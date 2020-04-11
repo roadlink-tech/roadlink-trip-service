@@ -39,15 +39,3 @@ class Trip(val path: List<Location>, val capacity: Int) {
         sections.getSectionsFrom(subtripSection).map { it.seatsOccupied += 1 }
     }
 }
-
-class SubtripSection(val initial: Location, val final: Location){
-    // puntos ordenados no necesariamente inmediatamente correlativos
-}
-
-data class Section(val initial: Location, val final: Location, var seatsOccupied: Int){
-    // puntos ordenados inmediatamente correlativos
-}
-
-data class Location(val latitude: Long, val longitude: Long){
-
-}
