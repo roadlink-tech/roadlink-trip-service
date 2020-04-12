@@ -11,7 +11,7 @@ class SectionsTest {
         val locLikeB = Location(1L, 1L)
         val locLikeC = Location(2L, 2L)
 
-        assertEquals(listOf(Section(locLikeB,locLikeC,0)),
+        assertEquals(listOf(Section(locLikeB,locLikeC, mutableListOf())),
                 sections[Subtrip(locLikeB,locLikeC)])
     }
 
@@ -23,7 +23,7 @@ class SectionsTest {
         val locLikeC = Location(2L, 2L)
         val locLikeD = Location(3L, 3L)
 
-        assertEquals(listOf(Section(locLikeB,locLikeC,0),Section(locLikeC,locLikeD,0)),
+        assertEquals(listOf(Section(locLikeB,locLikeC, mutableListOf()),Section(locLikeC,locLikeD, mutableListOf())),
                 sections[Subtrip(locLikeB,locLikeD)])
     }
 

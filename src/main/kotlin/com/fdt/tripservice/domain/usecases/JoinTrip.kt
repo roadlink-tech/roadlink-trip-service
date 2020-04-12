@@ -15,15 +15,15 @@ class JoinTrip(
     fun execute(token: String, tripId: Long, subtrip: Subtrip, joinerId: Long) {
         tripAuthService.verifyJoinerPermissionFor(token, joinerId)
         val trip = tripRepository.findById(tripId)
-        joinBySection(trip, joinerId, subtrip)
+        joinBySections(trip, joinerId, subtrip)
         tripRepository.save(trip)
     }
 
-    private fun joinBySection(trip: Trip, userId: Long, subtrip: Subtrip) {
-        if (trip.containsPassenger(userId)) {
+    private fun joinBySections(trip: Trip, userId: Long, subtrip: Subtrip) {
+        if (userId in trip) {
             throw UserAlreadyAddedToTripException("User $userId is already added to $trip trip")
         }
-        if (!trip.hasSubtrip(subtrip)) {
+        if (subtrip !in trip) {
             throw InvalidTripSectionException("Section $subtrip does not belong to $trip trip")
         }
         if (!trip.hasAvailableSeatAt(subtrip)) {

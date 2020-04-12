@@ -10,14 +10,14 @@ class TripTest {
     fun `if a trip contain two existing locations ordered, return true for hasSubtripSection`() {
         val trip = givenAnyTrip()
 
-        assertTrue(trip.hasSubtrip(Subtrip(locB(),locD())))
+        assertTrue(Subtrip(locB(),locD()) in trip)
     }
 
     @Test
     fun `if a trip doesn't contain two locations ordered, return false for hasSubtripSection`() {
         val trip = givenAnyTrip()
 
-        assertFalse(trip.hasSubtrip(Subtrip(locD(),locB())))
+        assertFalse(Subtrip(locD(),locB()) in trip)
     }
 
     @Test
@@ -27,21 +27,21 @@ class TripTest {
         val locLikeB = locB()
         val locLikeE = Location(4L,3L)
 
-        assertFalse(trip.hasSubtrip(Subtrip(locB(),locLikeE)))
+        assertFalse(Subtrip(locB(),locLikeE) in trip)
     }
 
     @Test
     fun `if a trip doesn't contain one initial existing location, return false for hasSubtripSection`() {
         val trip = givenAnyTrip()
 
-        assertFalse(trip.hasSubtrip(Subtrip(locNotInTrip(),locB())))
+        assertFalse(Subtrip(locNotInTrip(),locB()) in trip)
     }
 
     @Test
     fun `if a trip doesn't contain any locations, return false for hasSubtripSection`() {
         val trip = givenAnyTrip()
 
-        assertFalse(trip.hasSubtrip(Subtrip(otherLocNotInTrip(),locNotInTrip())))
+        assertFalse(Subtrip(otherLocNotInTrip(),locNotInTrip()) in trip)
     }
 
     @Test

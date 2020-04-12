@@ -6,7 +6,7 @@ class Sections(private val path: List<Location>) {
 
     init {
         for (i in 0 until path.lastIndex) {
-            sections.add(Section(path[i], path[i + 1], 0))
+            sections.add(Section(path[i], path[i + 1], mutableListOf()))
         }
     }
 
@@ -21,6 +21,8 @@ class Sections(private val path: List<Location>) {
             subtrip.initial in path &&
                     subtrip.final in path &&
                     areInOrder(subtrip)
+
+    operator fun contains(userId: Long) = sections.any { userId in it }
 
 //    operator fun contains(location: Location): Boolean =
 //        sections.find { it.initial == location || it.final == location } != null

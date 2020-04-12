@@ -21,20 +21,19 @@ class Trip(
        B -> D : se llama Subtrip
    */
 
-    fun containsPassenger(userId: Long): Boolean {
-        //TODO
-        return false
+    operator fun contains(userId: Long): Boolean {
+        return userId in sections
     }
 
-    fun hasSubtrip(subtrip: Subtrip) = subtrip in sections
+    operator fun contains(subtrip: Subtrip) = subtrip in sections
 
     fun hasAvailableSeatAt(subtrip: Subtrip): Boolean {
         for (section in sections[subtrip]) {
-            if (section.seatsOccupied >= capacity) return false
+            if (section.seatsOccupied() >= capacity) return false
         }
         return true
     }
 
     fun joinPassengerAt(userId: Long, subtrip: Subtrip) {
-        sections[subtrip].map { it.seatsOccupied += 1 }    }
+        sections[subtrip].map { it.joinPassenger(userId) }    }
 }
