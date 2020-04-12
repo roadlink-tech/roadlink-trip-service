@@ -4,12 +4,7 @@ import com.fdt.tripservice.application.dto.TripDto
 import com.fdt.tripservice.domain.trip.Location
 import com.fdt.tripservice.domain.trip.TripFactory
 import com.fdt.tripservice.domain.trip.TripRepository
-import com.fdt.tripservice.domain.trip.auth.AuthorizationService
-import com.fdt.tripservice.domain.trip.auth.Role.ADMIN
-import com.fdt.tripservice.domain.trip.auth.Role.DRIVER
-import com.fdt.tripservice.domain.trip.auth.Role.PASSENGER
-import com.fdt.tripservice.domain.trip.auth.TokenInfo
-import com.fdt.tripservice.domain.trip.auth.TokenService
+import com.fdt.tripservice.domain.trip.auth.TripAuthService
 import com.fdt.tripservice.domain.trip.auth.UnauthorizedException
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.atLeastOnce
@@ -25,46 +20,33 @@ import java.time.LocalDate
 class CreateTripTest {
 
     @Mock
-    private lateinit var tokenService: TokenService
-
-    @Mock
     private lateinit var tripFactory: TripFactory
 
     @Mock
-    private lateinit var authorizationService: AuthorizationService
+    private lateinit var tripAuthService: TripAuthService
 
     @Mock
     private lateinit var tripRepository: TripRepository
 
     private lateinit var createTrip: CreateTrip
+    //Passenger
     private val noCreatorId = 1L
     private val tokenWithoutCreatorRoles = "asldasd"
-    private val tokenInfoWithoutCreatorRoles = TokenInfo(noCreatorId, listOf(PASSENGER))
-
+    //Driver
     private val driverId = 2L
     private val tokenWithDriverRole = "akfñwe"
-    private val tokenInfoWithDriverRole = TokenInfo(driverId, listOf(PASSENGER, DRIVER))
-
+    //Admin
     private val adminId = 3L
     private val tokenWithAdminRole = "asflkjsdgjngbk"
-    private val tokenInfoWithAdminRole = TokenInfo(adminId, listOf(PASSENGER, DRIVER, ADMIN))
 
 
     @BeforeEach
     fun setUp() {
         initMocks(this)
-        createTrip = CreateTrip(authorizationService, tokenService, tripFactory, tripRepository)
+        createTrip = CreateTrip(tripAuthService, tripFactory, tripRepository)
         //Passenger
-        `when`(tokenService.getTokenInfo(tokenWithoutCreatorRoles)).thenReturn(tokenInfoWithoutCreatorRoles)
-        `when`(authorizationService.canCreateTripWith(tokenInfoWithoutCreatorRoles, noCreatorId)).thenReturn(false)
-
-        //Driver
-        `when`(tokenService.getTokenInfo(tokenWithDriverRole)).thenReturn(tokenInfoWithDriverRole)
-        `when`(authorizationService.canCreateTripWith(tokenInfoWithDriverRole, driverId)).thenReturn(true)
-
-        //Admin
-        `when`(tokenService.getTokenInfo(tokenWithAdminRole)).thenReturn(tokenInfoWithAdminRole)
-        `when`(authorizationService.canCreateTripWith(tokenInfoWithAdminRole, adminId)).thenReturn(true)
+        `when`(tripAuthService.verifyCreatorPermissionWith(tokenWithoutCreatorRoles, noCreatorId))
+                .thenThrow(UnauthorizedException::class.java)
     }
 
     @Test
