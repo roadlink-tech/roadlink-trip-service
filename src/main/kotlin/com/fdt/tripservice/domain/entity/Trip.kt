@@ -1,6 +1,6 @@
 package com.fdt.tripservice.domain.entity
 
-class Trip(private val path: List<Location>, private val capacity: Int) {
+class Trip(path: List<Location>, private val capacity: Int) {
 
     private var sections = Sections(path)
 
@@ -24,14 +24,4 @@ class Trip(private val path: List<Location>, private val capacity: Int) {
     fun joinPassengerAt(userId: Long, subtrip: Subtrip) {
         sections[subtrip].map { it.seatsOccupied += 1 }
     }
-
-    private fun existLocationInTrip(location: Location): Boolean {
-        // TODO see complexity
-        return path.contains(location)
-    }
-
-    private fun areInOrder(previous: Location, posterior: Location): Boolean {
-        return path.indexOf(previous) < path.indexOf(posterior)
-    }
-
 }
