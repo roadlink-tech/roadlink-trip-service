@@ -13,7 +13,7 @@ class TripTest {
         val locLikeB = Location(1L,1L)
         val locLikeD = Location(3L,3L)
 
-        assertTrue(trip.hasSubtripSection(locLikeB,locLikeD))
+        assertTrue(trip.hasSubtrip(Subtrip(locLikeB,locLikeD)))
     }
 
     @Test
@@ -23,7 +23,7 @@ class TripTest {
         val locLikeB = Location(1L,1L)
         val locLikeD = Location(3L,3L)
 
-        assertFalse(trip.hasSubtripSection(locLikeD,locLikeB))
+        assertFalse(trip.hasSubtrip(Subtrip(locLikeD,locLikeB)))
     }
 
     @Test
@@ -33,7 +33,7 @@ class TripTest {
         val locLikeB = Location(1L,1L)
         val locLikeE = Location(4L,3L)
 
-        assertFalse(trip.hasSubtripSection(locLikeB,locLikeE))
+        assertFalse(trip.hasSubtrip(Subtrip(locLikeB,locLikeE)))
     }
 
     @Test
@@ -43,7 +43,7 @@ class TripTest {
         val locLikeB = Location(1L,1L)
         val locLikeE = Location(4L,3L)
 
-        assertFalse(trip.hasSubtripSection(locLikeE,locLikeB))
+        assertFalse(trip.hasSubtrip(Subtrip(locLikeE,locLikeB)))
     }
 
     @Test
@@ -53,7 +53,7 @@ class TripTest {
         val locLikeT = Location(2L,1L)
         val locLikeE = Location(4L,3L)
 
-        assertFalse(trip.hasSubtripSection(locLikeT,locLikeE))
+        assertFalse(trip.hasSubtrip(Subtrip(locLikeT,locLikeE)))
     }
 
     @Test
@@ -62,7 +62,7 @@ class TripTest {
 
         val locB = Location(1L, 1L)
         val locC = Location(2L, 2L)
-        val subtripSection = SubtripSection(locB,locC)
+        val subtripSection = Subtrip(locB,locC)
 
         assertTrue(trip.hasAvailableSeatAt(subtripSection))
     }
@@ -73,7 +73,7 @@ class TripTest {
 
         val locB = Location(1L, 1L)
         val locC = Location(2L, 2L)
-        val subtripSection = SubtripSection(locB,locC)
+        val subtripSection = Subtrip(locB,locC)
 
         assertFalse(trip.hasAvailableSeatAt(subtripSection))
     }
@@ -84,12 +84,12 @@ class TripTest {
 
         val locB = Location(1L, 1L)
         val locC = Location(2L, 2L)
-        trip.joinPassengerAt(1L, SubtripSection(locB,locC))
+        trip.joinPassengerAt(1L, Subtrip(locB,locC))
 
         val locA = Location(0L, 0L)
         val locD = Location(3L, 3L)
 
-        assertFalse(trip.hasAvailableSeatAt(SubtripSection(locA,locD)))
+        assertFalse(trip.hasAvailableSeatAt(Subtrip(locA,locD)))
     }
 
     private fun givenAnyTrip(capacity: Int = 4): Trip {
