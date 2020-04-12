@@ -52,7 +52,7 @@ class CreateTripTest {
     @Test
     fun `when user does not have driver role then can't create any trip`() {
         //GIVEN
-        val tripDto = TripDto(Location(), Location(), LocalDate.now(), noCreatorId, listOf())
+        val tripDto = givenAnyTripDto()
 
         //THEN
         assertThrows<UnauthorizedException> { createTrip.execute(tokenWithoutCreatorRoles, tripDto) }
@@ -61,7 +61,7 @@ class CreateTripTest {
     @Test
     fun `when user has driver role then can create trips`() {
         //GIVEN
-        val tripDto = TripDto(Location(), Location(), LocalDate.now(), driverId, listOf())
+        val tripDto = givenAnyTripDto()
 
         //WHEN
         createTrip.execute(tokenWithDriverRole, tripDto)
@@ -74,7 +74,7 @@ class CreateTripTest {
     @Test
     fun `when user has admin role then can create trips`() {
         //GIVEN
-        val tripDto = TripDto(Location(), Location(), LocalDate.now(), adminId, listOf())
+        val tripDto = givenAnyTripDto()
 
         //WHEN
         createTrip.execute(tokenWithAdminRole, tripDto)
@@ -83,6 +83,9 @@ class CreateTripTest {
         noExceptionWasThrown()
         tripWasSaved()
     }
+
+    private fun givenAnyTripDto() =
+            TripDto(Location(0L, 0L), Location(1L, 1L), LocalDate.now(), noCreatorId, listOf(), 1)
 
     private fun tripWasSaved() {
         verify(tripRepository, atLeastOnce()).save(any())

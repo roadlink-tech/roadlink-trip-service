@@ -1,4 +1,3 @@
 package com.fdt.tripservice.domain.trip
 
-class Location {
-}
+data class Location(val latitude: Long, val longitude: Long)

@@ -1,6 +1,7 @@
 package com.fdt.tripservice.domain.usecases
 
 import com.fdt.tripservice.domain.trip.Location
+import com.fdt.tripservice.domain.trip.Subtrip
 import com.fdt.tripservice.domain.trip.Trip
 import com.fdt.tripservice.domain.trip.TripRepository
 import com.fdt.tripservice.domain.trip.auth.TripAuthService
@@ -14,7 +15,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations.initMocks
-import java.lang.RuntimeException
 import java.time.LocalDate
 
 class JoinTripTest {
@@ -33,15 +33,16 @@ class JoinTripTest {
     private val driverId = 2L
     private val validTripId = 1L
     private val invalidTrip = 9999999999L
-    private val validSectionId = 1L
+    private val validSubtrip = Subtrip(Location(0L, 0L), Location(1L, 1L))
 
     private val expectedTrip = Trip(
             validTripId,
-            Location(),
-            Location(),
+            Location(0L, 0L),
+            Location(1L, 1L),
             LocalDate.now(),
             emptyList(),
-            driverId)
+            driverId,
+            1)
 
     @BeforeEach
     fun setUp() {
@@ -55,7 +56,7 @@ class JoinTripTest {
         findExpectedTrip()
 
         //WHEN
-        joinTrip.execute(passengerToken, validTripId, validSectionId, passengerId)
+        joinTrip.execute(passengerToken, validTripId, validSubtrip, passengerId)
 
         //THEN
         tripWasUpdated()
@@ -69,7 +70,7 @@ class JoinTripTest {
 
         //WHEN
         Assertions.assertThrows(TripNotFoundException::class.java) {
-            joinTrip.execute(passengerToken, invalidTrip, validSectionId, passengerId)
+            joinTrip.execute(passengerToken, invalidTrip, validSubtrip, passengerId)
         }
     }
 
@@ -81,7 +82,7 @@ class JoinTripTest {
 
         //THEN
         Assertions.assertThrows(UnauthorizedException::class.java) {
-            joinTrip.execute(driverToken, validTripId, validSectionId, driverId)
+            joinTrip.execute(driverToken, validTripId, validSubtrip, driverId)
         }
     }
 
