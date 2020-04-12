@@ -12,6 +12,6 @@ data class TripDto(
         val meetingPoints: List<Location>) {
 
     fun toTrip(): Trip {
-        return Trip(departure, arrival, departureAt, meetingPoints, creatorId)
+        return Trip(departure = departure, arrival = arrival, departureAt = departureAt, meetingPoints = meetingPoints, creatorId = creatorId)
     }
 }

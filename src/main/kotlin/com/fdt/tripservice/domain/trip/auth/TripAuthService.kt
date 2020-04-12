@@ -2,39 +2,48 @@ package com.fdt.tripservice.domain.trip.auth
 
 import com.fdt.tripservice.domain.trip.auth.Role.ADMIN
 import com.fdt.tripservice.domain.trip.auth.Role.DRIVER
+import com.fdt.tripservice.domain.trip.auth.Role.PASSENGER
 
 open class TripAuthService(private val authRepository: AuthRepository) {
 
-    open fun verifyCreatorPermissionWith(token: String, creatorId: Long) {
+    private val tripCreatorRoles = listOf(DRIVER, ADMIN)
+    private val tripJoinerRoles = listOf(PASSENGER, ADMIN)
+
+    open fun verifyCreatorPermissionFor(token: String, creatorId: Long) {
+        verifyPermission(token, creatorId, tripCreatorRoles)
+    }
+
+    open fun verifyJoinerPermissionFor(token: String, joinerId: Long) {
+        verifyPermission(token, joinerId, tripJoinerRoles)
+    }
+
+    private fun verifyPermission(token: String, userId: Long, requiredRoles: List<Role>) {
         val auth = authRepository.findByToken(token)
-        val canCreateTrip = canCreateTripWith(auth, creatorId)
-        if (!canCreateTrip) {
+        val hasPermission = hasPermission(auth, userId, requiredRoles)
+        if (!hasPermission) {
             throw UnauthorizedException("User ${auth.userId} does not have permission to perform this action.")
         }
     }
 
-    open fun canCreateTripWith(auth: Auth, creatorId: Long): Boolean {
-        if (!hasCreatorRole(auth.roles)) {
+    private fun hasPermission(auth: Auth, creatorId: Long, requiredRoles: List<Role>): Boolean {
+        if (!isAuthorizedCaller(auth, creatorId)) {
             return false
         }
-        /*
-        * admin users can create trip to another user
-        * */
-        if (isDifferentCaller(auth.userId, creatorId)) {
-            return auth.roles.contains(ADMIN)
+        return requiredRoles.intersect(auth.roles).isNotEmpty()
+    }
+
+    private fun isAuthorizedCaller(auth: Auth, creatorId: Long): Boolean {
+        if (isAdminCaller(auth)) {
+            return true
         }
-        return true
+        return !isDifferentCaller(auth.userId, creatorId)
+    }
+
+    private fun isAdminCaller(auth: Auth): Boolean {
+        return auth.roles.contains(ADMIN)
     }
 
     private fun isDifferentCaller(callerId: Long, creatorId: Long): Boolean {
         return callerId != creatorId
-    }
-
-    private fun hasCreatorRole(roles: List<Role>): Boolean {
-        return tripCreatorRoles().intersect(roles).isNotEmpty()
-    }
-
-    private fun tripCreatorRoles(): List<Role> {
-        return listOf(DRIVER, ADMIN)
     }
 }

@@ -45,7 +45,7 @@ class CreateTripTest {
         initMocks(this)
         createTrip = CreateTrip(tripAuthService, tripFactory, tripRepository)
         //Passenger
-        `when`(tripAuthService.verifyCreatorPermissionWith(tokenWithoutCreatorRoles, noCreatorId))
+        `when`(tripAuthService.verifyCreatorPermissionFor(tokenWithoutCreatorRoles, noCreatorId))
                 .thenThrow(UnauthorizedException::class.java)
     }
 

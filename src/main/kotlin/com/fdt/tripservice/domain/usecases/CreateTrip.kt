@@ -12,7 +12,7 @@ class CreateTrip(
         private val tripRepository: TripRepository) {
 
     fun execute(token: String, tripDto: TripDto): Trip {
-        tripAuthService.verifyCreatorPermissionWith(token, tripDto.creatorId)
+        tripAuthService.verifyCreatorPermissionFor(token, tripDto.creatorId)
         val trip = tripFactory.create(tripDto)
         return tripRepository.save(trip)
     }

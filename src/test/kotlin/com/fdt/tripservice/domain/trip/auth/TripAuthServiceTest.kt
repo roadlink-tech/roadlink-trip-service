@@ -41,7 +41,7 @@ class TripAuthServiceTest {
     @Test
     fun `when token belongs to admin user then can create trip for a user without require role`() {
         //WHEN
-        tripAuthService.verifyCreatorPermissionWith(adminToken, passengerId)
+        tripAuthService.verifyCreatorPermissionFor(adminToken, passengerId)
 
         //THEN
         noExceptionWasThrown()
@@ -50,14 +50,14 @@ class TripAuthServiceTest {
     @Test
     fun `when token belongs to passenger user then can't create trip`() {
         assertThrows<UnauthorizedException> {
-            tripAuthService.verifyCreatorPermissionWith(passengerToken, passengerId)
+            tripAuthService.verifyCreatorPermissionFor(passengerToken, passengerId)
         }
     }
 
     @Test
     fun `when token belongs to driver user then can create trip`() {
         //WHEN
-        tripAuthService.verifyCreatorPermissionWith(driverToken, driverId)
+        tripAuthService.verifyCreatorPermissionFor(driverToken, driverId)
 
         //THEN
         noExceptionWasThrown()
@@ -66,14 +66,14 @@ class TripAuthServiceTest {
     @Test
     fun `when token belongs to non admin user and try to create trip for a passenger user then should throw exception`() {
         assertThrows<UnauthorizedException> {
-            tripAuthService.verifyCreatorPermissionWith(driverToken, passengerId)
+            tripAuthService.verifyCreatorPermissionFor(driverToken, passengerId)
         }
     }
 
     @Test
     fun `when token belongs to non admin user and try to create trip for another user then should throw exception`() {
         assertThrows<UnauthorizedException> {
-            tripAuthService.verifyCreatorPermissionWith(driverToken, 4L)
+            tripAuthService.verifyCreatorPermissionFor(driverToken, 4L)
         }
     }
     private fun noExceptionWasThrown() {
