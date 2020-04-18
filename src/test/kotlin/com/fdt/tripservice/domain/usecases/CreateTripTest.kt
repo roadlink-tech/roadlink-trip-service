@@ -29,30 +29,20 @@ class CreateTripTest {
     private lateinit var tripRepository: TripRepository
 
     private lateinit var createTrip: CreateTrip
-    //Passenger
-    private val noCreatorId = 1L
-    private val tokenWithoutCreatorRoles = "asldasd"
-    //Driver
-    private val driverId = 2L
-    private val tokenWithDriverRole = "akfñwe"
-    //Admin
-    private val adminId = 3L
-    private val tokenWithAdminRole = "asflkjsdgjngbk"
 
+    private val creatorId = 1L
 
     @BeforeEach
     fun setUp() {
         initMocks(this)
         createTrip = CreateTrip(tripAuthService, tripFactory, tripRepository)
-        //Passenger
-        `when`(tripAuthService.verifyCreatorPermissionFor(tokenWithoutCreatorRoles, noCreatorId))
-                .thenThrow(UnauthorizedException::class.java)
     }
 
     @Test
     fun `when user does not have driver role then can't create any trip`() {
         //GIVEN
         val tripDto = givenAnyTripDto()
+        val tokenWithoutCreatorRoles = givenATokenWithoutCreatorRoles()
 
         //THEN
         assertThrows<UnauthorizedException> { createTrip.execute(tokenWithoutCreatorRoles, tripDto) }
@@ -62,6 +52,7 @@ class CreateTripTest {
     fun `when user has driver role then can create trips`() {
         //GIVEN
         val tripDto = givenAnyTripDto()
+        val tokenWithDriverRole = givenATokenWithDriverRole()
 
         //WHEN
         createTrip.execute(tokenWithDriverRole, tripDto)
@@ -75,6 +66,7 @@ class CreateTripTest {
     fun `when user has admin role then can create trips`() {
         //GIVEN
         val tripDto = givenAnyTripDto()
+        val tokenWithAdminRole = givenATokenWithAdminRole()
 
         //WHEN
         createTrip.execute(tokenWithAdminRole, tripDto)
@@ -85,7 +77,24 @@ class CreateTripTest {
     }
 
     private fun givenAnyTripDto() =
-            TripDto(Location(0L, 0L), Location(1L, 1L), LocalDate.now(), noCreatorId, listOf(), 1)
+            TripDto(Location(0L, 0L), Location(1L, 1L), LocalDate.now(), creatorId, listOf(), 1)
+
+    private fun givenATokenWithoutCreatorRoles(): String {
+        val tokenWithoutCreatorRoles = "asldasd"
+        `when`(tripAuthService.verifyCreatorPermissionFor(tokenWithoutCreatorRoles, creatorId))
+                .thenThrow(UnauthorizedException::class.java)
+        return tokenWithoutCreatorRoles
+    }
+
+    private fun givenATokenWithDriverRole(): String {
+        val tokenWithDriverRole = "akfñwe"
+        return tokenWithDriverRole
+    }
+
+    private fun givenATokenWithAdminRole(): String {
+        val tokenWithAdminRole = "asflkjsdgjngbk"
+        return tokenWithAdminRole
+    }
 
     private fun tripWasSaved() {
         verify(tripRepository, atLeastOnce()).save(any())

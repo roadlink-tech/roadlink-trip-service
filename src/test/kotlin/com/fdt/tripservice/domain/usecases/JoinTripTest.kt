@@ -30,23 +30,6 @@ class JoinTripTest {
 
     private lateinit var joinTrip: JoinTrip
 
-    private val passengerToken = "aflsjglkfdjlkgjfd"
-    private val driverToken = "gsldksglkfsglkfgldk"
-    private val passengerId = 1L
-    private val otherPassengerId = 3L
-    private val driverId = 2L
-    private val validTripId = 1L
-    private val invalidTrip = 9999999999L
-    private val validSubtrip = Subtrip(Location(0L, 0L), Location(1L, 1L))
-
-    private val expectedTrip = Trip(
-            validTripId,
-            Location(0L, 0L),
-            Location(1L, 1L),
-            LocalDate.now(),
-            emptyList(),
-            driverId,
-            1)
 
     @BeforeEach
     fun setUp() {
@@ -57,115 +40,141 @@ class JoinTripTest {
     @Test
     fun `when passenger try to join trip with available seats then should work ok`() {
         //GIVEN
-        findExpectedTrip()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val tripWithAvailableSeats = givenATripWithAvailableSeats()
+        val validSubtrip = givenAValidSubtrip()
 
         //WHEN
-        joinTrip.execute(passengerToken, validTripId, validSubtrip, passengerId)
+        joinTrip.execute(passengerToken, tripWithAvailableSeats.id!!, validSubtrip, passengerId)
 
         //THEN
-        tripWasUpdated()
+        thenTripWasUpdated(tripWithAvailableSeats)
         noExceptionWasThrown()
     }
 
     @Test
     fun `when passenger try to join to an not existing trip then must fail`() {
         //GIVEN
-        thrownTripNotFoundException()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val notExistingTripId = givenANotExistingTrip()
+        val validSubtrip = givenAValidSubtrip()
 
         //WHEN
         Assertions.assertThrows(TripNotFoundException::class.java) {
-            joinTrip.execute(passengerToken, invalidTrip, validSubtrip, passengerId)
+            joinTrip.execute(passengerToken, notExistingTripId, validSubtrip, passengerId)
         }
     }
 
     @Test
     fun `when user without required permission try to join to trip then must fail`() {
         //GIVEN
-        findExpectedTrip()
-        thrownExceptionGivenUserWithoutPermission()
+        val driverId = 1L
+        val tripWithAvailableSeats = givenATripWithAvailableSeats()
+        val tokenWithoutPermissions = givenATokenWithoutPermissionFor(driverId)
+        val validSubtrip = givenAValidSubtrip()
 
         //THEN
         Assertions.assertThrows(UnauthorizedException::class.java) {
-            joinTrip.execute(driverToken, validTripId, validSubtrip, driverId)
+            joinTrip.execute(tokenWithoutPermissions, tripWithAvailableSeats.id!!, validSubtrip, driverId)
         }
     }
 
     @Test
     fun `when user with required permissions try to join an full trip then must fail`() {
-        givenATripIsFull()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val tripFull = givenATripIsFull()
+        val validSubtrip = givenAValidSubtrip()
 
         Assertions.assertThrows(UnavailableTripSeatException::class.java) {
-            joinTrip.execute(passengerToken, validTripId, validSubtrip, passengerId)
+            joinTrip.execute(passengerToken, tripFull.id!!, validSubtrip, passengerId)
         }
     }
 
     @Test
     fun `when user with required permissions try to join a not existing section in the trip then must fail`() {
-        givenAnyTrip()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val trip = givenATripWithAvailableSeats()
 
         val subtrip = Subtrip(locNotInTrip(), otherLocNotInTrip())
         Assertions.assertThrows(InvalidTripSectionException::class.java) {
-            joinTrip.execute(passengerToken, validTripId, subtrip, passengerId)
+            joinTrip.execute(passengerToken, trip.id!!, subtrip, passengerId)
         }
     }
 
     @Test
     fun `when user with required permissions try to join a section with not existing initial location in the trip then must fail`() {
-        val trip = givenAnyTrip()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val trip = givenATripWithAvailableSeats()
 
         val subtrip = Subtrip(locNotInTrip(), trip.arrival)
         Assertions.assertThrows(InvalidTripSectionException::class.java) {
-            joinTrip.execute(passengerToken, validTripId, subtrip, passengerId)
+            joinTrip.execute(passengerToken, trip.id!!, subtrip, passengerId)
         }
     }
 
     @Test
     fun `when user with required permissions try to join a section with not existing final location in the trip then must fail`() {
-        val trip = givenAnyTrip()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val trip = givenATripWithAvailableSeats()
 
         val subtrip = Subtrip(trip.departure, locNotInTrip())
         Assertions.assertThrows(InvalidTripSectionException::class.java) {
-            joinTrip.execute(passengerToken, validTripId, subtrip, passengerId)
+            joinTrip.execute(passengerToken, trip.id!!, subtrip, passengerId)
         }
     }
 
     @Test
     fun `when user with required permissions try to join again to a entire trip then must fail`() {
-        val trip = givenAnyTrip()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val trip = givenATripWithAvailableSeats()
 
         val entireTrip = Subtrip(trip.departure, trip.arrival)
-        joinTrip.execute(passengerToken, validTripId, entireTrip, passengerId)
+        joinTrip.execute(passengerToken, trip.id!!, entireTrip, passengerId)
 
         Assertions.assertThrows(UserAlreadyAddedToTripException::class.java) {
-            joinTrip.execute(passengerToken, validTripId, entireTrip, passengerId)
+            joinTrip.execute(passengerToken, trip.id!!, entireTrip, passengerId)
         }
     }
 
     @Test
     fun `when user with required permissions try to join another section of the same trip then must fail`() {
-        givenAnyTrip()
+        val passengerId = 1L
+        val passengerToken = givenAValidTokenFor(passengerId)
+        val trip = givenATripWithAvailableSeats()
 
         val subtripCD = Subtrip(locC(), locD())
-        joinTrip.execute(passengerToken, validTripId, subtripCD, passengerId)
+        joinTrip.execute(passengerToken, trip.id!!, subtripCD, passengerId)
 
         val subtripBC = Subtrip(locB(), locC())
         Assertions.assertThrows(UserAlreadyAddedToTripException::class.java) {
-            joinTrip.execute(passengerToken, validTripId, subtripBC, passengerId)
+            joinTrip.execute(passengerToken, trip.id!!, subtripBC, passengerId)
         }
     }
 
-
-
-    private fun givenATripIsFull() {
-        val trip = anyTrip(1)
-        `when`(tripRepository.findById(validTripId)).thenReturn(trip)
-        trip.joinPassengerAt(otherPassengerId, Subtrip(trip.departure, trip.arrival))
+    private fun givenATripWithAvailableSeats(): Trip {
+        val trip = anyTrip()
+        `when`(tripRepository.findById(trip.id!!)).thenReturn(trip)
+        return trip
     }
 
-    private fun givenAnyTrip(): Trip {
-        val trip = anyTrip()
-        `when`(tripRepository.findById(validTripId)).thenReturn(trip)
+    private fun givenATripIsFull(): Trip {
+        val trip = anyTrip(1)
+        `when`(tripRepository.findById(trip.id!!)).thenReturn(trip)
+        trip.joinPassengerAt(99L, Subtrip(trip.departure, trip.arrival))
         return trip
+    }
+
+    private fun givenANotExistingTrip(): Long {
+        val invalidTripId = 1L
+        `when`(tripRepository.findById(invalidTripId)).thenThrow(TripNotFoundException::class.java)
+        return invalidTripId
     }
 
     private fun anyTrip(capacity: Int = 4): Trip {
@@ -173,8 +182,10 @@ class JoinTripTest {
         val locB = locB()
         val locC = locC()
         val locD = locD()
-        return Trip(validTripId, locA, locD, LocalDate.now(), listOf(locB, locC), 1L, capacity)
+        return Trip(1L, locA, locD, LocalDate.now(), listOf(locB, locC), 1L, capacity)
     }
+
+    private fun givenAValidSubtrip() = Subtrip(locA(), locB())
 
     private fun locD() = Location(3L, 3L)
 
@@ -188,24 +199,23 @@ class JoinTripTest {
 
     private fun otherLocNotInTrip() = Location(1L, 2L)
 
-    private fun thrownExceptionGivenUserWithoutPermission() {
-        `when`(tripAuthService.verifyJoinerPermissionFor(driverToken, driverId))
+    private fun givenATokenWithoutPermissionFor(userId: Long): String {
+        val driverToken = "gsldksglkfsglkfgldk"
+        `when`(tripAuthService.verifyJoinerPermissionFor(driverToken, userId))
                 .thenThrow(UnauthorizedException::class.java)
+        return driverToken
     }
 
-    private fun findExpectedTrip() {
-        `when`(tripRepository.findById(validTripId)).thenReturn(expectedTrip)
+    private fun givenAValidTokenFor(userId: Long): String {
+        val validToken = "aflsjglkfdjlkgjfd"
+        return validToken
     }
 
     private fun noExceptionWasThrown() {
         //nothing to do
     }
 
-    private fun tripWasUpdated() {
-        verify(tripRepository, atLeastOnce()).save(expectedTrip)
-    }
-
-    private fun thrownTripNotFoundException() {
-        `when`(tripRepository.findById(invalidTrip)).thenThrow(TripNotFoundException::class.java)
+    private fun thenTripWasUpdated(trip: Trip) {
+        verify(tripRepository, atLeastOnce()).save(trip)
     }
 }
