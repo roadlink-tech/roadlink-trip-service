@@ -1,18 +1,8 @@
-HELP.md
 .gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+/build/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Ignore Gradle GUI config
+gradle-app.setting
 
 ### IntelliJ IDEA ###
 .idea
@@ -21,12 +11,11 @@ build/
 *.ipr
 out/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Cache of project
+.gradletasknamecache
 
-### VS Code ###
-.vscode/
+.idea
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+out
