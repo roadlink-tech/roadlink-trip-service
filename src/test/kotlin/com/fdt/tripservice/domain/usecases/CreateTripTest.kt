@@ -2,6 +2,7 @@ package com.fdt.tripservice.domain.usecases
 
 import com.fdt.tripservice.application.dto.TripDto
 import com.fdt.tripservice.domain.trip.Location
+import com.fdt.tripservice.domain.trip.Trip
 import com.fdt.tripservice.domain.trip.TripFactory
 import com.fdt.tripservice.domain.trip.TripRepository
 import com.fdt.tripservice.domain.trip.auth.TripAuthService
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations.initMocks
@@ -76,8 +78,12 @@ class CreateTripTest {
         tripWasSaved()
     }
 
-    private fun givenAnyTripDto() =
-            TripDto(Location(0L, 0L), Location(1L, 1L), LocalDate.now(), creatorId, listOf(), 1)
+    private fun givenAnyTripDto(): TripDto {
+        val tripDto = TripDto(Location(0L, 0L), Location(1L, 1L), LocalDate.now(), creatorId, listOf(), 1)
+        val trip = Mockito.mock(Trip::class.java)
+        `when`(tripFactory.create(tripDto)).thenReturn(trip)
+        return tripDto
+    }
 
     private fun givenATokenWithoutCreatorRoles(): String {
         val tokenWithoutCreatorRoles = "asldasd"

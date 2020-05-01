@@ -8,6 +8,7 @@ open class TripAuthService(private val authRepository: AuthRepository) {
 
     private val tripCreatorRoles = listOf(DRIVER, ADMIN)
     private val tripJoinerRoles = listOf(PASSENGER, ADMIN)
+    private val tripUnjoinerRoles = listOf(PASSENGER, ADMIN)
 
     open fun verifyCreatorPermissionFor(token: String, creatorId: Long) {
         verifyPermission(token, creatorId, tripCreatorRoles)
@@ -15,6 +16,10 @@ open class TripAuthService(private val authRepository: AuthRepository) {
 
     open fun verifyJoinerPermissionFor(token: String, joinerId: Long) {
         verifyPermission(token, joinerId, tripJoinerRoles)
+    }
+
+    open fun verifyUnjoinerPermissionFor(token: String, unjoinerId: Long) {
+        verifyPermission(token, unjoinerId, tripUnjoinerRoles)
     }
 
     private fun verifyPermission(token: String, userId: Long, requiredRoles: List<Role>) {

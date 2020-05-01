@@ -14,6 +14,7 @@ class JoinTrip(
 
     fun execute(token: String, tripId: Long, subtrip: Subtrip, joinerId: Long) {
         tripAuthService.verifyJoinerPermissionFor(token, joinerId)
+
         val trip = tripRepository.findById(tripId)
         joinBySections(trip, joinerId, subtrip)
         tripRepository.save(trip)

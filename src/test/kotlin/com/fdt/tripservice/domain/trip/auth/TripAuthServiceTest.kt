@@ -21,13 +21,15 @@ class TripAuthServiceTest {
     private val adminId = 2L
     private val authAdmin = Auth(adminId, listOf(ADMIN))
 
-    private val passengerId = 1L
     private val passengerToken = "fjdsfjsd"
+    private val passengerId = 1L
     private val authPassenger = Auth(passengerId, listOf(PASSENGER))
 
     private val driverToken = "driverToken"
     private val driverId = 3L
     private val authDriver = Auth(driverId, listOf(DRIVER))
+
+    private val otherUserId = 4L
 
     @BeforeEach
     fun setUp() {
@@ -73,9 +75,42 @@ class TripAuthServiceTest {
     @Test
     fun `when token belongs to non admin user and try to create trip for another user then should throw exception`() {
         assertThrows<UnauthorizedException> {
-            tripAuthService.verifyCreatorPermissionFor(driverToken, 4L)
+            tripAuthService.verifyCreatorPermissionFor(driverToken, otherUserId)
         }
     }
+
+    @Test
+    fun `when token belongs to admin user then can unjoin a user without required role`() {
+        //WHEN
+        tripAuthService.verifyUnjoinerPermissionFor(adminToken, driverId)
+
+        //THEN
+        noExceptionWasThrown()
+    }
+
+    @Test
+    fun `when token belongs to passenger user then can unjoin a trip`() {
+        //WHEN
+        tripAuthService.verifyUnjoinerPermissionFor(passengerToken, passengerId)
+
+        //THEN
+        noExceptionWasThrown()
+    }
+
+    @Test
+    fun `when token belongs to passenger user and try to unjoin another user then must fail`() {
+        assertThrows<UnauthorizedException> {
+            tripAuthService.verifyCreatorPermissionFor(passengerToken, otherUserId)
+        }
+    }
+
+    @Test
+    fun `when token belongs to driver user user must fail to unjoin a trip`() {
+        assertThrows<UnauthorizedException> {
+            tripAuthService.verifyCreatorPermissionFor(passengerToken, otherUserId)
+        }
+    }
+
     private fun noExceptionWasThrown() {
         //nothing to do
     }
