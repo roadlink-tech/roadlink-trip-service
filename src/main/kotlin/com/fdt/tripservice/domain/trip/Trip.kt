@@ -1,5 +1,6 @@
 package com.fdt.tripservice.domain.trip
 
+import com.fdt.tripservice.domain.trip.exception.UserNotInTripException
 import java.time.LocalDate
 
 class Trip(
@@ -35,5 +36,13 @@ class Trip(
     }
 
     fun joinPassengerAt(userId: Long, subtrip: Subtrip) {
-        sections[subtrip].map { it.joinPassenger(userId) }    }
+        sections[subtrip].map { it.joinPassenger(userId) }
+    }
+
+    fun unjoinPassenger(passengerId: Long) {
+        if (passengerId !in this)
+            throw UserNotInTripException("User $passengerId not in trip ${this.id}")
+
+        sections.unjoinPassenger(passengerId)
+    }
 }

@@ -24,8 +24,9 @@ class Sections(private val path: List<Location>) {
 
     operator fun contains(userId: Long) = sections.any { userId in it }
 
-//    operator fun contains(location: Location): Boolean =
-//        sections.find { it.initial == location || it.final == location } != null
+    fun unjoinPassenger(passengerId: Long) {
+        sections.map { it.unjoinPassenger(passengerId) }
+    }
 
     private fun indexOfInitial(initial: Location): Int {
         for (section in sections) {
