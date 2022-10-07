@@ -5,11 +5,11 @@ import com.fdt.tripservice.domain.trip.TripRepository
 import com.fdt.tripservice.domain.trip.auth.TripAuthService
 import com.fdt.tripservice.domain.trip.auth.UnauthorizedException
 import com.fdt.tripservice.domain.trip.exception.TripNotFoundException
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito
+import org.mockito.Mockito.verify
 
 class UnjoinTripTest {
 

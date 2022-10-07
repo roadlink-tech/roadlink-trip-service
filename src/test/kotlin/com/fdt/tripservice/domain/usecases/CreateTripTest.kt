@@ -7,18 +7,15 @@ import com.fdt.tripservice.domain.trip.TripFactory
 import com.fdt.tripservice.domain.trip.TripRepository
 import com.fdt.tripservice.domain.trip.auth.TripAuthService
 import com.fdt.tripservice.domain.trip.auth.UnauthorizedException
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.atLeastOnce
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations.initMocks
 import java.time.LocalDate
-
+/*
 class CreateTripTest {
 
     @Mock
@@ -110,3 +107,4 @@ class CreateTripTest {
         //nothing to do
     }
 }
+ */
