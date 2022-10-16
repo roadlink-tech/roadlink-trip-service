@@ -16,7 +16,6 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-	testImplementation("org.mockito:mockito-core:4.8.0")
 }
 
 tasks.withType<Test> {

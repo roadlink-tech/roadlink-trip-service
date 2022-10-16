@@ -1,37 +1,130 @@
 package com.fdt.tripservice.usecases
 
-import com.fdt.tripservice.domain.trip.Location
-import org.junit.jupiter.api.Assertions.*
+import com.fdt.tripservice.InMemorySectionRepository
+import com.fdt.tripservice.domain.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 internal class SearchTripTest {
-    @Test
-    fun `foo bar`() {
-        // given
-        val locationA = Location(-34.568683, -58.450998, "A")
-        val locationB = Location(-34.568409, -58.448209, "B")
-        val locationC = Location(-34.573860, -58.452533, "C")
-        //val locationC = Location(-34.571104, -58.450366, "C")
-        val locationD = Location(-34.570565, -58.447630, "D")
-        val fakeNextLocationsFrom = FakeNextLocationsFrom(
-            nexts = mutableMapOf(
-                locationA to setOf(locationB, locationC),
-                locationB to setOf(locationD),
-                locationC to setOf(locationD),
-            ),
-        )
-        val pickWithProbability = PickWithProbability(RandomUniformDoubleGenerator())
-        val searchTrip = SearchTrip(
-            nextLocationsFrom = fakeNextLocationsFrom,
-            pickWithProbability = pickWithProbability,
+
+    private lateinit var inMemorySectionRepository: InMemorySectionRepository
+
+    private lateinit var searchTrip: SearchTrip
+
+    @BeforeEach
+    fun setUp() {
+        inMemorySectionRepository = InMemorySectionRepository()
+        val bruteForceSearchEngine = BruteForceSearchEngine(
+            sectionRepository = inMemorySectionRepository,
         )
 
-        // when
-        searchTrip(
-            SearchTrip.Request(
-            departure = locationA,
-            arrival = locationD,
+        searchTrip = SearchTrip(
+            searchEngine = bruteForceSearchEngine,
+        )
+    }
+
+    @Test
+    fun `given no section exists then should return empty list`() {
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
         ))
 
+        assertTrue(result.isEmpty())
     }
+
+    @Test
+    fun `given exists a trip plan between the given departure and arrival then should return it`() {
+        inMemorySectionRepository.save(SectionFactory.avCabildo())
+
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
+        ))
+
+        assertEquals(listOf(TripPlanFactory.avCabildo()), result)
+    }
+
+    @Test
+    fun `given exists a trip plan but not between the given departure and arrival then should return empty list`() {
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino())
+
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
+        ))
+
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun `given exists a trip plan with one meeting point but not between the given departure and arrival then should return empty list`() {
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino2880_avCabildo1621())
+        inMemorySectionRepository.save(SectionFactory.avCabildo1621_virreyDelPino1800())
+
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
+        ))
+
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun `given exists two trip plan then should only return the one between the given departure and arrival`() {
+        inMemorySectionRepository.save(SectionFactory.avCabildo())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino())
+
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
+        ))
+
+        assertEquals(listOf(TripPlanFactory.avCabildo()), result)
+    }
+
+    @Test
+    fun `given exists a trip plan with one meeting point between the given departure and arrival then should return it`() {
+        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
+
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
+        ))
+
+        assertEquals(listOf(TripPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20()), result)
+    }
+
+    @Test
+    fun `given exists two trip plans with one meeting point between the given departure and arrival then the shorter must be first`() {
+        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
+
+        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino2880())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino2880_avCabildo20())
+
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
+        ))
+
+        assertEquals(
+            listOf(
+                TripPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+                TripPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
+            ),
+            result
+        )
+    }
+
 }
