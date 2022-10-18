@@ -30,4 +30,10 @@ object TripPointFactory {
             location = LocationFactory.avCabildo_1621(),
             at = InstantFactory.october15_15hs(),
         )
+
+    fun avDelLibertador_5000() =
+        TripPoint(
+            location = LocationFactory.avDelLibertador_5000(),
+            at = InstantFactory.october15_17_30hs(),
+        )
 }

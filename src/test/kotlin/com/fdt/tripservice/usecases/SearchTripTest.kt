@@ -127,4 +127,30 @@ internal class SearchTripTest {
         )
     }
 
+    @Test
+    fun `given exists two trip plans with the same meeting point between the given departure and arrival then should return `() {
+        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avDelLibertador5000())
+        inMemorySectionRepository.save(SectionFactory.avDelLibertador5000_avCabildo20())
+
+        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino2880())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino2880_avCabildo20())
+
+        val result = searchTrip(SearchTrip.Request(
+            departure = LocationFactory.avCabildo_4853(),
+            arrival = LocationFactory.avCabildo_20(),
+            at = InstantFactory.october15_12hs(),
+        ))
+
+        assertEquals(
+            listOf(
+                TripPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+                TripPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
+                TripPlanFactory.avCabildo4853_virreyDelPino1800_avDelLibertador5000_avCabildo20(),
+            ),
+            result
+        )
+    }
+
 }

@@ -8,21 +8,19 @@ class BruteForceSearchEngine(
     override fun search(departure: Location, arrival: Location, at: Instant): List<TripPlan> {
         val tripPlans = mutableListOf<TripPlan>()
 
-        val stack = mutableListOf<Section>()
+        val stack = mutableListOf<TripPlan>()
         sectionRepository.findNextSectionsFrom(departure).forEach { nextSection ->
-            stack.add(nextSection)
+            stack.add(TripPlan(listOf(nextSection)))
         }
 
-        val sections = mutableListOf<Section>()
         while (stack.isNotEmpty()) {
-            val actual = stack.removeLast()
-            sections.add(actual)
-            if (actual.arrivesTo(arrival)) {
-                tripPlans.add(TripPlan(sections = sections.toList()))
-                sections.clear()
+            val actualTripPlan = stack.removeLast()
+            val actualSection = actualTripPlan.last()
+            if (actualSection.arrivesTo(arrival)) {
+                tripPlans.add(actualTripPlan)
             }
-            sectionRepository.findNextSectionsFrom(actual.arrival()).forEach { nextSection ->
-                stack.add(nextSection)
+            sectionRepository.findNextSectionsFrom(actualSection.arrival()).forEach { nextSection ->
+                stack.add(actualTripPlan + nextSection)
             }
         }
 

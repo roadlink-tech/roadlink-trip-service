@@ -56,4 +56,18 @@ object SectionFactory {
             arrival = TripPointFactory.virreyDelPino_1800(),
             distanceInMeters = 400.0,
         )
+
+    fun virreyDelPino1800_avDelLibertador5000() =
+        Section(
+            departure = TripPointFactory.virreyDelPino_1800(),
+            arrival = TripPointFactory.avDelLibertador_5000(),
+            distanceInMeters = 3000.0,
+        )
+
+    fun avDelLibertador5000_avCabildo20() =
+        Section(
+            departure = TripPointFactory.avDelLibertador_5000(),
+            arrival = TripPointFactory.avCabildo_20(),
+            distanceInMeters = 3000.0,
+        )
 }
