@@ -9,7 +9,7 @@ class BruteForceSearchEngine(
         val tripPlans = mutableListOf<TripPlan>()
 
         val stack = mutableListOf<TripPlan>()
-        sectionRepository.findNextSectionsFrom(departure).forEach { nextSection ->
+        sectionRepository.findNextSections(departure, at).forEach { nextSection ->
             stack.add(TripPlan(listOf(nextSection)))
         }
 
@@ -19,7 +19,7 @@ class BruteForceSearchEngine(
             if (actualSection.arrivesTo(arrival)) {
                 tripPlans.add(actualTripPlan)
             }
-            sectionRepository.findNextSectionsFrom(actualSection.arrival()).forEach { nextSection ->
+            sectionRepository.findNextSections(actualSection.arrival(), at).forEach { nextSection ->
                 stack.add(actualTripPlan + nextSection)
             }
         }

@@ -1,5 +1,7 @@
 package com.fdt.tripservice.domain
 
+import java.time.Instant
+
 data class Section(val departure: TripPoint, val arrival: TripPoint, val distanceInMeters: Double) {
 
     fun departure(): Location = departure.location
@@ -15,4 +17,8 @@ data class Section(val departure: TripPoint, val arrival: TripPoint, val distanc
     }
 
     fun distance(): Double = distanceInMeters
+
+    fun departuresAfterOrEqual(at: Instant): Boolean {
+        return departure.at.isAfter(at) || departure.at == at
+    }
 }
