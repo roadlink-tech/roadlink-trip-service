@@ -13,7 +13,7 @@ COPY gradle gradle
 COPY src src
 
 # create application jar
-RUN ./gradlew clean build -x test --stacktrace
+RUN gradle clean build -x test
 
 # move application jar
 RUN mv ./build/libs/*-SNAPSHOT.jar service.jar
@@ -31,7 +31,7 @@ COPY --from=compiler $APP_HOME/service.jar $APP_HOME/service.jar
 
 WORKDIR $APP_HOME
 
-ENV JAVA_OPTS="$SECURITY_OPTS $MAX_RAM_PERCENTAGE $MIN_RAM_PERCENTAGE"
+ENV JAVA_OPTS="$MAX_RAM_PERCENTAGE $MIN_RAM_PERCENTAGE"
 ENTRYPOINT exec java $JAVA_OPTS -jar service.jar
 EXPOSE 8080
 
