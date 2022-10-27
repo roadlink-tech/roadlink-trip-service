@@ -1,4 +1,4 @@
-package com.fdt.tripservice.domain
+package com.roadlink.tripservice.domain
 
 data class TripPlan(val sections: List<Section>) {
     operator fun plus(section: Section): TripPlan {

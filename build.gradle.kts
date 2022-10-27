@@ -1,30 +1,66 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-	kotlin("jvm") version "1.7.10"
+    id("org.jetbrains.kotlin.jvm") version "1.7.20"
+    id("org.jetbrains.kotlin.kapt") version "1.7.20"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.20"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.2"
 }
 
-group = "com.fdt"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+version = "0.1"
+group = "com.roadlink"
 
+val kotlinVersion=project.properties.get("kotlinVersion")
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-	testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
+    kapt("io.micronaut:micronaut-http-validation")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("io.micronaut:micronaut-validation")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    // GRAPH QL
+    implementation("io.micronaut.graphql:micronaut-graphql:3.2.0")
+    implementation("com.graphql-java-kickstart:graphql-java-tools:13.0.2") {
+        exclude("org.slf4j", "slf4j-api")
+    }
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+
+application {
+    mainClass.set("com.roadlink.ApplicationKt")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "1.8"
-	}
+tasks {
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
 }
+graalvmNative.toolchainDetection.set(false)
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.roadlink.*")
+    }
+}
+
+
+

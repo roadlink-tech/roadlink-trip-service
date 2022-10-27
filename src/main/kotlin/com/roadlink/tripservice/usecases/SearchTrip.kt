@@ -1,6 +1,8 @@
-package com.fdt.tripservice.usecases
+package com.roadlink.tripservice.usecases
 
-import com.fdt.tripservice.domain.*
+import com.roadlink.tripservice.domain.Location
+import com.roadlink.tripservice.domain.SearchEngine
+import com.roadlink.tripservice.domain.TripPlan
 import java.time.Instant
 
 class SearchTrip(

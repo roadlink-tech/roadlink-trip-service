@@ -1,0 +1,34 @@
+type Query {
+    searchTrips(searchTripsInput: SearchTripsInput!): [FooBar!]!
+}
+
+input SearchTripsInput {
+    departure: LocationInput!
+    arrival: LocationInput!
+    at: Instant2!
+}
+
+input LocationInput {
+    latitude: Float!
+    longitude: Float!
+}
+
+type TripPlan {
+    sections: [Section2!]!
+}
+
+type FooBar {
+    sections: [Section2!]!
+}
+
+type Section2 {
+    departure: Location2!
+    arrival: Location2!
+}
+
+type Location2 {
+    latitude: Float!
+    longitude: Float!
+}
+
+scalar Instant2

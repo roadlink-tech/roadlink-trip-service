@@ -1,7 +1,7 @@
-package com.fdt.tripservice.usecases
+package com.roadlink.tripservice.usecases
 
-import com.fdt.tripservice.InMemorySectionRepository
-import com.fdt.tripservice.domain.*
+import com.roadlink.tripservice.InMemorySectionRepository
+import com.roadlink.tripservice.domain.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -27,7 +27,8 @@ internal class SearchTripTest {
 
     @Test
     fun `given no section exists then should return empty list`() {
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),
@@ -40,7 +41,8 @@ internal class SearchTripTest {
     fun `given exists a trip plan between the given departure and arrival then should return it`() {
         inMemorySectionRepository.save(SectionFactory.avCabildo())
 
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),
@@ -53,7 +55,8 @@ internal class SearchTripTest {
     fun `given exists a trip plan but not between the given departure and arrival then should return empty list`() {
         inMemorySectionRepository.save(SectionFactory.virreyDelPino())
 
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),
@@ -67,7 +70,8 @@ internal class SearchTripTest {
         inMemorySectionRepository.save(SectionFactory.virreyDelPino2880_avCabildo1621())
         inMemorySectionRepository.save(SectionFactory.avCabildo1621_virreyDelPino1800())
 
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),
@@ -81,7 +85,8 @@ internal class SearchTripTest {
         inMemorySectionRepository.save(SectionFactory.avCabildo())
         inMemorySectionRepository.save(SectionFactory.virreyDelPino())
 
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),
@@ -95,7 +100,8 @@ internal class SearchTripTest {
         inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
         inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
 
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),
@@ -112,7 +118,8 @@ internal class SearchTripTest {
         inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino2880())
         inMemorySectionRepository.save(SectionFactory.virreyDelPino2880_avCabildo20())
 
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),
@@ -137,7 +144,8 @@ internal class SearchTripTest {
         inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino2880())
         inMemorySectionRepository.save(SectionFactory.virreyDelPino2880_avCabildo20())
 
-        val result = searchTrip(SearchTrip.Request(
+        val result = searchTrip(
+            SearchTrip.Request(
             departure = LocationFactory.avCabildo_4853(),
             arrival = LocationFactory.avCabildo_20(),
             at = InstantFactory.october15_12hs(),

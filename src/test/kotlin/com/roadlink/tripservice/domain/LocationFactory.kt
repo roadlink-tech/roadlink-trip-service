@@ -1,4 +1,4 @@
-package com.fdt.tripservice.domain
+package com.roadlink.tripservice.domain
 
 object LocationFactory {
     fun avCabildo_4853() = Location(latitude = -34.540412, longitude = -58.474732, alias = "AvCabildo 4853")

@@ -1,4 +1,4 @@
-package com.fdt.tripservice.domain
+package com.roadlink.tripservice.domain
 
 object TripPointFactory {
     fun avCabildo_4853() =

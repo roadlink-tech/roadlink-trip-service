@@ -1,4 +1,4 @@
-package com.fdt.tripservice.domain
+package com.roadlink.tripservice.domain
 
 object TripPlanFactory {
     fun avCabildo() = TripPlan(sections = listOf(SectionFactory.avCabildo()))

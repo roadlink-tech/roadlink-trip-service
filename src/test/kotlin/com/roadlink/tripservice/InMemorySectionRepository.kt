@@ -1,8 +1,8 @@
-package com.fdt.tripservice
+package com.roadlink.tripservice
 
-import com.fdt.tripservice.domain.Location
-import com.fdt.tripservice.domain.Section
-import com.fdt.tripservice.domain.SectionRepository
+import com.roadlink.tripservice.domain.Location
+import com.roadlink.tripservice.domain.Section
+import com.roadlink.tripservice.domain.SectionRepository
 import java.time.Instant
 
 class InMemorySectionRepository(
