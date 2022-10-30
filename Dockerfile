@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM gradle:6.3.0-jdk11 as compiler
+FROM gradle:7.2.0-jdk17 as compiler
 
 ENV APP_HOME=/usr/app/
 
@@ -9,18 +9,20 @@ WORKDIR $APP_HOME
 
 # copy source code
 COPY build.gradle.kts settings.gradle.kts gradlew $APP_HOME
+COPY gradle.properties $APP_HOME
 COPY gradle gradle
+COPY micronaut-cli.yml micronaut-cli.yml
 COPY src src
 
 # create application jar
 RUN gradle clean build -x test
 
 # move application jar
-RUN mv ./build/libs/*-SNAPSHOT.jar service.jar
+RUN mv ./build/libs/*-all.jar service.jar
 #
 # Run stage
 #
-FROM openjdk:11
+FROM openjdk:17-jdk-alpine
 
 
 ENV APP_HOME=/usr/app/
@@ -31,8 +33,6 @@ COPY --from=compiler $APP_HOME/service.jar $APP_HOME/service.jar
 
 WORKDIR $APP_HOME
 
-ENV JAVA_OPTS="$MAX_RAM_PERCENTAGE $MIN_RAM_PERCENTAGE"
+ENV JAVA_OPTS="$SECURITY_OPTS $MAX_RAM_PERCENTAGE $MIN_RAM_PERCENTAGE"
 ENTRYPOINT exec java $JAVA_OPTS -jar service.jar
 EXPOSE 8080
-
-

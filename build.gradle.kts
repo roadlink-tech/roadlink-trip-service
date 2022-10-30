@@ -56,6 +56,3 @@ micronaut {
         annotations("com.roadlink.*")
     }
 }
-
-
-
