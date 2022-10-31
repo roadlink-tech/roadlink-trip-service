@@ -18,7 +18,7 @@ class SearchTripRestController(private val searchTrip: SearchTrip) {
         @QueryValue departureLongitude: Double,
         @QueryValue arrivalLatitude: Double,
         @QueryValue arrivalLongitude: Double,
-        @QueryValue at: String,
+        @QueryValue at: Long,
     ): SearchTripResponse {
 
         val tripPlans = searchTrip(SearchTrip.Request(
@@ -28,7 +28,7 @@ class SearchTripRestController(private val searchTrip: SearchTrip) {
             arrival = Location(
                 latitude = arrivalLatitude, longitude = arrivalLongitude,
             ),
-            at = Instant.parse(at),
+            at = Instant.ofEpochMilli(at),
         ))
 
         return toSearchTripResponse(tripPlans)
@@ -51,7 +51,7 @@ class SearchTripRestController(private val searchTrip: SearchTrip) {
                 latitude = tripPoint.location.latitude,
                 longitude = tripPoint.location.longitude,
             ),
-            at = tripPoint.at.toString(),
+            at = tripPoint.at.toEpochMilli(),
         )
     }
 }
@@ -63,6 +63,6 @@ data class TripPlanResponse(val sections: List<SectionResponse>)
 
 data class SectionResponse(val departure: TripPointResponse, val arrival: TripPointResponse)
 
-data class TripPointResponse(val location: LocationResponse, val at: String)
+data class TripPointResponse(val location: LocationResponse, val at: Long)
 
 data class LocationResponse(val latitude: Double, val longitude: Double)

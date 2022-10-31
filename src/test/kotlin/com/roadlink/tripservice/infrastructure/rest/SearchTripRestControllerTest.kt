@@ -42,7 +42,7 @@ internal class SearchTripRestControllerTest {
                 .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
                 .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
                 .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
-                .queryParam("at", InstantFactory.october15_12hs().toString())
+                .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                 .build())
 
         val response = client.toBlocking().exchange(request, String::class.java)
@@ -70,7 +70,7 @@ internal class SearchTripRestControllerTest {
                 .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
                 .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
                 .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
-                .queryParam("at", InstantFactory.october15_12hs().toString())
+                .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                 .build())
 
         val response = client.toBlocking().exchange(request, String::class.java)
@@ -89,14 +89,14 @@ internal class SearchTripRestControllerTest {
                                             "latitude": -34.540412,
                                             "longitude": -58.474732
                                         },
-                                        "at": "2022-10-15T12:00:00Z"
+                                        "at": 1665835200000
                                     },
                                     "arrival": {
                                         "location": {
                                             "latitude": -34.562389,
                                             "longitude": -58.445302
                                         },
-                                        "at": "2022-10-15T17:00:00Z"
+                                        "at": 1665853200000
                                     }
                                 },
                                 {
@@ -105,14 +105,14 @@ internal class SearchTripRestControllerTest {
                                             "latitude": -34.562389,
                                             "longitude": -58.445302
                                         },
-                                        "at": "2022-10-15T17:00:00Z"
+                                        "at": 1665853200000
                                     },
                                     "arrival": {
                                         "location": {
                                             "latitude": -34.574810,
                                             "longitude": -58.435990
                                         },
-                                        "at": "2022-10-15T18:00:00Z"
+                                        "at": 1665856800000
                                     }
                                 }
                             ]
