@@ -29,7 +29,7 @@ dependencies {
 
 
 application {
-    mainClass.set("com.roadlink.ApplicationKt")
+    mainClass.set("com.roadlink.tripservice.ApplicationKt")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
