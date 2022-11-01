@@ -10,7 +10,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.QueryValue
 import java.time.Instant
 
-@Controller("/trips")
+@Controller("/trip-service/trips")
 class SearchTripRestController(private val searchTrip: SearchTrip) {
     @Get
     fun handle(

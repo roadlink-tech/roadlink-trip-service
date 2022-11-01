@@ -37,7 +37,7 @@ internal class SearchTripRestControllerTest {
     @Test
     fun `given no section exists then should return ok status code and the trip plan in response body`() {
         val request: HttpRequest<Any> = HttpRequest
-            .GET(UriBuilder.of("/trips")
+            .GET(UriBuilder.of("/trip-service/trips")
                 .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
                 .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
                 .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
@@ -65,7 +65,7 @@ internal class SearchTripRestControllerTest {
         inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
 
         val request: HttpRequest<Any> = HttpRequest
-            .GET(UriBuilder.of("/trips")
+            .GET(UriBuilder.of("/trip-service/trips")
                 .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
                 .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
                 .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
