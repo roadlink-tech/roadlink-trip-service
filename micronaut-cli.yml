@@ -1,5 +1,5 @@
 applicationType: default
-defaultPackage: com.roadlink
+defaultPackage: com.roadlink.tripservice
 testFramework: junit
 sourceLanguage: kotlin
 buildTool: gradle_kotlin

@@ -7,7 +7,7 @@ plugins {
 }
 
 version = "0.1"
-group = "com.roadlink"
+group = "com.roadlink.tripservice"
 
 val kotlinVersion=project.properties.get("kotlinVersion")
 repositories {
@@ -53,6 +53,6 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("com.roadlink.*")
+        annotations("com.roadlink.tripservice.*")
     }
 }
