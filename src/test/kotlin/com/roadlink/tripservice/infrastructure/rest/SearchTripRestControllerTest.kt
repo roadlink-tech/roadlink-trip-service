@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.InstantFactory
 import com.roadlink.tripservice.domain.LocationFactory
 import com.roadlink.tripservice.domain.SectionFactory
-import com.roadlink.tripservice.infrastructure.repositories.InMemorySectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType

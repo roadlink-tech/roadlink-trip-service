@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.infrastructure.repositories
+package com.roadlink.tripservice.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.domain.Section

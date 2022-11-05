@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.infrastructure.repositories.InMemorySectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
