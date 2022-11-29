@@ -2,7 +2,14 @@ package com.roadlink.tripservice.domain
 
 import java.time.Instant
 
-data class Section(val departure: TripPoint, val arrival: TripPoint, val distanceInMeters: Double) {
+data class Section(
+    val departure: TripPoint,
+    val arrival: TripPoint,
+    val distanceInMeters: Double,
+    val driver: String,
+    val vehicle: String,
+    val availableSeats: Int,
+) {
 
     fun departure(): Location = departure.location
 

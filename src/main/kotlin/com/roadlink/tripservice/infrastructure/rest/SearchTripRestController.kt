@@ -40,6 +40,9 @@ class SearchTripRestController(private val searchTrip: SearchTrip) {
                 SectionResponse(
                     departure = toTripPointResponse(section.departure),
                     arrival = toTripPointResponse(section.arrival),
+                    driver = section.driver,
+                    vehicle = section.vehicle,
+                    availableSeats = section.availableSeats,
                 )
             })
         })
@@ -52,6 +55,11 @@ class SearchTripRestController(private val searchTrip: SearchTrip) {
                 longitude = tripPoint.location.longitude,
             ),
             at = tripPoint.at.toEpochMilli(),
+            formatted = tripPoint.formatted,
+            street = tripPoint.street,
+            city = tripPoint.city,
+            country = tripPoint.country,
+            housenumber = tripPoint.housenumber,
         )
     }
 }
@@ -61,8 +69,22 @@ data class SearchTripResponse(val tripPlans: List<TripPlanResponse>)
 
 data class TripPlanResponse(val sections: List<SectionResponse>)
 
-data class SectionResponse(val departure: TripPointResponse, val arrival: TripPointResponse)
+data class SectionResponse(
+    val departure: TripPointResponse,
+    val arrival: TripPointResponse,
+    val driver: String,
+    val vehicle: String,
+    val availableSeats: Int,
+)
 
-data class TripPointResponse(val location: LocationResponse, val at: Long)
+data class TripPointResponse(
+    val location: LocationResponse,
+    val at: Long,
+    val formatted: String,
+    val street: String,
+    val city: String,
+    val country: String,
+    val housenumber: String,
+)
 
 data class LocationResponse(val latitude: Double, val longitude: Double)

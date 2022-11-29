@@ -89,15 +89,28 @@ internal class SearchTripRestControllerTest {
                                             "latitude": -34.540412,
                                             "longitude": -58.474732
                                         },
-                                        "at": 1665835200000
+                                        "at": 1665835200000,
+                                        "formatted": "Av. Cabildo 4853, Buenos Aires",
+                                        "street": "Av. Cabildo",
+                                        "city": "Buenos Aires",
+                                        "country": "Argentina",
+                                        "housenumber": "4853"
                                     },
                                     "arrival": {
                                         "location": {
                                             "latitude": -34.562389,
                                             "longitude": -58.445302
                                         },
-                                        "at": 1665853200000
-                                    }
+                                        "at": 1665853200000,
+                                        "formatted": "Virrey del Pino 1800, Buenos Aires",
+                                        "street": "Virrey del Pino",
+                                        "city": "Buenos Aires",
+                                        "country": "Argentina",
+                                        "housenumber": "1800"
+                                    },
+                                    "driver": "John Smith",
+                                    "vehicle": "Ford mustang",
+                                    "availableSeats": 4
                                 },
                                 {
                                     "departure": {
@@ -105,15 +118,28 @@ internal class SearchTripRestControllerTest {
                                             "latitude": -34.562389,
                                             "longitude": -58.445302
                                         },
-                                        "at": 1665853200000
+                                        "at": 1665853200000,
+                                        "formatted": "Virrey del Pino 1800, Buenos Aires",
+                                        "street": "Virrey del Pino",
+                                        "city": "Buenos Aires",
+                                        "country": "Argentina",
+                                        "housenumber": "1800"
                                     },
                                     "arrival": {
                                         "location": {
                                             "latitude": -34.574810,
                                             "longitude": -58.435990
                                         },
-                                        "at": 1665856800000
-                                    }
+                                        "at": 1665856800000,
+                                        "formatted": "Av. Cabildo 20, Buenos Aires",
+                                        "street": "Av. Cabildo",
+                                        "city": "Buenos Aires",
+                                        "country": "Argentina",
+                                        "housenumber": "20"
+                                    },
+                                    "driver": "John Smith",
+                                    "vehicle": "Ford mustang",
+                                    "availableSeats": 4
                                 }
                             ]
                         }
