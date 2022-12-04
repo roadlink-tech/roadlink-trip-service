@@ -1,10 +1,12 @@
 package com.roadlink.tripservice.domain
 
+import java.time.Instant
+
 object TripPointFactory {
-    fun avCabildo_4853() =
+    fun avCabildo_4853(at: Instant = InstantFactory.october15_12hs()) =
         TripPoint(
             location = LocationFactory.avCabildo_4853(),
-            at = InstantFactory.october15_12hs(),
+            at = at,
             formatted = "Av. Cabildo 4853, Buenos Aires",
             street = "Av. Cabildo",
             city = "Buenos Aires",
@@ -12,10 +14,10 @@ object TripPointFactory {
             housenumber = "4853",
         )
 
-    fun avCabildo_20() =
+    fun avCabildo_20(at: Instant = InstantFactory.october15_18hs()) =
         TripPoint(
             location = LocationFactory.avCabildo_20(),
-            at = InstantFactory.october15_18hs(),
+            at = at,
             formatted = "Av. Cabildo 20, Buenos Aires",
             street = "Av. Cabildo",
             city = "Buenos Aires",
@@ -34,10 +36,10 @@ object TripPointFactory {
             housenumber = "2880",
         )
 
-    fun virreyDelPino_1800() =
+    fun virreyDelPino_1800(at: Instant = InstantFactory.october15_17hs()) =
         TripPoint(
             location = LocationFactory.virreyDelPino_1800(),
-            at = InstantFactory.october15_17hs(),
+            at = at,
             formatted = "Virrey del Pino 1800, Buenos Aires",
             street = "Virrey del Pino",
             city = "Buenos Aires",
