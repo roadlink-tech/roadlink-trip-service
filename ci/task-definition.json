@@ -1,6 +1,6 @@
 {
   "ipcMode": null,
-  "executionRoleArn": "arn:aws:iam::601092042633:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::315238282715:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
@@ -29,7 +29,7 @@
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "601092042633.dkr.ecr.us-east-1.amazonaws.com/trip-service",
+      "image": "315238282715.dkr.ecr.us-east-1.amazonaws.com/trip-service",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -56,7 +56,7 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:601092042633:task-definition/trip-service:9",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:315238282715:task-definition/trip-service:9",
   "family": "trip-service",
   "requiresAttributes": [
     {
