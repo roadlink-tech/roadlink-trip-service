@@ -5,3 +5,13 @@ netty:
   default:
     allocator:
       max-order: 3
+geoapify:
+  # This is no secure. This is a secret and must be retrieved from
+  # a secret manager or env vars.
+  apiKey:
+    07dab08fd2da4d0eb54455ac01f2f920
+  http:
+    scheme: http
+    host: api.geoapify.com
+    port: 80
+    endpoint: v1/geocode/search
