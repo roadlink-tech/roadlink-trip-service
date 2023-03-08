@@ -2,6 +2,12 @@ package com.roadlink.tripservice.trip.usecases
 
 import com.roadlink.tripservice.trip.domain.*
 
+class DefaultIdGenerator : IdGenerator {
+    override fun id(): String {
+        TODO("Not yet implemented")
+    }
+
+}
 class CreateTrip(
     private val tripRepository: TripRepository,
     private val idGenerator: IdGenerator,
