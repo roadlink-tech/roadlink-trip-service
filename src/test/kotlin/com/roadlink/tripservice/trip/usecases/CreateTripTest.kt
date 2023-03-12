@@ -4,7 +4,10 @@ import com.roadlink.tripservice.trip.SpyEventPublisher
 import com.roadlink.tripservice.trip.StubIdGenerator
 import com.roadlink.tripservice.trip.StubTimeProvider
 import com.roadlink.tripservice.trip.domain.*
-import com.roadlink.tripservice.trip.infrastructure.persistence.InMemoryTripRepository
+import com.roadlink.tripservice.domain.event.TripCreatedEvent
+import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
+import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
+import com.roadlink.tripservice.usecases.CreateTrip
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -42,8 +45,9 @@ internal class CreateTripTest {
     fun `given already exists trip with same driver in the given time range then should fail`() {
         inMemoryTripRepository.save(TripFactory.avCabildo())
 
-        assertThrows<AlreadyExistsTripByDriverInTimeRange> {
-            createTrip(CreateTrip.Request(
+        assertThrows<com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange> {
+            createTrip(
+                CreateTrip.Request(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -58,8 +62,9 @@ internal class CreateTripTest {
 
     @Test
     fun `given trip with no meeting points and arrival at before departure at then should fail`() {
-        assertThrows<InvalidTripTimeRange> {
-            createTrip(CreateTrip.Request(
+        assertThrows<InvalidTripTimeRangeException> {
+            createTrip(
+                CreateTrip.Request(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -76,8 +81,9 @@ internal class CreateTripTest {
 
     @Test
     fun `given trip with one meeting point and meeting point at before departure at then should fail`() {
-        assertThrows<InvalidTripTimeRange> {
-            createTrip(CreateTrip.Request(
+        assertThrows<InvalidTripTimeRangeException> {
+            createTrip(
+                CreateTrip.Request(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -96,8 +102,9 @@ internal class CreateTripTest {
 
     @Test
     fun `given trip with one meeting point and meeting point at after arrival at then should fail`() {
-        assertThrows<InvalidTripTimeRange> {
-            createTrip(CreateTrip.Request(
+        assertThrows<InvalidTripTimeRangeException> {
+            createTrip(
+                CreateTrip.Request(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -118,7 +125,8 @@ internal class CreateTripTest {
     fun `can create trip with no meeting points`() {
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildoId)
 
-        val result = createTrip(CreateTrip.Request(
+        val result = createTrip(
+            CreateTrip.Request(
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
@@ -129,17 +137,20 @@ internal class CreateTripTest {
 
         assertEquals(TripFactory.avCabildo(), result)
         assertEquals(listOf(TripFactory.avCabildo()), inMemoryTripRepository.findAll())
-        spyEventPublisher.verifyHasPublish(TripCreatedEvent(
+        spyEventPublisher.verifyHasPublish(
+            TripCreatedEvent(
             trip = TripFactory.avCabildo(),
             at = InstantFactory.october15_7hs(),
-        ))
+        )
+        )
     }
 
     @Test
     fun `can create trip with meeting points`() {
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20)
 
-        val result = createTrip(CreateTrip.Request(
+        val result = createTrip(
+            CreateTrip.Request(
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
@@ -150,9 +161,11 @@ internal class CreateTripTest {
 
         assertEquals(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), result)
         assertEquals(listOf(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20()), inMemoryTripRepository.findAll())
-        spyEventPublisher.verifyHasPublish(TripCreatedEvent(
+        spyEventPublisher.verifyHasPublish(
+            TripCreatedEvent(
             trip = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
             at = InstantFactory.october15_7hs(),
-        ))
+        )
+        )
     }
 }

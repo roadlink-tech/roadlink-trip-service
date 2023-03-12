@@ -7,7 +7,7 @@ import com.roadlink.tripservice.dev_tools.infrastructure.network.QueryParameter
 import com.roadlink.tripservice.dev_tools.infrastructure.network.ReadRequest
 import com.roadlink.tripservice.dev_tools.domain.GeoapifyPoint
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Response
-import com.roadlink.tripservice.trip.domain.Location
+import com.roadlink.tripservice.domain.Location
 
 class HttpGeoapify(
     private val get: Get,

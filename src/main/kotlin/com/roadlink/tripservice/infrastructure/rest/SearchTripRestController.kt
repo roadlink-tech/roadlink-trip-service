@@ -1,0 +1,91 @@
+package com.roadlink.tripservice.infrastructure.rest
+
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.roadlink.tripservice.domain.Location
+import com.roadlink.tripservice.domain.trip.TripPlan
+import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.usecases.SearchTrip
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.QueryValue
+import java.time.Instant
+
+@Controller("/trip-service/trips")
+class SearchTripRestController(private val searchTrip: SearchTrip) {
+    @Get
+    fun handle(
+        @QueryValue departureLatitude: Double,
+        @QueryValue departureLongitude: Double,
+        @QueryValue arrivalLatitude: Double,
+        @QueryValue arrivalLongitude: Double,
+        @QueryValue at: Long,
+    ): SearchTripResponse {
+
+        val tripPlans = searchTrip(
+            SearchTrip.Request(
+            departure = Location(
+                latitude = departureLatitude, longitude = departureLongitude,
+            ),
+            arrival = Location(
+                latitude = arrivalLatitude, longitude = arrivalLongitude,
+            ),
+            at = Instant.ofEpochMilli(at),
+        ))
+
+        return toSearchTripResponse(tripPlans)
+    }
+
+    private fun toSearchTripResponse(tripPlans: List<TripPlan>): SearchTripResponse {
+        return SearchTripResponse(tripPlans = tripPlans.map { tripPlan ->
+            TripPlanResponse(sections = tripPlan.sections.map { section ->
+                SectionResponse(
+                    departure = toTripPointResponse(section.departure),
+                    arrival = toTripPointResponse(section.arrival),
+                    driver = section.driver,
+                    vehicle = section.vehicle,
+                    availableSeats = section.availableSeats,
+                )
+            })
+        })
+    }
+
+    private fun toTripPointResponse(tripPoint: TripPoint): TripPointResponse {
+        return TripPointResponse(
+            location = LocationResponse(
+                latitude = tripPoint.location.latitude,
+                longitude = tripPoint.location.longitude,
+            ),
+            at = tripPoint.at.toEpochMilli(),
+            formatted = tripPoint.formatted,
+            street = tripPoint.street,
+            city = tripPoint.city,
+            country = tripPoint.country,
+            housenumber = tripPoint.housenumber,
+        )
+    }
+}
+
+@JsonInclude(JsonInclude.Include.ALWAYS)
+data class SearchTripResponse(val tripPlans: List<TripPlanResponse>)
+
+data class TripPlanResponse(val sections: List<SectionResponse>)
+
+data class SectionResponse(
+    val departure: TripPointResponse,
+    val arrival: TripPointResponse,
+    val driver: String,
+    val vehicle: String,
+    val availableSeats: Int,
+)
+
+data class TripPointResponse(
+    val location: LocationResponse,
+    val at: Long,
+    val formatted: String,
+    val street: String,
+    val city: String,
+    val country: String,
+    val housenumber: String,
+)
+
+data class LocationResponse(val latitude: Double, val longitude: Double)

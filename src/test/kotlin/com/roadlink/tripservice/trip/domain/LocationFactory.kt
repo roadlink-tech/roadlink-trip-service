@@ -1,5 +1,7 @@
 package com.roadlink.tripservice.trip.domain
 
+import com.roadlink.tripservice.domain.Location
+
 object LocationFactory {
     fun avCabildo_4853() = Location(latitude = -34.540412, longitude = -58.474732, alias = "AvCabildo 4853")
     fun avCabildo_1621() = Location(latitude = -34.565985, longitude = -58.452394, alias = "AvCabildo 41621")

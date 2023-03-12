@@ -3,9 +3,9 @@ package com.roadlink.tripservice.dev_tools.usecases
 import com.roadlink.tripservice.dev_tools.domain.Geoapify
 import com.roadlink.tripservice.dev_tools.domain.GeoapifyPoint
 import com.roadlink.tripservice.dev_tools.domain.GeoapifyPointNotExists
-import com.roadlink.tripservice.trip.domain.Section
-import com.roadlink.tripservice.trip.domain.SectionRepository
-import com.roadlink.tripservice.trip.domain.TripPoint
+import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.trip.TripPoint
 import java.time.Instant
 
 class AddSection(

@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.trip.domain
 
+import com.roadlink.tripservice.domain.trip.TripPoint
 import java.time.Instant
 
 object TripPointFactory {

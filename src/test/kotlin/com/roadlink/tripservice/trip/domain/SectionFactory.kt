@@ -1,5 +1,7 @@
 package com.roadlink.tripservice.trip.domain
 
+import com.roadlink.tripservice.domain.trip.section.Section
+
 object SectionFactory {
     fun avCabildo() =
         Section(

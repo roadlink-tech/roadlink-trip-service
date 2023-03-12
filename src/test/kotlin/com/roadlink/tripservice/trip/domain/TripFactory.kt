@@ -1,5 +1,7 @@
 package com.roadlink.tripservice.trip.domain
 
+import com.roadlink.tripservice.domain.trip.Trip
+
 object TripFactory {
 
     const val avCabildoId = "TripFactory_avCabildo"

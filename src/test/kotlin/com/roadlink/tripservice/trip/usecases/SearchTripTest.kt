@@ -1,7 +1,8 @@
 package com.roadlink.tripservice.trip.usecases
 
 import com.roadlink.tripservice.trip.domain.*
-import com.roadlink.tripservice.trip.infrastructure.persistence.InMemorySectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
+import com.roadlink.tripservice.usecases.SearchTrip
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -16,7 +17,7 @@ internal class SearchTripTest {
     @BeforeEach
     fun setUp() {
         inMemorySectionRepository = InMemorySectionRepository()
-        val bruteForceSearchEngine = BruteForceSearchEngine(
+        val bruteForceSearchEngine = com.roadlink.tripservice.domain.BruteForceSearchEngine(
             sectionRepository = inMemorySectionRepository,
         )
 

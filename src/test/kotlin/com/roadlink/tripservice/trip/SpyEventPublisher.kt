@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.trip
 
-import com.roadlink.tripservice.trip.domain.Event
-import com.roadlink.tripservice.trip.domain.EventPublisher
-import com.roadlink.tripservice.trip.domain.Observer
+import com.roadlink.tripservice.domain.event.Event
+import com.roadlink.tripservice.domain.event.EventPublisher
+import com.roadlink.tripservice.domain.event.Observer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 
