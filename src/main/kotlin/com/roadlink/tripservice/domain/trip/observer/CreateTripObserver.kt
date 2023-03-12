@@ -2,10 +2,16 @@ package com.roadlink.tripservice.domain.trip.observer
 
 import com.roadlink.tripservice.domain.event.Event
 import com.roadlink.tripservice.domain.event.Observer
+import com.roadlink.tripservice.domain.event.TripCreatedEvent
+import com.roadlink.tripservice.domain.trip.TripRepository
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 
-class CreateTripObserver : Observer {
+class CreateTripObserver(val sectionRepository: SectionRepository) : Observer {
     override fun update(event: Event) {
-        // crear secciones de viaje a partir del evento
-        TODO()
+        val tripCreatedEvent = event as TripCreatedEvent
+        val trip = tripCreatedEvent.trip
+        val sections = trip.sections()
+        sectionRepository.save(sections)
+
     }
 }

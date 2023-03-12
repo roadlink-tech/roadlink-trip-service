@@ -45,7 +45,7 @@ class CreateTrip(
         val driver = request.driver
         val timeRange = TimeRange(from = request.departure.at, to = request.arrival.at)
         if (tripRepository.existsByDriverAndInTimeRange(driver, timeRange))
-            throw com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange(driver, timeRange)
+            throw AlreadyExistsTripByDriverInTimeRange(driver, timeRange)
     }
 
     private fun Request.toTrip(): Trip =
