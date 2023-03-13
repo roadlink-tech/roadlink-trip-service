@@ -5,7 +5,7 @@ import java.time.Instant
 
 interface SectionRepository {
     fun save(section: Section)
-
     fun save(sections: Set<Section>)
     fun findNextSections(from: Location, at: Instant): Set<Section>
+    fun deleteAll()
 }

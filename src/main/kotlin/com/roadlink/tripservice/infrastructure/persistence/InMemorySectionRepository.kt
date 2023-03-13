@@ -25,7 +25,7 @@ class InMemorySectionRepository(
             .toSet()
     }
 
-    fun deleteAll() {
+    override fun deleteAll() {
         sections.clear()
     }
 }

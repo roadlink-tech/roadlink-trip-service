@@ -1,10 +1,10 @@
 package com.roadlink.tripservice.trip.infrastructure.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.LocationFactory
 import com.roadlink.tripservice.trip.domain.SectionFactory
-import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
@@ -24,26 +24,28 @@ internal class SearchTripRestControllerTest {
     lateinit var client: HttpClient
 
     @Inject
-    private lateinit var inMemorySectionRepository: InMemorySectionRepository
+    private lateinit var sectionRepository: SectionRepository
 
     @Inject
     private lateinit var objectMapper: ObjectMapper
 
     @BeforeEach
     fun setUp() {
-        inMemorySectionRepository.deleteAll()
+        sectionRepository.deleteAll()
     }
 
     @Test
     fun `given no section exists then should return ok status code and the trip plan in response body`() {
         val request: HttpRequest<Any> = HttpRequest
-            .GET(UriBuilder.of("/trip-service/trips")
-                .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
-                .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
-                .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
-                .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
-                .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
-                .build())
+            .GET(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .build()
+            )
 
         val response = client.toBlocking().exchange(request, String::class.java)
 
@@ -61,17 +63,19 @@ internal class SearchTripRestControllerTest {
 
     @Test
     fun `given exists a trip plan with one meeting point between the given departure and arrival then should return ok status code and the trip plan in response body`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
-        inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
+        sectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
+        sectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
 
         val request: HttpRequest<Any> = HttpRequest
-            .GET(UriBuilder.of("/trip-service/trips")
-                .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
-                .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
-                .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
-                .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
-                .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
-                .build())
+            .GET(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .build()
+            )
 
         val response = client.toBlocking().exchange(request, String::class.java)
 
