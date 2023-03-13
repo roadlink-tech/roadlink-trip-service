@@ -4,6 +4,7 @@ import com.roadlink.tripservice.domain.event.EventPublisher
 import com.roadlink.tripservice.domain.event.InMemoryEventPublisher
 import com.roadlink.tripservice.domain.time.DefaultTimeProvider
 import com.roadlink.tripservice.domain.trip.observer.CreateTripObserver
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
 import com.roadlink.tripservice.usecases.CreateTrip
 import com.roadlink.tripservice.usecases.DefaultIdGenerator
@@ -26,9 +27,9 @@ class SearchTripConfig {
     }
 
     @Singleton
-    fun createTripEventPublisher(): EventPublisher {
+    fun createTripEventPublisher(sectionsRepository: SectionRepository): EventPublisher {
         val publisher = InMemoryEventPublisher()
-        publisher.suscribe(CreateTripObserver())
+        publisher.suscribe(CreateTripObserver(sectionsRepository))
         return publisher
     }
     @Singleton
@@ -38,7 +39,7 @@ class SearchTripConfig {
     ): CreateTrip {
         return CreateTrip(
             tripRepository = inMemoryTripRepository,
-            idGenerator =  DefaultIdGenerator(),
+            idGenerator =  DefaultIdGenerator,
             eventPublisher = createTripEventPublisher,
             timeProvider = DefaultTimeProvider()
         )

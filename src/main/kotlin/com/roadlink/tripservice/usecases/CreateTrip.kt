@@ -9,13 +9,14 @@ import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.TripRepository
+import java.util.UUID
 
-class DefaultIdGenerator : IdGenerator {
+object DefaultIdGenerator : IdGenerator {
     override fun id(): String {
-        TODO("Not yet implemented")
+        return UUID.randomUUID().toString()
     }
-
 }
+
 class CreateTrip(
     private val tripRepository: TripRepository,
     private val idGenerator: IdGenerator,

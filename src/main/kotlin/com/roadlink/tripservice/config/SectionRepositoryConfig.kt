@@ -3,15 +3,16 @@ package com.roadlink.tripservice.config
 import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 import java.time.Instant
 
 @Factory
-class InMemorySectionRepositoryConfig {
+class SectionRepositoryConfig {
     @Singleton
-    fun inMemorySectionRepository(): InMemorySectionRepository {
+    fun sectionRepository(): SectionRepository {
         return InMemorySectionRepository(sections = mutableListOf(
                 Section(
                     departure = TripPoint(

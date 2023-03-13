@@ -12,6 +12,12 @@ class InMemorySectionRepository(
         sections.add(section)
     }
 
+    override fun save(sections: Set<Section>) {
+        sections.forEach { section ->
+            this.save(section)
+        }
+    }
+
     override fun findNextSections(from: Location, at: Instant): Set<Section> {
         return sections
             .filter { it.departuresFrom(from) }

@@ -48,6 +48,51 @@ object TripPointFactory {
             housenumber = "1800",
         )
 
+    // TODO
+    fun caba(at: Instant = InstantFactory.october15_17hs()) =
+        TripPoint(
+            location = LocationFactory.caba(),
+            at = at,
+            formatted = "9 de julio y corrientes, Buenos Aires",
+            street = "9 de julio",
+            city = "CABA",
+            country = "Argentina",
+            housenumber = "0",
+        )
+
+    fun escobar(at: Instant = InstantFactory.october15_17hs()) =
+        TripPoint(
+            location = LocationFactory.escobar(),
+            at = at,
+            formatted = "escobar centro",
+            street = "escobar",
+            city = "Escobar",
+            country = "Argentina",
+            housenumber = "1800",
+        )
+
+    fun pilar(at: Instant = InstantFactory.october15_17hs()) =
+        TripPoint(
+            location = LocationFactory.pilar(),
+            at = at,
+            formatted = "Pilar centro, Buenos Aires",
+            street = "Virrey del Pino",
+            country = "Argentina",
+            city = "Pilar",
+            housenumber = "1800",
+        )
+
+    fun rosario(at: Instant = InstantFactory.october15_17hs()) =
+        TripPoint(
+            location = LocationFactory.rosario(),
+            at = at,
+            formatted = "Rosario, Santa Fe",
+            street = "Virrey del Pino",
+            city = "Rosario",
+            country = "Argentina",
+            housenumber = "1800",
+        )
+
     fun avCabildo_1621() =
         TripPoint(
             location = LocationFactory.avCabildo_1621(),

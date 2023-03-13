@@ -6,8 +6,8 @@ import java.time.Instant
 
 class BruteForceSearchEngine(
     private val sectionRepository: SectionRepository,
-) : com.roadlink.tripservice.domain.SearchEngine {
-    override fun search(departure: com.roadlink.tripservice.domain.Location, arrival: com.roadlink.tripservice.domain.Location, at: Instant): List<TripPlan> {
+) : SearchEngine {
+    override fun search(departure: Location, arrival: Location, at: Instant): List<TripPlan> {
         val tripPlans = mutableListOf<TripPlan>()
 
         val stack = mutableListOf<TripPlan>()

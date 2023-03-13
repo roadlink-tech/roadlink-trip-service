@@ -28,4 +28,18 @@ object TripFactory {
             meetingPoints = listOf(TripPointFactory.virreyDelPino_1800()),
             availableSeats = 5,
         )
+
+    fun caba_escobar_pilar_rosario() =
+        Trip(
+            id = avCabildo4853_virreyDelPino1800_avCabildo20,
+            driver = "John Smith",
+            vehicle = "Ford mustang",
+            departure = TripPointFactory.caba(),
+            arrival = TripPointFactory.rosario(),
+            meetingPoints = listOf(
+                TripPointFactory.escobar(),
+                TripPointFactory.pilar(),
+            ),
+            availableSeats = 5,
+        )
 }

@@ -1,15 +1,15 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
 @Factory
 class BruteForceSearchEngineConfig {
     @Singleton
-    fun bruteForceSearchEngine(inMemorySectionRepository: InMemorySectionRepository): com.roadlink.tripservice.domain.BruteForceSearchEngine {
+    fun bruteForceSearchEngine(sectionRepository: SectionRepository): com.roadlink.tripservice.domain.BruteForceSearchEngine {
         return com.roadlink.tripservice.domain.BruteForceSearchEngine(
-            sectionRepository = inMemorySectionRepository,
+            sectionRepository = sectionRepository,
         )
     }
 }
