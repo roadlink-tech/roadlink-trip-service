@@ -1,8 +1,7 @@
 package com.roadlink.tripservice.usecases
 
 import com.roadlink.tripservice.domain.*
-import com.roadlink.tripservice.domain.event.EventPublisher
-import com.roadlink.tripservice.domain.event.TripCreatedEvent
+import com.roadlink.tripservice.domain.event.*
 import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
 import com.roadlink.tripservice.domain.time.TimeProvider
 import com.roadlink.tripservice.domain.time.TimeRange
@@ -21,6 +20,7 @@ class CreateTrip(
     private val tripRepository: TripRepository,
     private val idGenerator: IdGenerator,
     private val eventPublisher: EventPublisher,
+    private val commandBus: CommandBus,
     private val timeProvider: TimeProvider,
 ) {
     operator fun invoke(request: Request): Trip {
@@ -31,6 +31,12 @@ class CreateTrip(
         return trip.also {
             tripRepository.save(it)
             eventPublisher.publish(TripCreatedEvent(trip = trip, at = timeProvider.now()))
+            commandBus.execute<TripCreatedCommandV2, TripCreatedCommandResponseV2>(
+                TripCreatedCommandV2(
+                    trip = trip,
+                    at = timeProvider.now()
+                )
+            )
         }
     }
 

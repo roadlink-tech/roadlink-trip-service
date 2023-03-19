@@ -1,39 +1,34 @@
-package com.roadlink.tripservice.domain.event
+package com.roadlink.tripservice.trip
 
-import java.lang.IllegalArgumentException
+import com.roadlink.tripservice.domain.event.*
 import java.lang.IllegalStateException
 import kotlin.reflect.KClass
 
-interface EventPublisher {
-    fun suscribe(observer: Observer)
-    fun publish(event: Event)
+class SpyCreateTripHandler() :
+    CommandHandler<TripCreatedCommandV2, TripCreatedCommandResponseV2> {
+    override fun handle(command: TripCreatedCommandV2): TripCreatedCommandResponseV2 {
+        return TripCreatedCommandResponseV2(command.trip)
+    }
 }
 
-
-interface Command
-
-interface CommandResponse
-interface CommandBus {
-    fun <C : Command, R : CommandResponse> execute(command: C): R
-}
-
-interface CommandHandler<C : Command, R : CommandResponse> {
-    fun handle(command: C): R
-}
-
-class SimpleCommandBus : CommandBus {
-
+class SpyCommandBus : CommandBus {
     private val handlers = mutableMapOf<Class<out Command>, CommandHandler<Command, CommandResponse>>()
+
+    init {
+        registerHandler(SpyCreateTripHandler())
+    }
+
     override fun <C : Command, R : CommandResponse> execute(command: C): R {
         val handler = handlers[command::class.java] as? CommandHandler<C, R>
             ?: throw IllegalStateException("No handler registered for command of type ${command::class.java}")
         return handler.handle(command)
     }
 
-    fun registerHandler(handler: CommandHandler<out Command, out CommandResponse>) {
+    private fun registerHandler(handler: CommandHandler<out Command, out CommandResponse>) {
         val commandClass = handler::class.supertypes
             .firstOrNull { it.classifier == CommandHandler::class }?.arguments?.first()?.type?.classifier as? KClass<out Command>
             ?: throw IllegalArgumentException("Handler class does not implement CommandHandler")
         handlers[commandClass.java] = handler as CommandHandler<Command, CommandResponse>
     }
+
 }

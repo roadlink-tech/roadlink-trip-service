@@ -1,12 +1,15 @@
 package com.roadlink.tripservice.trip.usecases
 
+import com.roadlink.tripservice.domain.event.SimpleCommandBus
 import com.roadlink.tripservice.trip.SpyEventPublisher
 import com.roadlink.tripservice.trip.StubIdGenerator
 import com.roadlink.tripservice.trip.StubTimeProvider
 import com.roadlink.tripservice.trip.domain.*
 import com.roadlink.tripservice.domain.event.TripCreatedEvent
 import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
+import com.roadlink.tripservice.domain.trip.observer.CreateTripHandler
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
+import com.roadlink.tripservice.trip.SpyCommandBus
 import com.roadlink.tripservice.usecases.CreateTrip
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -24,10 +27,13 @@ internal class CreateTripTest {
 
     private lateinit var stubTimeProvider: StubTimeProvider
 
+    private lateinit var spyCommandBus: SpyCommandBus
+
     private lateinit var createTrip: CreateTrip
 
     @BeforeEach
     fun setUp() {
+        spyCommandBus = SpyCommandBus()
         inMemoryTripRepository = InMemoryTripRepository()
         stubIdGenerator = StubIdGenerator()
         spyEventPublisher = SpyEventPublisher()
@@ -37,6 +43,7 @@ internal class CreateTripTest {
             tripRepository = inMemoryTripRepository,
             idGenerator = stubIdGenerator,
             eventPublisher = spyEventPublisher,
+            commandBus = spyCommandBus,
             timeProvider = stubTimeProvider,
         )
     }
@@ -48,13 +55,14 @@ internal class CreateTripTest {
         assertThrows<com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange> {
             createTrip(
                 CreateTrip.Request(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(),
-                meetingPoints = emptyList(),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(),
+                    meetingPoints = emptyList(),
+                    availableSeats = 4,
+                )
+            )
         }
         assertEquals(listOf(TripFactory.avCabildo()), inMemoryTripRepository.findAll())
         spyEventPublisher.verifyNoEventHasBeenPublished()
@@ -65,15 +73,16 @@ internal class CreateTripTest {
         assertThrows<InvalidTripTimeRangeException> {
             createTrip(
                 CreateTrip.Request(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(
-                    at = InstantFactory.october15_7hs(),
-                ),
-                meetingPoints = emptyList(),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(
+                        at = InstantFactory.october15_7hs(),
+                    ),
+                    meetingPoints = emptyList(),
+                    availableSeats = 4,
+                )
+            )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
         spyEventPublisher.verifyNoEventHasBeenPublished()
@@ -84,17 +93,18 @@ internal class CreateTripTest {
         assertThrows<InvalidTripTimeRangeException> {
             createTrip(
                 CreateTrip.Request(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(),
-                meetingPoints = listOf(
-                    TripPointFactory.virreyDelPino_1800(
-                        at = InstantFactory.october15_7hs(),
-                    )
-                ),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(),
+                    meetingPoints = listOf(
+                        TripPointFactory.virreyDelPino_1800(
+                            at = InstantFactory.october15_7hs(),
+                        )
+                    ),
+                    availableSeats = 4,
+                )
+            )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
         spyEventPublisher.verifyNoEventHasBeenPublished()
@@ -105,17 +115,18 @@ internal class CreateTripTest {
         assertThrows<InvalidTripTimeRangeException> {
             createTrip(
                 CreateTrip.Request(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(),
-                meetingPoints = listOf(
-                    TripPointFactory.virreyDelPino_1800(
-                        at = InstantFactory.october15_22hs(),
-                    )
-                ),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(),
+                    meetingPoints = listOf(
+                        TripPointFactory.virreyDelPino_1800(
+                            at = InstantFactory.october15_22hs(),
+                        )
+                    ),
+                    availableSeats = 4,
+                )
+            )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
         spyEventPublisher.verifyNoEventHasBeenPublished()
@@ -127,21 +138,22 @@ internal class CreateTripTest {
 
         val result = createTrip(
             CreateTrip.Request(
-            driver = "John Smith",
-            vehicle = "Ford mustang",
-            departure = TripPointFactory.avCabildo_4853(),
-            arrival = TripPointFactory.avCabildo_20(),
-            meetingPoints = emptyList(),
-            availableSeats = 4,
-        ))
+                driver = "John Smith",
+                vehicle = "Ford mustang",
+                departure = TripPointFactory.avCabildo_4853(),
+                arrival = TripPointFactory.avCabildo_20(),
+                meetingPoints = emptyList(),
+                availableSeats = 4,
+            )
+        )
 
         assertEquals(TripFactory.avCabildo(), result)
         assertEquals(listOf(TripFactory.avCabildo()), inMemoryTripRepository.findAll())
         spyEventPublisher.verifyHasPublish(
             TripCreatedEvent(
-            trip = TripFactory.avCabildo(),
-            at = InstantFactory.october15_7hs(),
-        )
+                trip = TripFactory.avCabildo(),
+                at = InstantFactory.october15_7hs(),
+            )
         )
     }
 
@@ -151,21 +163,25 @@ internal class CreateTripTest {
 
         val result = createTrip(
             CreateTrip.Request(
-            driver = "John Smith",
-            vehicle = "Ford mustang",
-            departure = TripPointFactory.avCabildo_4853(),
-            arrival = TripPointFactory.avCabildo_20(),
-            meetingPoints = listOf(TripPointFactory.virreyDelPino_1800()),
-            availableSeats = 5,
-        ))
+                driver = "John Smith",
+                vehicle = "Ford mustang",
+                departure = TripPointFactory.avCabildo_4853(),
+                arrival = TripPointFactory.avCabildo_20(),
+                meetingPoints = listOf(TripPointFactory.virreyDelPino_1800()),
+                availableSeats = 5,
+            )
+        )
 
         assertEquals(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), result)
-        assertEquals(listOf(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20()), inMemoryTripRepository.findAll())
+        assertEquals(
+            listOf(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20()),
+            inMemoryTripRepository.findAll()
+        )
         spyEventPublisher.verifyHasPublish(
             TripCreatedEvent(
-            trip = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
-            at = InstantFactory.october15_7hs(),
-        )
+                trip = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+                at = InstantFactory.october15_7hs(),
+            )
         )
     }
 }

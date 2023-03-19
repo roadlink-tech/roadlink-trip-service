@@ -1,8 +1,6 @@
 package com.roadlink.tripservice.domain.trip.observer
 
-import com.roadlink.tripservice.domain.event.Event
-import com.roadlink.tripservice.domain.event.Observer
-import com.roadlink.tripservice.domain.event.TripCreatedEvent
+import com.roadlink.tripservice.domain.event.*
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 
 class CreateTripObserver(private val sectionRepository: SectionRepository) : Observer {
@@ -11,5 +9,16 @@ class CreateTripObserver(private val sectionRepository: SectionRepository) : Obs
         val trip = tripCreatedEvent.trip
         val sections = trip.sections()
         sectionRepository.save(sections)
+    }
+}
+
+class CreateTripHandler(private val sectionRepository: SectionRepository) :
+    CommandHandler<TripCreatedCommandV2, TripCreatedCommandResponseV2> {
+
+    override fun handle(command: TripCreatedCommandV2): TripCreatedCommandResponseV2 {
+        val trip = command.trip
+        val sections = trip.sections()
+        sectionRepository.save(sections)
+        return TripCreatedCommandResponseV2(trip)
     }
 }

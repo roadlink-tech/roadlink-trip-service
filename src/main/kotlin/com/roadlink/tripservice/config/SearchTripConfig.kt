@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.domain.event.EventPublisher
-import com.roadlink.tripservice.domain.event.InMemoryEventPublisher
+import com.roadlink.tripservice.domain.event.*
 import com.roadlink.tripservice.domain.time.DefaultTimeProvider
+import com.roadlink.tripservice.domain.trip.observer.CreateTripHandler
 import com.roadlink.tripservice.domain.trip.observer.CreateTripObserver
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
@@ -32,15 +32,25 @@ class SearchTripConfig {
         publisher.suscribe(CreateTripObserver(sectionsRepository))
         return publisher
     }
+
+    @Singleton
+    fun commandBus(sectionsRepository: SectionRepository): CommandBus {
+        val bus = SimpleCommandBus()
+        bus.registerHandler(CreateTripHandler(sectionsRepository))
+        return bus
+    }
+
     @Singleton
     fun createTrip(
         inMemoryTripRepository: InMemoryTripRepository,
-        createTripEventPublisher: EventPublisher
+        createTripEventPublisher: EventPublisher,
+        commandBus: CommandBus
     ): CreateTrip {
         return CreateTrip(
             tripRepository = inMemoryTripRepository,
-            idGenerator =  DefaultIdGenerator,
+            idGenerator = DefaultIdGenerator,
             eventPublisher = createTripEventPublisher,
+            commandBus = commandBus,
             timeProvider = DefaultTimeProvider()
         )
     }
