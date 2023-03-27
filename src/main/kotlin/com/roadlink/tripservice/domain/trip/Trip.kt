@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.domain.trip
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.section.Section
 
@@ -9,6 +10,7 @@ data class Trip(
     val vehicle: String,
     val departure: TripPoint,
     val arrival: TripPoint,
+    @JsonInclude(JsonInclude.Include.ALWAYS) // TODO: testear y agregar mapeo a dto de infra.
     val meetingPoints: List<TripPoint>,
     val availableSeats: Int,
 ) {
@@ -29,8 +31,8 @@ data class Trip(
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,
-                driver = "",
-                vehicle = "",
+                driver = driver,
+                vehicle = vehicle,
                 availableSeats = 2
             )
             sections.add(section)
