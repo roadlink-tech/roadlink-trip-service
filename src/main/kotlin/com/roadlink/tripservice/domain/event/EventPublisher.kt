@@ -14,7 +14,7 @@ interface Command
 
 interface CommandResponse
 interface CommandBus {
-    fun <C : Command, R : CommandResponse> execute(command: C): R
+    fun <C : Command, R : CommandResponse> publish(command: C): R
 }
 
 interface CommandHandler<C : Command, R : CommandResponse> {
@@ -24,7 +24,7 @@ interface CommandHandler<C : Command, R : CommandResponse> {
 class SimpleCommandBus : CommandBus {
 
     private val handlers = mutableMapOf<Class<out Command>, CommandHandler<Command, CommandResponse>>()
-    override fun <C : Command, R : CommandResponse> execute(command: C): R {
+    override fun <C : Command, R : CommandResponse> publish(command: C): R {
         val handler = handlers[command::class.java] as? CommandHandler<C, R>
             ?: throw IllegalStateException("No handler registered for command of type ${command::class.java}")
         return handler.handle(command)

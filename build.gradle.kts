@@ -9,7 +9,7 @@ plugins {
 version = "0.1"
 group = "com.roadlink.tripservice"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion = project.properties.get("kotlinVersion")
 repositories {
     mavenCentral()
 }
@@ -26,6 +26,8 @@ dependencies {
     implementation("io.micronaut:micronaut-validation")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    testImplementation("io.mockk:mockk:1.13.4")
+
 }
 
 

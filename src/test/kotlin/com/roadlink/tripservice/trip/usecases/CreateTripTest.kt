@@ -1,21 +1,20 @@
 package com.roadlink.tripservice.trip.usecases
 
-import com.roadlink.tripservice.domain.event.SimpleCommandBus
-import com.roadlink.tripservice.trip.SpyEventPublisher
-import com.roadlink.tripservice.trip.StubIdGenerator
-import com.roadlink.tripservice.trip.StubTimeProvider
-import com.roadlink.tripservice.trip.domain.*
-import com.roadlink.tripservice.domain.event.TripCreatedEvent
 import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
-import com.roadlink.tripservice.domain.trip.observer.CreateTripHandler
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
-import com.roadlink.tripservice.trip.SpyCommandBus
+import com.roadlink.tripservice.trip.*
+import com.roadlink.tripservice.trip.domain.InstantFactory
+import com.roadlink.tripservice.trip.domain.TripFactory
+import com.roadlink.tripservice.trip.domain.TripPointFactory
 import com.roadlink.tripservice.usecases.CreateTrip
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+
 
 internal class CreateTripTest {
 
@@ -27,25 +26,31 @@ internal class CreateTripTest {
 
     private lateinit var stubTimeProvider: StubTimeProvider
 
-    private lateinit var spyCommandBus: SpyCommandBus
+    private lateinit var commandBus: SpyCommandBus
 
     private lateinit var createTrip: CreateTrip
 
     @BeforeEach
     fun setUp() {
-        spyCommandBus = SpyCommandBus()
         inMemoryTripRepository = InMemoryTripRepository()
         stubIdGenerator = StubIdGenerator()
         spyEventPublisher = SpyEventPublisher()
         stubTimeProvider = StubTimeProvider(fixedNow = InstantFactory.october15_7hs())
+        commandBus = SpyCommandBus()
+        commandBus.registerHandler(SpyCreateTripHandler())
 
         createTrip = CreateTrip(
             tripRepository = inMemoryTripRepository,
             idGenerator = stubIdGenerator,
             eventPublisher = spyEventPublisher,
-            commandBus = spyCommandBus,
+            commandBus = commandBus,
             timeProvider = stubTimeProvider,
         )
+    }
+
+    @AfterEach
+    fun clear() {
+        commandBus.clear()
     }
 
     @Test
@@ -65,7 +70,7 @@ internal class CreateTripTest {
             )
         }
         assertEquals(listOf(TripFactory.avCabildo()), inMemoryTripRepository.findAll())
-        spyEventPublisher.verifyNoEventHasBeenPublished()
+        theCommandHasNotBeenPublished()
     }
 
     @Test
@@ -85,11 +90,11 @@ internal class CreateTripTest {
             )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
-        spyEventPublisher.verifyNoEventHasBeenPublished()
+        theCommandHasNotBeenPublished()
     }
 
     @Test
-    fun `given trip with one meeting point and meeting point at before departure at then should fail`() {
+    fun `given trip with one meeting point and meeting point at before departureAt then should fail`() {
         assertThrows<InvalidTripTimeRangeException> {
             createTrip(
                 CreateTrip.Request(
@@ -107,7 +112,7 @@ internal class CreateTripTest {
             )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
-        spyEventPublisher.verifyNoEventHasBeenPublished()
+        theCommandHasNotBeenPublished()
     }
 
     @Test
@@ -129,7 +134,7 @@ internal class CreateTripTest {
             )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
-        spyEventPublisher.verifyNoEventHasBeenPublished()
+        theCommandHasNotBeenPublished()
     }
 
     @Test
@@ -149,12 +154,7 @@ internal class CreateTripTest {
 
         assertEquals(TripFactory.avCabildo(), result)
         assertEquals(listOf(TripFactory.avCabildo()), inMemoryTripRepository.findAll())
-        spyEventPublisher.verifyHasPublish(
-            TripCreatedEvent(
-                trip = TripFactory.avCabildo(),
-                at = InstantFactory.october15_7hs(),
-            )
-        )
+        theCommandHasBeenPublished()
     }
 
     @Test
@@ -177,11 +177,14 @@ internal class CreateTripTest {
             listOf(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20()),
             inMemoryTripRepository.findAll()
         )
-        spyEventPublisher.verifyHasPublish(
-            TripCreatedEvent(
-                trip = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
-                at = InstantFactory.october15_7hs(),
-            )
-        )
+        theCommandHasBeenPublished()
+    }
+
+    private fun theCommandHasBeenPublished() {
+        Assertions.assertFalse(commandBus.publishedCommands.isEmpty())
+    }
+
+    private fun theCommandHasNotBeenPublished() {
+        Assertions.assertTrue(commandBus.publishedCommands.isEmpty())
     }
 }

@@ -30,8 +30,8 @@ class CreateTrip(
         val trip = request.toTrip()
         return trip.also {
             tripRepository.save(it)
-            eventPublisher.publish(TripCreatedEvent(trip = trip, at = timeProvider.now()))
-            commandBus.execute<TripCreatedCommandV2, TripCreatedCommandResponseV2>(
+            //eventPublisher.publish(TripCreatedEvent(trip = trip, at = timeProvider.now()))
+            commandBus.publish<TripCreatedCommandV2, TripCreatedCommandResponseV2>(
                 TripCreatedCommandV2(
                     trip = trip,
                     at = timeProvider.now()
