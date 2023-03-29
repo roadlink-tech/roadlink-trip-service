@@ -1,25 +1,20 @@
 package com.roadlink.tripservice.usecases
 
-import com.roadlink.tripservice.domain.*
-import com.roadlink.tripservice.domain.event.*
-import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
+import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
+import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.time.TimeProvider
 import com.roadlink.tripservice.domain.time.TimeRange
+import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.TripRepository
-import java.util.UUID
-
-object DefaultIdGenerator : IdGenerator {
-    override fun id(): String {
-        return UUID.randomUUID().toString()
-    }
-}
+import com.roadlink.tripservice.domain.trip.events.CommandBus
+import com.roadlink.tripservice.domain.trip.events.command_responses.TripCreatedCommandResponse
+import com.roadlink.tripservice.domain.trip.events.commands.TripCreatedCommand
 
 class CreateTrip(
     private val tripRepository: TripRepository,
     private val idGenerator: IdGenerator,
-    private val eventPublisher: EventPublisher,
     private val commandBus: CommandBus,
     private val timeProvider: TimeProvider,
 ) {
@@ -29,14 +24,8 @@ class CreateTrip(
 
         val trip = input.toTrip()
         return trip.also {
-            tripRepository.save(it)
-            //eventPublisher.publish(TripCreatedEvent(trip = trip, at = timeProvider.now()))
-            commandBus.publish<TripCreatedCommandV2, TripCreatedCommandResponseV2>(
-                TripCreatedCommandV2(
-                    trip = trip,
-                    at = timeProvider.now()
-                )
-            )
+            save(it)
+            publishTripCreatedEvent(it)
         }
     }
 
@@ -65,6 +54,19 @@ class CreateTrip(
             meetingPoints = meetingPoints,
             availableSeats = availableSeats,
         )
+
+    private fun save(trip: Trip) {
+        tripRepository.save(trip)
+    }
+
+    private fun publishTripCreatedEvent(trip: Trip) {
+        commandBus.publish<TripCreatedCommand, TripCreatedCommandResponse>(
+            TripCreatedCommand(
+                trip = trip,
+                at = timeProvider.now()
+            )
+        )
+    }
 
     data class Input(
         val driver: String,

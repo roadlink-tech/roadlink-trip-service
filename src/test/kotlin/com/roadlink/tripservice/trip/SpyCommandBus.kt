@@ -1,11 +1,16 @@
 package com.roadlink.tripservice.trip
 
-import com.roadlink.tripservice.domain.event.*
+import com.roadlink.tripservice.domain.trip.events.CommandBus
+import com.roadlink.tripservice.domain.trip.events.command_responses.CommandResponse
+import com.roadlink.tripservice.domain.trip.events.command_responses.TripCreatedCommandResponse
+import com.roadlink.tripservice.domain.trip.events.commands.Command
+import com.roadlink.tripservice.domain.trip.events.commands.TripCreatedCommand
+import com.roadlink.tripservice.domain.trip.events.handlers.CommandHandler
 import kotlin.reflect.KClass
 
-class SpyCreateTripHandler : CommandHandler<TripCreatedCommandV2, TripCreatedCommandResponseV2> {
-    override fun handle(command: TripCreatedCommandV2): TripCreatedCommandResponseV2 {
-        return TripCreatedCommandResponseV2(command.trip)
+class SpyCreateTripHandler : CommandHandler<TripCreatedCommand, TripCreatedCommandResponse> {
+    override fun handle(command: TripCreatedCommand): TripCreatedCommandResponse {
+        return TripCreatedCommandResponse(command.trip)
     }
 }
 

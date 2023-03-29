@@ -1,29 +1,14 @@
-package com.roadlink.tripservice.domain.event
+package com.roadlink.tripservice.domain.trip.events
 
-import java.lang.IllegalArgumentException
-import java.lang.IllegalStateException
+import com.roadlink.tripservice.domain.trip.events.command_responses.CommandResponse
+import com.roadlink.tripservice.domain.trip.events.commands.Command
+import com.roadlink.tripservice.domain.trip.events.handlers.CommandHandler
 import kotlin.reflect.KClass
-
-interface EventPublisher {
-    fun suscribe(observer: Observer)
-    fun publish(event: Event)
-}
-
-
-interface Command
-
-interface CommandResponse
-interface CommandBus {
-    fun <C : Command, R : CommandResponse> publish(command: C): R
-}
-
-interface CommandHandler<C : Command, R : CommandResponse> {
-    fun handle(command: C): R
-}
 
 class SimpleCommandBus : CommandBus {
 
     private val handlers = mutableMapOf<Class<out Command>, CommandHandler<Command, CommandResponse>>()
+
     override fun <C : Command, R : CommandResponse> publish(command: C): R {
         val handler = handlers[command::class.java] as? CommandHandler<C, R>
             ?: throw IllegalStateException("No handler registered for command of type ${command::class.java}")

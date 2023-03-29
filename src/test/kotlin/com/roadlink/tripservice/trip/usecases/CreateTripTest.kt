@@ -3,7 +3,10 @@ package com.roadlink.tripservice.trip.usecases
 import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
 import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
-import com.roadlink.tripservice.trip.*
+import com.roadlink.tripservice.trip.SpyCommandBus
+import com.roadlink.tripservice.trip.SpyCreateTripHandler
+import com.roadlink.tripservice.trip.StubIdGenerator
+import com.roadlink.tripservice.trip.StubTimeProvider
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPointFactory
@@ -20,8 +23,6 @@ internal class CreateTripTest {
 
     private lateinit var stubIdGenerator: StubIdGenerator
 
-    private lateinit var spyEventPublisher: SpyEventPublisher
-
     private lateinit var stubTimeProvider: StubTimeProvider
 
     private lateinit var commandBus: SpyCommandBus
@@ -32,7 +33,6 @@ internal class CreateTripTest {
     fun setUp() {
         inMemoryTripRepository = InMemoryTripRepository()
         stubIdGenerator = StubIdGenerator()
-        spyEventPublisher = SpyEventPublisher()
         stubTimeProvider = StubTimeProvider(fixedNow = InstantFactory.october15_7hs())
         commandBus = SpyCommandBus()
         commandBus.registerHandler(SpyCreateTripHandler())
@@ -40,7 +40,6 @@ internal class CreateTripTest {
         createTrip = CreateTrip(
             tripRepository = inMemoryTripRepository,
             idGenerator = stubIdGenerator,
-            eventPublisher = spyEventPublisher,
             commandBus = commandBus,
             timeProvider = stubTimeProvider,
         )

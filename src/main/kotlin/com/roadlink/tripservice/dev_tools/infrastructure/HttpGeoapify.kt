@@ -2,10 +2,10 @@ package com.roadlink.tripservice.dev_tools.infrastructure
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.dev_tools.domain.Geoapify
+import com.roadlink.tripservice.dev_tools.domain.GeoapifyPoint
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Get
 import com.roadlink.tripservice.dev_tools.infrastructure.network.QueryParameter
 import com.roadlink.tripservice.dev_tools.infrastructure.network.ReadRequest
-import com.roadlink.tripservice.dev_tools.domain.GeoapifyPoint
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Response
 import com.roadlink.tripservice.domain.Location
 

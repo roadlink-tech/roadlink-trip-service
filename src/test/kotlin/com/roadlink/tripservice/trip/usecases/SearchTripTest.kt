@@ -1,7 +1,10 @@
 package com.roadlink.tripservice.trip.usecases
 
-import com.roadlink.tripservice.trip.domain.*
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
+import com.roadlink.tripservice.trip.domain.InstantFactory
+import com.roadlink.tripservice.trip.domain.LocationFactory
+import com.roadlink.tripservice.trip.domain.SectionFactory
+import com.roadlink.tripservice.trip.domain.TripPlanFactory
 import com.roadlink.tripservice.usecases.SearchTrip
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

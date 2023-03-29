@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.dev_tools.infrastructure.rest
 
-import com.roadlink.tripservice.dev_tools.usecases.AddSection
 import com.roadlink.tripservice.dev_tools.domain.GeoapifyPointNotExists
+import com.roadlink.tripservice.dev_tools.usecases.AddSection
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller

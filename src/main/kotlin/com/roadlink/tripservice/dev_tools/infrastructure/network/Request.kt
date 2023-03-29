@@ -1,7 +1,5 @@
 package com.roadlink.tripservice.dev_tools.infrastructure.network
 
-import java.lang.RuntimeException
-
 interface Request {
     val scheme: String
     val host: String
