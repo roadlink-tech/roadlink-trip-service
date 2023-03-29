@@ -68,8 +68,8 @@ data class CreateTripRequest(
     @JsonProperty(value = "meeting_points") val meetingPoints: List<TripPointRequested>,
     @JsonProperty(value = "available_seats") val availableSeats: Int,
 ) {
-    fun toDomain(): CreateTrip.Request {
-        return CreateTrip.Request(
+    fun toDomain(): CreateTrip.Input {
+        return CreateTrip.Input(
             driver = this.driver,
             vehicle = this.vehicle,
             departure = this.departure.toModel(),

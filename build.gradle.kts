@@ -59,3 +59,7 @@ micronaut {
         annotations("com.roadlink.tripservice.*")
     }
 }
+
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

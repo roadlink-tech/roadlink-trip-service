@@ -22,7 +22,7 @@ class SearchTripRestController(private val searchTrip: SearchTrip) {
     ): SearchTripResponse {
 
         val tripPlans = searchTrip(
-            SearchTrip.Request(
+            SearchTrip.Input(
             departure = Location(
                 latitude = departureLatitude, longitude = departureLongitude,
             ),

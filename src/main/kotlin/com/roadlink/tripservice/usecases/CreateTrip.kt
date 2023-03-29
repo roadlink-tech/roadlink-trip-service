@@ -23,11 +23,11 @@ class CreateTrip(
     private val commandBus: CommandBus,
     private val timeProvider: TimeProvider,
 ) {
-    operator fun invoke(request: Request): Trip {
-        validateTripTimeRange(request)
-        validateExistsTripByDriverAndInTimeRange(request)
+    operator fun invoke(input: Input): Trip {
+        validateTripTimeRange(input)
+        validateExistsTripByDriverAndInTimeRange(input)
 
-        val trip = request.toTrip()
+        val trip = input.toTrip()
         return trip.also {
             tripRepository.save(it)
             //eventPublisher.publish(TripCreatedEvent(trip = trip, at = timeProvider.now()))
@@ -40,22 +40,22 @@ class CreateTrip(
         }
     }
 
-    private fun validateTripTimeRange(request: Request) {
-        val tripPoints = listOf(request.departure) + request.meetingPoints + listOf(request.arrival)
+    private fun validateTripTimeRange(input: Input) {
+        val tripPoints = listOf(input.departure) + input.meetingPoints + listOf(input.arrival)
         for ((actual, next) in tripPoints.windowed(2, 1) { Pair(it[0], it[1]) }) {
             if (next.at.isBefore(actual.at))
                 throw InvalidTripTimeRangeException()
         }
     }
 
-    private fun validateExistsTripByDriverAndInTimeRange(request: Request) {
-        val driver = request.driver
-        val timeRange = TimeRange(from = request.departure.at, to = request.arrival.at)
+    private fun validateExistsTripByDriverAndInTimeRange(input: Input) {
+        val driver = input.driver
+        val timeRange = TimeRange(from = input.departure.at, to = input.arrival.at)
         if (tripRepository.existsByDriverAndInTimeRange(driver, timeRange))
             throw AlreadyExistsTripByDriverInTimeRange(driver, timeRange)
     }
 
-    private fun Request.toTrip(): Trip =
+    private fun Input.toTrip(): Trip =
         Trip(
             id = idGenerator.id(),
             driver = driver,
@@ -66,7 +66,7 @@ class CreateTrip(
             availableSeats = availableSeats,
         )
 
-    data class Request(
+    data class Input(
         val driver: String,
         val vehicle: String,
         val departure: TripPoint,

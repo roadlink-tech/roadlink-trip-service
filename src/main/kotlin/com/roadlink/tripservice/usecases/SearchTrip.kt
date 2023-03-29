@@ -9,15 +9,15 @@ class SearchTrip(
     private val searchEngine: SearchEngine,
 ) {
 
-    operator fun invoke(request: Request): List<TripPlan> {
+    operator fun invoke(input: Input): List<TripPlan> {
         return searchEngine.search(
-            departure = request.departure,
-            arrival = request.arrival,
-            at = request.at,
+            departure = input.departure,
+            arrival = input.arrival,
+            at = input.at,
         )
     }
 
-    data class Request(
+    data class Input(
         val departure: Location,
         val arrival: Location,
         val at: Instant,
