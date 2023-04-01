@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.infrastructure.rest
+package com.roadlink.tripservice.infrastructure.rest.handlers
 
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller

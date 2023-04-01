@@ -1,11 +1,16 @@
 package com.roadlink.tripservice.trip.infrastructure.rest
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.LocationFactory
 import com.roadlink.tripservice.trip.domain.SectionFactory
+import com.roadlink.tripservice.trip.infrastructure.rest.factories.SearchTripResponseFactory
+import com.roadlink.tripservice.trip.infrastructure.rest.responses.SearchTripExpectedResponse
 import io.micronaut.http.HttpRequest
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.HttpClient
@@ -24,14 +29,14 @@ internal class SearchTripRestControllerTest {
     lateinit var client: HttpClient
 
     @Inject
-    private lateinit var sectionRepository: SectionRepository
+    private lateinit var inMemorySectionRepository: InMemorySectionRepository
 
     @Inject
     private lateinit var objectMapper: ObjectMapper
 
     @BeforeEach
     fun setUp() {
-        sectionRepository.deleteAll()
+        inMemorySectionRepository.deleteAll()
     }
 
     @Test
@@ -47,24 +52,17 @@ internal class SearchTripRestControllerTest {
                     .build()
             )
 
-        val response = client.toBlocking().exchange(request, String::class.java)
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
-        assertJsonBody(
-            """
-                {
-                    "tripPlans": []
-                }
-            """.trimIndent(),
-            response.body()!!
-        )
+        assertOkBody(SearchTripResponseFactory.empty(), response)
     }
 
     @Test
     fun `given exists a trip plan with one meeting point between the given departure and arrival then should return ok status code and the trip plan in response body`() {
-        sectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
-        sectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
+        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800())
+        inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20())
 
         val request: HttpRequest<Any> = HttpRequest
             .GET(
@@ -77,84 +75,22 @@ internal class SearchTripRestControllerTest {
                     .build()
             )
 
-        val response = client.toBlocking().exchange(request, String::class.java)
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
-        assertJsonBody(
-            """
-                {
-                    "tripPlans": [
-                        {
-                            "sections": [
-                                {
-                                    "departure": {
-                                        "location": {
-                                            "latitude": -34.540412,
-                                            "longitude": -58.474732
-                                        },
-                                        "at": 1665835200000,
-                                        "formatted": "Av. Cabildo 4853, Buenos Aires",
-                                        "street": "Av. Cabildo",
-                                        "city": "Buenos Aires",
-                                        "country": "Argentina",
-                                        "housenumber": "4853"
-                                    },
-                                    "arrival": {
-                                        "location": {
-                                            "latitude": -34.562389,
-                                            "longitude": -58.445302
-                                        },
-                                        "at": 1665853200000,
-                                        "formatted": "Virrey del Pino 1800, Buenos Aires",
-                                        "street": "Virrey del Pino",
-                                        "city": "Buenos Aires",
-                                        "country": "Argentina",
-                                        "housenumber": "1800"
-                                    },
-                                    "driver": "John Smith",
-                                    "vehicle": "Ford mustang",
-                                    "availableSeats": 4
-                                },
-                                {
-                                    "departure": {
-                                        "location": {
-                                            "latitude": -34.562389,
-                                            "longitude": -58.445302
-                                        },
-                                        "at": 1665853200000,
-                                        "formatted": "Virrey del Pino 1800, Buenos Aires",
-                                        "street": "Virrey del Pino",
-                                        "city": "Buenos Aires",
-                                        "country": "Argentina",
-                                        "housenumber": "1800"
-                                    },
-                                    "arrival": {
-                                        "location": {
-                                            "latitude": -34.574810,
-                                            "longitude": -58.435990
-                                        },
-                                        "at": 1665856800000,
-                                        "formatted": "Av. Cabildo 20, Buenos Aires",
-                                        "street": "Av. Cabildo",
-                                        "city": "Buenos Aires",
-                                        "country": "Argentina",
-                                        "housenumber": "20"
-                                    },
-                                    "driver": "John Smith",
-                                    "vehicle": "Ford mustang",
-                                    "availableSeats": 4
-                                }
-                            ]
-                        }
-                    ]
-                }
-            """.trimIndent(),
-            response.body()!!
-        )
+        assertOkBody(SearchTripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), response)
     }
 
     private fun assertJsonBody(expected: String, actual: String) {
         assertEquals(objectMapper.readTree(expected), objectMapper.readTree(actual))
     }
+
+    private fun assertOkBody(searchTripResponse: SearchTripExpectedResponse, httpResponse: HttpResponse<JsonNode>) {
+        assertEquals(
+            objectMapper.readTree(objectMapper.writeValueAsString(searchTripResponse)),
+            httpResponse.body()!!
+        )
+    }
+
 }

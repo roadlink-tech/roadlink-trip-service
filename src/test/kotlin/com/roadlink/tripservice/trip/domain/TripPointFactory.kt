@@ -48,7 +48,6 @@ object TripPointFactory {
             housenumber = "1800",
         )
 
-    // TODO
     fun caba(at: Instant = InstantFactory.october15_17hs()) =
         TripPoint(
             location = LocationFactory.caba(),

@@ -19,4 +19,8 @@ class InMemoryTripRepository(
     fun findAll(): List<Trip> = trips
 
     fun isEmpty(): Boolean = trips.isEmpty()
+
+    fun deleteAll() {
+        trips.clear()
+    }
 }
