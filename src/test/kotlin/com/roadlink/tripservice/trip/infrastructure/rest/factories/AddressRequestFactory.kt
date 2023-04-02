@@ -5,6 +5,7 @@ import com.roadlink.tripservice.trip.infrastructure.rest.requests.AddressExpecte
 object AddressRequestFactory {
     fun avCabildo_4853() =
         AddressExpectedRequest(
+            location = LocationRequestFactory.avCabildo_4853(),
             street = "Av. Cabildo",
             city = "Buenos Aires",
             country = "Argentina",
@@ -13,6 +14,7 @@ object AddressRequestFactory {
 
     fun avCabildo_20() =
         AddressExpectedRequest(
+            location = LocationRequestFactory.avCabildo_20(),
             street = "Av. Cabildo",
             city = "Buenos Aires",
             country = "Argentina",
@@ -21,6 +23,7 @@ object AddressRequestFactory {
 
     fun virreyDelPino_1800() =
         AddressExpectedRequest(
+            location = LocationRequestFactory.virreyDelPino_1800(),
             street = "Virrey del Pino",
             city = "Buenos Aires",
             country = "Argentina",

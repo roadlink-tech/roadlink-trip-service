@@ -82,10 +82,6 @@ internal class SearchTripRestControllerTest {
         assertOkBody(SearchTripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), response)
     }
 
-    private fun assertJsonBody(expected: String, actual: String) {
-        assertEquals(objectMapper.readTree(expected), objectMapper.readTree(actual))
-    }
-
     private fun assertOkBody(searchTripResponse: SearchTripExpectedResponse, httpResponse: HttpResponse<JsonNode>) {
         assertEquals(
             objectMapper.readTree(objectMapper.writeValueAsString(searchTripResponse)),

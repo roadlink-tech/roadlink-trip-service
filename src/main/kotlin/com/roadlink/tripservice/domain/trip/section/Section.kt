@@ -13,21 +13,21 @@ data class Section(
     val availableSeats: Int,
 ) {
 
-    fun departure(): Location = departure.location
+    fun departure(): Location = departure.address.location
 
-    fun arrival(): Location = arrival.location
+    fun arrival(): Location = arrival.address.location
 
     fun arrivesTo(location: Location): Boolean {
-        return arrival.location == location
+        return arrival.address.location == location
     }
 
     fun departuresFrom(location: Location): Boolean {
-        return departure.location == location
+        return departure.address.location == location
     }
 
     fun distance(): Double = distanceInMeters
 
     fun departuresAfterOrEqual(at: Instant): Boolean {
-        return departure.at.isAfter(at) || departure.at == at
+        return departure.estimatedArrivalTime.isAfter(at) || departure.estimatedArrivalTime == at
     }
 }

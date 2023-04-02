@@ -1,8 +1,7 @@
 package com.roadlink.tripservice.dev_tools.usecases
 
 import com.roadlink.tripservice.dev_tools.domain.Geoapify
-import com.roadlink.tripservice.dev_tools.domain.GeoapifyPoint
-import com.roadlink.tripservice.dev_tools.domain.GeoapifyPointNotExists
+import com.roadlink.tripservice.dev_tools.domain.AddressNotExists
 import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
@@ -25,22 +24,14 @@ class AddSection(
         sectionRepository.save(section)
     }
 
-    private fun tripPoint(request: Request.TripPoint): TripPoint =
-        geoapify
-            .geocoding(name = request.name)
-            ?.toTripPoint(at = request.at)
-            ?: throw GeoapifyPointNotExists(request.name)
+    private fun tripPoint(request: Request.TripPoint): TripPoint {
+        val address = geoapify.addressByName(name = request.name) ?: throw AddressNotExists(request.name)
 
-    private fun GeoapifyPoint.toTripPoint(at: Instant): TripPoint =
-        TripPoint(
-            location = location,
-            at = at,
-            formatted = formatted,
-            street = street,
-            city = city,
-            country = country,
-            housenumber = housenumber,
+        return TripPoint(
+            estimatedArrivalTime = request.at,
+            address = address,
         )
+    }
 
     data class Request(
         val departure: TripPoint,
@@ -56,4 +47,5 @@ class AddSection(
         )
     }
 }
+
 

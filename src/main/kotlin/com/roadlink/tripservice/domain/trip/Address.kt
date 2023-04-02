@@ -1,10 +1,10 @@
-package com.roadlink.tripservice.dev_tools.domain
+package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.Location
 
-data class GeoapifyPoint(
+data class Address(
     val location: Location,
-    val formatted: String,
+    val fullAddress: String,
     val street: String,
     val city: String,
     val country: String,

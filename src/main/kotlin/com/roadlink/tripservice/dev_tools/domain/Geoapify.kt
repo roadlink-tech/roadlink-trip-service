@@ -1,5 +1,7 @@
 package com.roadlink.tripservice.dev_tools.domain
 
+import com.roadlink.tripservice.domain.trip.Address
+
 interface Geoapify {
-    fun geocoding(name: String): GeoapifyPoint?
+    fun addressByName(name: String): Address?
 }

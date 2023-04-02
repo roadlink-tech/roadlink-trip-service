@@ -6,12 +6,7 @@ import com.roadlink.tripservice.infrastructure.rest.responses.TripPointResponse
 object TripPointResponseMapper {
     fun map(tripPoint: TripPoint) =
         TripPointResponse(
-            location = LocationResponseMapper.map(tripPoint.location),
-            at = tripPoint.at.toEpochMilli(),
-            formatted = tripPoint.formatted,
-            street = tripPoint.street,
-            city = tripPoint.city,
-            country = tripPoint.country,
-            housenumber = tripPoint.housenumber,
+            estimatedArrivalTime = tripPoint.estimatedArrivalTime.toEpochMilli(),
+            address = AddressResponseMapper.map(tripPoint.address),
         )
 }

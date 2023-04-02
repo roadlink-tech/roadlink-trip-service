@@ -32,14 +32,14 @@ class CreateTrip(
     private fun validateTripTimeRange(input: Input) {
         val tripPoints = listOf(input.departure) + input.meetingPoints + listOf(input.arrival)
         for ((actual, next) in tripPoints.windowed(2, 1) { Pair(it[0], it[1]) }) {
-            if (next.at.isBefore(actual.at))
+            if (next.estimatedArrivalTime.isBefore(actual.estimatedArrivalTime))
                 throw InvalidTripTimeRangeException()
         }
     }
 
     private fun validateExistsTripByDriverAndInTimeRange(input: Input) {
         val driver = input.driver
-        val timeRange = TimeRange(from = input.departure.at, to = input.arrival.at)
+        val timeRange = TimeRange(from = input.departure.estimatedArrivalTime, to = input.arrival.estimatedArrivalTime)
         if (tripRepository.existsByDriverAndInTimeRange(driver, timeRange))
             throw AlreadyExistsTripByDriverInTimeRange(driver, timeRange)
     }

@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.dev_tools.infrastructure.rest
 
-import com.roadlink.tripservice.dev_tools.domain.GeoapifyPointNotExists
+import com.roadlink.tripservice.dev_tools.domain.AddressNotExists
 import com.roadlink.tripservice.dev_tools.usecases.AddSection
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
@@ -16,7 +16,7 @@ class AddSectionRestController(private val addSection: AddSection) {
             val request = body.toRequest()
             addSection(request)
             HttpResponse.ok()
-        } catch (e: GeoapifyPointNotExists) {
+        } catch (e: AddressNotExists) {
             HttpResponse.badRequest(e.message ?: "")
         }
     }
