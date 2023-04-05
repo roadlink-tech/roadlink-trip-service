@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.trip.usecases
 
 import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
-import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
+import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRange
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
 import com.roadlink.tripservice.trip.SpyCommandBus
 import com.roadlink.tripservice.trip.SpyCreateTripHandler
@@ -70,7 +70,7 @@ internal class CreateTripTest {
 
     @Test
     fun `given trip with no meeting points and arrival at before departure at then should fail`() {
-        assertThrows<InvalidTripTimeRangeException> {
+        assertThrows<InvalidTripTimeRange> {
             createTrip(CreateTrip.Input(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
@@ -88,7 +88,7 @@ internal class CreateTripTest {
 
     @Test
     fun `given trip with one meeting point and meeting point at before departureAt then should fail`() {
-        assertThrows<InvalidTripTimeRangeException> {
+        assertThrows<InvalidTripTimeRange> {
             createTrip(CreateTrip.Input(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
@@ -108,7 +108,7 @@ internal class CreateTripTest {
 
     @Test
     fun `given trip with one meeting point and meeting point at after arrival at then should fail`() {
-        assertThrows<InvalidTripTimeRangeException> {
+        assertThrows<InvalidTripTimeRange> {
             createTrip(CreateTrip.Input(
                 driver = "John Smith",
                 vehicle = "Ford mustang",

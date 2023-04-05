@@ -6,16 +6,20 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
 import com.roadlink.tripservice.trip.StubIdGenerator
 import com.roadlink.tripservice.trip.domain.TripFactory
+import com.roadlink.tripservice.trip.infrastructure.rest.factories.AlreadyExistsTripByDriverInTimeRangeResponseFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.factories.CreateTripRequestFactory
+import com.roadlink.tripservice.trip.infrastructure.rest.factories.InvalidTripTimeRangeResponseFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.factories.TripResponseFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.requests.CreateTripExpectedRequest
 import com.roadlink.tripservice.trip.infrastructure.rest.responses.TripExpectedResponse
+import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
+import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -69,6 +73,37 @@ class CreateTripControllerTest {
         thenTripExists(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
     }
 
+    @Test
+    fun `given already exists trip with same driver in the given time range then should fail`() {
+        inMemoryTripRepository.save(TripFactory.avCabildo())
+        val request = request(CreateTripRequestFactory.avCabildo())
+
+        val response = try {
+            client.toBlocking().exchange(request, Argument.of(JsonNode::class.java), Argument.of(JsonNode::class.java))
+        } catch (e: HttpClientResponseException) {
+            e.response
+        }
+
+        assertEquals(HttpStatus.CONFLICT, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertErrorBody(AlreadyExistsTripByDriverInTimeRangeResponseFactory.avCabildo(), response)
+    }
+
+    @Test
+    fun `given trip with no meeting points and arrival at before departure at then should fail`() {
+        val request = request(CreateTripRequestFactory.avCabildo_invalidTimeRange())
+
+        val response = try {
+            client.toBlocking().exchange(request, Argument.of(JsonNode::class.java), Argument.of(JsonNode::class.java))
+        } catch (e: HttpClientResponseException) {
+            e.response
+        }
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertErrorBody(InvalidTripTimeRangeResponseFactory.avCabildo_invalidTimeRange(), response)
+    }
+
     private fun request(createTripRequest: CreateTripExpectedRequest): HttpRequest<String> {
         val body = objectMapper.writeValueAsString(createTripRequest)
         return HttpRequest.POST(UriBuilder.of("/trip-service/trip").build(), body)
@@ -78,6 +113,13 @@ class CreateTripControllerTest {
         assertEquals(
             objectMapper.readTree(objectMapper.writeValueAsString(tripResponse)),
             httpResponse.body()!!
+        )
+    }
+
+    private fun <T> assertErrorBody(errorResponse: T, httpResponse: HttpResponse<out Any>) {
+        assertEquals(
+            objectMapper.readTree(objectMapper.writeValueAsString(errorResponse)),
+            httpResponse.getBody(JsonNode::class.java).get()
         )
     }
 

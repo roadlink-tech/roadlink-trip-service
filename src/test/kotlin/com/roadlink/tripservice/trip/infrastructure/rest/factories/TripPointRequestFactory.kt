@@ -2,6 +2,7 @@ package com.roadlink.tripservice.trip.infrastructure.rest.factories
 
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.requests.TripPointExpectedRequest
+import java.time.Instant
 
 object TripPointRequestFactory {
     fun avCabildo_4853() =
@@ -10,9 +11,9 @@ object TripPointRequestFactory {
             address = AddressRequestFactory.avCabildo_4853(),
         )
 
-    fun avCabildo_20() =
+    fun avCabildo_20(estimatedArrivalTime: Instant = InstantFactory.october15_18hs()) =
         TripPointExpectedRequest(
-            estimatedArrivalTime = InstantFactory.october15_18hs().toString(),
+            estimatedArrivalTime = estimatedArrivalTime.toString(),
             address = AddressRequestFactory.avCabildo_20(),
         )
 

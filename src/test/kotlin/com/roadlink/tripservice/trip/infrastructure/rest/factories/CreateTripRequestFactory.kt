@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.trip.infrastructure.rest.factories
 
+import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.requests.CreateTripExpectedRequest
 
 object CreateTripRequestFactory {
@@ -10,6 +11,18 @@ object CreateTripRequestFactory {
             departure = TripPointRequestFactory.avCabildo_4853(),
             meetingPoints = emptyList(),
             arrival = TripPointRequestFactory.avCabildo_20(),
+            availableSeats = 4,
+        )
+
+    fun avCabildo_invalidTimeRange() =
+        CreateTripExpectedRequest(
+            driver = "John Smith",
+            vehicle = "Ford mustang",
+            departure = TripPointRequestFactory.avCabildo_4853(),
+            meetingPoints = emptyList(),
+            arrival = TripPointRequestFactory.avCabildo_20(
+                estimatedArrivalTime = InstantFactory.october15_7hs(),
+            ),
             availableSeats = 4,
         )
 

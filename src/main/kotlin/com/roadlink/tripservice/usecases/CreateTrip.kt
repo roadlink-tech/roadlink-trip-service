@@ -4,7 +4,7 @@ import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
 import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.time.TimeProvider
 import com.roadlink.tripservice.domain.time.TimeRange
-import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRangeException
+import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRange
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.TripRepository
@@ -33,7 +33,10 @@ class CreateTrip(
         val tripPoints = listOf(input.departure) + input.meetingPoints + listOf(input.arrival)
         for ((actual, next) in tripPoints.windowed(2, 1) { Pair(it[0], it[1]) }) {
             if (next.estimatedArrivalTime.isBefore(actual.estimatedArrivalTime))
-                throw InvalidTripTimeRangeException()
+                throw InvalidTripTimeRange(
+                    actualTripPointEstimatedArrivalTime = actual.estimatedArrivalTime,
+                    nextTripPointEstimatedArrivalTime = next.estimatedArrivalTime,
+                )
         }
     }
 

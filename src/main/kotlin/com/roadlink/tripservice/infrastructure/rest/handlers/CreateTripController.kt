@@ -24,3 +24,4 @@ class CreateTripController(private val createTrip: CreateTrip) {
             .body(TripResponseMapper.map(trip))
     }
 }
+
