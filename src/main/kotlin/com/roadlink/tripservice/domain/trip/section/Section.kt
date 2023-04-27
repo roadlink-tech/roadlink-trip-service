@@ -5,6 +5,7 @@ import com.roadlink.tripservice.domain.trip.TripPoint
 import java.time.Instant
 
 data class Section(
+    val id: String,
     val departure: TripPoint,
     val arrival: TripPoint,
     val distanceInMeters: Double,

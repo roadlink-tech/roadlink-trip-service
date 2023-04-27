@@ -1,11 +1,14 @@
 package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
 import com.roadlink.tripservice.trip.domain.TripFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class TripTest {
+
+    private val idGenerator = UUIDIdGenerator()
 
     @Test
     fun `when a trip has a meeting point then 2 sections must be created`() {
@@ -13,7 +16,7 @@ class TripTest {
         val trip = givenATripWithAMeetingPoint()
 
         // when
-        val sections = trip.sections()
+        val sections = trip.sections(idGenerator)
 
         // then
         thenTheExpectedAmountOfSectionsWereCreated(2, sections)
@@ -25,7 +28,7 @@ class TripTest {
         val trip = givenATripWithTwoMeetingPoint()
 
         // when
-        val sections = trip.sections()
+        val sections = trip.sections(idGenerator)
 
         // then
         thenTheExpectedAmountOfSectionsWereCreated(3, sections)

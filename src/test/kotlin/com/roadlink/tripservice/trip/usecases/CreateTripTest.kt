@@ -128,7 +128,7 @@ internal class CreateTripTest {
 
     @Test
     fun `can create trip with no meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildoId)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
 
         val result = createTrip(CreateTrip.Input(
             driver = "John Smith",
@@ -146,7 +146,7 @@ internal class CreateTripTest {
 
     @Test
     fun `can create trip with meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id)
 
         val result = createTrip(CreateTrip.Input(
             driver = "John Smith",

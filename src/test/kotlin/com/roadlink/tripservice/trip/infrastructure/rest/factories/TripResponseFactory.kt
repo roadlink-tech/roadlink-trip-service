@@ -6,7 +6,7 @@ import com.roadlink.tripservice.trip.infrastructure.rest.responses.TripExpectedR
 object TripResponseFactory {
     fun avCabildo() =
         TripExpectedResponse(
-            id = TripFactory.avCabildoId,
+            id = TripFactory.avCabildo_id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointResponseFactory.avCabildo_4853(),
@@ -17,7 +17,7 @@ object TripResponseFactory {
 
     fun avCabildo4853_virreyDelPino1800_avCabildo20() =
         TripExpectedResponse(
-            id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20,
+            id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointResponseFactory.avCabildo_4853(),

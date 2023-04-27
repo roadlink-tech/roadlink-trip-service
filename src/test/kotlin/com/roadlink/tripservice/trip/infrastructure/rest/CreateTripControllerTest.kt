@@ -49,7 +49,7 @@ class CreateTripControllerTest {
 
     @Test
     fun `can create trip with no meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildoId)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
         val request = request(CreateTripRequestFactory.avCabildo())
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
@@ -62,7 +62,7 @@ class CreateTripControllerTest {
 
     @Test
     fun `can create trip with meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id)
         val request = request(CreateTripRequestFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
