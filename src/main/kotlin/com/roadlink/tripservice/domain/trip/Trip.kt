@@ -11,6 +11,7 @@ data class Trip(
     val departure: TripPoint,
     val arrival: TripPoint,
     val meetingPoints: List<TripPoint>,
+    // TODO rename it by seats to be used. It'll be the vehicle capacity
     val availableSeats: Int,
 ) {
 

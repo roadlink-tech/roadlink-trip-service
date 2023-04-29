@@ -11,7 +11,7 @@ data class Section(
     val distanceInMeters: Double,
     val driver: String,
     val vehicle: String,
-    val availableSeats: Int,
+    var availableSeats: Int,
 ) {
 
     fun departure(): Location = departure.address.location
@@ -30,5 +30,13 @@ data class Section(
 
     fun departuresAfterOrEqual(at: Instant): Boolean {
         return departure.estimatedArrivalTime.isAfter(at) || departure.estimatedArrivalTime == at
+    }
+
+    fun canReceiveAnyPassenger(): Boolean {
+        return availableSeats > 0
+    }
+
+    fun releaseSeat() {
+        availableSeats += 1
     }
 }

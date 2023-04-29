@@ -30,54 +30,6 @@ Request:
 ------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------
-CREACCION DE SOLICITUD DE UNION A VIAJE
-Input:
-    - passengerId / userId
-    - tripId
-        - sections: [sectionId]
-
-    seccciones = obtener secciones de request
-
-    para cada seccion en secciones {
-        si seccion no puede recibir pasajero
-             entonces rechazar solicitud
-             terminar
-    }
-
-    para cada trip {
-        crear solicitud
-    }
-
-    conductores = obtener conductores de la consulda
-    informar notificacion a conductor en conductores
-    id (agrupador, solicitud) : UUID = crear id de solicitud
-    guardar con id
-
-
-PassengerTripPlan <-> [ Solicitud ] <-> [ Section ]
-
-
-OUTPUT --> SOLICITUD A, SOLICITUD C,
-------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------
-SE RECHAZA SOLICITUD A
-
-    solicitud = buscar solicitud A
-
-    solicitudes = encontrar todas las solicitudes asociadas solicitud.agrupador
-    para cada solicitud en solicitudes {
-        rechazar solicitud
-
-        secciones = obtener secciones de solicitud
-        para cada seccion en secciones {
-            liberar asiento de section
-        }
-    }
-
-------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------
 
 SE ACEPTA SOLICITUD A
 
@@ -97,12 +49,13 @@ SE ACEPTA SOLICITUD A
     si todas las solicitud en solictudes estan aprobadas :
         confirmar passenger trip plan
 
-
+    guardar el TripPlan
  */
 
 
 
 
+// TODO delete id!
 
 class RequestJoinTrip(
     private val idGenerator: IdGenerator,
