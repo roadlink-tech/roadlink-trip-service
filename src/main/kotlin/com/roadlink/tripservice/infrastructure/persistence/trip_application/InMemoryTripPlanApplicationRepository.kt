@@ -18,4 +18,8 @@ class InMemoryTripPlanApplicationRepository(
         return tripPlanApplications
             .firstOrNull { it.tripApplications.any { tripApplication -> tripApplication.id == tripApplicationId } }
     }
+
+    fun deleteAll() {
+        this.tripPlanApplications.clear()
+    }
 }

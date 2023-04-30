@@ -3,7 +3,7 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application.response
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode
-import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode.TRIP_PLAN_COULD_NOT_BE_CREATED
+import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode.INSUFFICIENT_AMOUNT_OF_SEATS
 import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplicationOutput
 import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
 import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplicationOutput
@@ -19,7 +19,7 @@ class TripApplicationPlanResponseFactory {
 
             is CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger -> HttpResponse.status<ApiResponse>(
                 PRECONDITION_FAILED
-            ).body(CreateTripPlanApplicationErrorResponse(code = TRIP_PLAN_COULD_NOT_BE_CREATED))
+            ).body(CreateTripPlanApplicationErrorResponse(code = INSUFFICIENT_AMOUNT_OF_SEATS))
         }
 
     fun from(output: RejectTripApplicationOutput): HttpResponse<ApiResponse> =
