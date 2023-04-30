@@ -27,14 +27,13 @@ class TripPlanApplicationControllerTest {
     @field:Client("/")
     lateinit var client: HttpClient
 
-    @MockBean
+    @Inject
     lateinit var createTripPlanApplication: UseCase<TripPlanApplicationDTO, CreateTripPlanApplicationOutput>
 
-    @BeforeEach
-    fun beforeEach() {
-        createTripPlanApplication = mockk<UseCase<TripPlanApplicationDTO, CreateTripPlanApplicationOutput>>()
+    @MockBean(CreateTripPlanApplication::class)
+    fun createTripPlanApplication(): UseCase<TripPlanApplicationDTO, CreateTripPlanApplicationOutput> {
+        return mockk<UseCase<TripPlanApplicationDTO, CreateTripPlanApplicationOutput>>()
     }
-
 
     @Test
     fun `when create a trip plan and all the sections can receive a passenger, then it must be created successfully`() {
