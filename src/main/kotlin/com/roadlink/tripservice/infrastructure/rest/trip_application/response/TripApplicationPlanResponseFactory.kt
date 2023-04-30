@@ -4,11 +4,12 @@ import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode
 import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode.TRIP_PLAN_COULD_NOT_BE_CREATED
-import com.roadlink.tripservice.usecases.CreateTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplicationOutput
+import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplicationOutput
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
+import io.micronaut.http.HttpStatus.*
 import java.util.*
-import  com.roadlink.tripservice.usecases.RejectTripApplicationOutput
 
 class TripApplicationPlanResponseFactory {
     fun from(output: CreateTripPlanApplicationOutput): HttpResponse<ApiResponse> =
@@ -17,16 +18,29 @@ class TripApplicationPlanResponseFactory {
                 HttpResponse.created(CreateTripPlanApplicationResponse.from(output))
 
             is CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger -> HttpResponse.status<ApiResponse>(
-                HttpStatus.PRECONDITION_FAILED
+                PRECONDITION_FAILED
             ).body(CreateTripPlanApplicationErrorResponse(code = TRIP_PLAN_COULD_NOT_BE_CREATED))
         }
 
     fun from(output: RejectTripApplicationOutput): HttpResponse<ApiResponse> =
         when (output) {
             is RejectTripApplicationOutput.TripApplicationRejected ->
-                HttpResponse.status(HttpStatus.ACCEPTED)
+                HttpResponse.status(ACCEPTED)
+
             is RejectTripApplicationOutput.TripPlanApplicationNotExists ->
-                HttpResponse.status(HttpStatus.NOT_FOUND)
+                HttpResponse.status(NOT_FOUND)
+        }
+
+    fun from(output: AcceptTripApplicationOutput): HttpResponse<ApiResponse> =
+        when (output) {
+            is AcceptTripApplicationOutput.TripApplicationAccepted ->
+                HttpResponse.status(ACCEPTED)
+
+            is AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected ->
+                HttpResponse.status(PRECONDITION_FAILED)
+
+            is AcceptTripApplicationOutput.TripPlanApplicationNotExists ->
+                HttpResponse.status(NOT_FOUND)
         }
 
 }

@@ -3,7 +3,7 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application
 import com.roadlink.tripservice.infrastructure.rest.trip_application.request.CreateTripPlanApplicationRequest
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
-import com.roadlink.tripservice.usecases.CreateTripPlanApplication
+import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplication
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 

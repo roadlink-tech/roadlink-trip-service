@@ -39,4 +39,8 @@ data class Section(
     fun releaseSeat() {
         availableSeats += 1
     }
+
+    fun takeSeat() {
+        availableSeats -= 1
+    }
 }

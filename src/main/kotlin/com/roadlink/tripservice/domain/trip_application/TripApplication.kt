@@ -18,10 +18,19 @@ data class TripPlanApplication(
         enum class Status {
             PENDING_APPROVAL,
             REJECTED,
+            CONFIRMED
+        }
+
+        internal fun isConfirmed(): Boolean {
+            return this.status == CONFIRMED
         }
 
         internal fun isRejected(): Boolean {
             return this.status == REJECTED
+        }
+
+        internal fun confirm() {
+            this.status = CONFIRMED
         }
 
         internal fun reject() {
@@ -32,7 +41,20 @@ data class TripPlanApplication(
         }
     }
 
-    private fun isRejected(): Boolean {
+    fun isReadyToBeConfirm(): Boolean {
+        return this.tripApplications.filter { it.isConfirmed() }.size == this.tripApplications.size
+    }
+
+
+    fun confirmApplicationId(applicationId: UUID) {
+        val application = this.tripApplications.first { it.id == applicationId }
+        application.sections.forEach { section ->
+            section.takeSeat()
+        }
+        application.confirm()
+    }
+
+    fun isRejected(): Boolean {
         return this.tripApplications.any { it.isRejected() }
     }
 

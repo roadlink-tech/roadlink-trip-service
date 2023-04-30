@@ -1,12 +1,10 @@
-package com.roadlink.tripservice.usecases
+package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import java.util.UUID
 
 // TODO TEST!!!
-class RejectTripApplication(
-    private val tripPlanApplicationRepository: TripPlanApplicationRepository,
-) {
+class RejectTripApplication(private val tripPlanApplicationRepository: TripPlanApplicationRepository) {
     operator fun invoke(tripApplicationId: UUID): RejectTripApplicationOutput {
         val tripPlanApplication = tripPlanApplicationRepository.findByTripApplicationId(tripApplicationId)
             ?: return RejectTripApplicationOutput.TripPlanApplicationNotExists

@@ -1,11 +1,11 @@
-package com.roadlink.tripservice.usecases
+package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.rest.trip_application.TripPlanApplicationDTO
-import com.roadlink.tripservice.usecases.CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger
-import com.roadlink.tripservice.usecases.CreateTripPlanApplicationOutput.TripPlanApplicationCreated
+import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger
+import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput.TripPlanApplicationCreated
 import java.util.*
 
 sealed class CreateTripPlanApplicationOutput {
