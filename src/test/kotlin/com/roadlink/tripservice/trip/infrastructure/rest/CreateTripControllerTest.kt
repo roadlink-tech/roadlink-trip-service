@@ -16,7 +16,9 @@ import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.HttpStatus.*
 import io.micronaut.http.MediaType
+import io.micronaut.http.MediaType.*
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
@@ -54,8 +56,8 @@ class CreateTripControllerTest {
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
-        assertEquals(HttpStatus.CREATED, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(CREATED, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo(), response)
         thenTripExists(TripFactory.avCabildo())
     }
@@ -67,8 +69,8 @@ class CreateTripControllerTest {
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
-        assertEquals(HttpStatus.CREATED, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(CREATED, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), response)
         thenTripExists(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
     }
@@ -84,8 +86,8 @@ class CreateTripControllerTest {
             e.response
         }
 
-        assertEquals(HttpStatus.CONFLICT, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(CONFLICT, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertErrorBody(AlreadyExistsTripByDriverInTimeRangeResponseFactory.avCabildo(), response)
     }
 
@@ -99,8 +101,8 @@ class CreateTripControllerTest {
             e.response
         }
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(BAD_REQUEST, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertErrorBody(InvalidTripTimeRangeResponseFactory.avCabildo_invalidTimeRange(), response)
     }
 
