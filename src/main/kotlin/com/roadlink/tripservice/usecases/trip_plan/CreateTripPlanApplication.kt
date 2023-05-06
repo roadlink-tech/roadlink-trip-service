@@ -29,13 +29,13 @@ class CreateTripPlanApplication(
                 }
             }
 
-            tripPlanApplication.include(
-                TripPlanApplication.TripApplication(
-                    sections = sections,
-                    passengerId = input.passengerId,
-                    authorizerId = sections.first().driver
-                )
+            val tripApplication = TripPlanApplication.TripApplication(
+                sections = sections,
+                passengerId = input.passengerId,
+                authorizerId = sections.first().driver
             )
+
+            tripPlanApplication.include(tripApplication)
         }
 
         // TODO ver cómo informar o mostrar a los driver que tienen una solicitud pendiente de aceptación o rechazo

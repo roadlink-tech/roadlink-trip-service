@@ -103,6 +103,17 @@ object SectionFactory {
             availableSeats = 4,
         )
 
+    fun avCabildo1621_virreyDelPino1800_completed() =
+        Section(
+            id = avCabildo1621_virreyDelPino1800_id,
+            departure = TripPointFactory.avCabildo_1621(),
+            arrival = TripPointFactory.virreyDelPino_1800(),
+            distanceInMeters = 400.0,
+            driver = "John Smith",
+            vehicle = "Ford mustang",
+            availableSeats = 0,
+        )
+
     fun virreyDelPino1800_avDelLibertador5000() =
         Section(
             id = virreyDelPino1800_avDelLibertador5000_id,

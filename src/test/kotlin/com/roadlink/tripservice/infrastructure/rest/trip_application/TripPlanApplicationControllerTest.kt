@@ -6,6 +6,8 @@ import com.roadlink.tripservice.infrastructure.rest.trip_application.response.Cr
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplication
 import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
+import io.micronaut.context.annotation.Primary
+import io.micronaut.context.annotation.Replaces
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus.*
@@ -15,10 +17,13 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import jakarta.inject.Inject
+import jakarta.inject.Singleton
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -35,9 +40,16 @@ class TripPlanApplicationControllerTest {
     @Inject
     lateinit var createTripPlanApplication: UseCase<TripPlanApplicationDTO, CreateTripPlanApplicationOutput>
 
-    @MockBean(CreateTripPlanApplication::class)
+    @Primary
+    @Singleton
+    @Replaces(CreateTripPlanApplication::class)
     fun createTripPlanApplication(): UseCase<TripPlanApplicationDTO, CreateTripPlanApplicationOutput> {
-        return mockk()
+        return mockk(relaxed = true)
+    }
+
+    @BeforeEach
+    fun clear() {
+        clearMocks(createTripPlanApplication)
     }
 
     // TODO agregar validaciones en el payload
@@ -97,8 +109,8 @@ class TripPlanApplicationControllerTest {
 
         // THEN
         assertEquals(PRECONDITION_FAILED.code, response.code())
-
     }
+
 
     private fun thenTheTripPlanApplicationHasAnId(response: HttpResponse<JsonNode>) {
         val apiResponse =
