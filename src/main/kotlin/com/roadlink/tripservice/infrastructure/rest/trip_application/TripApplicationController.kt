@@ -4,6 +4,7 @@ import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplication
+import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplicationOutput
 import io.micronaut.http.annotation.Controller
 import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplication
 import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplicationOutput
@@ -16,7 +17,7 @@ import java.util.*
 @Controller("/trip-service/trip_application")
 class TripApplicationController(
     private val rejectTripApplication: UseCase<UUID, RejectTripApplicationOutput>,
-    private val acceptTripApplication: AcceptTripApplication,
+    private val acceptTripApplication: UseCase<UUID, AcceptTripApplicationOutput>,
     private val responseFactory: TripApplicationPlanResponseFactory,
 ) {
     @Put("/{id}/non-acceptance")

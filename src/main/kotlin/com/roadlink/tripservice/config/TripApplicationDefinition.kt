@@ -20,7 +20,9 @@ class TripApplicationDefinition {
     }
 
     @Singleton
-    fun acceptTripApplication(tripPlanApplicationRepository: TripPlanApplicationRepository): AcceptTripApplication {
+    fun acceptTripApplication(
+        tripPlanApplicationRepository: TripPlanApplicationRepository
+    ): UseCase<UUID, AcceptTripApplicationOutput> {
         return AcceptTripApplication(tripPlanApplicationRepository)
     }
 

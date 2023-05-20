@@ -36,6 +36,9 @@ class TripApplicationControllerTest {
     @Inject
     lateinit var rejectTripApplication: UseCase<UUID, RejectTripApplicationOutput>
 
+    @Inject
+    lateinit var acceptTripApplication: UseCase<UUID, AcceptTripApplicationOutput>
+
     @Primary
     @Singleton
     @Replaces(RejectTripApplication::class)
@@ -43,9 +46,17 @@ class TripApplicationControllerTest {
         return mockk(relaxed = true)
     }
 
+    @Primary
+    @Singleton
+    @Replaces(AcceptTripApplication::class)
+    fun acceptTripApplication(): UseCase<UUID, AcceptTripApplicationOutput> {
+        return mockk(relaxed = true)
+    }
+
     @BeforeEach
     fun clear() {
         clearMocks(rejectTripApplication)
+        clearMocks(acceptTripApplication)
     }
 
     @Test
@@ -91,5 +102,53 @@ class TripApplicationControllerTest {
 
         // THEN
         assertEquals(HttpStatus.ACCEPTED.code, response.code())
+    }
+
+    @Test
+    fun `when try to accept an application but it does not exist, then a not found must be retrieved`() {
+        every { acceptTripApplication.invoke(any()) } returns AcceptTripApplicationOutput.TripPlanApplicationNotExists
+
+        // GIVEN
+        val request =
+            HttpRequest.PUT(
+                UriBuilder.of(
+                    "/trip-service/trip_application/${
+                        UUID.randomUUID()
+                    }/acceptance"
+                ).build(), """"""
+            )
+
+        val response = try {
+            client.toBlocking().exchange(request, JsonNode::class.java)
+        } catch (e: HttpClientResponseException) {
+            e.response
+        }
+
+        // THEN
+        assertEquals(HttpStatus.NOT_FOUND.code, response.code())
+    }
+
+    @Test
+    fun `when try to accept an application but the plan has been rejected by someone else, then an error must be retrieved`() {
+        every { acceptTripApplication.invoke(any()) } returns AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected
+
+        // GIVEN
+        val request =
+            HttpRequest.PUT(
+                UriBuilder.of(
+                    "/trip-service/trip_application/${
+                        UUID.randomUUID()
+                    }/acceptance"
+                ).build(), """"""
+            )
+
+        val response = try {
+            client.toBlocking().exchange(request, JsonNode::class.java)
+        } catch (e: HttpClientResponseException) {
+            e.response
+        }
+
+        // THEN
+        assertEquals(HttpStatus.PRECONDITION_FAILED.code, response.code())
     }
 }
