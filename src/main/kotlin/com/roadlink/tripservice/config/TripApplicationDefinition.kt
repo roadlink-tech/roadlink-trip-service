@@ -6,12 +6,10 @@ import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMe
 import com.roadlink.tripservice.infrastructure.rest.trip_application.TripPlanApplicationDTO
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplication
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplication
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
-import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplication
+import com.roadlink.tripservice.usecases.trip_plan.*
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
+import java.util.UUID
 
 @Factory
 class TripApplicationDefinition {
@@ -27,7 +25,9 @@ class TripApplicationDefinition {
     }
 
     @Singleton
-    fun rejectTripApplication(tripPlanApplicationRepository: TripPlanApplicationRepository): RejectTripApplication {
+    fun rejectTripApplication(
+        tripPlanApplicationRepository: TripPlanApplicationRepository
+    ): UseCase<UUID, RejectTripApplicationOutput> {
         return RejectTripApplication(tripPlanApplicationRepository)
     }
 

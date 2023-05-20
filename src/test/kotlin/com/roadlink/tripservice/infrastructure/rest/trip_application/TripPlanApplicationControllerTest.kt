@@ -122,5 +122,4 @@ class TripPlanApplicationControllerTest {
         assertEquals(CREATED, response.status)
     }
 
-
 }

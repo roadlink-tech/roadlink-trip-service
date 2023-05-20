@@ -21,6 +21,7 @@ class CreateTripPlanApplication(
 
     override operator fun invoke(input: TripPlanApplicationDTO): CreateTripPlanApplicationOutput {
         val tripPlanApplication = TripPlanApplication()
+
         input.trips.forEach { tripSectionsDTO ->
             val sections = sectionRepository.findAllById(tripSectionsDTO.sectionsIds.toSet())
             sections.forEach { section ->
