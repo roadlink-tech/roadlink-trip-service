@@ -1,25 +1,23 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_application.response
 
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode
-import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode.INSUFFICIENT_AMOUNT_OF_SEATS
 import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplicationOutput
 import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
 import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplicationOutput
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus.*
-import java.util.*
 
 class TripApplicationPlanResponseFactory {
+
     fun from(output: CreateTripPlanApplicationOutput): HttpResponse<ApiResponse> =
         when (output) {
             is CreateTripPlanApplicationOutput.TripPlanApplicationCreated ->
-                HttpResponse.created(CreateTripPlanApplicationResponse.from(output))
+                HttpResponse.created(TripPlanApplicationCreatedResponse.from(output))
 
-            is CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger -> HttpResponse.status<ApiResponse>(
-                PRECONDITION_FAILED
-            ).body(CreateTripPlanApplicationErrorResponse(code = INSUFFICIENT_AMOUNT_OF_SEATS))
+            is CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger ->
+                HttpResponse
+                    .status<InsufficientAmountOfSeatsResponse>(PRECONDITION_FAILED)
+                    .body(InsufficientAmountOfSeatsResponse())
         }
 
     fun from(output: RejectTripApplicationOutput): HttpResponse<ApiResponse> =
@@ -37,23 +35,12 @@ class TripApplicationPlanResponseFactory {
                 HttpResponse.status(ACCEPTED)
 
             is AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected ->
-                HttpResponse.status(PRECONDITION_FAILED)
+                HttpResponse
+                    .status<TripPlanApplicationHasBeenRejectedResponse>(PRECONDITION_FAILED)
+                    .body(TripPlanApplicationHasBeenRejectedResponse())
 
             is AcceptTripApplicationOutput.TripPlanApplicationNotExists ->
                 HttpResponse.status(NOT_FOUND)
         }
 
-}
-
-class CreateTripPlanApplicationErrorResponse(code: ErrorResponseCode) : ErrorResponse(code)
-data class CreateTripPlanApplicationResponse(
-    val tripPlanApplicationId: UUID
-) : ApiResponse {
-    companion object {
-        fun from(output: CreateTripPlanApplicationOutput.TripPlanApplicationCreated): CreateTripPlanApplicationResponse {
-            return CreateTripPlanApplicationResponse(
-                tripPlanApplicationId = output.tripPlanApplicationId
-            )
-        }
-    }
 }

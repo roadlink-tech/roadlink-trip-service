@@ -2,7 +2,6 @@ package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.infrastructure.rest.trip_application.TripPlanApplicationDTO
 import com.roadlink.tripservice.trip.domain.SectionFactory
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -33,14 +32,14 @@ class CreateTripPlanApplicationTest {
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800()
         every { sectionRepository.findAllById(any()) } returns setOf(sectionOne, sectionTwo)
         every { tripPlanApplicationRepository.save(any()) } just runs
-        val application = TripPlanApplicationDTO(
+        val application = CreateTripPlanApplicationInput(
             passengerId = "chorch",
             trips = listOf(
-                TripPlanApplicationDTO.TripSectionsDTO(
+                CreateTripPlanApplicationInput.TripSections(
                     tripId = "1",
                     sectionsIds = listOf(sectionOne.id)
                 ),
-                TripPlanApplicationDTO.TripSectionsDTO(
+                CreateTripPlanApplicationInput.TripSections(
                     tripId = "2",
                     sectionsIds = listOf(sectionTwo.id)
                 )
@@ -66,14 +65,14 @@ class CreateTripPlanApplicationTest {
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800_completed()
         every { sectionRepository.findAllById(any()) } returns setOf(sectionOne, sectionTwo)
         every { tripPlanApplicationRepository.save(any()) } just runs
-        val application = TripPlanApplicationDTO(
+        val application = CreateTripPlanApplicationInput(
             passengerId = "chorch",
             trips = listOf(
-                TripPlanApplicationDTO.TripSectionsDTO(
+                CreateTripPlanApplicationInput.TripSections(
                     tripId = "1",
                     sectionsIds = listOf(sectionOne.id)
                 ),
-                TripPlanApplicationDTO.TripSectionsDTO(
+                CreateTripPlanApplicationInput.TripSections(
                     tripId = "2",
                     sectionsIds = listOf(sectionTwo.id)
                 )
