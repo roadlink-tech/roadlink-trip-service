@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
+import com.roadlink.tripservice.trip.SpyCommandBus
 import com.roadlink.tripservice.trip.StubIdGenerator
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.factories.AlreadyExistsTripByDriverInTimeRangeResponseFactory
@@ -25,7 +26,7 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -45,12 +46,15 @@ class CreateTripControllerTest {
     @Inject
     private lateinit var inMemoryTripRepository: InMemoryTripRepository
 
+    @Inject
+    private lateinit var spyCommandBus: SpyCommandBus
+
     @BeforeEach
     fun beforeEach() {
         inMemoryTripRepository.deleteAll()
+        spyCommandBus.clear()
     }
 
-    @Disabled("@mbosch")
     @Test
     fun `can create trip with no meeting points`() {
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
@@ -62,9 +66,9 @@ class CreateTripControllerTest {
         assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo(), response)
         thenTripExists(TripFactory.avCabildo())
+        theCommandHasBeenPublished()
     }
 
-    @Disabled("@Mbosh please check it when you feel free :)")
     @Test
     fun `can create trip with meeting points`() {
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id)
@@ -76,6 +80,7 @@ class CreateTripControllerTest {
         assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), response)
         thenTripExists(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
+        theCommandHasBeenPublished()
     }
 
     @Test
@@ -92,6 +97,7 @@ class CreateTripControllerTest {
         assertEquals(CONFLICT, response.status)
         assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertErrorBody(AlreadyExistsTripByDriverInTimeRangeResponseFactory.avCabildo(), response)
+        theCommandHasNotBeenPublished()
     }
 
     @Test
@@ -107,6 +113,7 @@ class CreateTripControllerTest {
         assertEquals(BAD_REQUEST, response.status)
         assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertErrorBody(InvalidTripTimeRangeResponseFactory.avCabildo_invalidTimeRange(), response)
+        theCommandHasNotBeenPublished()
     }
 
     private fun request(createTripRequest: CreateTripExpectedRequest): HttpRequest<String> {
@@ -131,4 +138,13 @@ class CreateTripControllerTest {
     private fun thenTripExists(trip: Trip) {
         assertEquals(listOf(trip), inMemoryTripRepository.findAll())
     }
+
+    private fun theCommandHasBeenPublished() {
+        assertFalse(spyCommandBus.publishedCommands.isEmpty())
+    }
+
+    private fun theCommandHasNotBeenPublished() {
+        assertTrue(spyCommandBus.publishedCommands.isEmpty())
+    }
+
 }
