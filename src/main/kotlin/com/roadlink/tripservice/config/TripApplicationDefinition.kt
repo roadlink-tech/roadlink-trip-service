@@ -3,7 +3,6 @@ package com.roadlink.tripservice.config
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
-import com.roadlink.tripservice.infrastructure.rest.trip_application.TripPlanApplicationDTO
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_plan.*
@@ -37,7 +36,7 @@ class TripApplicationDefinition {
     fun createTripPlanApplication(
         sectionRepository: SectionRepository,
         tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<TripPlanApplicationDTO, CreateTripPlanApplicationOutput> {
+    ): UseCase<CreateTripPlanApplicationInput, CreateTripPlanApplicationOutput> {
         return CreateTripPlanApplication(sectionRepository, tripPlanApplicationRepository)
     }
 

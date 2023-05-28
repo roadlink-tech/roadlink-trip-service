@@ -8,7 +8,7 @@ import com.roadlink.tripservice.domain.trip.events.commands.TripCreatedCommand
 import com.roadlink.tripservice.domain.trip.events.handlers.CommandHandler
 import kotlin.reflect.KClass
 
-class SpyCreateTripHandler : CommandHandler<TripCreatedCommand, TripCreatedCommandResponse> {
+class StubCreateTripHandler : CommandHandler<TripCreatedCommand, TripCreatedCommandResponse> {
     override fun handle(command: TripCreatedCommand): TripCreatedCommandResponse {
         return TripCreatedCommandResponse(command.trip)
     }
@@ -20,7 +20,7 @@ class SpyCommandBus : CommandBus {
     internal val publishedCommands = mutableListOf<Command>()
 
     init {
-        registerHandler(SpyCreateTripHandler())
+        registerHandler(StubCreateTripHandler())
     }
 
     override fun <C : Command, R : CommandResponse> publish(command: C): R {
@@ -31,7 +31,6 @@ class SpyCommandBus : CommandBus {
     }
 
     fun clear() {
-        this.handlers.clear()
         this.publishedCommands.clear()
     }
 
