@@ -16,9 +16,10 @@ class AcceptTripApplication(
             return AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected
         }
 
-        tripPlanApplication.confirmApplicationId(input)
-        tripPlanApplicationRepository.save(tripPlanApplication)
-        return AcceptTripApplicationOutput.TripApplicationAccepted
+        tripPlanApplication.confirmApplicationById(input)
+        return AcceptTripApplicationOutput.TripApplicationAccepted.also {
+            tripPlanApplicationRepository.save(tripPlanApplication)
+        }
     }
 }
 

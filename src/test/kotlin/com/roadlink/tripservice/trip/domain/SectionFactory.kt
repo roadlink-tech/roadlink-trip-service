@@ -15,7 +15,7 @@ object SectionFactory {
     const val virreyDelPino1800_avDelLibertador5000_id = "SectionFactory-virreyDelPino1800_avDelLibertador5000"
     const val avDelLibertador5000_avCabildo20_id = "SectionFactory-avDelLibertador5000_avCabildo20"
 
-    fun avCabildo() =
+    fun avCabildo(availableSeats: Int = 4) =
         Section(
             id = avCabildo_id,
             departure = TripPointFactory.avCabildo_4853(),
@@ -23,7 +23,7 @@ object SectionFactory {
             distanceInMeters = 6070.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            availableSeats = availableSeats,
         )
 
     fun virreyDelPino() =
@@ -37,7 +37,7 @@ object SectionFactory {
             availableSeats = 4,
         )
 
-    fun avCabildo4853_virreyDelPino1800() =
+    fun avCabildo4853_virreyDelPino1800(availableSeats: Int = 4) =
         Section(
             id = avCabildo4853_virreyDelPino1800_id,
             departure = TripPointFactory.avCabildo_4853(),
@@ -45,7 +45,7 @@ object SectionFactory {
             distanceInMeters = 4000.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            availableSeats = availableSeats,
         )
 
     fun virreyDelPino1800_avCabildo20() =

@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.domain.trip.section
 
+import com.roadlink.tripservice.domain.DomainError
 import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.domain.trip.TripPoint
 import java.time.Instant
@@ -41,6 +42,13 @@ data class Section(
     }
 
     fun takeSeat() {
+        if (availableSeats == 0) {
+            throw SectionError.InsufficientAvailableSeats(this.id)
+        }
         availableSeats -= 1
     }
+}
+
+sealed class SectionError(message: String) : DomainError(message) {
+    class InsufficientAvailableSeats(id: String) : SectionError("Section $id does not have available seats")
 }

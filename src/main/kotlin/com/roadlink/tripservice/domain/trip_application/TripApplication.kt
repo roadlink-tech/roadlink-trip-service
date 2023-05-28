@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.domain.trip_application
 
+import com.roadlink.tripservice.domain.DomainError
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.domain.trip.section.Section
 import java.util.*
@@ -45,9 +46,10 @@ data class TripPlanApplication(
         return this.tripApplications.filter { it.isConfirmed() }.size == this.tripApplications.size
     }
 
+    fun confirmApplicationById(applicationId: UUID) {
+        val application = this.tripApplications.find { it.id == applicationId }
+            ?: throw TripApplicationError.NotFound(applicationId)
 
-    fun confirmApplicationId(applicationId: UUID) {
-        val application = this.tripApplications.first { it.id == applicationId }
         application.sections.forEach { section ->
             section.takeSeat()
         }
@@ -69,5 +71,9 @@ data class TripPlanApplication(
             }
         }
     }
+}
+
+sealed class TripApplicationError(message: String) : DomainError(message) {
+    class NotFound(application: UUID) : TripApplicationError("Trip application $application does not exist")
 }
 
