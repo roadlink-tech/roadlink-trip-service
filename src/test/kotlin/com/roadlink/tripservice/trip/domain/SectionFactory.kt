@@ -15,7 +15,7 @@ object SectionFactory {
     const val virreyDelPino1800_avDelLibertador5000_id = "SectionFactory-virreyDelPino1800_avDelLibertador5000"
     const val avDelLibertador5000_avCabildo20_id = "SectionFactory-avDelLibertador5000_avCabildo20"
 
-    fun avCabildo(availableSeats: Int = 4) =
+    fun avCabildo(initialAmountOfSeats: Int = 4, bookedSeats: Int = 0) =
         Section(
             id = avCabildo_id,
             departure = TripPointFactory.avCabildo_4853(),
@@ -23,7 +23,8 @@ object SectionFactory {
             distanceInMeters = 6070.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = availableSeats,
+            initialAmountOfSeats = initialAmountOfSeats,
+            bookedSeats = bookedSeats
         )
 
     fun virreyDelPino() =
@@ -34,7 +35,8 @@ object SectionFactory {
             distanceInMeters = 1300.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 
     fun avCabildo4853_virreyDelPino1800(availableSeats: Int = 4) =
@@ -45,7 +47,8 @@ object SectionFactory {
             distanceInMeters = 4000.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = availableSeats,
+            initialAmountOfSeats = availableSeats,
+            bookedSeats = 0
         )
 
     fun virreyDelPino1800_avCabildo20() =
@@ -56,7 +59,8 @@ object SectionFactory {
             distanceInMeters = 3000.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 
     fun avCabildo4853_virreyDelPino2880() =
@@ -67,7 +71,8 @@ object SectionFactory {
             distanceInMeters = 5000.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 
     fun virreyDelPino2880_avCabildo20() =
@@ -78,7 +83,8 @@ object SectionFactory {
             distanceInMeters = 3000.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 
     fun virreyDelPino2880_avCabildo1621() =
@@ -89,7 +95,8 @@ object SectionFactory {
             distanceInMeters = 900.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 
     fun avCabildo1621_virreyDelPino1800() =
@@ -100,7 +107,8 @@ object SectionFactory {
             distanceInMeters = 400.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 
     fun avCabildo1621_virreyDelPino1800_completed() =
@@ -111,7 +119,8 @@ object SectionFactory {
             distanceInMeters = 400.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 0,
+            initialAmountOfSeats = 0,
+            bookedSeats = 0
         )
 
     fun virreyDelPino1800_avDelLibertador5000() =
@@ -122,7 +131,8 @@ object SectionFactory {
             distanceInMeters = 3000.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 
     fun avDelLibertador5000_avCabildo20() =
@@ -133,6 +143,7 @@ object SectionFactory {
             distanceInMeters = 3000.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 }

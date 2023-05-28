@@ -34,7 +34,8 @@ data class Trip(
                 distanceInMeters = 0.0,
                 driver = driver,
                 vehicle = vehicle,
-                availableSeats = availableSeats
+                initialAmountOfSeats = availableSeats,
+                bookedSeats = 0
             )
             sections.add(section)
         }

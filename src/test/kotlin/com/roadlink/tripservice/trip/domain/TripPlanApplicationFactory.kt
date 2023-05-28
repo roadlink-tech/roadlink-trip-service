@@ -5,7 +5,7 @@ import java.util.*
 
 object TripPlanApplicationFactory {
 
-    fun withoutAvailableSeats(
+    fun completed(
         tripApplicationId: UUID = UUID.randomUUID(),
     ): TripPlanApplication {
         return TripPlanApplication(
@@ -14,7 +14,26 @@ object TripPlanApplicationFactory {
                 TripPlanApplication.TripApplication(
                     id = tripApplicationId,
                     sections = setOf(
-                        SectionFactory.avCabildo(availableSeats = 0)
+                        SectionFactory.avCabildo(initialAmountOfSeats = 5, bookedSeats = 5),
+                    ),
+                    passengerId = "passengerId",
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleBooking(
+        tripApplicationId: UUID = UUID.randomUUID(),
+        initialAmountOfSeats: Int = 4
+    ): TripPlanApplication {
+        return TripPlanApplication(
+            id = UUID.randomUUID(),
+            tripApplications = mutableListOf(
+                TripPlanApplication.TripApplication(
+                    id = tripApplicationId,
+                    sections = setOf(
+                        SectionFactory.avCabildo(initialAmountOfSeats = initialAmountOfSeats, bookedSeats = 1)
                     ),
                     passengerId = "passengerId",
                     authorizerId = "authorizerId"
@@ -25,7 +44,7 @@ object TripPlanApplicationFactory {
 
     fun withASingleTripApplication(
         tripApplicationId: UUID = UUID.randomUUID(),
-        availableSeats: Int = 4
+        initialAmountOfSeats: Int = 4
     ): TripPlanApplication {
         return TripPlanApplication(
             id = UUID.randomUUID(),
@@ -33,7 +52,7 @@ object TripPlanApplicationFactory {
                 TripPlanApplication.TripApplication(
                     id = tripApplicationId,
                     sections = setOf(
-                        SectionFactory.avCabildo(availableSeats = availableSeats)
+                        SectionFactory.avCabildo(initialAmountOfSeats = initialAmountOfSeats)
                     ),
                     passengerId = "passengerId",
                     authorizerId = "authorizerId"

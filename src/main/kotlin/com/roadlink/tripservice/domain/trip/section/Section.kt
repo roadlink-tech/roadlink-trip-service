@@ -12,7 +12,8 @@ data class Section(
     val distanceInMeters: Double,
     val driver: String,
     val vehicle: String,
-    var availableSeats: Int,
+    var initialAmountOfSeats: Int,
+    var bookedSeats: Int
 ) {
 
     fun departure(): Location = departure.address.location
@@ -33,22 +34,35 @@ data class Section(
         return departure.estimatedArrivalTime.isAfter(at) || departure.estimatedArrivalTime == at
     }
 
+    fun availableSeats(): Int {
+        return initialAmountOfSeats - bookedSeats
+    }
+
     fun canReceiveAnyPassenger(): Boolean {
-        return availableSeats > 0
+        return availableSeats() > 0
+    }
+
+    fun hasAnyBooking(): Boolean {
+        return this.bookedSeats > 0
     }
 
     fun releaseSeat() {
-        availableSeats += 1
+        if (availableSeats() == initialAmountOfSeats) {
+            throw SectionError.ImpossibleToReleaseASeat(this.id)
+        }
+        bookedSeats -= 1
     }
 
     fun takeSeat() {
-        if (availableSeats == 0) {
+        if (availableSeats() == 0) {
             throw SectionError.InsufficientAvailableSeats(this.id)
         }
-        availableSeats -= 1
+        bookedSeats += 1
     }
 }
 
 sealed class SectionError(message: String) : DomainError(message) {
     class InsufficientAvailableSeats(id: String) : SectionError("Section $id does not have available seats")
+    class ImpossibleToReleaseASeat(id: String) :
+        SectionError("Can not release a seat for section $id, because there aren't any booked seat")
 }

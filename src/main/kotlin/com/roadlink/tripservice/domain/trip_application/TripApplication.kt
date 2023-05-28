@@ -36,7 +36,9 @@ data class TripPlanApplication(
 
         internal fun reject() {
             sections.forEach { section ->
-                section.releaseSeat()
+                if (section.hasAnyBooking()) {
+                    section.releaseSeat()
+                }
             }
             status = REJECTED
         }

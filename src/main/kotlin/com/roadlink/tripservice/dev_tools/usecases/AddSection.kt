@@ -21,7 +21,8 @@ class AddSection(
             distanceInMeters = request.distanceInMeters,
             driver = request.driver,
             vehicle = request.vehicle,
-            availableSeats = request.availableSeats,
+            initialAmountOfSeats = request.availableSeats,
+            bookedSeats = 0
         )
 
         sectionRepository.save(section)

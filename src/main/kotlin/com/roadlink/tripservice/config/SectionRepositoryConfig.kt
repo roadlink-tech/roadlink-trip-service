@@ -53,6 +53,7 @@ class SectionRepositoryConfig {
             distanceInMeters = 6070.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 }

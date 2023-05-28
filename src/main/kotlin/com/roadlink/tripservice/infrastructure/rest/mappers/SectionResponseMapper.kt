@@ -10,6 +10,6 @@ object SectionResponseMapper {
             arrival = TripPointResponseMapper.map(section.arrival),
             driver = section.driver,
             vehicle = section.vehicle,
-            availableSeats = section.availableSeats,
+            availableSeats = section.initialAmountOfSeats,
         )
 }
