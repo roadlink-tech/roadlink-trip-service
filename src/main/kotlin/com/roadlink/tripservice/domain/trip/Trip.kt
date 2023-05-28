@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.domain.trip
 
+import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.section.Section
 
@@ -10,11 +11,12 @@ data class Trip(
     val departure: TripPoint,
     val arrival: TripPoint,
     val meetingPoints: List<TripPoint>,
+    // TODO rename it by seats to be used. It'll be the vehicle capacity
     val availableSeats: Int,
 ) {
 
     // TODO revisar la creacion del trip y como lo itero
-    fun sections(): Set<Section> {
+    fun sections(idGenerator: IdGenerator): Set<Section> {
         val allTripPoints = buildList {
             add(departure)
             addAll(meetingPoints)
@@ -26,12 +28,14 @@ data class Trip(
                 return sections.toSet()
             }
             val section = Section(
+                id = idGenerator.id(),
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,
                 driver = driver,
                 vehicle = vehicle,
-                availableSeats = 2
+                initialAmountOfSeats = availableSeats,
+                bookedSeats = 0
             )
             sections.add(section)
         }

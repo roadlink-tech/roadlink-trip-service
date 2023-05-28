@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
+import com.roadlink.tripservice.trip.SpyCommandBus
 import com.roadlink.tripservice.trip.StubIdGenerator
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.factories.AlreadyExistsTripByDriverInTimeRangeResponseFactory
@@ -16,15 +17,18 @@ import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.HttpStatus.*
 import io.micronaut.http.MediaType
+import io.micronaut.http.MediaType.*
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 @MicronautTest
@@ -42,35 +46,41 @@ class CreateTripControllerTest {
     @Inject
     private lateinit var inMemoryTripRepository: InMemoryTripRepository
 
+    @Inject
+    private lateinit var spyCommandBus: SpyCommandBus
+
     @BeforeEach
     fun beforeEach() {
         inMemoryTripRepository.deleteAll()
+        spyCommandBus.clear()
     }
 
     @Test
     fun `can create trip with no meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildoId)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
         val request = request(CreateTripRequestFactory.avCabildo())
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
-        assertEquals(HttpStatus.CREATED, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(CREATED, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo(), response)
         thenTripExists(TripFactory.avCabildo())
+        theCommandHasBeenPublished()
     }
 
     @Test
     fun `can create trip with meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id)
         val request = request(CreateTripRequestFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
-        assertEquals(HttpStatus.CREATED, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(CREATED, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), response)
         thenTripExists(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
+        theCommandHasBeenPublished()
     }
 
     @Test
@@ -84,9 +94,10 @@ class CreateTripControllerTest {
             e.response
         }
 
-        assertEquals(HttpStatus.CONFLICT, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(CONFLICT, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertErrorBody(AlreadyExistsTripByDriverInTimeRangeResponseFactory.avCabildo(), response)
+        theCommandHasNotBeenPublished()
     }
 
     @Test
@@ -99,9 +110,10 @@ class CreateTripControllerTest {
             e.response
         }
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.status)
-        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(BAD_REQUEST, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertErrorBody(InvalidTripTimeRangeResponseFactory.avCabildo_invalidTimeRange(), response)
+        theCommandHasNotBeenPublished()
     }
 
     private fun request(createTripRequest: CreateTripExpectedRequest): HttpRequest<String> {
@@ -126,4 +138,13 @@ class CreateTripControllerTest {
     private fun thenTripExists(trip: Trip) {
         assertEquals(listOf(trip), inMemoryTripRepository.findAll())
     }
+
+    private fun theCommandHasBeenPublished() {
+        assertFalse(spyCommandBus.publishedCommands.isEmpty())
+    }
+
+    private fun theCommandHasNotBeenPublished() {
+        assertTrue(spyCommandBus.publishedCommands.isEmpty())
+    }
+
 }

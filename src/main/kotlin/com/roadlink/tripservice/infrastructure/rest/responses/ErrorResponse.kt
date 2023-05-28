@@ -1,3 +1,5 @@
 package com.roadlink.tripservice.infrastructure.rest.responses
 
-abstract class ErrorResponse(val code: ErrorResponseCode)
+import com.roadlink.tripservice.infrastructure.rest.ApiResponse
+
+abstract class ErrorResponse(val code: ErrorResponseCode) : ApiResponse

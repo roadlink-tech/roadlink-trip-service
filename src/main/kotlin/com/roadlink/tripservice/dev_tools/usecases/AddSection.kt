@@ -2,23 +2,27 @@ package com.roadlink.tripservice.dev_tools.usecases
 
 import com.roadlink.tripservice.dev_tools.domain.Geoapify
 import com.roadlink.tripservice.dev_tools.domain.AddressNotExists
+import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import java.time.Instant
 
 class AddSection(
+    private val idGenerator: IdGenerator,
     private val geoapify: Geoapify,
     private val sectionRepository: SectionRepository,
 ) {
     operator fun invoke(request: Request) {
         val section = Section(
+            id = idGenerator.id(),
             departure = tripPoint(request.departure),
             arrival = tripPoint(request.arrival),
             distanceInMeters = request.distanceInMeters,
             driver = request.driver,
             vehicle = request.vehicle,
-            availableSeats = request.availableSeats,
+            initialAmountOfSeats = request.availableSeats,
+            bookedSeats = 0
         )
 
         sectionRepository.save(section)

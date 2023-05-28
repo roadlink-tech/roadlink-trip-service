@@ -4,12 +4,12 @@ import com.roadlink.tripservice.domain.trip.Trip
 
 object TripFactory {
 
-    const val avCabildoId = "TripFactory_avCabildo"
-    const val avCabildo4853_virreyDelPino1800_avCabildo20 = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20"
+    const val avCabildo_id = "TripFactory_avCabildo"
+    const val avCabildo4853_virreyDelPino1800_avCabildo20_id = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20"
 
     fun avCabildo() =
         Trip(
-            id = avCabildoId,
+            id = avCabildo_id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
@@ -20,7 +20,7 @@ object TripFactory {
 
     fun avCabildo4853_virreyDelPino1800_avCabildo20() =
         Trip(
-            id = avCabildo4853_virreyDelPino1800_avCabildo20,
+            id = avCabildo4853_virreyDelPino1800_avCabildo20_id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
@@ -31,7 +31,7 @@ object TripFactory {
 
     fun caba_escobar_pilar_rosario() =
         Trip(
-            id = avCabildo4853_virreyDelPino1800_avCabildo20,
+            id = avCabildo4853_virreyDelPino1800_avCabildo20_id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.caba(),

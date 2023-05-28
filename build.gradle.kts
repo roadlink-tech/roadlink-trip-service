@@ -27,6 +27,7 @@ dependencies {
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     testImplementation("io.mockk:mockk:1.13.4")
+    testImplementation("io.micronaut.test:micronaut-test-junit5:4.0.0-M3")
 
 }
 

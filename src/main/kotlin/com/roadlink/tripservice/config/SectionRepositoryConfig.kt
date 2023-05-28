@@ -19,6 +19,7 @@ class SectionRepositoryConfig {
 
     private fun avCabildoSection(): Section =
         Section(
+            id = "1",
             departure = TripPoint(
                 estimatedArrivalTime = Instant.parse("2022-10-15T12:00:00Z"),
                 address = Address(
@@ -52,6 +53,7 @@ class SectionRepositoryConfig {
             distanceInMeters = 6070.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
-            availableSeats = 4,
+            initialAmountOfSeats = 4,
+            bookedSeats = 0
         )
 }

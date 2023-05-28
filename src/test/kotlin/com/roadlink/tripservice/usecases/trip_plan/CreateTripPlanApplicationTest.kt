@@ -1,0 +1,108 @@
+package com.roadlink.tripservice.usecases.trip_plan
+
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
+import com.roadlink.tripservice.trip.domain.SectionFactory
+import io.mockk.*
+import io.mockk.impl.annotations.MockK
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+
+class CreateTripPlanApplicationTest {
+
+    @MockK
+    lateinit var sectionRepository: SectionRepository
+
+    @MockK
+    lateinit var tripPlanApplicationRepository: TripPlanApplicationRepository
+
+    private lateinit var createTripPlanApplication: CreateTripPlanApplication
+
+    @BeforeEach
+    fun setUp() {
+        MockKAnnotations.init(this)
+        createTripPlanApplication = CreateTripPlanApplication(sectionRepository, tripPlanApplicationRepository)
+    }
+
+    @Test
+    fun `when all the request sections can receive the passenger, then the plan must be created`() {
+        // GIVEN
+        val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
+        val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800()
+        every { sectionRepository.findAllById(any()) } returns setOf(sectionOne, sectionTwo)
+        every { tripPlanApplicationRepository.save(any()) } just runs
+        val application = CreateTripPlanApplicationInput(
+            passengerId = "chorch",
+            trips = listOf(
+                CreateTripPlanApplicationInput.TripSections(
+                    tripId = "1",
+                    sectionsIds = listOf(sectionOne.id)
+                ),
+                CreateTripPlanApplicationInput.TripSections(
+                    tripId = "2",
+                    sectionsIds = listOf(sectionTwo.id)
+                )
+            )
+        )
+
+        // WHEN
+        val output = createTripPlanApplication(application)
+
+        // THEN
+        thenTheTripPlanWasCreated(output)
+        thenTheTripPlanWasSaved()
+    }
+
+    private fun thenTheTripPlanWasSaved() {
+        verify { tripPlanApplicationRepository.save(any()) }
+    }
+
+    @Test
+    fun `when there is a section which can not receive the passenger, then the plan must not be created`() {
+        // GIVEN
+        val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
+        val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800_completed()
+        every { sectionRepository.findAllById(any()) } returns setOf(sectionOne, sectionTwo)
+        every { tripPlanApplicationRepository.save(any()) } just runs
+        val application = CreateTripPlanApplicationInput(
+            passengerId = "chorch",
+            trips = listOf(
+                CreateTripPlanApplicationInput.TripSections(
+                    tripId = "1",
+                    sectionsIds = listOf(sectionOne.id)
+                ),
+                CreateTripPlanApplicationInput.TripSections(
+                    tripId = "2",
+                    sectionsIds = listOf(sectionTwo.id)
+                )
+            )
+        )
+
+        // WHEN
+        val output = createTripPlanApplication(application)
+
+        // THEN
+        thenTheTripPlanCouldNotBeCreated(output)
+        thenTheTripPlanWasNotSaved()
+    }
+
+    private fun thenTheTripPlanWasNotSaved() {
+        verify(exactly = 0) { tripPlanApplicationRepository.save(any()) }
+    }
+
+    private fun thenTheTripPlanCouldNotBeCreated(output: CreateTripPlanApplicationOutput) {
+        assertInstanceOf(
+            CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger::class.java,
+            output
+        )
+    }
+
+    private fun thenTheTripPlanWasCreated(output: CreateTripPlanApplicationOutput) {
+        extracted(output)
+    }
+
+    private fun extracted(output: CreateTripPlanApplicationOutput) {
+        assertInstanceOf(CreateTripPlanApplicationOutput.TripPlanApplicationCreated::class.java, output)
+    }
+}

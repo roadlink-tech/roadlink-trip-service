@@ -4,7 +4,7 @@ import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
 import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRange
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
 import com.roadlink.tripservice.trip.SpyCommandBus
-import com.roadlink.tripservice.trip.SpyCreateTripHandler
+import com.roadlink.tripservice.trip.StubCreateTripHandler
 import com.roadlink.tripservice.trip.StubIdGenerator
 import com.roadlink.tripservice.trip.StubTimeProvider
 import com.roadlink.tripservice.trip.domain.InstantFactory
@@ -35,7 +35,7 @@ internal class CreateTripTest {
         stubIdGenerator = StubIdGenerator()
         stubTimeProvider = StubTimeProvider(fixedNow = InstantFactory.october15_7hs())
         commandBus = SpyCommandBus()
-        commandBus.registerHandler(SpyCreateTripHandler())
+        commandBus.registerHandler(StubCreateTripHandler())
 
         createTrip = CreateTrip(
             tripRepository = inMemoryTripRepository,
@@ -128,7 +128,7 @@ internal class CreateTripTest {
 
     @Test
     fun `can create trip with no meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildoId)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
 
         val result = createTrip(CreateTrip.Input(
             driver = "John Smith",
@@ -146,7 +146,7 @@ internal class CreateTripTest {
 
     @Test
     fun `can create trip with meeting points`() {
-        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20)
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id)
 
         val result = createTrip(CreateTrip.Input(
             driver = "John Smith",

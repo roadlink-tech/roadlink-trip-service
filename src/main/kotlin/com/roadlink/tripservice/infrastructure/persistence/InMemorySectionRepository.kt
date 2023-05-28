@@ -25,6 +25,12 @@ class InMemorySectionRepository(
             .toSet()
     }
 
+    override fun findAllById(sectionsIds: Set<String>): Set<Section> {
+        return sections
+            .filter { it.id in sectionsIds }
+            .toSet()
+    }
+
     fun deleteAll() {
         sections.clear()
     }
