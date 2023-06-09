@@ -23,6 +23,7 @@ class AddSectionRestController(private val addSection: AddSection) {
 
     private fun HttpRequestBody.toRequest(): AddSection.Request =
         AddSection.Request(
+            tripId = tripId,
             departure = AddSection.Request.TripPoint(
                 name = departure.name,
                 at = Instant.parse(departure.at),
@@ -38,6 +39,7 @@ class AddSectionRestController(private val addSection: AddSection) {
         )
 
     data class HttpRequestBody(
+        val tripId: String,
         val departure: TripPoint,
         val arrival: TripPoint,
         val distanceInMeters: Double,

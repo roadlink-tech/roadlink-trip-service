@@ -4,9 +4,9 @@ import com.roadlink.tripservice.domain.DomainError
 import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.domain.trip.TripPoint
 import java.time.Instant
-
 data class Section(
     val id: String,
+    val tripId: String,
     val departure: TripPoint,
     val arrival: TripPoint,
     val distanceInMeters: Double,
@@ -38,6 +38,10 @@ data class Section(
         return initialAmountOfSeats - bookedSeats
     }
 
+    fun occupiedSeats(): Int {
+        return bookedSeats
+    }
+
     fun canReceiveAnyPassenger(): Boolean {
         return availableSeats() > 0
     }
@@ -46,20 +50,29 @@ data class Section(
         return this.bookedSeats > 0
     }
 
+    fun hasNoSeatsAvailable(): Boolean {
+        return availableSeats() == 0
+    }
+
+    fun hasAllSeatsAvailable(): Boolean  {
+        return availableSeats() == initialAmountOfSeats
+    }
+
     fun releaseSeat() {
-        if (availableSeats() == initialAmountOfSeats) {
+        if (hasAllSeatsAvailable()) {
             throw SectionError.ImpossibleToReleaseASeat(this.id)
         }
         bookedSeats -= 1
     }
 
     fun takeSeat() {
-        if (availableSeats() == 0) {
+        if (hasNoSeatsAvailable()) {
             throw SectionError.InsufficientAvailableSeats(this.id)
         }
         bookedSeats += 1
     }
 }
+
 
 sealed class SectionError(message: String) : DomainError(message) {
     class InsufficientAvailableSeats(id: String) : SectionError("Section $id does not have available seats")

@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.trip.domain
 
+import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 
 object SectionFactory {
@@ -15,11 +16,17 @@ object SectionFactory {
     const val virreyDelPino1800_avDelLibertador5000_id = "SectionFactory-virreyDelPino1800_avDelLibertador5000"
     const val avDelLibertador5000_avCabildo20_id = "SectionFactory-avDelLibertador5000_avCabildo20"
 
-    fun avCabildo(initialAmountOfSeats: Int = 4, bookedSeats: Int = 0) =
+    fun avCabildo(
+        departure: TripPoint = TripPointFactory.avCabildo_4853(),
+        arrival: TripPoint = TripPointFactory.avCabildo_20(),
+        initialAmountOfSeats: Int = 4,
+        bookedSeats: Int = 0,
+    ) =
         Section(
             id = avCabildo_id,
-            departure = TripPointFactory.avCabildo_4853(),
-            arrival = TripPointFactory.avCabildo_20(),
+            tripId = TripFactory.avCabildo_id,
+            departure = departure,
+            arrival = arrival,
             distanceInMeters = 6070.0,
             driver = "John Smith",
             vehicle = "Ford mustang",
@@ -30,6 +37,7 @@ object SectionFactory {
     fun virreyDelPino() =
         Section(
             id = virreyDelPino_id,
+            tripId = "virreyDelPino",
             departure = TripPointFactory.virreyDelPino_2880(),
             arrival = TripPointFactory.virreyDelPino_1800(),
             distanceInMeters = 1300.0,
@@ -42,6 +50,7 @@ object SectionFactory {
     fun avCabildo4853_virreyDelPino1800(availableSeats: Int = 4) =
         Section(
             id = avCabildo4853_virreyDelPino1800_id,
+            tripId = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.virreyDelPino_1800(),
             distanceInMeters = 4000.0,
@@ -54,6 +63,7 @@ object SectionFactory {
     fun virreyDelPino1800_avCabildo20() =
         Section(
             id = virreyDelPino1800_avCabildo20_id,
+            tripId = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             departure = TripPointFactory.virreyDelPino_1800(),
             arrival = TripPointFactory.avCabildo_20(),
             distanceInMeters = 3000.0,
@@ -66,6 +76,7 @@ object SectionFactory {
     fun avCabildo4853_virreyDelPino2880() =
         Section(
             id = avCabildo4853_virreyDelPino2880_id,
+            tripId = "avCabildo4853_virreyDelPino2880",
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.virreyDelPino_2880(),
             distanceInMeters = 5000.0,
@@ -78,6 +89,7 @@ object SectionFactory {
     fun virreyDelPino2880_avCabildo20() =
         Section(
             id = virreyDelPino2880_avCabildo20_id,
+            tripId = "virreyDelPino2880_avCabildo20",
             departure = TripPointFactory.virreyDelPino_2880(),
             arrival = TripPointFactory.avCabildo_20(),
             distanceInMeters = 3000.0,
@@ -90,6 +102,7 @@ object SectionFactory {
     fun virreyDelPino2880_avCabildo1621() =
         Section(
             id = virreyDelPino2880_avCabildo1621_id,
+            tripId = "virreyDelPino2880_avCabildo20",
             departure = TripPointFactory.virreyDelPino_2880(),
             arrival = TripPointFactory.avCabildo_1621(),
             distanceInMeters = 900.0,
@@ -102,6 +115,7 @@ object SectionFactory {
     fun avCabildo1621_virreyDelPino1800() =
         Section(
             id = avCabildo1621_virreyDelPino1800_id,
+            tripId = "avCabildo1621_virreyDelPino1800",
             departure = TripPointFactory.avCabildo_1621(),
             arrival = TripPointFactory.virreyDelPino_1800(),
             distanceInMeters = 400.0,
@@ -114,6 +128,7 @@ object SectionFactory {
     fun avCabildo1621_virreyDelPino1800_completed() =
         Section(
             id = avCabildo1621_virreyDelPino1800_id,
+            tripId = "avCabildo1621_virreyDelPino1800_completed",
             departure = TripPointFactory.avCabildo_1621(),
             arrival = TripPointFactory.virreyDelPino_1800(),
             distanceInMeters = 400.0,
@@ -126,6 +141,7 @@ object SectionFactory {
     fun virreyDelPino1800_avDelLibertador5000() =
         Section(
             id = virreyDelPino1800_avDelLibertador5000_id,
+            tripId = "virreyDelPino1800_avDelLibertador5000",
             departure = TripPointFactory.virreyDelPino_1800(),
             arrival = TripPointFactory.avDelLibertador_5000(),
             distanceInMeters = 3000.0,
@@ -138,6 +154,7 @@ object SectionFactory {
     fun avDelLibertador5000_avCabildo20() =
         Section(
             id = avDelLibertador5000_avCabildo20_id,
+            tripId = "avDelLibertador5000_avCabildo20",
             departure = TripPointFactory.avDelLibertador_5000(),
             arrival = TripPointFactory.avCabildo_20(),
             distanceInMeters = 3000.0,
@@ -146,4 +163,29 @@ object SectionFactory {
             initialAmountOfSeats = 4,
             bookedSeats = 0
         )
+
+    class Builder(private var section: Section) {
+
+        fun allSeatsAvailable() = apply {
+            this.section = this.section.copy(bookedSeats = 0)
+        }
+
+        fun noSeatsAvailable() = apply {
+            this.section = this.section.copy(
+                initialAmountOfSeats = 1,
+                bookedSeats = 1,
+            )
+        }
+
+        fun someSeatsAvailable() = apply {
+            this.section = this.section.copy(
+                initialAmountOfSeats = 3,
+                bookedSeats = 1,
+            )
+        }
+
+        fun build() = section
+    }
 }
+
+fun Section.builder() = SectionFactory.Builder(section = this)
