@@ -4,9 +4,11 @@ import com.roadlink.tripservice.domain.DomainError
 import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.domain.trip.TripPoint
 import java.time.Instant
+import java.util.UUID
 
 data class Section(
     val id: String,
+    val tripId: UUID,
     val departure: TripPoint,
     val arrival: TripPoint,
     val distanceInMeters: Double,

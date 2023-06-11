@@ -3,9 +3,11 @@ package com.roadlink.tripservice.domain.trip
 import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.section.Section
+import java.util.*
 
 data class Trip(
     val id: String,
+    // TODO Is it the driver id? if it's then why not use a UUID instead of string
     val driver: String,
     val vehicle: String,
     val departure: TripPoint,
@@ -29,6 +31,7 @@ data class Trip(
             }
             val section = Section(
                 id = idGenerator.id(),
+                tripId = UUID.fromString(this.id),
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,

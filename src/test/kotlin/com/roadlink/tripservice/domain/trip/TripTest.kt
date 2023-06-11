@@ -6,7 +6,7 @@ import com.roadlink.tripservice.trip.domain.TripFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class TripTest {
+class TripTest2 {
 
     private val idGenerator = UUIDIdGenerator()
 

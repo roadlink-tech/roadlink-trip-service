@@ -1,6 +1,7 @@
 package com.roadlink.tripservice.trip.domain
 
 import com.roadlink.tripservice.domain.trip.section.Section
+import java.util.*
 
 object SectionFactory {
 
@@ -24,7 +25,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = initialAmountOfSeats,
-            bookedSeats = bookedSeats
+            bookedSeats = bookedSeats,
+            tripId = UUID.randomUUID()
         )
 
     fun virreyDelPino() =
@@ -36,7 +38,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun avCabildo4853_virreyDelPino1800(availableSeats: Int = 4) =
@@ -48,7 +51,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = availableSeats,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun virreyDelPino1800_avCabildo20() =
@@ -60,7 +64,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun avCabildo4853_virreyDelPino2880() =
@@ -72,7 +77,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun virreyDelPino2880_avCabildo20() =
@@ -84,7 +90,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun virreyDelPino2880_avCabildo1621() =
@@ -96,7 +103,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun avCabildo1621_virreyDelPino1800() =
@@ -108,7 +116,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun avCabildo1621_virreyDelPino1800_completed() =
@@ -120,7 +129,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 0,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun virreyDelPino1800_avDelLibertador5000() =
@@ -132,7 +142,8 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
     fun avDelLibertador5000_avCabildo20() =
@@ -144,6 +155,7 @@ object SectionFactory {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 }

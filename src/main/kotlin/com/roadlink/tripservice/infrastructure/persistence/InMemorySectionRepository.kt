@@ -4,6 +4,7 @@ import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import java.time.Instant
+import java.util.*
 
 class InMemorySectionRepository(
     private val sections: MutableList<Section> = mutableListOf(),
@@ -28,6 +29,12 @@ class InMemorySectionRepository(
     override fun findAllById(sectionsIds: Set<String>): Set<Section> {
         return sections
             .filter { it.id in sectionsIds }
+            .toSet()
+    }
+
+    override fun findAllByTripIds(tripIds: List<UUID>): Set<Section> {
+        return sections
+            .filter { it.tripId in tripIds }
             .toSet()
     }
 

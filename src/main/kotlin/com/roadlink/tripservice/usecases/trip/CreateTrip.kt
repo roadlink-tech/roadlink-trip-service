@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases
+package com.roadlink.tripservice.usecases.trip
 
 import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
 import com.roadlink.tripservice.domain.IdGenerator

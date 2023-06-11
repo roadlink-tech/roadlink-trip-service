@@ -10,7 +10,7 @@ import com.roadlink.tripservice.trip.StubTimeProvider
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPointFactory
-import com.roadlink.tripservice.usecases.CreateTrip
+import com.roadlink.tripservice.usecases.trip.CreateTrip
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -55,7 +55,8 @@ internal class CreateTripTest {
         inMemoryTripRepository.save(TripFactory.avCabildo())
 
         assertThrows<AlreadyExistsTripByDriverInTimeRange> {
-            createTrip(CreateTrip.Input(
+            createTrip(
+                CreateTrip.Input(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -71,7 +72,8 @@ internal class CreateTripTest {
     @Test
     fun `given trip with no meeting points and arrival at before departure at then should fail`() {
         assertThrows<InvalidTripTimeRange> {
-            createTrip(CreateTrip.Input(
+            createTrip(
+                CreateTrip.Input(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -89,7 +91,8 @@ internal class CreateTripTest {
     @Test
     fun `given trip with one meeting point and meeting point at before departureAt then should fail`() {
         assertThrows<InvalidTripTimeRange> {
-            createTrip(CreateTrip.Input(
+            createTrip(
+                CreateTrip.Input(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -109,7 +112,8 @@ internal class CreateTripTest {
     @Test
     fun `given trip with one meeting point and meeting point at after arrival at then should fail`() {
         assertThrows<InvalidTripTimeRange> {
-            createTrip(CreateTrip.Input(
+            createTrip(
+                CreateTrip.Input(
                 driver = "John Smith",
                 vehicle = "Ford mustang",
                 departure = TripPointFactory.avCabildo_4853(),
@@ -130,7 +134,8 @@ internal class CreateTripTest {
     fun `can create trip with no meeting points`() {
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
 
-        val result = createTrip(CreateTrip.Input(
+        val result = createTrip(
+            CreateTrip.Input(
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
@@ -148,7 +153,8 @@ internal class CreateTripTest {
     fun `can create trip with meeting points`() {
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id)
 
-        val result = createTrip(CreateTrip.Input(
+        val result = createTrip(
+            CreateTrip.Input(
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),

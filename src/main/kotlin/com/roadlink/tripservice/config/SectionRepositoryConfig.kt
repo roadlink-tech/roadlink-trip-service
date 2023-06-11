@@ -9,6 +9,7 @@ import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionReposi
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 import java.time.Instant
+import java.util.*
 
 @Factory
 class SectionRepositoryConfig {
@@ -54,6 +55,7 @@ class SectionRepositoryConfig {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 }

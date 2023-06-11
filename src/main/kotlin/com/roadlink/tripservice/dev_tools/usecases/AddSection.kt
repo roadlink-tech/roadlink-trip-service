@@ -7,6 +7,7 @@ import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import java.time.Instant
+import java.util.UUID
 
 class AddSection(
     private val idGenerator: IdGenerator,
@@ -22,7 +23,8 @@ class AddSection(
             driver = request.driver,
             vehicle = request.vehicle,
             initialAmountOfSeats = request.availableSeats,
-            bookedSeats = 0
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
         )
 
         sectionRepository.save(section)

@@ -4,8 +4,7 @@ import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.time.DefaultTimeProvider
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.events.CommandBus
-import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
-import com.roadlink.tripservice.usecases.CreateTrip
+import com.roadlink.tripservice.usecases.trip.CreateTrip
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
