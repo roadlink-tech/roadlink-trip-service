@@ -31,7 +31,7 @@ data class Trip(
             }
             val section = Section(
                 id = idGenerator.id(),
-                tripId = UUID.fromString(this.id),
+                tripId = UUID.randomUUID(),
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,
