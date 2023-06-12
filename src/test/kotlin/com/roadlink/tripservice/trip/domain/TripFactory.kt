@@ -4,13 +4,13 @@ import com.roadlink.tripservice.domain.trip.Trip
 
 object TripFactory {
 
-    const val avCabildo_id = "TripFactory_avCabildo"
+    const val avCabildo_id = "81dcb088-4b7e-4956-a50a-52eee0dd5a0b"
     const val avCabildo4853_virreyDelPino1800_avCabildo20_id = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20"
 
-    fun avCabildo() =
+    fun avCabildo4853_to_avCabildo20(driverId: String = "John Smith") =
         Trip(
             id = avCabildo_id,
-            driver = "John Smith",
+            driver = driverId,
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
@@ -18,9 +18,9 @@ object TripFactory {
             availableSeats = 4,
         )
 
-    fun avCabildo4853_virreyDelPino1800_avCabildo20() =
+    fun avCabildo4853_virreyDelPino1800_avCabildo20(id : String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
         Trip(
-            id = avCabildo4853_virreyDelPino1800_avCabildo20_id,
+            id = id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
@@ -29,9 +29,9 @@ object TripFactory {
             availableSeats = 5,
         )
 
-    fun caba_escobar_pilar_rosario() =
+    fun caba_escobar_pilar_rosario(id : String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
         Trip(
-            id = avCabildo4853_virreyDelPino1800_avCabildo20_id,
+            id = id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.caba(),

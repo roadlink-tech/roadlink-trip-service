@@ -2,6 +2,7 @@ package com.roadlink.tripservice.config
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
@@ -14,8 +15,15 @@ import java.util.UUID
 class TripApplicationDefinition {
 
     @Singleton
-    fun tripPlanApplicationRepository(): InMemoryTripPlanApplicationRepository {
-        return InMemoryTripPlanApplicationRepository()
+    fun tripApplicationRepository(): InMemoryTripApplicationRepository {
+        return InMemoryTripApplicationRepository()
+    }
+
+    @Singleton
+    fun tripPlanApplicationRepository(
+        tripApplicationRepository: InMemoryTripApplicationRepository
+    ): InMemoryTripPlanApplicationRepository {
+        return InMemoryTripPlanApplicationRepository(tripApplicationRepository = tripApplicationRepository)
     }
 
     @Singleton

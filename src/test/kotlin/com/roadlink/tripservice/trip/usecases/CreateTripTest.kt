@@ -52,7 +52,7 @@ internal class CreateTripTest {
 
     @Test
     fun `given already exists trip with same driver in the given time range then should fail`() {
-        inMemoryTripRepository.save(TripFactory.avCabildo())
+        inMemoryTripRepository.save(TripFactory.avCabildo4853_to_avCabildo20())
 
         assertThrows<AlreadyExistsTripByDriverInTimeRange> {
             createTrip(
@@ -65,7 +65,7 @@ internal class CreateTripTest {
                 availableSeats = 4,
             ))
         }
-        assertEquals(listOf(TripFactory.avCabildo()), inMemoryTripRepository.findAll())
+        assertEquals(listOf(TripFactory.avCabildo4853_to_avCabildo20()), inMemoryTripRepository.findAll())
         theCommandHasNotBeenPublished()
     }
 
@@ -144,8 +144,8 @@ internal class CreateTripTest {
             availableSeats = 4,
         ))
 
-        assertEquals(TripFactory.avCabildo(), result)
-        assertEquals(listOf(TripFactory.avCabildo()), inMemoryTripRepository.findAll())
+        assertEquals(TripFactory.avCabildo4853_to_avCabildo20(), result)
+        assertEquals(listOf(TripFactory.avCabildo4853_to_avCabildo20()), inMemoryTripRepository.findAll())
         theCommandHasBeenPublished()
     }
 

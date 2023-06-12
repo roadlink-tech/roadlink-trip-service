@@ -9,6 +9,10 @@ data class TripPlanApplication(
     val id: UUID = UUID.randomUUID(),
     val tripApplications: MutableList<TripApplication> = mutableListOf()
 ) {
+    fun hasPendingApplication(): Boolean {
+        return tripApplications.any { it.isPending() }
+    }
+
     data class TripApplication(
         val id: UUID = UUID.randomUUID(),
         val sections: Set<Section>,
@@ -20,6 +24,18 @@ data class TripPlanApplication(
             PENDING_APPROVAL,
             REJECTED,
             CONFIRMED
+        }
+
+        fun driverId(): UUID {
+            return UUID.fromString(this.sections.first().driver)
+        }
+
+        fun tripId(): UUID {
+            return this.sections.first().tripId
+        }
+
+        internal fun isPending(): Boolean {
+            return this.status == PENDING_APPROVAL
         }
 
         internal fun isConfirmed(): Boolean {
@@ -43,6 +59,7 @@ data class TripPlanApplication(
             status = REJECTED
         }
     }
+
 
     fun isReadyToBeConfirm(): Boolean {
         return this.tripApplications.filter { it.isConfirmed() }.size == this.tripApplications.size

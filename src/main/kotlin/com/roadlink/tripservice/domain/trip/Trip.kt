@@ -14,7 +14,7 @@ data class Trip(
     val arrival: TripPoint,
     val meetingPoints: List<TripPoint>,
     // TODO rename it by seats to be used. It'll be the vehicle capacity
-    val availableSeats: Int,
+    val availableSeats: Int
 ) {
 
     // TODO revisar la creacion del trip y como lo itero
@@ -31,7 +31,7 @@ data class Trip(
             }
             val section = Section(
                 id = idGenerator.id(),
-                tripId = UUID.randomUUID(),
+                tripId = UUID.fromString(this.id),
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,

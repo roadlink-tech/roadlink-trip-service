@@ -4,31 +4,57 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_summary.driver.DriverTripSummary
 import com.roadlink.tripservice.usecases.UseCase
 import java.util.*
 
-// TODO test it!!
+
 class RetrieveDriverTripSummary(
     private val tripRepository: TripRepository,
-    private val sectionsRepository: SectionRepository
-) : UseCase<UUID, RetrieveDriverTripSummaryOutput> {
-    override fun invoke(input: UUID): RetrieveDriverTripSummaryOutput {
-        val trips = tripRepository.findAllByDriverId(input)
+    private val sectionsRepository: SectionRepository,
+    private val tripApplicationRepository: TripApplicationRepository
+) : UseCase<String, RetrieveDriverTripSummaryOutput> {
+
+    // TODO change the input value by UUID, when driver type into Trip entity was update
+    override fun invoke(input: String): RetrieveDriverTripSummaryOutput {
+        val trips = tripRepository.findAllByDriverId(UUID.fromString(input))
+        val canReceiveAnyPassengerByTripId = mapTripsThatCanReceivePassengers(trips)
+        val hasPendingApplicationsByTripId = mapTripsThatHasPendingApplications(UUID.fromString(input))
+        return createOutput(trips, canReceiveAnyPassengerByTripId, hasPendingApplicationsByTripId)
+    }
+
+    private fun mapTripsThatHasPendingApplications(driverId: UUID): Map<UUID, Boolean> {
+        val tripApplications = tripApplicationRepository.findAllByDriverId(driverId)
+        val tipApplicationsGroupByTripId = groupTripApplicationsByTripId(tripApplications)
+        val hasPendingApplicationsByTripId: Map<UUID, Boolean> = tipApplicationsGroupByTripId.map { entry ->
+            Pair(entry.key, entry.value.any { it.isPending() })
+        }.toMap()
+        return hasPendingApplicationsByTripId
+    }
+
+    private fun groupTripApplicationsByTripId(tripApplications: List<TripPlanApplication.TripApplication>)
+            : Map<UUID, List<TripPlanApplication.TripApplication>> {
+        return tripApplications.groupBy { it.tripId() }
+    }
+
+    private fun mapTripsThatCanReceivePassengers(trips: List<Trip>): Map<UUID, Boolean> {
         val sectionsByTripId = groupSectionsByTripId(trips)
-        val canReceiveAnyPassengerByTripId: Map<UUID, Boolean> =
-            sectionsByTripId.map { entry -> Pair(entry.key, entry.value.any { it.canReceiveAnyPassenger() }) }.toMap()
-        return createOutput(trips, canReceiveAnyPassengerByTripId)
+        return sectionsByTripId.map { entry -> Pair(entry.key, entry.value.any { it.canReceiveAnyPassenger() }) }
+            .toMap()
     }
 
     private fun createOutput(
         trips: List<Trip>,
-        canReceiveAnyPassengerByTripId: Map<UUID, Boolean>
+        canReceiveAnyPassengerByTripId: Map<UUID, Boolean>,
+        hasPendingApplicationsByTripId: Map<UUID, Boolean>
     ): RetrieveDriverTripSummaryOutput {
         return RetrieveDriverTripSummaryOutput(trips.map {
             DriverTripSummary(
                 trip = it,
-                hasAvailableSeats = canReceiveAnyPassengerByTripId[UUID.fromString(it.id)]!!
+                hasAvailableSeats = canReceiveAnyPassengerByTripId[UUID.fromString(it.id)]!!,
+                hasPendingApplications = hasPendingApplicationsByTripId[UUID.fromString(it.id)]!!
             )
         })
     }

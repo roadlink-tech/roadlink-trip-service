@@ -5,4 +5,6 @@ import java.util.*
 interface TripPlanApplicationRepository {
     fun save(application: TripPlanApplication)
     fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication?
+    //fun findAllByDriverId(driverId: UUID): List<TripPlanApplication>
 }
+

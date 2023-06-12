@@ -19,14 +19,15 @@ object SectionFactory {
     fun avCabildo(
         initialAmountOfSeats: Int = 4,
         bookedSeats: Int = 0,
-        tripId: UUID = UUID.fromString("ad2e7d11-0fbb-4711-8f0c-a0f31529241f")
+        tripId: UUID = UUID.fromString("ad2e7d11-0fbb-4711-8f0c-a0f31529241f"),
+        driverId: String = "John Smith"
     ) =
         Section(
             id = avCabildo_id,
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
             distanceInMeters = 6070.0,
-            driver = "John Smith",
+            driver = driverId,
             vehicle = "Ford mustang",
             initialAmountOfSeats = initialAmountOfSeats,
             bookedSeats = bookedSeats,
