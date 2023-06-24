@@ -19,6 +19,15 @@ class InMemoryTripPlanApplicationRepository(
             .firstOrNull { it.tripApplications.any { tripApplication -> tripApplication.id == tripApplicationId } }
     }
 
+    override fun findTripApplicationBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+        return tripPlanApplications
+            .flatMap { it.tripApplications }
+            .filter { tripApplication ->
+                tripApplication.sections.any { it.id == sectionId }
+            }
+            .toSet()
+    }
+
     fun deleteAll() {
         this.tripPlanApplications.clear()
     }

@@ -6,6 +6,7 @@ object TripFactory {
 
     const val avCabildo_id = "TripFactory_avCabildo"
     const val avCabildo4853_virreyDelPino1800_avCabildo20_id = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20"
+    const val caba_escobar_pilar_rosario_id = "TripFactory_caba_escobar_pilar_rosario_id"
 
     fun avCabildo() =
         Trip(
@@ -31,7 +32,7 @@ object TripFactory {
 
     fun caba_escobar_pilar_rosario() =
         Trip(
-            id = avCabildo4853_virreyDelPino1800_avCabildo20_id,
+            id = caba_escobar_pilar_rosario_id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointFactory.caba(),

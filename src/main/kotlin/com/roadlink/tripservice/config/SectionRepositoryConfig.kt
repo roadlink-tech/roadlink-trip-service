@@ -20,6 +20,7 @@ class SectionRepositoryConfig {
     private fun avCabildoSection(): Section =
         Section(
             id = "1",
+            tripId = "1",
             departure = TripPoint(
                 estimatedArrivalTime = Instant.parse("2022-10-15T12:00:00Z"),
                 address = Address(
