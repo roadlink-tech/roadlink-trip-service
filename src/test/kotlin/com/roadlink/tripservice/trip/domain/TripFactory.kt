@@ -7,7 +7,7 @@ object TripFactory {
     const val avCabildo_id = "81dcb088-4b7e-4956-a50a-52eee0dd5a0b"
     const val avCabildo4853_virreyDelPino1800_avCabildo20_id = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20"
 
-    fun avCabildo4853_to_avCabildo20(driverId: String = "John Smith") =
+    fun avCabildo4853_to_avCabildo20(driverId: String = "John Smith", availableSeats: Int = 4) =
         Trip(
             id = avCabildo_id,
             driver = driverId,
@@ -15,10 +15,10 @@ object TripFactory {
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
             meetingPoints = emptyList(),
-            availableSeats = 4,
+            availableSeats = availableSeats,
         )
 
-    fun avCabildo4853_virreyDelPino1800_avCabildo20(id : String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
+    fun avCabildo4853_virreyDelPino1800_avCabildo20(id: String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
         Trip(
             id = id,
             driver = "John Smith",
@@ -29,7 +29,7 @@ object TripFactory {
             availableSeats = 5,
         )
 
-    fun caba_escobar_pilar_rosario(id : String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
+    fun caba_escobar_pilar_rosario(id: String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
         Trip(
             id = id,
             driver = "John Smith",

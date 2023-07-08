@@ -17,7 +17,7 @@ class DriverTripSummaryController(
 ) {
 
     @Get
-    fun retrieve(@PathVariable driverId: String): HttpResponse<List<ApiResponse>> {
+    fun retrieve(@PathVariable driverId: String): HttpResponse<Any> {
         val output = retrieveDriverTripSummary(UUID.fromString(driverId))
         return responseFactory.from(output)
     }

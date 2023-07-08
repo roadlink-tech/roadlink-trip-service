@@ -54,7 +54,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
     fun `when a trip was saved successfully, then its summary should be retrieved`() {
         // GIVEN
         val trip = givenACreatedTrip()
-        givenATripPlanApplicationPendingFor(trip)
+        givenATripPlanApplicationFor(trip)
 
         // WHEN
         val summary = retrieveDriverTripSummary(trip.driver)
@@ -72,10 +72,56 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val summary = retrieveDriverTripSummary(driverId.toString())
 
         // THEN
-        assertTrue(summary.thereAreNotTrips())
+        assertInstanceOf(RetrieveDriverTripSummaryOutput::class.java, summary)
     }
 
-    private fun givenATripPlanApplicationPendingFor(trip: Trip) {
+    @Test
+    fun `when a trip can not receive any passenger, then it must be retrieved in the summary response`() {
+        // GIVEN
+        val driverId = UUID.randomUUID()
+        val trip = givenACreatedTrip(driverId, availableSeats = 0)
+        givenATripPlanApplicationFor(trip.id, driverId)
+
+        // WHEN
+        val summary = retrieveDriverTripSummary(driverId.toString())
+
+        // THEN
+        thenAtLeastATripWithoutCapacityMustBeRetrieved(summary)
+    }
+
+    @Test
+    fun `when there are more than one trip, all of those must be retrieve in the summary`() {
+        // GIVEN
+        val driverId = UUID.randomUUID()
+        repeat(5) {
+            val trip = givenACreatedTrip(driverId)
+            givenATripPlanApplicationFor(trip.id, driverId)
+        }
+
+        // WHEN
+        val summary = retrieveDriverTripSummary(driverId.toString())
+
+        // THEN
+        thenAllTheTripApplicationsMustBeRetrieved(summary)
+    }
+
+    private fun thenAllTheTripApplicationsMustBeRetrieved(summary: RetrieveDriverTripSummaryOutput) {
+        assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.size == 5)
+    }
+
+    private fun thenAtLeastATripWithoutCapacityMustBeRetrieved(summary: RetrieveDriverTripSummaryOutput) {
+        assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.any { !it.hasAvailableSeats })
+    }
+
+    private fun givenATripPlanApplicationFor(tripId: String, driverId: UUID) {
+        val tripPlanApplication = TripPlanApplicationFactory.withASingleBooking(
+            tripId = UUID.fromString(tripId),
+            driverId = driverId.toString()
+        )
+        tripPlanApplicationRepository.save(tripPlanApplication)
+    }
+
+    private fun givenATripPlanApplicationFor(trip: Trip) {
         val tripPlanApplication = TripPlanApplicationFactory.withASingleBooking(
             tripId = UUID.fromString(trip.id),
             driverId = "81dcb088-4b7e-4956-a50a-52eee0dd5a0f"
@@ -83,8 +129,12 @@ class RetrieveDriverTripSummaryIntegrationTest {
         tripPlanApplicationRepository.save(tripPlanApplication)
     }
 
-    private fun givenACreatedTrip(): Trip {
-        val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = "81dcb088-4b7e-4956-a50a-52eee0dd5a0f")
+    private fun givenACreatedTrip(
+        driverId: UUID = UUID.fromString("81dcb088-4b7e-4956-a50a-52eee0dd5a0f"),
+        availableSeats: Int = 4
+    ): Trip {
+        val trip =
+            TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString(), availableSeats = availableSeats)
         tripRepository.save(trip)
         sectionsRepository.save(trip.sections(idGenerator))
         return trip
