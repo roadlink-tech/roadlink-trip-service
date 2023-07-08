@@ -19,9 +19,10 @@ class RetrieveDriverTripSummary(
 
     // TODO change the input value by UUID, when driver type into Trip entity was update
     override fun invoke(input: String): RetrieveDriverTripSummaryOutput {
-        val trips = tripRepository.findAllByDriverId(UUID.fromString(input))
+        val driverId = UUID.fromString(input)
+        val trips = tripRepository.findAllByDriverId(driverId)
         val canReceiveAnyPassengerByTripId = mapTripsThatCanReceivePassengers(trips)
-        val hasPendingApplicationsByTripId = mapTripsThatHasPendingApplications(UUID.fromString(input))
+        val hasPendingApplicationsByTripId = mapTripsThatHasPendingApplications(driverId)
         return createOutput(trips, canReceiveAnyPassengerByTripId, hasPendingApplicationsByTripId)
     }
 
@@ -64,4 +65,8 @@ class RetrieveDriverTripSummary(
     }
 }
 
-class RetrieveDriverTripSummaryOutput(val trips: List<DriverTripSummary>)
+class RetrieveDriverTripSummaryOutput(val trips: List<DriverTripSummary>) {
+    fun thereAreNotTrips(): Boolean {
+        return trips.isEmpty()
+    }
+}

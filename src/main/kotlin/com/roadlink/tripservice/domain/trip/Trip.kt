@@ -12,6 +12,7 @@ data class Trip(
     val vehicle: String,
     val departure: TripPoint,
     val arrival: TripPoint,
+    val status: Status = Status.NOT_STARTED,
     val meetingPoints: List<TripPoint>,
     // TODO rename it by seats to be used. It'll be the vehicle capacity
     val availableSeats: Int
@@ -52,4 +53,10 @@ data class Trip(
 
     fun isInTimeRange(timeRange: TimeRange): Boolean =
         TimeRange(departure.estimatedArrivalTime, arrival.estimatedArrivalTime).intersects(timeRange)
+
+    enum class Status {
+        NOT_STARTED,
+        IN_PROGRESS,
+        FINISHED
+    }
 }

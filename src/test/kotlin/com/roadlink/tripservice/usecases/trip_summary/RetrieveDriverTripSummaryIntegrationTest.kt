@@ -5,7 +5,6 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
@@ -13,7 +12,9 @@ import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMe
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -26,7 +27,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
 
     private lateinit var sectionsRepository: SectionRepository
 
-    private lateinit var tripPlanApplicationRepository: TripPlanApplicationRepository
+    private lateinit var tripPlanApplicationRepository: InMemoryTripPlanApplicationRepository
 
     private lateinit var tripApplicationRepository: TripApplicationRepository
 
@@ -44,6 +45,11 @@ class RetrieveDriverTripSummaryIntegrationTest {
             RetrieveDriverTripSummary(tripRepository, sectionsRepository, tripApplicationRepository)
     }
 
+    @AfterEach
+    fun afterEach() {
+        tripPlanApplicationRepository.deleteAll()
+    }
+
     @Test
     fun `when a trip was saved successfully, then its summary should be retrieved`() {
         // GIVEN
@@ -54,7 +60,19 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val summary = retrieveDriverTripSummary(trip.driver)
 
         // THEN
-        Assertions.assertNotNull(summary)
+        assertNotNull(summary)
+    }
+
+    @Test
+    fun `when the driver does not have any trip save, an empty summary must be retrieved`() {
+        // GIVEN
+        val driverId = UUID.randomUUID()
+
+        // WHEN
+        val summary = retrieveDriverTripSummary(driverId.toString())
+
+        // THEN
+        assertTrue(summary.thereAreNotTrips())
     }
 
     private fun givenATripPlanApplicationPendingFor(trip: Trip) {

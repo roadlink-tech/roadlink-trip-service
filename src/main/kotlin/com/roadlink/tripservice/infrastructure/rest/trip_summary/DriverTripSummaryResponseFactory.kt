@@ -16,11 +16,9 @@ class DriverTripSummaryResponseFactory {
                 arrivalDistrict = summary.trip.arrival.address.city,
                 departureInstant = summary.trip.departure.estimatedArrivalTime,
                 arrivalInstant = summary.trip.arrival.estimatedArrivalTime,
-                // TODO which are the available values for this field, and why?
-                status = "TODO it must be defined firstly",
+                status = summary.trip.status.toString(),
                 hasSeatAvailable = summary.hasAvailableSeats,
-                // TODO what is this?
-                hasPendingNotifications = false
+                hasPendingApplications = summary.hasPendingApplications
             )
         }
         return HttpResponse.status<ApiResponse?>(HttpStatus.OK)
@@ -42,6 +40,6 @@ data class DriverTripSummaryResponse(
     val status: String,
     @JsonProperty("has_seat_available")
     val hasSeatAvailable: Boolean,
-    @JsonProperty("has_pending_notifications")
-    val hasPendingNotifications: Boolean
+    @JsonProperty("has_pending_notifications") // ver con @Felix para que se has_pending_applications
+    val hasPendingApplications: Boolean
 ) : ApiResponse
