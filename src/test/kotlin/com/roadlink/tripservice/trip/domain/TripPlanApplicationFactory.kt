@@ -1,6 +1,10 @@
 package com.roadlink.tripservice.trip.domain
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.PENDING_APPROVAL
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.REJECTED
 import java.util.*
 
 object TripPlanApplicationFactory {
@@ -11,7 +15,7 @@ object TripPlanApplicationFactory {
         return TripPlanApplication(
             id = UUID.randomUUID(),
             tripApplications = mutableListOf(
-                TripPlanApplication.TripApplication(
+                TripApplication(
                     id = tripApplicationId,
                     sections = setOf(
                         SectionFactory.avCabildo(initialAmountOfSeats = 5, bookedSeats = 5),
@@ -27,12 +31,13 @@ object TripPlanApplicationFactory {
         tripApplicationId: UUID = UUID.randomUUID(),
         initialAmountOfSeats: Int = 4,
         tripId: UUID = UUID.randomUUID(),
+        status: Status = PENDING_APPROVAL,
         driverId: String = "John Smith"
     ): TripPlanApplication {
         return TripPlanApplication(
             id = UUID.randomUUID(),
             tripApplications = mutableListOf(
-                TripPlanApplication.TripApplication(
+                TripApplication(
                     id = tripApplicationId,
                     sections = setOf(
                         SectionFactory.avCabildo(
@@ -42,6 +47,7 @@ object TripPlanApplicationFactory {
                             driverId = driverId
                         )
                     ),
+                    status = status,
                     passengerId = "passengerId",
                     authorizerId = "authorizerId"
                 ),
@@ -56,7 +62,7 @@ object TripPlanApplicationFactory {
         return TripPlanApplication(
             id = UUID.randomUUID(),
             tripApplications = mutableListOf(
-                TripPlanApplication.TripApplication(
+                TripApplication(
                     id = tripApplicationId,
                     sections = setOf(
                         SectionFactory.avCabildo(initialAmountOfSeats = initialAmountOfSeats)
@@ -72,11 +78,11 @@ object TripPlanApplicationFactory {
         return TripPlanApplication(
             id = UUID.randomUUID(),
             tripApplications = mutableListOf(
-                TripPlanApplication.TripApplication(
+                TripApplication(
                     id = UUID.randomUUID(),
                     sections = emptySet(),
                     passengerId = "passengerId",
-                    status = TripPlanApplication.TripApplication.Status.REJECTED,
+                    status = REJECTED,
                     authorizerId = "authorizerId"
                 ),
             )

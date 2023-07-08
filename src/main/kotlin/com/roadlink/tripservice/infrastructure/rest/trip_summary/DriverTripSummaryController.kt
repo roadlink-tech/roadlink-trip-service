@@ -1,6 +1,5 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_summary
 
-import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_summary.RetrieveDriverTripSummaryOutput
 import io.micronaut.http.HttpResponse

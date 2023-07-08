@@ -5,6 +5,9 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.*
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.*
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
@@ -13,7 +16,6 @@ import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMe
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -53,8 +55,9 @@ class RetrieveDriverTripSummaryIntegrationTest {
     @Test
     fun `when a trip was saved successfully, then its summary should be retrieved`() {
         // GIVEN
-        val trip = givenACreatedTrip()
-        givenATripPlanApplicationFor(trip)
+        val driverId = UUID.randomUUID()
+        val trip = givenACreatedTrip(driverId = driverId)
+        givenATripPlanApplicationFor(trip.id, driverId)
 
         // WHEN
         val summary = retrieveDriverTripSummary(trip.driver)
@@ -105,6 +108,21 @@ class RetrieveDriverTripSummaryIntegrationTest {
         thenAllTheTripApplicationsMustBeRetrieved(summary)
     }
 
+    @Test
+    fun `when there is at least a trip application plan confirm, then it must be retrieve in the summary`() {
+        // GIVEN
+        val driverId = UUID.randomUUID()
+
+        val trip = givenACreatedTrip(driverId)
+        givenATripPlanApplicationFor(trip.id, driverId, CONFIRMED)
+
+        // WHEN
+        val summary = retrieveDriverTripSummary(driverId.toString())
+
+        // THEN
+        assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.any { !it.hasPendingApplications })
+    }
+
     private fun thenAllTheTripApplicationsMustBeRetrieved(summary: RetrieveDriverTripSummaryOutput) {
         assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.size == 5)
     }
@@ -113,18 +131,15 @@ class RetrieveDriverTripSummaryIntegrationTest {
         assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.any { !it.hasAvailableSeats })
     }
 
-    private fun givenATripPlanApplicationFor(tripId: String, driverId: UUID) {
+    private fun givenATripPlanApplicationFor(
+        tripId: String,
+        driverId: UUID,
+        status: Status = PENDING_APPROVAL
+    ) {
         val tripPlanApplication = TripPlanApplicationFactory.withASingleBooking(
             tripId = UUID.fromString(tripId),
-            driverId = driverId.toString()
-        )
-        tripPlanApplicationRepository.save(tripPlanApplication)
-    }
-
-    private fun givenATripPlanApplicationFor(trip: Trip) {
-        val tripPlanApplication = TripPlanApplicationFactory.withASingleBooking(
-            tripId = UUID.fromString(trip.id),
-            driverId = "81dcb088-4b7e-4956-a50a-52eee0dd5a0f"
+            driverId = driverId.toString(),
+            status = status
         )
         tripPlanApplicationRepository.save(tripPlanApplication)
     }
