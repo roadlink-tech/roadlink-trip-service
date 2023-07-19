@@ -17,15 +17,14 @@ class AddSection(
     operator fun invoke(request: Request) {
         val section = Section(
             id = idGenerator.id(),
-            tripId = request.tripId,
+            tripId = UUID.fromString(request.tripId),
             departure = tripPoint(request.departure),
             arrival = tripPoint(request.arrival),
             distanceInMeters = request.distanceInMeters,
             driver = request.driver,
             vehicle = request.vehicle,
             initialAmountOfSeats = request.availableSeats,
-            bookedSeats = 0,
-            tripId = UUID.randomUUID()
+            bookedSeats = 0
         )
 
         sectionRepository.save(section)

@@ -21,7 +21,7 @@ class SectionRepositoryConfig {
     private fun avCabildoSection(): Section =
         Section(
             id = "1",
-            tripId = "1",
+            tripId = UUID.randomUUID(),
             departure = TripPoint(
                 estimatedArrivalTime = Instant.parse("2022-10-15T12:00:00Z"),
                 address = Address(
@@ -56,7 +56,6 @@ class SectionRepositoryConfig {
             driver = "John Smith",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
-            bookedSeats = 0,
-            tripId = UUID.randomUUID()
+            bookedSeats = 0
         )
 }

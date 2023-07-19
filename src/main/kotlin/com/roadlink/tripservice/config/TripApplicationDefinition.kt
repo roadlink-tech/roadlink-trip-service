@@ -20,13 +20,6 @@ class TripApplicationDefinition {
     }
 
     @Singleton
-    fun tripPlanApplicationRepository(
-        tripApplicationRepository: InMemoryTripApplicationRepository
-    ): InMemoryTripPlanApplicationRepository {
-        return InMemoryTripPlanApplicationRepository(tripApplicationRepository = tripApplicationRepository)
-    }
-
-    @Singleton
     fun acceptTripApplication(
         tripPlanApplicationRepository: TripPlanApplicationRepository
     ): UseCase<UUID, AcceptTripApplicationOutput> {

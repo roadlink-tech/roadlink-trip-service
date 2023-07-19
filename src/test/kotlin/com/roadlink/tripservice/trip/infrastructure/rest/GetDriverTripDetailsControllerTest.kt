@@ -43,10 +43,11 @@ class GetDriverTripDetailsControllerTest {
 
     @Test
     fun `can handle driver trip details request`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo(
+        val section = SectionFactory.avCabildo(
             initialAmountOfSeats = 4,
             bookedSeats = 1,
-        ))
+        )
+        inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
                 sections = setOf(SectionFactory.avCabildo()),
@@ -57,19 +58,22 @@ class GetDriverTripDetailsControllerTest {
         val request: HttpRequest<Any> = HttpRequest
             .GET(
                 UriBuilder.of("/trip-service/driver-trip-detail")
-                    .queryParam("tripId", TripFactory.avCabildo_id)
+                    .queryParam("tripId", section.tripId)
                     .build()
             )
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
         assertOkBody(
-            DriverTripDetailResponseFactory.avCabildoWithASingleTripApplicationConfirmed(),
+            DriverTripDetailResponseFactory.avCabildoWithASingleTripApplicationConfirmed(tripId = section.tripId.toString()),
             response
         )
     }
 
-    private fun assertOkBody(driverTripDetailResponse: DriverTripDetailExpectedResponse, httpResponse: HttpResponse<JsonNode>) {
+    private fun assertOkBody(
+        driverTripDetailResponse: DriverTripDetailExpectedResponse,
+        httpResponse: HttpResponse<JsonNode>
+    ) {
         assertEquals(
             objectMapper.readTree(objectMapper.writeValueAsString(driverTripDetailResponse)),
             httpResponse.body()!!

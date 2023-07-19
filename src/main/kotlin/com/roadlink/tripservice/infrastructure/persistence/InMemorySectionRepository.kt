@@ -40,7 +40,7 @@ class InMemorySectionRepository(
             .toSet()
     }
 
-    override fun findByTripId(tripId: String): TripPlan {
+    override fun findByTripId(tripId: UUID): TripPlan {
         return sections
             .filter { it.tripId == tripId }
             .sortedBy { it.departure.estimatedArrivalTime }

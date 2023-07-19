@@ -11,6 +11,6 @@ interface SectionRepository {
     fun findNextSections(from: Location, at: Instant): Set<Section>
     fun findAllById(sectionsIds: Set<String>): Set<Section>
     // TODO check if should we return a list of sections?, or move it behave to a new TripPlanRepository
-    fun findByTripId(tripId: String): TripPlan
+    fun findByTripId(tripId: UUID): TripPlan
     fun findAllByTripIds(tripIds: List<UUID>): Set<Section>
 }

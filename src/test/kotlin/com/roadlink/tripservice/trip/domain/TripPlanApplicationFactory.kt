@@ -4,8 +4,7 @@ import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.PENDING_APPROVAL
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.REJECTED
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import java.util.*
 
 object TripPlanApplicationFactory {
@@ -100,11 +99,11 @@ object TripPlanApplicationFactory {
         return TripPlanApplication(
             id = UUID.randomUUID(),
             tripApplications = mutableListOf(
-                TripPlanApplication.TripApplication(
+                TripApplication(
                     id = UUID.randomUUID(),
                     sections = sections,
                     passengerId = passengerId,
-                    status = TripPlanApplication.TripApplication.Status.CONFIRMED,
+                    status = CONFIRMED,
                     authorizerId = "authorizerId"
                 ),
             )
@@ -118,11 +117,11 @@ object TripPlanApplicationFactory {
         return TripPlanApplication(
             id = UUID.randomUUID(),
             tripApplications = mutableListOf(
-                TripPlanApplication.TripApplication(
+                TripApplication(
                     id = UUID.randomUUID(),
                     sections = sections,
                     passengerId = passengerId,
-                    status = TripPlanApplication.TripApplication.Status.PENDING_APPROVAL,
+                    status = PENDING_APPROVAL,
                     authorizerId = "authorizerId"
                 ),
             )

@@ -5,9 +5,9 @@ import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.responses.*
 
 object DriverTripDetailResponseFactory {
-    fun avCabildoWithASingleTripApplicationConfirmed(): DriverTripDetailExpectedResponse =
+    fun avCabildoWithASingleTripApplicationConfirmed(tripId: String = TripFactory.avCabildo_id ): DriverTripDetailExpectedResponse =
         DriverTripDetailExpectedResponse(
-            tripId = TripFactory.avCabildo_id,
+            tripId = tripId,
             tripStatus = TripStatusExpectedResponse.FINISHED,
             seatStatus = SeatsAvailabilityStatusExpectedResponse.SOME_SEATS_AVAILABLE,
             sectionDetails = listOf(
