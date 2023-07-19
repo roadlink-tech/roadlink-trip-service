@@ -3,7 +3,7 @@ package com.roadlink.tripservice.infrastructure.rest.handlers
 import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.infrastructure.rest.mappers.SearchTripResponseMapper
 import com.roadlink.tripservice.infrastructure.rest.responses.*
-import com.roadlink.tripservice.usecases.SearchTrip
+import com.roadlink.tripservice.usecases.trip.SearchTrip
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get

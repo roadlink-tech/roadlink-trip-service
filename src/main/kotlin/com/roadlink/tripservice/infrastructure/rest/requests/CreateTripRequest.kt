@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.infrastructure.rest.requests
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.roadlink.tripservice.usecases.CreateTrip
+import com.roadlink.tripservice.usecases.trip.CreateTrip
 
 data class CreateTripRequest(
     @JsonProperty(value = "driver") val driver: String,

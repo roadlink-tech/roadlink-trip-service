@@ -9,6 +9,7 @@ import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionReposi
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 import java.time.Instant
+import java.util.*
 
 @Factory
 class SectionRepositoryConfig {
@@ -20,7 +21,7 @@ class SectionRepositoryConfig {
     private fun avCabildoSection(): Section =
         Section(
             id = "1",
-            tripId = "1",
+            tripId = UUID.randomUUID(),
             departure = TripPoint(
                 estimatedArrivalTime = Instant.parse("2022-10-15T12:00:00Z"),
                 address = Address(

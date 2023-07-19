@@ -15,6 +15,8 @@ import com.roadlink.tripservice.trip.domain.InstantFactory.october15_7hs
 import com.roadlink.tripservice.usecases.GetDriverTripDetail
 import com.roadlink.tripservice.domain.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.TripStatus.*
+import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,6 +26,8 @@ class GetDriverTripDetailTest {
     private lateinit var inMemorySectionRepository: InMemorySectionRepository
 
     private lateinit var inMemoryTripPlanApplicationRepository: InMemoryTripPlanApplicationRepository
+
+    private lateinit var inMemoryTripApplicationRepository: InMemoryTripApplicationRepository
 
     private lateinit var fixedUserRepository: FixedUserRepository
 
@@ -36,7 +40,9 @@ class GetDriverTripDetailTest {
     @BeforeEach
     fun setUp() {
         inMemorySectionRepository = InMemorySectionRepository()
-        inMemoryTripPlanApplicationRepository = InMemoryTripPlanApplicationRepository()
+        inMemoryTripApplicationRepository = InMemoryTripApplicationRepository()
+        inMemoryTripPlanApplicationRepository =
+            InMemoryTripPlanApplicationRepository(tripApplicationRepository = inMemoryTripApplicationRepository)
         fixedUserRepository = FixedUserRepository()
         fixedRatingRepository = FixedRatingRepository()
         stubTimeProvider = StubTimeProvider(fixedNow = october15_13hs())
@@ -52,104 +58,114 @@ class GetDriverTripDetailTest {
 
     @Test
     fun `trip not started`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo(
+        val section = SectionFactory.avCabildo(
             departure = TripPointFactory.avCabildo_4853(at = october15_15hs()),
             arrival = TripPointFactory.avCabildo_20(at = october15_18hs()),
-        ))
+        )
+        inMemorySectionRepository.save(section)
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
-        ))
+                tripId = section.tripId,
+            )
+        )
 
         assertEquals(NOT_STARTED, driverTripDetail.tripStatus)
     }
 
     @Test
     fun `trip finished`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo(
+        val section = SectionFactory.avCabildo(
             departure = TripPointFactory.avCabildo_4853(at = october15_7hs()),
             arrival = TripPointFactory.avCabildo_20(at = october15_12hs()),
-        ))
+        )
+        inMemorySectionRepository.save(section)
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
-            ))
+                tripId = section.tripId,
+            )
+        )
 
         assertEquals(FINISHED, driverTripDetail.tripStatus)
     }
 
     @Test
-    fun `trip in progress`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo(
+    fun `given a section that belongs to a trip, when get the driver trip detail then its status must be the expected`() {
+        // given
+        val section = SectionFactory.avCabildo(
             departure = TripPointFactory.avCabildo_4853(at = october15_12hs()),
             arrival = TripPointFactory.avCabildo_20(at = october15_15hs()),
-        ))
+        )
+        inMemorySectionRepository.save(section)
 
+        // when
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
-            ))
+                tripId = section.tripId,
+            )
+        )
 
+        // then
         assertEquals(IN_PROGRESS, driverTripDetail.tripStatus)
     }
 
     @Test
     fun `no seats available`() {
-        inMemorySectionRepository.save(
-            SectionFactory.avCabildo().builder()
-                .noSeatsAvailable()
-                .build()
-        )
+        val section = SectionFactory.avCabildo().builder()
+            .noSeatsAvailable()
+            .build()
+        inMemorySectionRepository.save(section)
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
-            ))
+                tripId = section.tripId,
+            )
+        )
 
         assertEquals(NO_SEATS_AVAILABLE, driverTripDetail.seatStatus)
     }
 
     @Test
     fun `all seats available`() {
-        inMemorySectionRepository.save(
-            SectionFactory.avCabildo().builder()
-                .allSeatsAvailable()
-                .build()
-        )
+        val section = SectionFactory.avCabildo().builder()
+            .allSeatsAvailable()
+            .build()
+        inMemorySectionRepository.save(section)
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
-            ))
+                tripId = section.tripId,
+            )
+        )
 
         assertEquals(ALL_SEATS_AVAILABLE, driverTripDetail.seatStatus)
     }
 
     @Test
     fun `some seats available`() {
-        inMemorySectionRepository.save(
-            SectionFactory.avCabildo().builder()
-                .someSeatsAvailable()
-                .build()
-        )
+        val section = SectionFactory.avCabildo().builder()
+            .someSeatsAvailable()
+            .build()
+        inMemorySectionRepository.save(section)
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
-            ))
+                tripId = section.tripId
+            )
+        )
 
         assertEquals(SOME_SEATS_AVAILABLE, driverTripDetail.seatStatus)
     }
 
     @Test
     fun `driver section detail no passenger`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo())
+        val section = SectionFactory.avCabildo()
+        inMemorySectionRepository.save(section)
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
+                tripId = section.tripId,
             )
         )
 
@@ -170,25 +186,26 @@ class GetDriverTripDetailTest {
 
     @Test
     fun `driver section detail only consider passenger who has accepted application`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo())
+        val section = SectionFactory.avCabildo()
+        inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationPendingApproval(
-                sections = setOf(SectionFactory.avCabildo()),
+                sections = setOf(section),
                 passengerId = "JOHN",
             ),
             TripPlanApplicationFactory.withASingleTripApplicationRejected(
-                sections = setOf(SectionFactory.avCabildo()),
+                sections = setOf(section),
                 passengerId = "JENNA",
             ),
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
-                sections = setOf(SectionFactory.avCabildo()),
+                sections = setOf(section),
                 passengerId = "BJNOVAK",
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
+                tripId = section.tripId,
             )
         )
 
@@ -215,17 +232,18 @@ class GetDriverTripDetailTest {
 
     @Test
     fun `driver section detail passenger not exists`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo())
+        val section = SectionFactory.avCabildo()
+        inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
-                sections = setOf(SectionFactory.avCabildo()),
+                sections = setOf(section),
                 passengerId = "ANGELA",
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
+                tripId = section.tripId,
             )
         )
 
@@ -246,17 +264,18 @@ class GetDriverTripDetailTest {
 
     @Test
     fun `driver section detail passenger not been rated`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo())
+        val section = SectionFactory.avCabildo()
+        inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
-                sections = setOf(SectionFactory.avCabildo()),
+                sections = setOf(section),
                 passengerId = "PAINN",
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
-                tripId = TripFactory.avCabildo_id,
+                tripId = section.tripId,
             )
         )
 

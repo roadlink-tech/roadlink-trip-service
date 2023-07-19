@@ -16,9 +16,7 @@ import com.roadlink.tripservice.trip.infrastructure.rest.responses.TripExpectedR
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
 import io.micronaut.http.HttpStatus.*
-import io.micronaut.http.MediaType
 import io.micronaut.http.MediaType.*
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
@@ -28,7 +26,6 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 @MicronautTest
@@ -65,7 +62,7 @@ class CreateTripControllerTest {
         assertEquals(CREATED, response.status)
         assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo(), response)
-        thenTripExists(TripFactory.avCabildo())
+        thenTripExists(TripFactory.avCabildo4853_to_avCabildo20())
         theCommandHasBeenPublished()
     }
 
@@ -85,7 +82,7 @@ class CreateTripControllerTest {
 
     @Test
     fun `given already exists trip with same driver in the given time range then should fail`() {
-        inMemoryTripRepository.save(TripFactory.avCabildo())
+        inMemoryTripRepository.save(TripFactory.avCabildo4853_to_avCabildo20())
         val request = request(CreateTripRequestFactory.avCabildo())
 
         val response = try {

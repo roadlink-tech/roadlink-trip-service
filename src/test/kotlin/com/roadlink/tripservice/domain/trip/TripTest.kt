@@ -6,7 +6,7 @@ import com.roadlink.tripservice.trip.domain.TripFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class TripTest {
+class TripTest2 {
 
     private val idGenerator = UUIDIdGenerator()
 
@@ -35,7 +35,7 @@ class TripTest {
     }
 
     private fun givenATripWithTwoMeetingPoint(): Trip {
-        return TripFactory.caba_escobar_pilar_rosario()
+        return TripFactory.caba_escobar_pilar_rosario(id = "81dcb088-4b7e-4956-a50a-52eee0dd5a0b")
     }
 
     private fun thenTheExpectedAmountOfSectionsWereCreated(expectedSections: Int, sections: Set<Section>) {
@@ -43,6 +43,6 @@ class TripTest {
     }
 
     private fun givenATripWithAMeetingPoint(): Trip {
-        return TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20()
+        return TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(id = "81dcb088-4b7e-4956-a50a-52eee0dd5a0b")
     }
 }

@@ -3,16 +3,19 @@ package com.roadlink.tripservice.domain.trip
 import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.section.Section
+import java.util.*
 
 data class Trip(
     val id: String,
+    // TODO Is it the driver id? if it's then why not use a UUID instead of string
     val driver: String,
     val vehicle: String,
     val departure: TripPoint,
     val arrival: TripPoint,
+    val status: Status = Status.NOT_STARTED,
     val meetingPoints: List<TripPoint>,
     // TODO rename it by seats to be used. It'll be the vehicle capacity
-    val availableSeats: Int,
+    val availableSeats: Int
 ) {
 
     // TODO revisar la creacion del trip y como lo itero
@@ -29,7 +32,7 @@ data class Trip(
             }
             val section = Section(
                 id = idGenerator.id(),
-                tripId = id,
+                tripId = UUID.fromString(this.id),
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,
@@ -50,4 +53,10 @@ data class Trip(
 
     fun isInTimeRange(timeRange: TimeRange): Boolean =
         TimeRange(departure.estimatedArrivalTime, arrival.estimatedArrivalTime).intersects(timeRange)
+
+    enum class Status {
+        NOT_STARTED,
+        IN_PROGRESS,
+        FINISHED
+    }
 }

@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.config
 
 import com.roadlink.tripservice.domain.BruteForceSearchEngine
-import com.roadlink.tripservice.usecases.SearchTrip
+import com.roadlink.tripservice.usecases.trip.SearchTrip
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 

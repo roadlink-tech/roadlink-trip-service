@@ -7,6 +7,7 @@ import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import java.time.Instant
+import java.util.UUID
 
 class AddSection(
     private val idGenerator: IdGenerator,
@@ -16,7 +17,7 @@ class AddSection(
     operator fun invoke(request: Request) {
         val section = Section(
             id = idGenerator.id(),
-            tripId = request.tripId,
+            tripId = UUID.fromString(request.tripId),
             departure = tripPoint(request.departure),
             arrival = tripPoint(request.arrival),
             distanceInMeters = request.distanceInMeters,

@@ -7,6 +7,7 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.domain.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.TripStatus.*
+import java.util.UUID
 
 class GetDriverTripDetail(
     private val sectionRepository: SectionRepository,
@@ -40,7 +41,7 @@ class GetDriverTripDetail(
                                                 fullName = fullName,
                                                 rating = ratingRepository.findByUserId(passengerId)
                                                     ?.let { rating ->
-                                                          Rated(rating)
+                                                        Rated(rating)
                                                     }
                                                     ?: NotBeenRated,
                                             )
@@ -66,5 +67,5 @@ class GetDriverTripDetail(
             else -> SOME_SEATS_AVAILABLE
         }
 
-    data class Input(val tripId: String)
+    data class Input(val tripId: UUID)
 }

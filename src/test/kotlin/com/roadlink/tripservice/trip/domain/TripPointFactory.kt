@@ -4,11 +4,12 @@ import com.roadlink.tripservice.domain.trip.TripPoint
 import java.time.Instant
 
 object TripPointFactory {
-    fun avCabildo_4853(at: Instant = InstantFactory.october15_12hs()) =
-        TripPoint(
+    fun avCabildo_4853(at: Instant = InstantFactory.october15_12hs()): TripPoint {
+        return TripPoint(
             estimatedArrivalTime = at,
             address = AddressFactory.avCabildo_4853(),
         )
+    }
 
     fun avCabildo_20(at: Instant = InstantFactory.october15_18hs()) =
         TripPoint(
