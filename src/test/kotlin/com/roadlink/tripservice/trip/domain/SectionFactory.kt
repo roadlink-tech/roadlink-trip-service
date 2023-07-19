@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.trip.domain
 
+import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import java.util.*
 
@@ -17,6 +18,8 @@ object SectionFactory {
     const val avDelLibertador5000_avCabildo20_id = "SectionFactory-avDelLibertador5000_avCabildo20"
 
     fun avCabildo(
+        departure: TripPoint = TripPointFactory.avCabildo_4853(),
+        arrival: TripPoint = TripPointFactory.avCabildo_20(),
         initialAmountOfSeats: Int = 4,
         bookedSeats: Int = 0,
         tripId: UUID = UUID.fromString("ad2e7d11-0fbb-4711-8f0c-a0f31529241f"),
@@ -24,8 +27,9 @@ object SectionFactory {
     ) =
         Section(
             id = avCabildo_id,
-            departure = TripPointFactory.avCabildo_4853(),
-            arrival = TripPointFactory.avCabildo_20(),
+            //tripId = TripFactory.avCabildo_id,
+            departure = departure,
+            arrival = arrival,
             distanceInMeters = 6070.0,
             driver = driverId,
             vehicle = "Ford mustang",
@@ -53,6 +57,7 @@ object SectionFactory {
     ) =
         Section(
             id = avCabildo4853_virreyDelPino1800_id,
+            //tripId = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.virreyDelPino_1800(),
             distanceInMeters = 4000.0,
@@ -68,6 +73,7 @@ object SectionFactory {
     ) =
         Section(
             id = virreyDelPino1800_avCabildo20_id,
+            //tripId = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             departure = TripPointFactory.virreyDelPino_1800(),
             arrival = TripPointFactory.avCabildo_20(),
             distanceInMeters = 3000.0,
@@ -176,4 +182,29 @@ object SectionFactory {
             bookedSeats = 0,
             tripId = tripId
         )
+
+    class Builder(private var section: Section) {
+
+        fun allSeatsAvailable() = apply {
+            this.section = this.section.copy(bookedSeats = 0)
+        }
+
+        fun noSeatsAvailable() = apply {
+            this.section = this.section.copy(
+                initialAmountOfSeats = 1,
+                bookedSeats = 1,
+            )
+        }
+
+        fun someSeatsAvailable() = apply {
+            this.section = this.section.copy(
+                initialAmountOfSeats = 3,
+                bookedSeats = 1,
+            )
+        }
+
+        fun build() = section
+    }
 }
+
+fun Section.builder() = SectionFactory.Builder(section = this)

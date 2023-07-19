@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.trip.domain
 
+import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status
@@ -74,15 +75,54 @@ object TripPlanApplicationFactory {
         )
     }
 
-    fun withAnApplicationRejected(): TripPlanApplication {
+    fun withASingleTripApplicationRejected(
+        sections: Set<Section> = emptySet(),
+        passengerId: String = "passengerId",
+    ): TripPlanApplication {
         return TripPlanApplication(
             id = UUID.randomUUID(),
             tripApplications = mutableListOf(
                 TripApplication(
                     id = UUID.randomUUID(),
-                    sections = emptySet(),
-                    passengerId = "passengerId",
+                    sections = sections,
+                    passengerId = passengerId,
                     status = REJECTED,
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleTripApplicationConfirmed(
+        sections: Set<Section> = emptySet(),
+        passengerId: String = "passengerId",
+    ): TripPlanApplication {
+        return TripPlanApplication(
+            id = UUID.randomUUID(),
+            tripApplications = mutableListOf(
+                TripPlanApplication.TripApplication(
+                    id = UUID.randomUUID(),
+                    sections = sections,
+                    passengerId = passengerId,
+                    status = TripPlanApplication.TripApplication.Status.CONFIRMED,
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleTripApplicationPendingApproval(
+        sections: Set<Section> = emptySet(),
+        passengerId: String = "passengerId",
+    ): TripPlanApplication {
+        return TripPlanApplication(
+            id = UUID.randomUUID(),
+            tripApplications = mutableListOf(
+                TripPlanApplication.TripApplication(
+                    id = UUID.randomUUID(),
+                    sections = sections,
+                    passengerId = passengerId,
+                    status = TripPlanApplication.TripApplication.Status.PENDING_APPROVAL,
                     authorizerId = "authorizerId"
                 ),
             )

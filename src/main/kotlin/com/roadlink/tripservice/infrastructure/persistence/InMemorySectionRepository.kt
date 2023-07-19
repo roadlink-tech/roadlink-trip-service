@@ -1,6 +1,7 @@
 package com.roadlink.tripservice.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.Location
+import com.roadlink.tripservice.domain.trip.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import java.time.Instant
@@ -9,6 +10,7 @@ import java.util.*
 class InMemorySectionRepository(
     private val sections: MutableList<Section> = mutableListOf(),
 ) : SectionRepository {
+
     override fun save(section: Section) {
         sections.add(section)
     }
@@ -36,6 +38,13 @@ class InMemorySectionRepository(
         return sections
             .filter { it.tripId in tripIds }
             .toSet()
+    }
+
+    override fun findByTripId(tripId: String): TripPlan {
+        return sections
+            .filter { it.tripId == tripId }
+            .sortedBy { it.departure.estimatedArrivalTime }
+            .let { TripPlan(it) }
     }
 
     fun deleteAll() {

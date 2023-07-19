@@ -1,0 +1,31 @@
+package com.roadlink.tripservice.trip.infrastructure.rest.factories
+
+import com.roadlink.tripservice.trip.domain.SectionFactory
+import com.roadlink.tripservice.trip.domain.TripFactory
+import com.roadlink.tripservice.trip.infrastructure.rest.responses.*
+
+object DriverTripDetailResponseFactory {
+    fun avCabildoWithASingleTripApplicationConfirmed(): DriverTripDetailExpectedResponse =
+        DriverTripDetailExpectedResponse(
+            tripId = TripFactory.avCabildo_id,
+            tripStatus = TripStatusExpectedResponse.FINISHED,
+            seatStatus = SeatsAvailabilityStatusExpectedResponse.SOME_SEATS_AVAILABLE,
+            sectionDetails = listOf(
+                DriverSectionDetailExpectedResponse(
+                    sectionId = SectionFactory.avCabildo_id,
+                    departure = TripPointResponseFactory.avCabildo_4853(),
+                    arrival = TripPointResponseFactory.avCabildo_20(),
+                    occupiedSeats = 1,
+                    availableSeats = 3,
+                    passengers = listOf(
+                        PassengerExpectedResponse(
+                            type = PassengerResultExpectedResponseType.PASSENGER,
+                            id = "PAINN",
+                            fullName = "Painn Wilson",
+                            rating = NotBeenRatedExpectedResponse(),
+                        )
+                    ),
+                )
+            ),
+        )
+}

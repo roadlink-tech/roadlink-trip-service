@@ -9,7 +9,7 @@ import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_plan.*
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
-import java.util.UUID
+import java.util.*
 
 @Factory
 class TripApplicationDefinition {

@@ -17,6 +17,7 @@ class AddSection(
     operator fun invoke(request: Request) {
         val section = Section(
             id = idGenerator.id(),
+            tripId = request.tripId,
             departure = tripPoint(request.departure),
             arrival = tripPoint(request.arrival),
             distanceInMeters = request.distanceInMeters,
@@ -40,6 +41,7 @@ class AddSection(
     }
 
     data class Request(
+        val tripId: String,
         val departure: TripPoint,
         val arrival: TripPoint,
         val distanceInMeters: Double,

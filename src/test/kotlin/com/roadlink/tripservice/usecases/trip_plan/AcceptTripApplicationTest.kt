@@ -35,7 +35,7 @@ class AcceptTripApplicationTest {
 
     @Test
     fun `when try to accept a trip plan but the it has been already rejected, then an error response must be retrieved`() {
-        every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withAnApplicationRejected()
+        every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplicationRejected()
 
         // WHEN
         val output = acceptTripApplication(UUID.randomUUID())
