@@ -7,8 +7,6 @@ import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode
 import com.roadlink.tripservice.usecases.trip_summary.RetrieveDriverTripSummaryOutput
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.MutableHttpResponse
-import java.time.Instant
 
 class EmptyDriverTripSummaryResponse : ErrorResponse(code = ErrorResponseCode.EMPTY_DRIVER_TRIP_SUMMARY)
 
@@ -21,8 +19,8 @@ class DriverTripSummaryResponseFactory {
                         id = summary.trip.id,
                         departureDistrict = summary.trip.departure.address.city,
                         arrivalDistrict = summary.trip.arrival.address.city,
-                        departureInstant = summary.trip.departure.estimatedArrivalTime,
-                        arrivalInstant = summary.trip.arrival.estimatedArrivalTime,
+                        departureInstant = summary.trip.departure.estimatedArrivalTime.toEpochMilli(),
+                        arrivalInstant = summary.trip.arrival.estimatedArrivalTime.toEpochMilli(),
                         status = summary.trip.status.toString(),
                         hasSeatAvailable = summary.hasAvailableSeats,
                         hasPendingApplications = summary.hasPendingApplications
@@ -43,11 +41,11 @@ data class DriverTripSummaryResponse(
     @JsonProperty("departure_district")
     val departureDistrict: String,
     @JsonProperty("departure_instant")
-    val departureInstant: Instant,
+    val departureInstant: Long,
     @JsonProperty("arrival_district")
     val arrivalDistrict: String,
     @JsonProperty("arrival_instant")
-    val arrivalInstant: Instant,
+    val arrivalInstant: Long,
     @JsonProperty("status")
     val status: String,
     @JsonProperty("has_seat_available")
