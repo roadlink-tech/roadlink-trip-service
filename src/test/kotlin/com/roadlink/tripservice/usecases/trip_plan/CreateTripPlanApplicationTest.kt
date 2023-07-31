@@ -30,7 +30,7 @@ class CreateTripPlanApplicationTest {
         // GIVEN
         val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800()
-        every { sectionRepository.findAllById(any()) } returns setOf(sectionOne, sectionTwo)
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
         every { tripPlanApplicationRepository.save(any()) } just runs
         val application = CreateTripPlanApplicationInput(
             passengerId = "chorch",
@@ -63,7 +63,7 @@ class CreateTripPlanApplicationTest {
         // GIVEN
         val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800_completed()
-        every { sectionRepository.findAllById(any()) } returns setOf(sectionOne, sectionTwo)
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
         every { tripPlanApplicationRepository.save(any()) } just runs
         val application = CreateTripPlanApplicationInput(
             passengerId = "chorch",

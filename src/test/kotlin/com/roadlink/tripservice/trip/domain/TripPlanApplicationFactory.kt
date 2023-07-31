@@ -17,7 +17,7 @@ object TripPlanApplicationFactory {
             tripApplications = mutableListOf(
                 TripApplication(
                     id = tripApplicationId,
-                    sections = setOf(
+                    sections = listOf(
                         SectionFactory.avCabildo(initialAmountOfSeats = 5, bookedSeats = 5),
                     ),
                     passengerId = "passengerId",
@@ -39,7 +39,7 @@ object TripPlanApplicationFactory {
             tripApplications = mutableListOf(
                 TripApplication(
                     id = tripApplicationId,
-                    sections = setOf(
+                    sections = listOf(
                         SectionFactory.avCabildo(
                             initialAmountOfSeats = initialAmountOfSeats,
                             bookedSeats = 1,
@@ -64,7 +64,7 @@ object TripPlanApplicationFactory {
             tripApplications = mutableListOf(
                 TripApplication(
                     id = tripApplicationId,
-                    sections = setOf(
+                    sections = listOf(
                         SectionFactory.avCabildo(initialAmountOfSeats = initialAmountOfSeats)
                     ),
                     passengerId = "passengerId",
@@ -75,7 +75,7 @@ object TripPlanApplicationFactory {
     }
 
     fun withASingleTripApplicationRejected(
-        sections: Set<Section> = emptySet(),
+        sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",
     ): TripPlanApplication {
         return TripPlanApplication(
@@ -93,7 +93,7 @@ object TripPlanApplicationFactory {
     }
 
     fun withASingleTripApplicationConfirmed(
-        sections: Set<Section> = emptySet(),
+        sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",
     ): TripPlanApplication {
         return TripPlanApplication(
@@ -111,7 +111,7 @@ object TripPlanApplicationFactory {
     }
 
     fun withASingleTripApplicationPendingApproval(
-        sections: Set<Section> = emptySet(),
+        sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",
     ): TripPlanApplication {
         return TripPlanApplication(

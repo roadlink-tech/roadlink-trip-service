@@ -17,19 +17,7 @@ object DriverTripDetailResponseMapper {
                     occupiedSeats = driverSectionDetail.occupiedSeats,
                     availableSeats = driverSectionDetail.availableSeats,
                     passengers = driverSectionDetail.passengers.map { passenger ->
-                        when (passenger) {
-                            is Passenger ->
-                                PassengerResponse(
-                                    id = passenger.id,
-                                    fullName = passenger.fullName,
-                                    rating = when (passenger.rating) {
-                                        is Rated -> RatedResponse(rating = passenger.rating.rating)
-                                        NotBeenRated -> NotBeenRatedResponse()
-                                    },
-                                )
-                            is PassengerNotExists ->
-                                PassengerNotExistsResponse(id = passenger.id)
-                        }
+                        PassengerResultResponseMapper.map(passenger)
                     }
                 )
             }

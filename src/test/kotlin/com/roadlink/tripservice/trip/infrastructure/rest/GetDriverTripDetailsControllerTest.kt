@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.trip.domain.SectionFactory
-import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.factories.DriverTripDetailResponseFactory
 import com.roadlink.tripservice.trip.infrastructure.rest.responses.DriverTripDetailExpectedResponse
@@ -50,7 +49,7 @@ class GetDriverTripDetailsControllerTest {
         inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
-                sections = setOf(SectionFactory.avCabildo()),
+                sections = listOf(SectionFactory.avCabildo()),
                 passengerId = "PAINN",
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.save(it) }

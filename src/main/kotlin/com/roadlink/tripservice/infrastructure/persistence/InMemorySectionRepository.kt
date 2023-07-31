@@ -28,10 +28,11 @@ class InMemorySectionRepository(
             .toSet()
     }
 
-    override fun findAllById(sectionsIds: Set<String>): Set<Section> {
-        return sections
-            .filter { it.id in sectionsIds }
-            .toSet()
+    override fun findAllById(sectionsIds: List<String>): List<Section> {
+        return sectionsIds
+            .mapNotNull { sectionId ->
+                sections.firstOrNull { it.id == sectionId }
+            }
     }
 
     override fun findAllByTripIds(tripIds: List<UUID>): Set<Section> {

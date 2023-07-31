@@ -1,6 +1,7 @@
 package com.roadlink.tripservice.domain.trip_application
 
 import com.roadlink.tripservice.domain.DomainError
+import com.roadlink.tripservice.domain.trip.TripPoint
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.domain.trip.section.Section
 import java.util.*
@@ -15,7 +16,7 @@ data class TripPlanApplication(
 
     data class TripApplication(
         val id: UUID = UUID.randomUUID(),
-        val sections: Set<Section>,
+        val sections: List<Section>,
         val passengerId: String,
         var status: Status = PENDING_APPROVAL,
         val authorizerId: String
@@ -33,6 +34,12 @@ data class TripPlanApplication(
         fun tripId(): UUID {
             return this.sections.first().tripId
         }
+
+        fun departureTripPoint(): TripPoint =
+            sections.first().departure
+
+        fun arrivalTripPoint(): TripPoint =
+            sections.last().arrival
 
         internal fun isPending(): Boolean {
             return this.status == PENDING_APPROVAL

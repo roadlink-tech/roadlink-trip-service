@@ -17,7 +17,7 @@ class CreateTripPlanApplication(
         val tripPlanApplication = TripPlanApplication()
 
         input.trips.forEach { tripSectionsDTO ->
-            val sections = sectionRepository.findAllById(tripSectionsDTO.sectionsIds.toSet())
+            val sections = sectionRepository.findAllById(tripSectionsDTO.sectionsIds)
             sections.forEach { section ->
                 if (!section.canReceiveAnyPassenger()) {
                     return OneOfTheSectionCanNotReceivePassenger(message = "The following section ${section.id} could not receive any passenger")

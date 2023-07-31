@@ -41,8 +41,9 @@ class GetDriverTripDetailTest {
     fun setUp() {
         inMemorySectionRepository = InMemorySectionRepository()
         inMemoryTripApplicationRepository = InMemoryTripApplicationRepository()
-        inMemoryTripPlanApplicationRepository =
-            InMemoryTripPlanApplicationRepository(tripApplicationRepository = inMemoryTripApplicationRepository)
+        inMemoryTripPlanApplicationRepository = InMemoryTripPlanApplicationRepository(
+            tripApplicationRepository = inMemoryTripApplicationRepository
+        )
         fixedUserRepository = FixedUserRepository()
         fixedRatingRepository = FixedRatingRepository()
         stubTimeProvider = StubTimeProvider(fixedNow = october15_13hs())
@@ -190,15 +191,15 @@ class GetDriverTripDetailTest {
         inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationPendingApproval(
-                sections = setOf(section),
+                sections = listOf(section),
                 passengerId = "JOHN",
             ),
             TripPlanApplicationFactory.withASingleTripApplicationRejected(
-                sections = setOf(section),
+                sections = listOf(section),
                 passengerId = "JENNA",
             ),
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
-                sections = setOf(section),
+                sections = listOf(section),
                 passengerId = "BJNOVAK",
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
@@ -236,7 +237,7 @@ class GetDriverTripDetailTest {
         inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
-                sections = setOf(section),
+                sections = listOf(section),
                 passengerId = "ANGELA",
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
@@ -268,7 +269,7 @@ class GetDriverTripDetailTest {
         inMemorySectionRepository.save(section)
         listOf(
             TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
-                sections = setOf(section),
+                sections = listOf(section),
                 passengerId = "PAINN",
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
