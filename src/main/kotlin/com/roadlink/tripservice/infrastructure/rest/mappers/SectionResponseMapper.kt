@@ -6,6 +6,8 @@ import com.roadlink.tripservice.infrastructure.rest.responses.SectionResponse
 object SectionResponseMapper {
     fun map(section: Section) =
         SectionResponse(
+            id = section.id,
+            tripId = section.tripId.toString(),
             departure = TripPointResponseMapper.map(section.departure),
             arrival = TripPointResponseMapper.map(section.arrival),
             driver = section.driver,
