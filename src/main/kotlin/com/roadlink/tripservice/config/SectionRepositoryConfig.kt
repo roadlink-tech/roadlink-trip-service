@@ -53,7 +53,7 @@ class SectionRepositoryConfig {
                 ),
             ),
             distanceInMeters = 6070.0,
-            driver = "John Smith",
+            driver = "66fdb5fe-8ed2-48d1-8526-8a9d3760345b",
             vehicle = "Ford mustang",
             initialAmountOfSeats = 4,
             bookedSeats = 0
