@@ -10,15 +10,13 @@ data class TripPlanApplication(
     val id: UUID = UUID.randomUUID(),
     val tripApplications: MutableList<TripApplication> = mutableListOf()
 ) {
-    fun hasPendingApplication(): Boolean {
-        return tripApplications.any { it.isPending() }
-    }
 
     data class TripApplication(
         val id: UUID = UUID.randomUUID(),
         val sections: List<Section>,
         val passengerId: String,
         var status: Status = PENDING_APPROVAL,
+        // TODO qué es esto?
         val authorizerId: String
     ) {
         enum class Status {
@@ -67,19 +65,22 @@ data class TripPlanApplication(
         }
     }
 
-
-    fun isReadyToBeConfirm(): Boolean {
-        return this.tripApplications.filter { it.isConfirmed() }.size == this.tripApplications.size
-    }
-
-    fun confirmApplicationById(applicationId: UUID) {
+    fun confirmApplicationById(applicationId: UUID, callerId: UUID? = null) {
         val application = this.tripApplications.find { it.id == applicationId }
             ?: throw TripApplicationError.NotFound(applicationId)
+
+        if (callerId != null && isAnyDriverTryingToJoinAsPassenger(callerId)) {
+            throw TripApplicationError.DriverTryingToJoinAsPassenger(applicationId, callerId)
+        }
 
         application.sections.forEach { section ->
             section.takeSeat()
         }
         application.confirm()
+    }
+
+    private fun isAnyDriverTryingToJoinAsPassenger(callerId: UUID): Boolean {
+        return this.tripApplications.any { it.driverId() == callerId }
     }
 
     fun isRejected(): Boolean {
@@ -101,5 +102,7 @@ data class TripPlanApplication(
 
 sealed class TripApplicationError(message: String) : DomainError(message) {
     class NotFound(application: UUID) : TripApplicationError("Trip application $application does not exist")
+    class DriverTryingToJoinAsPassenger(application: UUID, driverId: UUID) :
+        TripApplicationError("User $driverId is driver and is trying to join to $application trip application as passenger too")
 }
 
