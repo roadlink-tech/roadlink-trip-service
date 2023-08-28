@@ -32,7 +32,7 @@ class TripApplicationController(
         val output = acceptTripApplication(
             AcceptTripApplicationInput(
                 tripApplication = UUID.fromString(id),
-                callerId = UUID.fromString(callerId)
+                callerId = callerId?.let { UUID.fromString(it) }
             )
         )
         return responseFactory.from(output)
