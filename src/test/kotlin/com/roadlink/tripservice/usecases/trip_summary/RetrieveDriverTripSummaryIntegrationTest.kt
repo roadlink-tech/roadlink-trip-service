@@ -123,6 +123,19 @@ class RetrieveDriverTripSummaryIntegrationTest {
         assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.any { !it.hasPendingApplications })
     }
 
+    @Test
+    fun `when there isn't any trip application, then the summary retrieved must not contain any pending application`() {
+        // GIVEN
+        val driverId = UUID.randomUUID()
+        givenACreatedTrip(driverId)
+
+        // WHEN
+        val summary = retrieveDriverTripSummary(driverId.toString())
+
+        // THEN
+        assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.any { !it.hasPendingApplications })
+    }
+
     private fun thenAllTheTripApplicationsMustBeRetrieved(summary: RetrieveDriverTripSummaryOutput) {
         assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.size == 5)
     }

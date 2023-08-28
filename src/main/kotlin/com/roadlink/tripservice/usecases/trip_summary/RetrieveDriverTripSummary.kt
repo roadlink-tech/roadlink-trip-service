@@ -57,7 +57,7 @@ class RetrieveDriverTripSummary(
             DriverTripSummary(
                 trip = it,
                 hasAvailableSeats = canReceiveAnyPassengerByTripId[UUID.fromString(it.id)]!!,
-                hasPendingApplications = hasPendingApplicationsByTripId[UUID.fromString(it.id)]!!
+                hasPendingApplications = hasPendingApplicationsByTripId[UUID.fromString(it.id)] ?: false
             )
         })
     }
