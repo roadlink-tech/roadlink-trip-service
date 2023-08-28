@@ -6,22 +6,28 @@ import java.util.*
 
 class AcceptTripApplication(
     private val tripPlanApplicationRepository: TripPlanApplicationRepository
-) : UseCase<UUID, AcceptTripApplicationOutput> {
+) : UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput> {
 
-    override operator fun invoke(input: UUID): AcceptTripApplicationOutput {
-        val tripPlanApplication = tripPlanApplicationRepository.findByTripApplicationId(input)
+    override operator fun invoke(input: AcceptTripApplicationInput): AcceptTripApplicationOutput {
+        val tripPlanApplication = tripPlanApplicationRepository.findByTripApplicationId(input.tripApplication)
             ?: return AcceptTripApplicationOutput.TripPlanApplicationNotExists
 
         if (tripPlanApplication.isRejected()) {
             return AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected
         }
 
-        tripPlanApplication.confirmApplicationById(input)
+        tripPlanApplication.confirmApplicationById(input.tripApplication, input.callerId)
         return AcceptTripApplicationOutput.TripApplicationAccepted.also {
             tripPlanApplicationRepository.save(tripPlanApplication)
         }
     }
 }
+
+data class AcceptTripApplicationInput(
+    val tripApplication: UUID,
+    // TODO fix it when the header has been change from the frontend
+    val callerId: UUID ? = null
+)
 
 sealed class AcceptTripApplicationOutput {
     object TripPlanApplicationNotExists : AcceptTripApplicationOutput()

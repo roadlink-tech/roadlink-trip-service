@@ -2,7 +2,6 @@ package com.roadlink.tripservice.domain.trip_application
 
 import com.roadlink.tripservice.domain.trip.section.SectionError
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -22,6 +21,28 @@ class TripPlanApplicationTest {
         // THEN
         val section = tripPlanApplication.tripApplications.first().sections.first()
         assertEquals(3, section.availableSeats())
+    }
+
+    @Test
+    fun `when try to confirm an application but the caller is a driver of the trip application, then an error must be thrown`() {
+        // GIVEN
+        val id = UUID.randomUUID()
+        val driverId = UUID.randomUUID()
+        val tripPlanApplication =
+            TripPlanApplicationFactory.withASingleTripApplication(
+                tripApplicationId = id,
+                initialAmountOfSeats = 4,
+                driverId = driverId.toString()
+            )
+
+        // WHEN
+        val ex = assertThrows(TripApplicationError.DriverTryingToJoinAsPassenger::class.java) {
+            tripPlanApplication.confirmApplicationById(id, driverId)
+        }
+
+        // THEN
+        assertNotNull(ex)
+        assertTrue(ex.message.contains("is driver and is trying to join to"))
     }
 
     @Test

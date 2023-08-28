@@ -57,7 +57,8 @@ object TripPlanApplicationFactory {
 
     fun withASingleTripApplication(
         tripApplicationId: UUID = UUID.randomUUID(),
-        initialAmountOfSeats: Int = 4
+        initialAmountOfSeats: Int = 4,
+        driverId: String = "John Smith"
     ): TripPlanApplication {
         return TripPlanApplication(
             id = UUID.randomUUID(),
@@ -65,7 +66,10 @@ object TripPlanApplicationFactory {
                 TripApplication(
                     id = tripApplicationId,
                     sections = listOf(
-                        SectionFactory.avCabildo(initialAmountOfSeats = initialAmountOfSeats)
+                        SectionFactory.avCabildo(
+                            initialAmountOfSeats = initialAmountOfSeats,
+                            driverId = driverId
+                        )
                     ),
                     passengerId = "passengerId",
                     authorizerId = "authorizerId"

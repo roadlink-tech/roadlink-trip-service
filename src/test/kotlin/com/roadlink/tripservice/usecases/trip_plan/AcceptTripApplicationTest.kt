@@ -27,7 +27,7 @@ class AcceptTripApplicationTest {
         every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns null
 
         // WHEN
-        val output = acceptTripApplication(UUID.randomUUID())
+        val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID()))
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripPlanApplicationNotExists::class.java, output)
@@ -38,7 +38,7 @@ class AcceptTripApplicationTest {
         every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplicationRejected()
 
         // WHEN
-        val output = acceptTripApplication(UUID.randomUUID())
+        val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID()))
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected::class.java, output)
@@ -54,7 +54,7 @@ class AcceptTripApplicationTest {
         )
 
         // WHEN
-        val output = acceptTripApplication(tripPlanApplicationId)
+        val output = acceptTripApplication(AcceptTripApplicationInput(tripPlanApplicationId))
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripApplicationAccepted::class.java, output)

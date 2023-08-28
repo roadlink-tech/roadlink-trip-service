@@ -3,12 +3,10 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplication
-import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplicationOutput
+import com.roadlink.tripservice.usecases.trip_plan.*
 import io.micronaut.http.annotation.Controller
-import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplication
-import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplicationOutput
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Header
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Put
 import java.util.*
@@ -17,7 +15,7 @@ import java.util.*
 @Controller("/trip-service/trip_application")
 class TripApplicationController(
     private val rejectTripApplication: UseCase<UUID, RejectTripApplicationOutput>,
-    private val acceptTripApplication: UseCase<UUID, AcceptTripApplicationOutput>,
+    private val acceptTripApplication: UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput>,
     private val responseFactory: TripApplicationPlanResponseFactory,
 ) {
     @Put("/{id}/non-acceptance")
@@ -27,8 +25,16 @@ class TripApplicationController(
     }
 
     @Put("/{id}/acceptance")
-    fun acceptance(@PathVariable id: String): HttpResponse<ApiResponse> {
-        val output = acceptTripApplication(UUID.fromString(id))
+    fun acceptance(
+        @PathVariable id: String,
+        @Header("X-Caller-Id") callerId: String? = ""
+    ): HttpResponse<ApiResponse> {
+        val output = acceptTripApplication(
+            AcceptTripApplicationInput(
+                tripApplication = UUID.fromString(id),
+                callerId = UUID.fromString(callerId)
+            )
+        )
         return responseFactory.from(output)
     }
 }

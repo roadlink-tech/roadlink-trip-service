@@ -3,7 +3,6 @@ package com.roadlink.tripservice.config
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_plan.*
@@ -22,7 +21,7 @@ class TripApplicationDefinition {
     @Singleton
     fun acceptTripApplication(
         tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<UUID, AcceptTripApplicationOutput> {
+    ): UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput> {
         return AcceptTripApplication(tripPlanApplicationRepository)
     }
 
