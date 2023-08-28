@@ -129,6 +129,7 @@ class TripApplicationControllerTest {
     }
 
     @Test
+    // TODO fix me!
     fun `when try to accept an application but the plan has been rejected by someone else, then an error must be retrieved`() {
         every { acceptTripApplication.invoke(any()) } returns AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected
 
