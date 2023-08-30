@@ -4,6 +4,7 @@ import com.roadlink.tripservice.domain.RatingRepository
 import com.roadlink.tripservice.domain.UserRepository
 import com.roadlink.tripservice.domain.time.TimeProvider
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.GetDriverTripDetail
 import io.micronaut.context.annotation.Factory
@@ -15,6 +16,7 @@ class GetDriverTripDetailConfig {
     fun getDriverTripDetail(
         sectionRepository: SectionRepository,
         tripPlanApplicationRepository: TripPlanApplicationRepository,
+        tripApplicationRepository: TripApplicationRepository,
         userRepository: UserRepository,
         ratingRepository: RatingRepository,
         timeProvider: TimeProvider,
@@ -22,6 +24,7 @@ class GetDriverTripDetailConfig {
         return GetDriverTripDetail(
             sectionRepository = sectionRepository,
             tripPlanApplicationRepository = tripPlanApplicationRepository,
+            tripApplicationRepository = tripApplicationRepository,
             userRepository = userRepository,
             ratingRepository = ratingRepository,
             timeProvider = timeProvider,

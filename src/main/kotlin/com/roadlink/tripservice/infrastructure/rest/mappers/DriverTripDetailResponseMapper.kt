@@ -9,6 +9,7 @@ object DriverTripDetailResponseMapper {
             tripId = driverTripDetail.tripId,
             tripStatus = tripStatusResponse(driverTripDetail.tripStatus),
             seatStatus = seatsAvailabilityStatusResponse(driverTripDetail.seatStatus),
+            hasPendingApplications = driverTripDetail.hasPendingApplications,
             sectionDetails = driverTripDetail.sectionDetails.map { driverSectionDetail ->
                 DriverSectionDetailResponse(
                     sectionId = driverSectionDetail.sectionId,

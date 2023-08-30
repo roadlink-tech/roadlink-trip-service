@@ -7,11 +7,13 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.domain.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.TripStatus.*
+import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import java.util.UUID
 
 class GetDriverTripDetail(
     private val sectionRepository: SectionRepository,
     private val tripPlanApplicationRepository: TripPlanApplicationRepository,
+    private val tripApplicationRepository: TripApplicationRepository,
     private val userRepository: UserRepository,
     private val ratingRepository: RatingRepository,
     private val timeProvider: TimeProvider,
@@ -22,6 +24,7 @@ class GetDriverTripDetail(
                 tripId = input.tripId,
                 tripStatus = tripStatusOf(tripPlan),
                 seatStatus = seatsAvailabilityStatusOf(tripPlan),
+                hasPendingApplications = hasPendingApplications(input.tripId),
                 sectionDetails = tripPlan.sections
                     .map { section ->
                         DriverSectionDetail(
@@ -66,6 +69,10 @@ class GetDriverTripDetail(
             tripPlan.hasAllSeatsAvailable() -> ALL_SEATS_AVAILABLE
             else -> SOME_SEATS_AVAILABLE
         }
+
+    private fun hasPendingApplications(tripId: UUID): Boolean =
+        tripApplicationRepository.findByTripId(tripId)
+            .any { tripApplication -> tripApplication.isPending() }
 
     data class Input(val tripId: UUID)
 }

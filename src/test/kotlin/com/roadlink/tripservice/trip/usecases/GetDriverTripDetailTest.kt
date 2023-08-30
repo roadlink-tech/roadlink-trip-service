@@ -15,9 +15,8 @@ import com.roadlink.tripservice.trip.domain.InstantFactory.october15_7hs
 import com.roadlink.tripservice.usecases.GetDriverTripDetail
 import com.roadlink.tripservice.domain.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.TripStatus.*
-import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -51,6 +50,7 @@ class GetDriverTripDetailTest {
         getDriverTripDetail = GetDriverTripDetail(
             sectionRepository = inMemorySectionRepository,
             tripPlanApplicationRepository = inMemoryTripPlanApplicationRepository,
+            tripApplicationRepository = inMemoryTripApplicationRepository,
             userRepository = fixedUserRepository,
             ratingRepository = fixedRatingRepository,
             timeProvider = stubTimeProvider,
@@ -300,4 +300,47 @@ class GetDriverTripDetailTest {
             driverTripDetail.sectionDetails,
         )
     }
+
+    @Test
+    fun `should not has pending applications when trip not has any application`() {
+        val section = SectionFactory.avCabildo()
+        inMemorySectionRepository.save(section)
+
+        val driverTripDetail = getDriverTripDetail(
+            GetDriverTripDetail.Input(
+                tripId = section.tripId,
+            )
+        )
+
+        assertFalse(driverTripDetail.hasPendingApplications)
+    }
+
+    @Test
+    fun `has pending applications only consider applications in pending state`() {
+        val section = SectionFactory.avCabildo()
+        inMemorySectionRepository.save(section)
+        listOf(
+            TripPlanApplicationFactory.withASingleTripApplicationPendingApproval(
+                sections = listOf(section),
+                passengerId = "JOHN",
+            ),
+            TripPlanApplicationFactory.withASingleTripApplicationRejected(
+                sections = listOf(section),
+                passengerId = "JENNA",
+            ),
+            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+                sections = listOf(section),
+                passengerId = "BJNOVAK",
+            ),
+        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+
+        val driverTripDetail = getDriverTripDetail(
+            GetDriverTripDetail.Input(
+                tripId = section.tripId,
+            )
+        )
+
+        assertTrue(driverTripDetail.hasPendingApplications)
+    }
+
 }

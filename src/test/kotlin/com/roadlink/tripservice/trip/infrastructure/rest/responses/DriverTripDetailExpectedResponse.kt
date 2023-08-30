@@ -10,6 +10,7 @@ data class DriverTripDetailExpectedResponse(
     val tripId: String,
     val tripStatus: TripStatusExpectedResponse,
     val seatStatus: SeatsAvailabilityStatusExpectedResponse,
+    val hasPendingApplications: Boolean,
     val sectionDetails: List<DriverSectionDetailExpectedResponse>
 )
 

@@ -10,6 +10,7 @@ object DriverTripDetailResponseFactory {
             tripId = tripId,
             tripStatus = TripStatusExpectedResponse.FINISHED,
             seatStatus = SeatsAvailabilityStatusExpectedResponse.SOME_SEATS_AVAILABLE,
+            hasPendingApplications = false,
             sectionDetails = listOf(
                 DriverSectionDetailExpectedResponse(
                     sectionId = SectionFactory.avCabildo_id,

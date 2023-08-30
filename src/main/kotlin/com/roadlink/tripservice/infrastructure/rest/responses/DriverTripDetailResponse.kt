@@ -6,5 +6,6 @@ data class DriverTripDetailResponse(
     val tripId: UUID,
     val tripStatus: TripStatusResponse,
     val seatStatus: SeatsAvailabilityStatusResponse,
+    val hasPendingApplications: Boolean,
     val sectionDetails: List<DriverSectionDetailResponse>
 )
