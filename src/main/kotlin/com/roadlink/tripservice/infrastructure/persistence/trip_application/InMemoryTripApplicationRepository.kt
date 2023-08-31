@@ -8,6 +8,11 @@ class InMemoryTripApplicationRepository(
     private val tripApplications: MutableList<TripPlanApplication.TripApplication> = mutableListOf(),
 ) : TripApplicationRepository {
     override fun saveAll(tripApplications: List<TripPlanApplication.TripApplication>) {
+        tripApplications.forEach { application ->
+            this.tripApplications.removeIf {
+                it.id == application.id
+            }
+        }
         this.tripApplications.addAll(tripApplications)
     }
 
