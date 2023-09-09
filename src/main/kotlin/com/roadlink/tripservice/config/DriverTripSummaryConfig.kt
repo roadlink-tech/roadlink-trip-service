@@ -11,7 +11,7 @@ import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
 @Factory
-class DriverTripSummaryDefinition {
+class DriverTripSummaryConfig {
     @Singleton
     fun retrieveDriverTripSummary(
         tripRepository: TripRepository,

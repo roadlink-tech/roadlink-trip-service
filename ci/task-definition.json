@@ -21,6 +21,18 @@
         {
           "name": "FOO",
           "value": "{{FOO}}"
+        },
+        {
+          "name": "DB_JDBC_URL",
+          "value": "{{DB_JDBC_URL}}"
+        },
+        {
+          "name": "DB_USERNAME",
+          "value": "{{DB_USERNAME}}"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "value": "{{DB_PASSWORD}}"
         }
       ],
       "resourceRequirements": null,

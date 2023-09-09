@@ -1,10 +1,15 @@
 micronaut:
   application:
     name: tripservice
+
 netty:
   default:
     allocator:
       max-order: 3
+
+foo:
+  foo: ${FOO}
+
 geoapify:
   # This is no secure. This is a secret and must be retrieved from
   # a secret manager or env vars.
@@ -16,4 +21,28 @@ geoapify:
     port: 80
     endpoint: v1/geocode/search
 
-foo: ${FOO:nobar}
+datasources:
+  default:
+    url: ${DB_JDBC_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    db-type: mysql
+    dialect: MYSQL
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      idle-timeout: 30000  # En milisegundos
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        ddl-auto: none
+        hbm2ddl:
+          auto: none
+
+flyway:
+  datasources:
+    default:
+      enabled: true
