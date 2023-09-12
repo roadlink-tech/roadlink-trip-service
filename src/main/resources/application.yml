@@ -15,3 +15,5 @@ geoapify:
     host: api.geoapify.com
     port: 80
     endpoint: v1/geocode/search
+
+foo: ${FOO:nobar}
