@@ -29,7 +29,7 @@ class FooConfig {
 
 class Foo(val value: String)
 
-@Controller("/foo")
+@Controller("/trip-service/foo")
 class FooRestController(private val foo: Foo) {
     @Get
     @Produces(MediaType.TEXT_PLAIN)
