@@ -1,5 +1,7 @@
 package com.roadlink.tripservice.infrastructure.rest.handlers
 
+import com.roadlink.tripservice.domain.Foobar
+import com.roadlink.tripservice.domain.FoobarRepository
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Value
 import io.micronaut.http.MediaType
@@ -30,10 +32,14 @@ class FooConfig {
 class Foo(val value: String)
 
 @Controller("/trip-service/foo")
-class FooRestController(private val foo: Foo) {
+class FooRestController(
+    private val foo: Foo,
+    private val foobarRepository: FoobarRepository,
+) {
     @Get
     @Produces(MediaType.TEXT_PLAIN)
     fun handle(): String {
+        foobarRepository.save(Foobar("hello2"))
         return foo.value
     }
 }
