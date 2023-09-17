@@ -46,11 +46,18 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
 
+      - name: Set environment variables
+        run: |
+          echo "FOO=${{ secrets.FOO }}" >> .env
+        env:
+          FOO: ${{ secrets.FOO }}
+
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
+          FOO: ${{ secrets.FOO }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
@@ -74,3 +81,5 @@ jobs:
           service: trip-service
           cluster: road_link_cluster
           wait-for-service-stability: true
+        env:
+          FOO: ${{ secrets.FOO }}
