@@ -20,7 +20,7 @@
       "environment": [
         {
           "name": "FOO",
-          "value": "${{ secrets.FOO }}"
+          "value": "{{FOO}}"
         }
       ],
       "resourceRequirements": null,
