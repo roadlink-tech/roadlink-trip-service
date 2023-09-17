@@ -17,7 +17,12 @@
       "command": null,
       "linuxParameters": null,
       "cpu": 512,
-      "environment": [],
+      "environment": [
+        {
+          "name": "FOO",
+          "value": "${{ secrets.FOO }}"
+        }
+      ],
       "resourceRequirements": null,
       "ulimits": null,
       "dnsServers": null,
