@@ -56,8 +56,6 @@ jobs:
 
           # Save the updated task definition back to a file
           echo "$TASK_DEFINITION" > ci/task-definition.json
-        env:
-          FOO: ${{ secrets.FOO }}
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
