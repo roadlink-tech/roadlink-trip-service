@@ -7,7 +7,7 @@ import java.util.*
 
 interface SectionRepository {
     fun save(section: Section)
-    fun save(sections: Set<Section>)
+    fun saveAll(sections: Set<Section>)
     fun findNextSections(from: Location, at: Instant): Set<Section>
     fun findAllById(sectionsIds: List<String>): List<Section>
     // TODO check if should we return a list of sections?, or move it behave to a new TripPlanRepository

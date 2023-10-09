@@ -45,4 +45,4 @@ jpa:
 flyway:
   datasources:
     default:
-      enabled: true
+      enabled: false

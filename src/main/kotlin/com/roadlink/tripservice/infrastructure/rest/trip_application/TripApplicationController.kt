@@ -27,7 +27,7 @@ class TripApplicationController(
     @Put("/{id}/acceptance")
     fun acceptance(
         @PathVariable id: String,
-        @Header("X-Caller-Id") callerId: String? = ""
+        @Header("X-Caller-Id") callerId: String? = null
     ): HttpResponse<ApiResponse> {
         val output = acceptTripApplication(
             AcceptTripApplicationInput(

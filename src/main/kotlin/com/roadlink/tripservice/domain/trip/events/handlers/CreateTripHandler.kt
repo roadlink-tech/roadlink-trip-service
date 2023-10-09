@@ -14,7 +14,7 @@ class CreateTripHandler(
     override fun handle(command: TripCreatedCommand): TripCreatedCommandResponse {
         val trip = command.trip
         val sections = trip.sections(idGenerator)
-        sectionRepository.save(sections)
+        sectionRepository.saveAll(sections)
         return TripCreatedCommandResponse(trip)
     }
 }

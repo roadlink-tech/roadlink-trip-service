@@ -15,7 +15,7 @@ class InMemorySectionRepository(
         sections.add(section)
     }
 
-    override fun save(sections: Set<Section>) {
+    override fun saveAll(sections: Set<Section>) {
         sections.forEach { section ->
             this.save(section)
         }
