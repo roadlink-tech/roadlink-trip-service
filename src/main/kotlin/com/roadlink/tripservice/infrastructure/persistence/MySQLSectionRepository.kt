@@ -10,9 +10,6 @@ import java.time.Instant
 import java.util.*
 
 
-//@Repository
-//interface MicronautDataSectionRepository : CrudRepository<SectionJPAEntity, String>
-
 class MySQLSectionRepository(
     private val entityManager: EntityManager
 ) : SectionRepository {
