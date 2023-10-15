@@ -63,7 +63,7 @@ class RetrieveDriverTripSummary(
     }
 
     private fun groupSectionsByTripId(trips: List<Trip>): Map<UUID, List<Section>> {
-        return sectionsRepository.findAllByTripIds(trips.map { UUID.fromString(it.id) }).groupBy { it.tripId }
+        return sectionsRepository.findAllByTripIds(trips.map { UUID.fromString(it.id) }.toSet()).groupBy { it.tripId }
     }
 }
 

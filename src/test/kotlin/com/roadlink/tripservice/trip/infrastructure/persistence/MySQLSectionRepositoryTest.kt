@@ -7,14 +7,10 @@ import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.LocationFactory
 import com.roadlink.tripservice.trip.domain.SectionFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.testcontainers.containers.MySQLContainer
-import org.testcontainers.utility.DockerImageName
 import java.util.*
 
 
@@ -28,7 +24,7 @@ class MySQLSectionRepositoryTest {
     fun `test empty database should return empty result`() {
         val section = SectionFactory.avCabildo()
 
-        val result = repository.findAllById(listOf(section.id))
+        val result = repository.findAllById(setOf(section.id))
 
         assertEquals(emptyList<Section>(), result)
     }
@@ -79,7 +75,7 @@ class MySQLSectionRepositoryTest {
 
         repository.saveAll(setOf(sectionTrip1, sectionTrip1b, sectionTrip2, sectionTrip2b, sectionTrip3))
 
-        val result = repository.findAllByTripIds(listOf(sectionTrip1.tripId, sectionTrip2b.tripId))
+        val result = repository.findAllByTripIds(setOf(sectionTrip1.tripId, sectionTrip2b.tripId))
 
         assertEquals(setOf(sectionTrip1, sectionTrip1b, sectionTrip2, sectionTrip2b), result)
     }
@@ -90,7 +86,7 @@ class MySQLSectionRepositoryTest {
         val section = SectionFactory.avCabildo()
         repository.save(section)
 
-        val result = repository.findAllById(listOf(section.id))
+        val result = repository.findAllById(setOf(section.id))
 
         assertEquals(listOf(section), result)
     }
@@ -106,7 +102,7 @@ class MySQLSectionRepositoryTest {
         val section3 = SectionFactory.virreyDelPino()
         repository.save(section3)
 
-        val result = repository.findAllById(listOf(section.id))
+        val result = repository.findAllById(setOf(section.id))
 
         assertEquals(listOf(section), result)
     }
@@ -121,7 +117,7 @@ class MySQLSectionRepositoryTest {
 
         repository.saveAll(setSection)
 
-        val result = repository.findAllById(listOf(section.id, section2.id, section3.id))
+        val result = repository.findAllById(setOf(section.id, section2.id, section3.id))
 
         assertTrue(result.containsAll(listOf(section, section2, section3)))
     }

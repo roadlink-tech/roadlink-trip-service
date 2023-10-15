@@ -9,8 +9,8 @@ interface SectionRepository {
     fun save(section: Section)
     fun saveAll(sections: Set<Section>)
     fun findNextSections(from: Location, at: Instant): Set<Section>
-    fun findAllById(sectionsIds: List<String>): List<Section>
+    fun findAllById(sectionsIds: Set<String>): List<Section>
     // TODO check if should we return a list of sections?, or move it behave to a new TripPlanRepository
     fun findByTripId(tripId: UUID): TripPlan
-    fun findAllByTripIds(tripIds: List<UUID>): Set<Section>
+    fun findAllByTripIds(tripIds: Set<UUID>): Set<Section>
 }
