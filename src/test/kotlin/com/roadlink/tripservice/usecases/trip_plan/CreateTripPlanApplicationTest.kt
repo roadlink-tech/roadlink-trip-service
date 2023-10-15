@@ -37,11 +37,11 @@ class CreateTripPlanApplicationTest {
             trips = listOf(
                 CreateTripPlanApplicationInput.TripSections(
                     tripId = "1",
-                    sectionsIds = listOf(sectionOne.id)
+                    sectionsIds = setOf(sectionOne.id)
                 ),
                 CreateTripPlanApplicationInput.TripSections(
                     tripId = "2",
-                    sectionsIds = listOf(sectionTwo.id)
+                    sectionsIds = setOf(sectionTwo.id)
                 )
             )
         )
@@ -70,11 +70,11 @@ class CreateTripPlanApplicationTest {
             trips = listOf(
                 CreateTripPlanApplicationInput.TripSections(
                     tripId = "1",
-                    sectionsIds = listOf(sectionOne.id)
+                    sectionsIds = setOf(sectionOne.id)
                 ),
                 CreateTripPlanApplicationInput.TripSections(
                     tripId = "2",
-                    sectionsIds = listOf(sectionTwo.id)
+                    sectionsIds = setOf(sectionTwo.id)
                 )
             )
         )

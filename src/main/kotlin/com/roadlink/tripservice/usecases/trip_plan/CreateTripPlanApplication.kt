@@ -45,7 +45,7 @@ data class CreateTripPlanApplicationInput(
 ) {
     data class TripSections(
         val tripId: String,
-        val sectionsIds: List<String>
+        val sectionsIds: Set<String>
     )
 }
 
