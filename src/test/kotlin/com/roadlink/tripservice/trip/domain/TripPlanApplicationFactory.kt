@@ -9,6 +9,8 @@ import java.util.*
 
 object TripPlanApplicationFactory {
 
+    val johnSmithDriverId = UUID.fromString("806d4a73-eb1f-466f-a646-b71962df512c")
+
     fun completed(
         tripApplicationId: UUID = UUID.randomUUID(),
     ): TripPlanApplication {
@@ -18,7 +20,11 @@ object TripPlanApplicationFactory {
                 TripApplication(
                     id = tripApplicationId,
                     sections = listOf(
-                        SectionFactory.avCabildo(initialAmountOfSeats = 5, bookedSeats = 5),
+                        SectionFactory.avCabildo(
+                            initialAmountOfSeats = 5,
+                            bookedSeats = 5,
+                            driverId = johnSmithDriverId.toString(),
+                        ),
                     ),
                     passengerId = "passengerId",
                     authorizerId = "authorizerId"
@@ -32,7 +38,7 @@ object TripPlanApplicationFactory {
         initialAmountOfSeats: Int = 4,
         tripId: UUID = UUID.randomUUID(),
         status: Status = PENDING_APPROVAL,
-        driverId: String = "John Smith"
+        driverId: String = johnSmithDriverId.toString()
     ): TripPlanApplication {
         return TripPlanApplication(
             id = UUID.randomUUID(),
@@ -58,7 +64,7 @@ object TripPlanApplicationFactory {
     fun withASingleTripApplication(
         tripApplicationId: UUID = UUID.randomUUID(),
         initialAmountOfSeats: Int = 4,
-        driverId: String = "John Smith"
+        driverId: String = johnSmithDriverId.toString()
     ): TripPlanApplication {
         return TripPlanApplication(
             id = UUID.randomUUID(),
