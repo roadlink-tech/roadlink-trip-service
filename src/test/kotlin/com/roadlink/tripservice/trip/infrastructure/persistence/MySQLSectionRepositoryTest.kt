@@ -174,39 +174,3 @@ class MySQLSectionRepositoryTest {
     }
 
 }
-
-/*
-abstract class End2EndTest : TestPropertyProvider {
-    companion object {
-        val mySQLContainer = MySQLContainer(DockerImageName.parse("mysql:8.0")).also { it.start() }
-    }
-
-    override fun getProperties(): MutableMap<String, String> {
-        return mutableMapOf(
-            "datasources.default.driver-class-name" to "com.mysql.cj.jdbc.Driver",
-            "datasources.default.url" to mySQLContainer.getJdbcUrl(),
-            "datasources.default.username" to mySQLContainer.username,
-            "datasources.default.password" to mySQLContainer.password
-        )
-    }
-}
-
-
-@MicronautTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class MySQLSectionRepositoryV2Test : End2EndTest() {
-
-    @Inject
-    lateinit var repository: MySQLSectionRepository
-
-    @Test
-    fun `test save and retrieve`() {
-        val section = SectionFactory.avCabildo()
-        repository.save(section)
-
-        val result = repository.findAllById(listOf(section.id))
-
-        assertEquals(listOf(section), result)
-    }
-}
- */
