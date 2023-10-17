@@ -2,6 +2,7 @@ package com.roadlink.tripservice.domain.trip_application
 
 import com.roadlink.tripservice.domain.trip.section.SectionError
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory.johnSmithDriverId
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -12,11 +13,12 @@ class TripPlanApplicationTest {
     fun `when confirm an application, then the available seats must decrease by one`() {
         // GIVEN
         val id = UUID.randomUUID()
+        val callerId = UUID.randomUUID()
         val tripPlanApplication =
             TripPlanApplicationFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
 
         // WHEN
-        tripPlanApplication.confirmApplicationById(id)
+        tripPlanApplication.confirmApplicationById(id, callerId)
 
         // THEN
         val section = tripPlanApplication.tripApplications.first().sections.first()
@@ -49,12 +51,13 @@ class TripPlanApplicationTest {
     fun `when confirm an application twice, then the available seats must decrease by 2`() {
         // GIVEN
         val id = UUID.randomUUID()
+        val callerId = UUID.randomUUID()
         val tripPlanApplication =
             TripPlanApplicationFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
 
         // WHEN
         repeat(2) {
-            tripPlanApplication.confirmApplicationById(id)
+            tripPlanApplication.confirmApplicationById(id, callerId)
         }
 
         // THEN
@@ -66,12 +69,13 @@ class TripPlanApplicationTest {
     fun `when try to confirm an application which does not have any available seat, then an exception must be retrieved`() {
         // GIVEN
         val id = UUID.randomUUID()
+        val callerId = UUID.randomUUID()
         val tripPlanApplication =
             TripPlanApplicationFactory.completed(tripApplicationId = id)
 
         // WHEN
         assertThrows(SectionError.InsufficientAvailableSeats::class.java) {
-            tripPlanApplication.confirmApplicationById(id)
+            tripPlanApplication.confirmApplicationById(id, callerId)
         }
     }
 
@@ -83,7 +87,7 @@ class TripPlanApplicationTest {
 
         // WHEN
         assertThrows(TripApplicationError.NotFound::class.java) {
-            tripPlanApplication.confirmApplicationById(id)
+            tripPlanApplication.confirmApplicationById(id, johnSmithDriverId)
         }
     }
 

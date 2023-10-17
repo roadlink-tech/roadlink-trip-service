@@ -2,6 +2,7 @@ package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory.johnSmithDriverId
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.assertInstanceOf
@@ -27,7 +28,7 @@ class AcceptTripApplicationTest {
         every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns null
 
         // WHEN
-        val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID()))
+        val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID(), UUID.randomUUID()))
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripPlanApplicationNotExists::class.java, output)
@@ -38,7 +39,7 @@ class AcceptTripApplicationTest {
         every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplicationRejected()
 
         // WHEN
-        val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID()))
+        val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID(), UUID.randomUUID()))
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected::class.java, output)
@@ -48,13 +49,14 @@ class AcceptTripApplicationTest {
     fun `when accept a trip plan application, then an expected response must be retrieved and it must be saved`() {
         // GIVEN
         val tripPlanApplicationId = UUID.randomUUID()
+        val callerId = UUID.randomUUID()
         every { tripPlanApplicationRepository.save(any()) } just runs
         every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplication(
             tripPlanApplicationId
         )
 
         // WHEN
-        val output = acceptTripApplication(AcceptTripApplicationInput(tripPlanApplicationId))
+        val output = acceptTripApplication(AcceptTripApplicationInput(tripPlanApplicationId, callerId))
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripApplicationAccepted::class.java, output)

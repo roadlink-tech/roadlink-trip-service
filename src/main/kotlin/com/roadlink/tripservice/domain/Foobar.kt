@@ -2,8 +2,8 @@ package com.roadlink.tripservice.domain
 
 import io.micronaut.data.annotation.Repository
 import io.micronaut.data.repository.CrudRepository
-import javax.persistence.Entity
-import javax.persistence.Id
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
 
 // TODO: temporary entity. delete when database adapter is in progress or finished
 @Entity

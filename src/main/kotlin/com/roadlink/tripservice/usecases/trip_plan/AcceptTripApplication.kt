@@ -25,8 +25,7 @@ class AcceptTripApplication(
 
 data class AcceptTripApplicationInput(
     val tripApplication: UUID,
-    // TODO fix it when the header has been change from the frontend
-    val callerId: UUID ? = null
+    val callerId: UUID
 )
 
 sealed class AcceptTripApplicationOutput {

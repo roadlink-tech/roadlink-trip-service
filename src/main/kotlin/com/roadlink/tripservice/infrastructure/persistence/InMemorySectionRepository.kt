@@ -15,7 +15,7 @@ class InMemorySectionRepository(
         sections.add(section)
     }
 
-    override fun save(sections: Set<Section>) {
+    override fun saveAll(sections: Set<Section>) {
         sections.forEach { section ->
             this.save(section)
         }
@@ -28,14 +28,14 @@ class InMemorySectionRepository(
             .toSet()
     }
 
-    override fun findAllById(sectionsIds: List<String>): List<Section> {
+    override fun findAllById(sectionsIds: Set<String>): List<Section> {
         return sectionsIds
             .mapNotNull { sectionId ->
                 sections.firstOrNull { it.id == sectionId }
             }
     }
 
-    override fun findAllByTripIds(tripIds: List<UUID>): Set<Section> {
+    override fun findAllByTripIds(tripIds: Set<UUID>): Set<Section> {
         return sections
             .filter { it.tripId in tripIds }
             .toSet()

@@ -5,7 +5,6 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.*
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.*
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
@@ -164,7 +163,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val trip =
             TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString(), availableSeats = availableSeats)
         tripRepository.save(trip)
-        sectionsRepository.save(trip.sections(idGenerator))
+        sectionsRepository.saveAll(trip.sections(idGenerator))
         return trip
     }
 }

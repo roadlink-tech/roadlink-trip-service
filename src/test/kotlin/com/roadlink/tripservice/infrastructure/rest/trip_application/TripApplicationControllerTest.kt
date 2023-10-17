@@ -107,6 +107,7 @@ class TripApplicationControllerTest {
 
     @Test
     fun `when try to accept an application but it does not exist, then a not found must be retrieved`() {
+        val callerId = UUID.randomUUID()
         every { acceptTripApplication.invoke(any()) } returns AcceptTripApplicationOutput.TripPlanApplicationNotExists
 
         // GIVEN
@@ -117,7 +118,7 @@ class TripApplicationControllerTest {
                         UUID.randomUUID()
                     }/acceptance"
                 ).build(), """"""
-            )
+            ).header("X-Caller-Id", callerId.toString())
 
         val response = try {
             client.toBlocking().exchange(request, JsonNode::class.java)
@@ -133,6 +134,7 @@ class TripApplicationControllerTest {
     @Test
     // TODO fix me!
     fun `when try to accept an application but the plan has been rejected by someone else, then an error must be retrieved`() {
+        val callerId = UUID.randomUUID()
         every { acceptTripApplication.invoke(any()) } returns AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected
 
         // GIVEN
@@ -143,7 +145,7 @@ class TripApplicationControllerTest {
                         UUID.randomUUID()
                     }/acceptance"
                 ).build(), """"""
-            )
+            ).header("X-Caller-Id", callerId.toString())
 
         val response = try {
             client.toBlocking().exchange(request, JsonNode::class.java)

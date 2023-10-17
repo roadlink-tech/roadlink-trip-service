@@ -18,7 +18,7 @@ data class CreateTripPlanApplicationRequest(
         fun toInput(): CreateTripPlanApplicationInput.TripSections {
             return CreateTripPlanApplicationInput.TripSections(
                 tripId = this.tripId,
-                sectionsIds = this.sectionsIds
+                sectionsIds = this.sectionsIds.toSet()
             )
         }
     }

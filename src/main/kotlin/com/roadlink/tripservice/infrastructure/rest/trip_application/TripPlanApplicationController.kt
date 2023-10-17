@@ -15,7 +15,7 @@ class TripPlanApplicationController(
     private val responseFactory: TripApplicationPlanResponseFactory
 ) {
     @Post
-    fun create(@Body request: CreateTripPlanApplicationRequest): HttpResponse<ApiResponse> {
+    fun create(@Body request: CreateTripPlanApplicationRequest): HttpResponse<*> {
         val input = request.toInput()
         val output = createTripPlanApplication(input)
         return responseFactory.from(output)

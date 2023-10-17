@@ -65,11 +65,11 @@ data class TripPlanApplication(
         }
     }
 
-    fun confirmApplicationById(applicationId: UUID, callerId: UUID? = null) {
+    fun confirmApplicationById(applicationId: UUID, callerId: UUID) {
         val application = this.tripApplications.find { it.id == applicationId }
             ?: throw TripApplicationError.NotFound(applicationId)
 
-        if (callerId != null && isAnyDriverTryingToJoinAsPassenger(callerId)) {
+        if (isAnyDriverTryingToJoinAsPassenger(callerId)) {
             throw TripApplicationError.DriverTryingToJoinAsPassenger(applicationId, callerId)
         }
 
