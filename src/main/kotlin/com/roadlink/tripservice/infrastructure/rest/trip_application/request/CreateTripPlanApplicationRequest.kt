@@ -13,12 +13,12 @@ data class CreateTripPlanApplicationRequest(
         @JsonProperty("trip_id")
         val tripId: String,
         @JsonProperty("section_ids")
-        val sectionsIds: Set<String>
+        val sectionsIds: List<String>
     ) {
         fun toInput(): CreateTripPlanApplicationInput.TripSections {
             return CreateTripPlanApplicationInput.TripSections(
                 tripId = this.tripId,
-                sectionsIds = this.sectionsIds
+                sectionsIds = this.sectionsIds.toSet()
             )
         }
     }
