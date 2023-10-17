@@ -5,7 +5,6 @@ plugins {
     id("com.google.devtools.ksp") version "1.8.22-1.0.11"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.0.4"
-    id("org.openrewrite.rewrite") version ("latest.release")
 }
 
 version = "0.1"
@@ -21,7 +20,6 @@ val micronautTestJunit5 = "4.0.0-M3"
 val testContainersVersion = "1.19.1"
 val jakartaPersistenceApiVersion = "2.2.3"
 val okhttpVersion = "4.10.0"
-val reWriteMicronautVersion = "2.1.1"
 
 dependencies {
     // KOTLIN
@@ -39,7 +37,6 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("jakarta.annotation:jakarta.annotation-api")
     runtimeOnly("org.yaml:snakeyaml")
-    rewrite("org.openrewrite.recipe:rewrite-micronaut:$reWriteMicronautVersion")
 
     // MICRONAUT DATA
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
@@ -102,8 +99,4 @@ micronaut {
 
 tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-rewrite {
-    activeRecipe("org.openrewrite.java.micronaut.Micronaut3to4Migration")
 }
