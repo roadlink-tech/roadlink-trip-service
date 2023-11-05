@@ -18,7 +18,7 @@ class AcceptTripApplication(
 
         tripPlanApplication.confirmApplicationById(input.tripApplication, input.callerId)
         return AcceptTripApplicationOutput.TripApplicationAccepted.also {
-            tripPlanApplicationRepository.save(tripPlanApplication)
+            tripPlanApplicationRepository.update(tripPlanApplication)
         }
     }
 }

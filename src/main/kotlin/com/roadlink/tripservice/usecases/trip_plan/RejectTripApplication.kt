@@ -14,7 +14,7 @@ class RejectTripApplication(
             ?: return RejectTripApplicationOutput.TripPlanApplicationNotExists
 
         tripPlanApplication.reject()
-        tripPlanApplicationRepository.save(tripPlanApplication)
+        tripPlanApplicationRepository.update(tripPlanApplication)
         return RejectTripApplicationOutput.TripApplicationRejected
     }
 }

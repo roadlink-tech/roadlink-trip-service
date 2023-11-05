@@ -9,7 +9,15 @@ class InMemoryTripPlanApplicationRepository(
     private val tripPlanApplications: MutableList<TripPlanApplication> = mutableListOf(),
     private val tripApplicationRepository: TripApplicationRepository
 ) : TripPlanApplicationRepository {
-    override fun save(application: TripPlanApplication) {
+    override fun insert(application: TripPlanApplication) {
+        tripPlanApplications.removeIf {
+            it.id == application.id
+        }
+        tripPlanApplications.add(application)
+        tripApplicationRepository.saveAll(application.tripApplications)
+    }
+
+    override fun update(application: TripPlanApplication) {
         tripPlanApplications.removeIf {
             it.id == application.id
         }

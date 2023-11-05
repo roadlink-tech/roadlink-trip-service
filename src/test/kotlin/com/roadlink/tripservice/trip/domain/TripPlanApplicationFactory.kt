@@ -64,7 +64,8 @@ object TripPlanApplicationFactory {
     fun withASingleTripApplication(
         tripApplicationId: UUID = UUID.randomUUID(),
         initialAmountOfSeats: Int = 4,
-        driverId: String = johnSmithDriverId.toString()
+        driverId: String = johnSmithDriverId.toString(),
+        passengerId: String = "passengerId",
     ): TripPlanApplication {
         return TripPlanApplication(
             id = UUID.randomUUID(),
@@ -77,7 +78,7 @@ object TripPlanApplicationFactory {
                             driverId = driverId
                         )
                     ),
-                    passengerId = "passengerId",
+                    passengerId = passengerId,
                     authorizerId = "authorizerId"
                 ),
             )
@@ -137,4 +138,14 @@ object TripPlanApplicationFactory {
             )
         )
     }
+
+    fun withApplications(
+        tripApplications: List<TripApplication>
+    ): TripPlanApplication {
+        return TripPlanApplication(
+            id = UUID.randomUUID(),
+            tripApplications = tripApplications.toMutableList()
+        )
+    }
+
 }

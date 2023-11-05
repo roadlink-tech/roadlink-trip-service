@@ -202,7 +202,7 @@ class GetDriverTripDetailTest {
                 sections = listOf(section),
                 passengerId = "BJNOVAK",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
@@ -240,7 +240,7 @@ class GetDriverTripDetailTest {
                 sections = listOf(section),
                 passengerId = "ANGELA",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
@@ -272,7 +272,7 @@ class GetDriverTripDetailTest {
                 sections = listOf(section),
                 passengerId = "PAINN",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
@@ -332,7 +332,7 @@ class GetDriverTripDetailTest {
                 sections = listOf(section),
                 passengerId = "BJNOVAK",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val driverTripDetail = getDriverTripDetail(
             GetDriverTripDetail.Input(
