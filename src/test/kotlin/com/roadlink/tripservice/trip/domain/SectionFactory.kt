@@ -183,6 +183,19 @@ object SectionFactory {
             tripId = tripId
         )
 
+    fun withDriver(driverId: UUID) =
+        Section(
+            id = UUID.randomUUID().toString(),
+            departure = TripPointFactory.virreyDelPino_2880(),
+            arrival = TripPointFactory.virreyDelPino_1800(),
+            distanceInMeters = 1300.0,
+            driver = driverId.toString(),
+            vehicle = "Ford mustang",
+            initialAmountOfSeats = 4,
+            bookedSeats = 0,
+            tripId = UUID.randomUUID()
+        )
+
     class Builder(private var section: Section) {
 
         fun allSeatsAvailable() = apply {
