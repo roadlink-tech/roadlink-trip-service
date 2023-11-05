@@ -11,9 +11,8 @@ class MySQLTripPlanApplicationRepositoryConfig {
     @Singleton
     fun mySQLTripPlanApplicationRepository(
         entityManager: EntityManager,
-        mySQLTripApplicationRepository: MySQLTripApplicationRepository,
     ): MySQLTripPlanApplicationRepository {
-        return MySQLTripPlanApplicationRepository(entityManager, mySQLTripApplicationRepository)
+        return MySQLTripPlanApplicationRepository(entityManager)
     }
 }
 
