@@ -72,7 +72,7 @@ class GetDriverTripApplicationsTest {
                 sections = listOf(section),
                 passengerId = "BJNOVAK",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val driverTripApplications = getDriverTripApplications(
             GetDriverTripApplications.Input(
@@ -102,7 +102,7 @@ class GetDriverTripApplicationsTest {
             tripPlanApplicationPendingApproval,
             tripPlanApplicationRejected,
             tripPlanApplicationConfirmed,
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val driverTripApplications = getDriverTripApplications(
             GetDriverTripApplications.Input(

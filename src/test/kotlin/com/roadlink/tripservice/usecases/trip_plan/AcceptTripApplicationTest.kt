@@ -2,7 +2,6 @@ package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
-import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory.johnSmithDriverId
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.assertInstanceOf
@@ -50,7 +49,7 @@ class AcceptTripApplicationTest {
         // GIVEN
         val tripPlanApplicationId = UUID.randomUUID()
         val callerId = UUID.randomUUID()
-        every { tripPlanApplicationRepository.save(any()) } just runs
+        every { tripPlanApplicationRepository.update(any()) } just runs
         every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplication(
             tripPlanApplicationId
         )
@@ -60,7 +59,7 @@ class AcceptTripApplicationTest {
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripApplicationAccepted::class.java, output)
-        verify { tripPlanApplicationRepository.save(any()) }
+        verify { tripPlanApplicationRepository.update(any()) }
     }
 
 }

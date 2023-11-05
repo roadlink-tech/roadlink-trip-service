@@ -52,7 +52,7 @@ class GetDriverTripApplicationsControllerTest {
             tripPlanApplicationPendingApproval,
             tripPlanApplicationRejected,
             tripPlanApplicationConfirmed,
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val request: HttpRequest<Any> = HttpRequest
             .GET(

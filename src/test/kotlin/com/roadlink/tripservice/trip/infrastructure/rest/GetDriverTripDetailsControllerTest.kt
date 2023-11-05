@@ -52,7 +52,7 @@ class GetDriverTripDetailsControllerTest {
                 sections = listOf(SectionFactory.avCabildo()),
                 passengerId = "PAINN",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.save(it) }
+        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
         val request: HttpRequest<Any> = HttpRequest
             .GET(

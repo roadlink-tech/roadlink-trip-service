@@ -31,7 +31,7 @@ class CreateTripPlanApplicationTest {
         val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800()
         every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
-        every { tripPlanApplicationRepository.save(any()) } just runs
+        every { tripPlanApplicationRepository.insert(any()) } just runs
         val application = CreateTripPlanApplicationInput(
             passengerId = "chorch",
             trips = listOf(
@@ -55,7 +55,7 @@ class CreateTripPlanApplicationTest {
     }
 
     private fun thenTheTripPlanWasSaved() {
-        verify { tripPlanApplicationRepository.save(any()) }
+        verify { tripPlanApplicationRepository.insert(any()) }
     }
 
     @Test
@@ -64,7 +64,7 @@ class CreateTripPlanApplicationTest {
         val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800_completed()
         every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
-        every { tripPlanApplicationRepository.save(any()) } just runs
+        every { tripPlanApplicationRepository.insert(any()) } just runs
         val application = CreateTripPlanApplicationInput(
             passengerId = "chorch",
             trips = listOf(
@@ -88,7 +88,7 @@ class CreateTripPlanApplicationTest {
     }
 
     private fun thenTheTripPlanWasNotSaved() {
-        verify(exactly = 0) { tripPlanApplicationRepository.save(any()) }
+        verify(exactly = 0) { tripPlanApplicationRepository.insert(any()) }
     }
 
     private fun thenTheTripPlanCouldNotBeCreated(output: CreateTripPlanApplicationOutput) {

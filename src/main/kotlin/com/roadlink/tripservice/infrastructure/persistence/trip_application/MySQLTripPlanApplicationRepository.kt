@@ -7,6 +7,7 @@ import com.roadlink.tripservice.infrastructure.persistence.SectionJPAEntity
 import jakarta.persistence.EntityManager
 import java.util.*
 import jakarta.persistence.*
+import jakarta.transaction.Transactional
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 
@@ -44,7 +45,7 @@ data class TripApplicationJPAEntity(
     @Id
     @JdbcTypeCode(SqlTypes.CHAR)
     val id: UUID,
-    @ManyToMany //TODO: tiene sentido esto aca? dado que al guardar primero tenemos que guardar a parte esta collection
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER) //TODO: tiene sentido esto aca? dado que al guardar primero tenemos que guardar a parte esta collection
     val sections: List<SectionJPAEntity>,
     val passengerId: String,
     val status: String,
@@ -100,24 +101,44 @@ class MySQLTripPlanApplicationRepository(
     private val entityManager: EntityManager,
     private val mySQLTripApplicationRepository: MySQLTripApplicationRepository,
 ): TripPlanApplicationRepository {
-    override fun save(application: TripPlanApplication) {
+
+    override fun insert(application: TripPlanApplication) {
         //mySQLTripApplicationRepository.saveAll(application.tripApplications)
 
         entityManager.persist(TripPlanApplicationJPAEntity.from(application))
     }
 
+    override fun update(application: TripPlanApplication) {
+        entityManager.merge(TripPlanApplicationJPAEntity.from(application))
+    }
+
     override fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication? {
-        return entityManager.createQuery(
-            "SELECT tpa FROM TripPlanApplicationJPAEntity tpa WHERE tpa.id = :id",
-            TripPlanApplicationJPAEntity::class.java
-        )
-            .setParameter("id", tripApplicationId)
-            .singleResult
-            .toDomain()
+        return try {
+            entityManager.createQuery(
+                "SELECT tpa FROM TripPlanApplicationJPAEntity tpa WHERE tpa.id = :id",
+                TripPlanApplicationJPAEntity::class.java
+            )
+                .setParameter("id", tripApplicationId)
+                .singleResult
+                .toDomain()
+        } catch (e: NoResultException) {
+            null
+        }
     }
 
     override fun findTripApplicationBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
-        TODO("Not yet implemented")
+        return entityManager.createQuery(
+            """
+                |SELECT ta FROM TripApplicationJPAEntity ta
+                |JOIN ta.sections s
+                |WHERE s.id = :sectionId
+                |""".trimMargin(),
+            TripApplicationJPAEntity::class.java
+        )
+            .setParameter("sectionId", sectionId)
+            .resultList
+            .map { it.toDomain() }
+            .toSet()
     }
 
 }

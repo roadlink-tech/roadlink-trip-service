@@ -153,7 +153,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
             driverId = driverId.toString(),
             status = status
         )
-        tripPlanApplicationRepository.save(tripPlanApplication)
+        tripPlanApplicationRepository.insert(tripPlanApplication)
     }
 
     private fun givenACreatedTrip(

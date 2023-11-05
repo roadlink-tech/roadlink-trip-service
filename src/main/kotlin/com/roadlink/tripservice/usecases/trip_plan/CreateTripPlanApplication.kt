@@ -34,7 +34,7 @@ class CreateTripPlanApplication(
         }
 
         // TODO ver cómo informar o mostrar a los driver que tienen una solicitud pendiente de aceptación o rechazo
-        tripPlanApplicationRepository.save(tripPlanApplication)
+        tripPlanApplicationRepository.insert(tripPlanApplication)
         return TripPlanApplicationCreated(tripPlanApplication.id)
     }
 }
