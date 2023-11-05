@@ -15,11 +15,33 @@ class MySQLTripApplicationRepository(
     }
 
     override fun findAllByDriverId(driverId: UUID): List<TripPlanApplication.TripApplication> {
-        TODO("Not yet implemented")
+        return entityManager.createQuery(
+            """
+                |SELECT ta 
+                |FROM TripApplicationJPAEntity ta
+                |JOIN ta.sections s
+                |WHERE s.driver = :driverId
+                |""".trimMargin(),
+            TripApplicationJPAEntity::class.java
+        )
+            .setParameter("driverId", driverId.toString())
+            .resultList
+            .map { it.toDomain() }
     }
 
     override fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
-        TODO("Not yet implemented")
+        return entityManager.createQuery(
+            """
+                |SELECT ta 
+                |FROM TripApplicationJPAEntity ta
+                |JOIN ta.sections s
+                |WHERE s.tripId = :tripId
+                |""".trimMargin(),
+            TripApplicationJPAEntity::class.java
+        )
+            .setParameter("tripId", tripId)
+            .resultList
+            .map { it.toDomain() }
     }
 
 }

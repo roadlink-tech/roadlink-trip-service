@@ -3,6 +3,7 @@ package com.roadlink.tripservice.infrastructure.persistence.trip_application
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.infrastructure.persistence.SectionJPAEntity
 import jakarta.persistence.*
+import jakarta.persistence.CascadeType.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import java.util.*
@@ -13,7 +14,7 @@ data class TripApplicationJPAEntity(
     @Id
     @JdbcTypeCode(SqlTypes.CHAR)
     val id: UUID,
-    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @ManyToMany(cascade = [MERGE, REMOVE, REFRESH, DETACH], fetch = FetchType.EAGER)
     val sections: List<SectionJPAEntity>,
     val passengerId: String,
     val status: String,
