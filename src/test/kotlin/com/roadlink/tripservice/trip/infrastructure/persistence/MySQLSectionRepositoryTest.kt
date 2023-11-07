@@ -2,7 +2,7 @@ package com.roadlink.tripservice.trip.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.trip.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
-import com.roadlink.tripservice.infrastructure.persistence.MySQLSectionRepository
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.LocationFactory
 import com.roadlink.tripservice.trip.domain.SectionFactory
@@ -18,7 +18,7 @@ import java.util.*
 class MySQLSectionRepositoryTest {
 
     @Inject
-    lateinit var repository: MySQLSectionRepository
+    lateinit var repository: SectionRepository
 
     @Test
     fun `given no sections when find all by id then should return empty result`() {

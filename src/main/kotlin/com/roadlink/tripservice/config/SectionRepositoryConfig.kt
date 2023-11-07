@@ -1,61 +1,17 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.domain.Location
-import com.roadlink.tripservice.domain.trip.Address
-import com.roadlink.tripservice.domain.trip.TripPoint
-import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.MySQLSectionRepository
 import io.micronaut.context.annotation.Factory
+import io.micronaut.transaction.TransactionOperations
 import jakarta.inject.Singleton
-import java.time.Instant
-import java.util.*
+import jakarta.persistence.EntityManager
+import org.hibernate.Session
 
 @Factory
 class SectionRepositoryConfig {
     @Singleton
-    fun sectionRepository(): SectionRepository {
-        return InMemorySectionRepository(sections = mutableListOf(avCabildoSection()))
+    fun sectionRepository(entityManager: EntityManager, transactionManager: TransactionOperations<Session>): SectionRepository {
+        return MySQLSectionRepository(entityManager = entityManager, transactionManager = transactionManager)
     }
-
-    private fun avCabildoSection(): Section =
-        Section(
-            id = "1",
-            tripId = UUID.randomUUID(),
-            departure = TripPoint(
-                estimatedArrivalTime = Instant.parse("2022-10-15T12:00:00Z"),
-                address = Address(
-                    location = Location(
-                        latitude = -34.54025770408163,
-                        longitude = -58.47450726734694,
-                        alias = "AvCabildo 4853",
-                    ),
-                    fullAddress = "Av. Cabildo 4853, Buenos Aires",
-                    street = "Av. Cabildo",
-                    city = "Buenos Aires",
-                    country = "Argentina",
-                    housenumber = "4853",
-                ),
-            ),
-            arrival = TripPoint(
-                estimatedArrivalTime = Instant.parse("2022-10-15T13:00:00Z"),
-                address = Address(
-                    location = Location(
-                        latitude = -34.57489533621165,
-                        longitude = -58.435972139652776,
-                        alias = "AvCabildo 20",
-                    ),
-                    fullAddress = "Av. Cabildo 20, Buenos Aires",
-                    street = "Av. Cabildo",
-                    city = "Buenos Aires",
-                    country = "Argentina",
-                    housenumber = "20",
-                ),
-            ),
-            distanceInMeters = 6070.0,
-            driver = "66fdb5fe-8ed2-48d1-8526-8a9d3760345b",
-            vehicle = "Ford mustang",
-            initialAmountOfSeats = 4,
-            bookedSeats = 0
-        )
 }

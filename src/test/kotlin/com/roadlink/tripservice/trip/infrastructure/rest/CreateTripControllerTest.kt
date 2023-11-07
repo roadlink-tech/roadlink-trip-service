@@ -2,8 +2,9 @@ package com.roadlink.tripservice.trip.infrastructure.rest
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.Trip
-import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.trip.SpyCommandBus
 import com.roadlink.tripservice.trip.StubIdGenerator
 import com.roadlink.tripservice.trip.domain.TripFactory
@@ -24,12 +25,14 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.*
 
 @MicronautTest
-class CreateTripControllerTest {
+class CreateTripControllerTest : End2EndTest() {
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient
@@ -41,14 +44,16 @@ class CreateTripControllerTest {
     private lateinit var stubIdGenerator: StubIdGenerator
 
     @Inject
-    private lateinit var inMemoryTripRepository: InMemoryTripRepository
+    private lateinit var tripRepository: TripRepository
 
     @Inject
     private lateinit var spyCommandBus: SpyCommandBus
 
+    @Inject
+    private lateinit var entityManager: EntityManager
+
     @BeforeEach
     fun beforeEach() {
-        inMemoryTripRepository.deleteAll()
         spyCommandBus.clear()
     }
 
@@ -82,7 +87,8 @@ class CreateTripControllerTest {
 
     @Test
     fun `given already exists trip with same driver in the given time range then should fail`() {
-        inMemoryTripRepository.save(TripFactory.avCabildo4853_to_avCabildo20())
+        tripRepository.save(TripFactory.avCabildo4853_to_avCabildo20())
+        entityManager.transaction.commit()
         val request = request(CreateTripRequestFactory.avCabildo())
 
         val response = try {
@@ -133,7 +139,10 @@ class CreateTripControllerTest {
     }
 
     private fun thenTripExists(trip: Trip) {
-        assertEquals(listOf(trip), inMemoryTripRepository.findAll())
+        assertTrue { tripRepository.existsByDriverAndInTimeRange(
+            driver = trip.driver,
+            timeRange = TimeRange(trip.departure.estimatedArrivalTime, trip.arrival.estimatedArrivalTime))
+        }
     }
 
     private fun theCommandHasBeenPublished() {

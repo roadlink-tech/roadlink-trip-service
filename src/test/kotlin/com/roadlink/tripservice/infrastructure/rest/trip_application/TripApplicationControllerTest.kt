@@ -2,6 +2,7 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.roadlink.tripservice.trip.infrastructure.rest.End2EndTest
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_plan.*
 import io.micronaut.context.annotation.Primary
@@ -25,7 +26,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class TripApplicationControllerTest {
+class TripApplicationControllerTest : End2EndTest() {
 
     @Inject
     @field:Client("/")

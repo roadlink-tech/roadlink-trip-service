@@ -3,19 +3,25 @@ package com.roadlink.tripservice.infrastructure.persistence
 import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
+import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
+import org.hibernate.Session
 import java.util.*
 
 class MySQLTripRepository(
-    private val entityManager: EntityManager
+    private val entityManager: EntityManager,
+    private val transactionManager: TransactionOperations<Session>,
 ) : TripRepository {
     override fun save(trip: Trip) {
-        entityManager.persist(TripJPAEntity.from(trip))
+        transactionManager.executeWrite {
+            entityManager.persist(TripJPAEntity.from(trip))
+        }
     }
 
     override fun existsByDriverAndInTimeRange(driver: String, timeRange: TimeRange): Boolean {
-        return entityManager.createQuery(
-        """
+        return transactionManager.executeRead {
+            entityManager.createQuery(
+                """
             |SELECT t 
             |FROM TripJPAEntity t
             |WHERE 
@@ -23,28 +29,31 @@ class MySQLTripRepository(
             |   AND NOT :to <= t.departure.estimatedArrivalTime
             |   AND NOT :from >= t.arrival.estimatedArrivalTime
             |""".trimMargin(),
-        TripJPAEntity::class.java
-    )
-        .setParameter("driverId", driver)
-        .setParameter("to", timeRange.to)
-        .setParameter("from", timeRange.from)
-        .resultList
-        .map { it.toDomain() }
-        .isNotEmpty()
+                TripJPAEntity::class.java
+            )
+                .setParameter("driverId", driver)
+                .setParameter("to", timeRange.to)
+                .setParameter("from", timeRange.from)
+                .resultList
+                .map { it.toDomain() }
+                .isNotEmpty()
+        }
     }
 
     override fun findAllByDriverId(driverId: UUID): List<Trip> {
-        return entityManager.createQuery(
-            """
+        return transactionManager.executeRead {
+            entityManager.createQuery(
+                """
                 |SELECT t 
                 |FROM TripJPAEntity t
                 |WHERE t.driver = :driverId
                 |""".trimMargin(),
-            TripJPAEntity::class.java
-        )
-            .setParameter("driverId", driverId.toString())
-            .resultList
-            .map { it.toDomain() }
+                TripJPAEntity::class.java
+            )
+                .setParameter("driverId", driverId.toString())
+                .resultList
+                .map { it.toDomain() }
+        }
     }
 
 }

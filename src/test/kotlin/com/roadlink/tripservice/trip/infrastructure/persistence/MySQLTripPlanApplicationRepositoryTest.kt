@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.trip.infrastructure.persistence
 
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
-import com.roadlink.tripservice.infrastructure.persistence.MySQLSectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripPlanApplicationRepository
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.trip.domain.SectionFactory
 import com.roadlink.tripservice.trip.domain.TripApplicationFactory
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
@@ -16,10 +16,10 @@ import java.util.*
 class MySQLTripPlanApplicationRepositoryTest {
 
     @Inject
-    private lateinit var sectionRepository: MySQLSectionRepository
+    private lateinit var sectionRepository: SectionRepository
 
     @Inject
-    lateinit var repository: MySQLTripPlanApplicationRepository
+    lateinit var repository: TripPlanApplicationRepository
 
     @Test
     fun `given no trip plan application when save one then should be able to find it`() {

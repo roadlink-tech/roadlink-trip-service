@@ -2,11 +2,14 @@ package com.roadlink.tripservice.infrastructure.persistence.trip_application
 
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
+import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
+import org.hibernate.Session
 import java.util.*
 
 class MySQLTripApplicationRepository(
     private val entityManager: EntityManager,
+    private val transactionManager: TransactionOperations<Session>,
 ) : TripApplicationRepository {
     override fun saveAll(tripApplications: List<TripPlanApplication.TripApplication>) {
         for (tripApplication in tripApplications) {
@@ -15,33 +18,37 @@ class MySQLTripApplicationRepository(
     }
 
     override fun findAllByDriverId(driverId: UUID): List<TripPlanApplication.TripApplication> {
-        return entityManager.createQuery(
-            """
+        return transactionManager.executeRead {
+            entityManager.createQuery(
+                """
                 |SELECT ta 
                 |FROM TripApplicationJPAEntity ta
                 |JOIN ta.sections s
                 |WHERE s.driver = :driverId
                 |""".trimMargin(),
-            TripApplicationJPAEntity::class.java
-        )
-            .setParameter("driverId", driverId.toString())
-            .resultList
-            .map { it.toDomain() }
+                TripApplicationJPAEntity::class.java
+            )
+                .setParameter("driverId", driverId.toString())
+                .resultList
+                .map { it.toDomain() }
+        }
     }
 
     override fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
-        return entityManager.createQuery(
-            """
+        return transactionManager.executeRead {
+            entityManager.createQuery(
+                """
                 |SELECT ta 
                 |FROM TripApplicationJPAEntity ta
                 |JOIN ta.sections s
                 |WHERE s.tripId = :tripId
                 |""".trimMargin(),
-            TripApplicationJPAEntity::class.java
-        )
-            .setParameter("tripId", tripId)
-            .resultList
-            .map { it.toDomain() }
+                TripApplicationJPAEntity::class.java
+            )
+                .setParameter("tripId", tripId)
+                .resultList
+                .map { it.toDomain() }
+        }
     }
 
 }

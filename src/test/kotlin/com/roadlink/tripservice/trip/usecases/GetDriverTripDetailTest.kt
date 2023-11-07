@@ -3,8 +3,6 @@ package com.roadlink.tripservice.trip.usecases
 import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
 import com.roadlink.tripservice.infrastructure.persistence.FixedUserRepository
-import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.trip.StubTimeProvider
 import com.roadlink.tripservice.trip.domain.*
 import com.roadlink.tripservice.trip.domain.InstantFactory.october15_12hs
@@ -15,7 +13,9 @@ import com.roadlink.tripservice.trip.domain.InstantFactory.october15_7hs
 import com.roadlink.tripservice.usecases.GetDriverTripDetail
 import com.roadlink.tripservice.domain.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.TripStatus.*
+import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

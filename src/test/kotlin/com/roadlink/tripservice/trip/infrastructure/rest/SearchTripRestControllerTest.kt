@@ -2,7 +2,7 @@ package com.roadlink.tripservice.trip.infrastructure.rest
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.LocationFactory
 import com.roadlink.tripservice.trip.domain.SectionFactory
@@ -18,27 +18,25 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
+import jakarta.persistence.EntityManager
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-internal class SearchTripRestControllerTest {
+internal class SearchTripRestControllerTest : End2EndTest() {
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient
 
     @Inject
-    private lateinit var inMemorySectionRepository: InMemorySectionRepository
+    private lateinit var sectionRepository: SectionRepository
 
     @Inject
     private lateinit var objectMapper: ObjectMapper
 
-    @BeforeEach
-    fun setUp() {
-        inMemorySectionRepository.deleteAll()
-    }
+    @Inject
+    private lateinit var entityManager: EntityManager
 
     @Test
     fun `given no section exists then should return ok status code and the trip plan in response body`() {
@@ -62,8 +60,9 @@ internal class SearchTripRestControllerTest {
 
     @Test
     fun `given exists a trip plan with one meeting point between the given departure and arrival then should return ok status code and the trip plan in response body`() {
-        inMemorySectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800(tripId = UUID.fromString(TripFactory.avCabildo_id)))
-        inMemorySectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20(tripId = UUID.fromString(TripFactory.avCabildo_id)))
+        sectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800(tripId = UUID.fromString(TripFactory.avCabildo_id)))
+        sectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20(tripId = UUID.fromString(TripFactory.avCabildo_id)))
+        entityManager.transaction.commit()
 
         val request: HttpRequest<Any> = HttpRequest
             .GET(
@@ -91,3 +90,4 @@ internal class SearchTripRestControllerTest {
     }
 
 }
+

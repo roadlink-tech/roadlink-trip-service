@@ -1,6 +1,9 @@
 package com.roadlink.tripservice.trip.infrastructure.persistence
 
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.MySQLSectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripPlanApplicationRepository
@@ -18,13 +21,13 @@ import java.util.*
 class MySQLTripApplicationRepositoryTest {
 
     @Inject
-    private lateinit var sectionRepository: MySQLSectionRepository
+    private lateinit var sectionRepository: SectionRepository
 
     @Inject
-    private lateinit var tripPlanApplicationRepository: MySQLTripPlanApplicationRepository
+    private lateinit var tripPlanApplicationRepository: TripPlanApplicationRepository
 
     @Inject
-    private lateinit var tripApplicationRepository: MySQLTripApplicationRepository
+    private lateinit var tripApplicationRepository: TripApplicationRepository
 
     @Test
     fun `given no trip application exists with the given driver id when find all by driver id then should return empty list`() {

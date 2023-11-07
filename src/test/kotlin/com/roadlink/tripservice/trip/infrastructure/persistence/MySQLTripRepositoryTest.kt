@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.trip.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.time.TimeRange
-import com.roadlink.tripservice.infrastructure.persistence.MySQLTripRepository
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.TripFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -14,7 +14,7 @@ import java.util.UUID
 class MySQLTripRepositoryTest {
 
     @Inject
-    private lateinit var repository: MySQLTripRepository
+    private lateinit var repository: TripRepository
 
     @Test
     fun `can save trip with no meeting points`() {
