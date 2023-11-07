@@ -19,10 +19,13 @@ object TripFactory {
             availableSeats = availableSeats,
         )
 
-    fun avCabildo4853_virreyDelPino1800_avCabildo20(id: String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
+    fun avCabildo4853_virreyDelPino1800_avCabildo20(
+        id: String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20",
+        driverId: String = "John Smith",
+    ) =
         Trip(
             id = id,
-            driver = "John Smith",
+            driver = driverId,
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
@@ -30,11 +33,13 @@ object TripFactory {
             availableSeats = 5,
         )
 
-    fun caba_escobar_pilar_rosario(id: String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20") =
+    fun caba_escobar_pilar_rosario(
+        id: String = "TripFactory_caba_escobar_pilar_rosario_id",
+        driverId: String = "John Smith",
+    ) =
         Trip(
             id = id,
-            //id = caba_escobar_pilar_rosario_id,
-            driver = "John Smith",
+            driver = driverId,
             vehicle = "Ford mustang",
             departure = TripPointFactory.caba(),
             arrival = TripPointFactory.rosario(),
