@@ -38,9 +38,8 @@ jpa:
   default:
     properties:
       hibernate:
-        ddl-auto: none
         hbm2ddl:
-          auto: none
+          auto: create-drop # Make this configurable depending on the environment
 
 flyway:
   datasources:
