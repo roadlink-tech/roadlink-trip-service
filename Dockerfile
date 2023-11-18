@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM gradle:7.2.0-jdk17 as compiler
+FROM gradle:8.1.1-jdk17 as compiler
 
 ENV APP_HOME=/usr/app/
 

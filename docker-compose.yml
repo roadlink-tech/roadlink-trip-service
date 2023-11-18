@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  trip_service_db:
+    image: mysql:8.0
+    container_name: trip_service_db
+    environment:
+      MYSQL_ROOT_PASSWORD: tu_contrasena_root
+      MYSQL_DATABASE: tripservice_db
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 5s
+      retries: 5
+      interval: 10s
+
+  api:
+    image: trip-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - FOO=foo
+      - DB_JDBC_URL=jdbc:mysql://trip_service_db:3306/tripservice_db
+      - DB_USERNAME=test
+      - DB_PASSWORD=test
+    depends_on:
+      trip_service_db:
+        condition: service_healthy
