@@ -1,6 +1,7 @@
 package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.*
+import com.roadlink.tripservice.domain.driver_trip.DriverTripApplication
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import java.util.UUID
 

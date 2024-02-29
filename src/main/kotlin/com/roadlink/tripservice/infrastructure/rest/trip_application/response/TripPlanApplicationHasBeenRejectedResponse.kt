@@ -1,6 +1,0 @@
-package com.roadlink.tripservice.infrastructure.rest.trip_application.response
-
-import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.ErrorResponseCode.TRIP_PLAN_APPLICATION_HAS_BEEN_REJECTED
-
-class TripPlanApplicationHasBeenRejectedResponse : ErrorResponse(code = TRIP_PLAN_APPLICATION_HAS_BEEN_REJECTED)

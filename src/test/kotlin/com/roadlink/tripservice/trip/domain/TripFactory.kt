@@ -11,7 +11,7 @@ object TripFactory {
     fun avCabildo4853_to_avCabildo20(driverId: String = "John Smith", availableSeats: Int = 4) =
         Trip(
             id = avCabildo_id,
-            driver = driverId,
+            driverId = driverId,
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
@@ -25,7 +25,7 @@ object TripFactory {
     ) =
         Trip(
             id = id,
-            driver = driverId,
+            driverId = driverId,
             vehicle = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
@@ -39,7 +39,7 @@ object TripFactory {
     ) =
         Trip(
             id = id,
-            driver = driverId,
+            driverId = driverId,
             vehicle = "Ford mustang",
             departure = TripPointFactory.caba(),
             arrival = TripPointFactory.rosario(),

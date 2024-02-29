@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.trip.usecases
 
-import com.roadlink.tripservice.domain.DriverTripApplication
+import com.roadlink.tripservice.domain.driver_trip.DriverTripApplication
 import com.roadlink.tripservice.domain.Passenger
 import com.roadlink.tripservice.domain.Rated
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication

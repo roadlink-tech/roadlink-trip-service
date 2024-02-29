@@ -59,7 +59,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
         givenATripPlanApplicationFor(trip.id, driverId)
 
         // WHEN
-        val summary = retrieveDriverTripSummary(trip.driver)
+        val summary = retrieveDriverTripSummary(trip.driverId)
 
         // THEN
         assertNotNull(summary)

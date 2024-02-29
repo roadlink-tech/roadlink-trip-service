@@ -10,9 +10,10 @@ import com.roadlink.tripservice.trip.domain.InstantFactory.october15_13hs
 import com.roadlink.tripservice.trip.domain.InstantFactory.october15_15hs
 import com.roadlink.tripservice.trip.domain.InstantFactory.october15_18hs
 import com.roadlink.tripservice.trip.domain.InstantFactory.october15_7hs
-import com.roadlink.tripservice.usecases.GetDriverTripDetail
-import com.roadlink.tripservice.domain.SeatsAvailabilityStatus.*
-import com.roadlink.tripservice.domain.TripStatus.*
+import com.roadlink.tripservice.usecases.driver_trip.GetDriverTripDetail
+import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
+import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
+import com.roadlink.tripservice.domain.trip.TripStatus.*
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository

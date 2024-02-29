@@ -1,6 +1,8 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_application.response
 
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
+import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponse
+import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponseCode
 import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplicationOutput
 import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
 import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplicationOutput
@@ -44,3 +46,6 @@ class TripApplicationPlanResponseFactory {
         }
 
 }
+
+class TripPlanApplicationHasBeenRejectedResponse : ErrorResponse(code = ErrorResponseCode.TRIP_PLAN_APPLICATION_HAS_BEEN_REJECTED)
+class InsufficientAmountOfSeatsResponse : ErrorResponse(code = ErrorResponseCode.INSUFFICIENT_AMOUNT_OF_SEATS)
