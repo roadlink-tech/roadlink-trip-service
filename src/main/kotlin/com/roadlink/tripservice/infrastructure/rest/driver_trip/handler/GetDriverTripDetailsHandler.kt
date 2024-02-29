@@ -10,7 +10,7 @@ import io.micronaut.http.annotation.QueryValue
 import java.util.*
 
 @Controller("/trip-service")
-class GetDriverTripDetailsController(
+class GetDriverTripDetailsHandler(
     private val getDriverTripDetail: GetDriverTripDetail,
 ) {
     // TODO validate that tripId could be mapped against  UUID

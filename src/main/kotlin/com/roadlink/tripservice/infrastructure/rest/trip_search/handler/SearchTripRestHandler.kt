@@ -11,7 +11,7 @@ import io.micronaut.http.annotation.QueryValue
 import java.time.Instant
 
 @Controller("/trip-service/trips")
-class SearchTripRestController(private val searchTrip: SearchTrip) {
+class SearchTripRestHandler(private val searchTrip: SearchTrip) {
     @Get
     fun handle(
         @QueryValue departureLatitude: Double,

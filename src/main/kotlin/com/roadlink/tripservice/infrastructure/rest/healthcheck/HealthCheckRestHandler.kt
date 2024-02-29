@@ -6,7 +6,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Produces
 
 @Controller("/health")
-class HealthCheckRestController {
+class HealthCheckRestHandler {
     @Get
     @Produces(MediaType.TEXT_PLAIN)
     fun handle(): String {

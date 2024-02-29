@@ -11,7 +11,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 
 @Controller("/trip-service/trip")
-class CreateTripController(private val createTrip: CreateTrip) {
+class CreateTripHandler(private val createTrip: CreateTrip) {
 
     @Post
     fun createTrip(@Body request: CreateTripRequest): HttpResponse<TripResponse> {

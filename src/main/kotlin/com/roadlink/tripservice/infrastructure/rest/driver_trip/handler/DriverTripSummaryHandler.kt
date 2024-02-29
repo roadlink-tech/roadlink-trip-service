@@ -10,7 +10,7 @@ import io.micronaut.http.annotation.PathVariable
 
 
 @Controller("/trip-service")
-class DriverTripSummaryController(
+class DriverTripSummaryHandler(
     private val retrieveDriverTripSummary: UseCase<String, RetrieveDriverTripSummaryOutput>,
     private val responseFactory: DriverTripSummaryResponseFactory
 ) {

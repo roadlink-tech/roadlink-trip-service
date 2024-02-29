@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-internal class SearchTripRestControllerTest : End2EndTest() {
+internal class SearchTripRestHandlerTest : End2EndTest() {
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient

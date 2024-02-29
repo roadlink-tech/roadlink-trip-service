@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class TripPlanApplicationControllerTest : End2EndTest() {
+class TripPlanApplicationHandlerTest : End2EndTest() {
 
     @Inject
     @field:Client("/")

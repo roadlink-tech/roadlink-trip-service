@@ -13,7 +13,7 @@ import java.util.*
 
 // TODO unificar convensión y reemplazar "-" por "_" en los endpoints
 @Controller("/trip-service/trip_application")
-class TripApplicationController(
+class TripApplicationHandler(
     private val rejectTripApplication: UseCase<UUID, RejectTripApplicationOutput>,
     private val acceptTripApplication: UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput>,
     private val responseFactory: TripApplicationPlanResponseFactory,

@@ -24,7 +24,7 @@ import java.util.*
 import kotlin.collections.List
 
 @MicronautTest
-class GetDriverTripApplicationsControllerTest : End2EndTest() {
+class GetDriverTripApplicationsHandlerTest : End2EndTest() {
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient

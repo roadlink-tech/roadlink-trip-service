@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class CreateTripControllerTest : End2EndTest() {
+class CreateTripHandlerTest : End2EndTest() {
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient
