@@ -14,11 +14,11 @@ class InMemoryTripRepository(
     }
 
     override fun existsByDriverAndInTimeRange(driver: String, timeRange: TimeRange): Boolean {
-        return trips.any { it.driver == driver && it.isInTimeRange(timeRange) }
+        return trips.any { it.driverId == driver && it.isInTimeRange(timeRange) }
     }
 
     override fun findAllByDriverId(driverId: UUID): List<Trip> {
-        return trips.filter { it.driver == driverId.toString() }
+        return trips.filter { it.driverId == driverId.toString() }
     }
 
     fun findAll(): List<Trip> = trips

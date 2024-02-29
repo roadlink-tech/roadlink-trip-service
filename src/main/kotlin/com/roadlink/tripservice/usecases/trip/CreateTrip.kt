@@ -50,7 +50,7 @@ class CreateTrip(
     private fun Input.toTrip(): Trip =
         Trip(
             id = idGenerator.id(),
-            driver = driver,
+            driverId = driver,
             vehicle = vehicle,
             departure = departure,
             arrival = arrival,

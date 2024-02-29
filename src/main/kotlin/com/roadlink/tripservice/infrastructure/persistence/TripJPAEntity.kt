@@ -42,7 +42,7 @@ data class TripJPAEntity(
         fun from(trip: Trip): TripJPAEntity {
             return TripJPAEntity(
                 id = trip.id,
-                driver = trip.driver,
+                driver = trip.driverId,
                 vehicle = trip.vehicle,
                 departure = TripPointJPAEntity.from(trip.departure),
                 arrival = TripPointJPAEntity.from(trip.arrival),
@@ -56,7 +56,7 @@ data class TripJPAEntity(
     fun toDomain(): Trip {
         return Trip(
             id = id,
-            driver = driver,
+            driverId = driver,
             vehicle = vehicle,
             departure = departure.toDomain(),
             arrival = arrival.toDomain(),

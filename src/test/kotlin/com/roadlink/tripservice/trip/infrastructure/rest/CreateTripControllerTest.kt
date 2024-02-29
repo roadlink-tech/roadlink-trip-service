@@ -140,7 +140,7 @@ class CreateTripControllerTest : End2EndTest() {
 
     private fun thenTripExists(trip: Trip) {
         assertTrue { tripRepository.existsByDriverAndInTimeRange(
-            driver = trip.driver,
+            driver = trip.driverId,
             timeRange = TimeRange(trip.departure.estimatedArrivalTime, trip.arrival.estimatedArrivalTime))
         }
     }

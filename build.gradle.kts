@@ -87,6 +87,16 @@ tasks {
         }
     }
 }
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        showExceptions = true
+        showStandardStreams = true
+        events("passed", "skipped", "failed")
+    }
+}
+
 graalvmNative.toolchainDetection.set(false)
 micronaut {
     runtime("netty")

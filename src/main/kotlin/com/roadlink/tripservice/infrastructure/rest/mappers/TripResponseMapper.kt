@@ -7,7 +7,7 @@ object TripResponseMapper {
     fun map(trip: Trip) =
         TripResponse(
             id = trip.id,
-            driver = trip.driver,
+            driver = trip.driverId,
             vehicle = trip.vehicle,
             departure = TripPointResponseMapper.map(trip.departure),
             meetingPoints = trip.meetingPoints.map { TripPointResponseMapper.map(it) },
