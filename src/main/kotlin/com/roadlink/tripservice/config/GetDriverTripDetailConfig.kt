@@ -6,7 +6,7 @@ import com.roadlink.tripservice.domain.time.TimeProvider
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.usecases.GetDriverTripDetail
+import com.roadlink.tripservice.usecases.driver_trip.GetDriverTripDetail
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 

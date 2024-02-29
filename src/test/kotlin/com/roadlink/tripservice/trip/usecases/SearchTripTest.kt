@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.trip.usecases
 
+import com.roadlink.tripservice.domain.searcher.BruteForceSearchEngine
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.LocationFactory
@@ -20,7 +21,7 @@ internal class SearchTripTest {
     @BeforeEach
     fun setUp() {
         inMemorySectionRepository = InMemorySectionRepository()
-        val bruteForceSearchEngine = com.roadlink.tripservice.domain.BruteForceSearchEngine(
+        val bruteForceSearchEngine = BruteForceSearchEngine(
             sectionRepository = inMemorySectionRepository,
         )
 
