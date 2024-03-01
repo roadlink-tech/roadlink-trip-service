@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponse
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponseCode
-import com.roadlink.tripservice.usecases.trip_summary.RetrieveDriverTripSummaryOutput
+import com.roadlink.tripservice.usecases.driver_trip.RetrieveDriverTripSummaryOutput
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 

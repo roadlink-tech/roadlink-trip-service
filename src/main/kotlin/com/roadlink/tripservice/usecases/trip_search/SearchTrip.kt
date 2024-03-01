@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.trip
+package com.roadlink.tripservice.usecases.trip_search
 
 import com.roadlink.tripservice.domain.Location
 import com.roadlink.tripservice.domain.trip_search.SearchEngine

@@ -14,6 +14,8 @@ import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMe
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.driver_trip.RetrieveDriverTripSummary
+import com.roadlink.tripservice.usecases.driver_trip.RetrieveDriverTripSummaryOutput
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
