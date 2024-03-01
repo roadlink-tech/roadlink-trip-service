@@ -36,8 +36,8 @@ data class Trip(
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,
-                driver = driverId,
-                vehicle = vehicle,
+                driverId = driverId,
+                vehicleId = vehicle,
                 initialAmountOfSeats = availableSeats,
                 bookedSeats = 0
             )

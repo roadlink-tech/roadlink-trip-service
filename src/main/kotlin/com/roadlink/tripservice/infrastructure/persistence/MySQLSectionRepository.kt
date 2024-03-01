@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.Location
-import com.roadlink.tripservice.domain.trip.TripPlan
+import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import io.micronaut.transaction.TransactionOperations

@@ -21,8 +21,8 @@ class AddSection(
             departure = tripPoint(request.departure),
             arrival = tripPoint(request.arrival),
             distanceInMeters = request.distanceInMeters,
-            driver = request.driver,
-            vehicle = request.vehicle,
+            driverId = request.driver,
+            vehicleId = request.vehicle,
             initialAmountOfSeats = request.availableSeats,
             bookedSeats = 0
         )

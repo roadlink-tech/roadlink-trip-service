@@ -12,7 +12,7 @@ import com.roadlink.tripservice.trip.domain.AddressFactory
 import com.roadlink.tripservice.trip.domain.SectionFactory
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
-import com.roadlink.tripservice.usecases.trip_plan.GetDriverTripApplications
+import com.roadlink.tripservice.usecases.trip_application.GetDriverTripApplications
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

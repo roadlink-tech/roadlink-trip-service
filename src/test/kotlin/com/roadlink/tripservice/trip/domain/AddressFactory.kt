@@ -10,7 +10,7 @@ object AddressFactory {
             street = "Av. Cabildo",
             city = "Buenos Aires",
             country = "Argentina",
-            housenumber = "4853",
+            houseNumber = "4853",
         )
 
     fun avCabildo_20() =
@@ -20,7 +20,7 @@ object AddressFactory {
             street = "Av. Cabildo",
             city = "Buenos Aires",
             country = "Argentina",
-            housenumber = "20",
+            houseNumber = "20",
         )
 
     fun virreyDelPino_2880() =
@@ -30,7 +30,7 @@ object AddressFactory {
             street = "Virrey del Pino",
             city = "Buenos Aires",
             country = "Argentina",
-            housenumber = "2880",
+            houseNumber = "2880",
         )
 
     fun virreyDelPino_1800() =
@@ -40,7 +40,7 @@ object AddressFactory {
             street = "Virrey del Pino",
             city = "Buenos Aires",
             country = "Argentina",
-            housenumber = "1800",
+            houseNumber = "1800",
         )
 
     fun caba() =
@@ -50,7 +50,7 @@ object AddressFactory {
             street = "9 de julio",
             city = "CABA",
             country = "Argentina",
-            housenumber = "0",
+            houseNumber = "0",
         )
 
     fun escobar() =
@@ -60,7 +60,7 @@ object AddressFactory {
             street = "escobar",
             city = "Escobar",
             country = "Argentina",
-            housenumber = "1800",
+            houseNumber = "1800",
         )
 
     fun pilar() =
@@ -70,7 +70,7 @@ object AddressFactory {
             street = "Virrey del Pino",
             country = "Argentina",
             city = "Pilar",
-            housenumber = "1800",
+            houseNumber = "1800",
         )
 
     fun rosario() =
@@ -80,7 +80,7 @@ object AddressFactory {
             street = "Virrey del Pino",
             city = "Rosario",
             country = "Argentina",
-            housenumber = "1800",
+            houseNumber = "1800",
         )
 
     fun avCabildo_1621() =
@@ -90,7 +90,7 @@ object AddressFactory {
             street = "Av. Cabildo",
             city = "Buenos Aires",
             country = "Argentina",
-            housenumber = "1621",
+            houseNumber = "1621",
         )
 
     fun avDelLibertador_5000() =
@@ -100,6 +100,6 @@ object AddressFactory {
             street = "Av. Del Libertador",
             city = "Buenos Aires",
             country = "Argentina",
-            housenumber = "5000",
+            houseNumber = "5000",
         )
 }

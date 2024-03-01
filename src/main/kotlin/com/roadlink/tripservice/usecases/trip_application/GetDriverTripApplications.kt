@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.trip_plan
+package com.roadlink.tripservice.usecases.trip_application
 
 import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.domain.driver_trip.DriverTripApplication

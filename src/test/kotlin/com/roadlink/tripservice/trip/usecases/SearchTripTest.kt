@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.trip.usecases
 
-import com.roadlink.tripservice.domain.searcher.BruteForceSearchEngine
+import com.roadlink.tripservice.domain.trip_search.BruteForceSearchEngine
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
 import com.roadlink.tripservice.trip.domain.InstantFactory
 import com.roadlink.tripservice.trip.domain.LocationFactory

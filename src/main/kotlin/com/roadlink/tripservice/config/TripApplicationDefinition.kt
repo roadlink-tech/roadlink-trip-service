@@ -4,9 +4,10 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripApplicationRepository
-import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
+import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripPlanApplicationResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_plan.*
+import com.roadlink.tripservice.usecases.trip_application.*
+import com.roadlink.tripservice.usecases.trip_application.plan.*
 import io.micronaut.context.annotation.Factory
 import io.micronaut.transaction.TransactionOperations
 import jakarta.inject.Singleton
@@ -18,7 +19,10 @@ import java.util.*
 class TripApplicationDefinition {
 
     @Singleton
-    fun tripApplicationRepository(entityManager: EntityManager, transactionManager: TransactionOperations<Session>): TripApplicationRepository {
+    fun tripApplicationRepository(
+        entityManager: EntityManager,
+        transactionManager: TransactionOperations<Session>
+    ): TripApplicationRepository {
         return MySQLTripApplicationRepository(entityManager = entityManager, transactionManager = transactionManager)
     }
 
@@ -45,7 +49,14 @@ class TripApplicationDefinition {
     }
 
     @Singleton
-    fun tripApplicationPlanResponseFactory(): TripApplicationPlanResponseFactory {
-        return TripApplicationPlanResponseFactory()
+    fun getTripPlanApplication(
+        tripPlanApplicationRepository: TripPlanApplicationRepository
+    ): UseCase<GetTripPlanApplicationInput, GetTripPlanApplicationOutput> {
+        return GetTripPlanApplication(tripPlanApplicationRepository)
+    }
+
+    @Singleton
+    fun tripApplicationPlanResponseFactory(): TripPlanApplicationResponseFactory {
+        return TripPlanApplicationResponseFactory()
     }
 }

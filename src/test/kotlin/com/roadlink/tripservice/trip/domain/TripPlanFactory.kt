@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.trip.domain
 
-import com.roadlink.tripservice.domain.trip.TripPlan
+import com.roadlink.tripservice.domain.trip_search.TripPlan
 
 object TripPlanFactory {
     fun avCabildo() = TripPlan(sections = listOf(SectionFactory.avCabildo()))

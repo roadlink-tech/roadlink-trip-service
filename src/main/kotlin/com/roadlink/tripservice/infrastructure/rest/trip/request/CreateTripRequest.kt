@@ -60,7 +60,7 @@ data class AddressRequest(
             street = street,
             city = city,
             country = country,
-            housenumber = houseNumber
+            houseNumber = houseNumber
         )
 }
 

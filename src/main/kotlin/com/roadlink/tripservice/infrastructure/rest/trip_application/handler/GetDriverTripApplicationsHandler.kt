@@ -2,7 +2,7 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application.handler
 
 import com.roadlink.tripservice.infrastructure.rest.trip_application.mapper.DriverTripApplicationResponseMapper
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.DriverTripApplicationResponse
-import com.roadlink.tripservice.usecases.trip_plan.GetDriverTripApplications
+import com.roadlink.tripservice.usecases.trip_application.GetDriverTripApplications
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -16,7 +16,8 @@ class GetDriverTripApplicationsHandler(
 ) {
     @Get("/driver-trip-applications")
     fun handle(@QueryValue tripId: String): HttpResponse<List<DriverTripApplicationResponse>> {
-        val driverTripApplications = getDriverTripApplications(GetDriverTripApplications.Input(
+        val driverTripApplications = getDriverTripApplications(
+            GetDriverTripApplications.Input(
             tripId = UUID.fromString(tripId)
         ))
 

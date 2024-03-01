@@ -59,8 +59,8 @@ data class SectionJPAEntity(
                 departure = TripPointJPAEntity.from(section.departure),
                 arrival = TripPointJPAEntity.from(section.arrival),
                 distanceInMeters = section.distanceInMeters,
-                driver = section.driver,
-                vehicle = section.vehicle,
+                driver = section.driverId,
+                vehicle = section.vehicleId,
                 initialAmountOfSeats = section.initialAmountOfSeats,
                 bookedSeats = section.bookedSeats
             )
@@ -74,8 +74,8 @@ data class SectionJPAEntity(
             departure = departure.toDomain(),
             arrival = arrival.toDomain(),
             distanceInMeters = distanceInMeters,
-            driver = driver,
-            vehicle = vehicle,
+            driverId = driver,
+            vehicleId = vehicle,
             initialAmountOfSeats = initialAmountOfSeats,
             bookedSeats = bookedSeats,
         )
@@ -102,7 +102,7 @@ data class TripPointJPAEntity(
                 city = trip.address.city,
                 country = trip.address.country,
                 street = trip.address.street,
-                housenumber = trip.address.housenumber
+                housenumber = trip.address.houseNumber
             )
         }
     }
@@ -119,7 +119,7 @@ data class TripPointJPAEntity(
                 street = street,
                 city = city,
                 country = country,
-                housenumber = housenumber,
+                houseNumber = housenumber,
             ),
         )
 }

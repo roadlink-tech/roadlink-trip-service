@@ -1,11 +1,11 @@
-package com.roadlink.tripservice.usecases.trip_plan
+package com.roadlink.tripservice.usecases.trip_application.plan
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput.TripPlanApplicationCreated
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput.TripPlanApplicationCreated
 import java.util.*
 
 class CreateTripPlanApplication(
@@ -27,7 +27,7 @@ class CreateTripPlanApplication(
             val tripApplication = TripPlanApplication.TripApplication(
                 sections = sections,
                 passengerId = input.passengerId,
-                authorizerId = sections.first().driver
+                authorizerId = sections.first().driverId
             )
 
             tripPlanApplication.include(tripApplication)

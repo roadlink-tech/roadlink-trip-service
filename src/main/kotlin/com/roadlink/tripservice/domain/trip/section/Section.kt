@@ -12,9 +12,8 @@ data class Section(
     val departure: TripPoint,
     val arrival: TripPoint,
     val distanceInMeters: Double,
-    // TODO esto es el driverId?
-    val driver: String,
-    val vehicle: String,
+    val driverId: String,
+    val vehicleId: String,
     var initialAmountOfSeats: Int,
     var bookedSeats: Int
 ) {

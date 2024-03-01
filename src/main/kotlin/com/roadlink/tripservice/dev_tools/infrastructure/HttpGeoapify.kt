@@ -48,7 +48,7 @@ class HttpGeoapify(
                 street = properties.get("street").asText(),
                 city = properties.get("city").asText(),
                 country = properties.get("country").asText(),
-                housenumber = properties.get("housenumber").asText(),
+                houseNumber = properties.get("housenumber").asText(),
             )
         }.firstOrNull()
 }

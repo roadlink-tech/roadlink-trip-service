@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripPlanApplicationCreatedResponse
 import com.roadlink.tripservice.trip.infrastructure.rest.End2EndTest
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplication
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationInput
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplication
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationInput
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.http.HttpRequest

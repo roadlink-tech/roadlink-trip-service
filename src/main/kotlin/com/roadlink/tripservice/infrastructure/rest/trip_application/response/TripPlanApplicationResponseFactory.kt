@@ -3,13 +3,13 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application.response
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponse
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponseCode
-import com.roadlink.tripservice.usecases.trip_plan.AcceptTripApplicationOutput
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationOutput
-import com.roadlink.tripservice.usecases.trip_plan.RejectTripApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.RejectTripApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus.*
 
-class TripApplicationPlanResponseFactory {
+class TripPlanApplicationResponseFactory {
 
     fun from(output: CreateTripPlanApplicationOutput): HttpResponse<ApiResponse> =
         when (output) {
@@ -21,6 +21,16 @@ class TripApplicationPlanResponseFactory {
                     .status<InsufficientAmountOfSeatsResponse>(PRECONDITION_FAILED)
                     .body(InsufficientAmountOfSeatsResponse())
         }
+
+    fun from(output: com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationOutput): HttpResponse<ApiResponse> {
+        return when (output) {
+            is com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationOutput.TripPlanApplicationFound ->
+                HttpResponse.ok(TripPlanApplicationResponse.from(output.tripPlanApplication))
+
+            is com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationOutput.TripPlanApplicationNotFound ->
+                HttpResponse.status(NOT_FOUND)
+        }
+    }
 
     fun from(output: RejectTripApplicationOutput): HttpResponse<ApiResponse> =
         when (output) {
@@ -47,5 +57,7 @@ class TripApplicationPlanResponseFactory {
 
 }
 
-class TripPlanApplicationHasBeenRejectedResponse : ErrorResponse(code = ErrorResponseCode.TRIP_PLAN_APPLICATION_HAS_BEEN_REJECTED)
+class TripPlanApplicationHasBeenRejectedResponse :
+    ErrorResponse(code = ErrorResponseCode.TRIP_PLAN_APPLICATION_HAS_BEEN_REJECTED)
+
 class InsufficientAmountOfSeatsResponse : ErrorResponse(code = ErrorResponseCode.INSUFFICIENT_AMOUNT_OF_SEATS)

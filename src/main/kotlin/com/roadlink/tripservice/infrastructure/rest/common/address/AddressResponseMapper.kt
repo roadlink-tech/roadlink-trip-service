@@ -11,7 +11,7 @@ object AddressResponseMapper {
             street = address.street,
             city = address.city,
             country = address.country,
-            housenumber = address.housenumber,
+            housenumber = address.houseNumber,
         )
 }
 

@@ -8,5 +8,5 @@ data class Address(
     val street: String,
     val city: String,
     val country: String,
-    val housenumber: String,
+    val houseNumber: String,
 )

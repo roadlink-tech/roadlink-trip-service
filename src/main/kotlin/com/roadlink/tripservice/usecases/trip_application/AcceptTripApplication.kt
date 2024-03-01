@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.trip_plan
+package com.roadlink.tripservice.usecases.trip_application
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.UseCase

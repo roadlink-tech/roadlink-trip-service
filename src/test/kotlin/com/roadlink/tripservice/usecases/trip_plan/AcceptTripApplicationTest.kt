@@ -2,6 +2,9 @@ package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplication
+import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationInput
+import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationOutput
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.assertInstanceOf

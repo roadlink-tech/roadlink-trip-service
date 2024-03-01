@@ -2,7 +2,7 @@ package com.roadlink.tripservice.usecases.driver_trip
 
 import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.domain.time.TimeProvider
-import com.roadlink.tripservice.domain.trip.TripPlan
+import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
