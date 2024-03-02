@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.config
+package com.roadlink.tripservice.config.trip_search
 
 import com.roadlink.tripservice.domain.trip_search.BruteForceSearchEngine
 import com.roadlink.tripservice.usecases.trip_search.SearchTrip

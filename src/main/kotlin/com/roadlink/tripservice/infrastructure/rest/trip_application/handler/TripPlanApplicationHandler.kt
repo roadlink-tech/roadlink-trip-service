@@ -5,15 +5,15 @@ import com.roadlink.tripservice.infrastructure.rest.trip_application.response.Tr
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationInput
 import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
-import com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationInput
-import com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationInput
+import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 
 @Controller("/trip-service/trip_plan_application")
 class TripPlanApplicationHandler(
     private val createTripPlanApplication: UseCase<CreateTripPlanApplicationInput, CreateTripPlanApplicationOutput>,
-    private val getTripPlanApplication: UseCase<GetTripPlanApplicationInput, GetTripPlanApplicationOutput>,
+    private val getTripPlanApplication: UseCase<RetrieveTripPlanApplicationInput, RetrieveTripPlanApplicationOutput>,
     private val responseFactory: TripPlanApplicationResponseFactory
 ) {
     @Post
@@ -25,7 +25,7 @@ class TripPlanApplicationHandler(
 
     @Get("/{tripPlanApplicationId}")
     fun get(@PathVariable("tripPlanApplicationId") tripPlanApplicationId: String): HttpResponse<*> {
-        val input = GetTripPlanApplicationInput(tripPlanApplicationId)
+        val input = RetrieveTripPlanApplicationInput(tripPlanApplicationId)
         val output = getTripPlanApplication(input)
         return responseFactory.from(output)
     }

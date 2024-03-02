@@ -5,7 +5,7 @@ import com.roadlink.tripservice.domain.driver_trip.DriverTripApplication
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import java.util.UUID
 
-class GetDriverTripApplications(
+class RetrieveDriverTripApplications(
     private val tripApplicationRepository: TripApplicationRepository,
     private val userRepository: UserRepository,
     private val ratingRepository: RatingRepository,

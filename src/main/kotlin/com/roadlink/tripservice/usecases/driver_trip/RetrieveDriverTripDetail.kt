@@ -14,7 +14,7 @@ import com.roadlink.tripservice.domain.trip.TripStatus.*
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import java.util.UUID
 
-class GetDriverTripDetail(
+class RetrieveDriverTripDetail(
     private val sectionRepository: SectionRepository,
     private val tripPlanApplicationRepository: TripPlanApplicationRepository,
     private val tripApplicationRepository: TripApplicationRepository,

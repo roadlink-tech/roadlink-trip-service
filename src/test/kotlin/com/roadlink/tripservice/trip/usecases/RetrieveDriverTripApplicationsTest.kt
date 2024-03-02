@@ -12,14 +12,14 @@ import com.roadlink.tripservice.trip.domain.AddressFactory
 import com.roadlink.tripservice.trip.domain.SectionFactory
 import com.roadlink.tripservice.trip.domain.TripFactory
 import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
-import com.roadlink.tripservice.usecases.trip_application.GetDriverTripApplications
+import com.roadlink.tripservice.usecases.trip_application.RetrieveDriverTripApplications
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
-class GetDriverTripApplicationsTest {
+class RetrieveDriverTripApplicationsTest {
 
     private lateinit var inMemoryTripApplicationRepository: InMemoryTripApplicationRepository
 
@@ -29,7 +29,7 @@ class GetDriverTripApplicationsTest {
 
     private lateinit var fixedRatingRepository: FixedRatingRepository
 
-    private lateinit var getDriverTripApplications: GetDriverTripApplications
+    private lateinit var retrieveDriverTripApplications: RetrieveDriverTripApplications
 
     @BeforeEach
     fun setUp() {
@@ -40,7 +40,7 @@ class GetDriverTripApplicationsTest {
         fixedUserRepository = FixedUserRepository()
         fixedRatingRepository = FixedRatingRepository()
 
-        getDriverTripApplications = GetDriverTripApplications(
+        retrieveDriverTripApplications = RetrieveDriverTripApplications(
             tripApplicationRepository = inMemoryTripApplicationRepository,
             userRepository = fixedUserRepository,
             ratingRepository = fixedRatingRepository,
@@ -51,8 +51,8 @@ class GetDriverTripApplicationsTest {
     fun `given no trip applications for the trip then should return empty list`() {
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
 
-        val driverTripApplications = getDriverTripApplications(
-            GetDriverTripApplications.Input(
+        val driverTripApplications = retrieveDriverTripApplications(
+            RetrieveDriverTripApplications.Input(
             tripId = tripId,
         ))
 
@@ -74,8 +74,8 @@ class GetDriverTripApplicationsTest {
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripApplications = getDriverTripApplications(
-            GetDriverTripApplications.Input(
+        val driverTripApplications = retrieveDriverTripApplications(
+            RetrieveDriverTripApplications.Input(
                 tripId = tripId,
             ))
 
@@ -104,8 +104,8 @@ class GetDriverTripApplicationsTest {
             tripPlanApplicationConfirmed,
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripApplications = getDriverTripApplications(
-            GetDriverTripApplications.Input(
+        val driverTripApplications = retrieveDriverTripApplications(
+            RetrieveDriverTripApplications.Input(
                 tripId = tripId,
             ))
 

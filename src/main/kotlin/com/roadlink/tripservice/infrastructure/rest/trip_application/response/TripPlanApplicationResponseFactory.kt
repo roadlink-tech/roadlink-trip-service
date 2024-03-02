@@ -22,12 +22,12 @@ class TripPlanApplicationResponseFactory {
                     .body(InsufficientAmountOfSeatsResponse())
         }
 
-    fun from(output: com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationOutput): HttpResponse<ApiResponse> {
+    fun from(output: com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput): HttpResponse<ApiResponse> {
         return when (output) {
-            is com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationOutput.TripPlanApplicationFound ->
+            is com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput.TripPlanApplicationFound ->
                 HttpResponse.ok(TripPlanApplicationResponse.from(output.tripPlanApplication))
 
-            is com.roadlink.tripservice.usecases.trip_application.plan.GetTripPlanApplicationOutput.TripPlanApplicationNotFound ->
+            is com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput.TripPlanApplicationNotFound ->
                 HttpResponse.status(NOT_FOUND)
         }
     }

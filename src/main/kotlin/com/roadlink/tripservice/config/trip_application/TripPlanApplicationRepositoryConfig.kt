@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.config
+package com.roadlink.tripservice.config.trip_application
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripPlanApplicationRepository
@@ -11,7 +11,13 @@ import org.hibernate.Session
 @Factory
 class TripPlanApplicationRepositoryConfig {
     @Singleton
-    fun tripPlanApplicationRepository(entityManager: EntityManager, transactionManager: TransactionOperations<Session>): TripPlanApplicationRepository {
-        return MySQLTripPlanApplicationRepository(entityManager = entityManager, transactionManager = transactionManager)
+    fun tripPlanApplicationRepository(
+        entityManager: EntityManager,
+        transactionManager: TransactionOperations<Session>
+    ): TripPlanApplicationRepository {
+        return MySQLTripPlanApplicationRepository(
+            entityManager = entityManager,
+            transactionManager = transactionManager
+        )
     }
 }

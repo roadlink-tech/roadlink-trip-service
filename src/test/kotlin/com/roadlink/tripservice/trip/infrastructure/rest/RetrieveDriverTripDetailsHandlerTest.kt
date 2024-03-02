@@ -21,7 +21,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @MicronautTest
-class GetDriverTripDetailsHandlerTest : End2EndTest() {
+class RetrieveDriverTripDetailsHandlerTest : End2EndTest() {
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient

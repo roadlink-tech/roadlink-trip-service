@@ -11,7 +11,10 @@ import org.hibernate.Session
 @Factory
 class SectionRepositoryConfig {
     @Singleton
-    fun sectionRepository(entityManager: EntityManager, transactionManager: TransactionOperations<Session>): SectionRepository {
+    fun sectionRepository(
+        entityManager: EntityManager,
+        transactionManager: TransactionOperations<Session>
+    ): SectionRepository {
         return MySQLSectionRepository(entityManager = entityManager, transactionManager = transactionManager)
     }
 }

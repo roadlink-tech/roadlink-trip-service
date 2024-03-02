@@ -6,7 +6,6 @@ import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationInput
 import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationOutput
 import com.roadlink.tripservice.usecases.trip_application.RejectTripApplicationOutput
-import com.roadlink.tripservice.usecases.trip_plan.*
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Header

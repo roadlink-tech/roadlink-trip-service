@@ -10,7 +10,7 @@ import com.roadlink.tripservice.trip.domain.InstantFactory.october15_13hs
 import com.roadlink.tripservice.trip.domain.InstantFactory.october15_15hs
 import com.roadlink.tripservice.trip.domain.InstantFactory.october15_18hs
 import com.roadlink.tripservice.trip.domain.InstantFactory.october15_7hs
-import com.roadlink.tripservice.usecases.driver_trip.GetDriverTripDetail
+import com.roadlink.tripservice.usecases.driver_trip.RetrieveDriverTripDetail
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
 import com.roadlink.tripservice.domain.trip.TripStatus.*
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class GetDriverTripDetailTest {
+class RetrieveDriverTripDetailTest {
 
     private lateinit var inMemorySectionRepository: InMemorySectionRepository
 
@@ -35,7 +35,7 @@ class GetDriverTripDetailTest {
 
     private lateinit var stubTimeProvider: StubTimeProvider
 
-    private lateinit var getDriverTripDetail: GetDriverTripDetail
+    private lateinit var retrieveDriverTripDetail: RetrieveDriverTripDetail
 
     @BeforeEach
     fun setUp() {
@@ -48,7 +48,7 @@ class GetDriverTripDetailTest {
         fixedRatingRepository = FixedRatingRepository()
         stubTimeProvider = StubTimeProvider(fixedNow = october15_13hs())
 
-        getDriverTripDetail = GetDriverTripDetail(
+        retrieveDriverTripDetail = RetrieveDriverTripDetail(
             sectionRepository = inMemorySectionRepository,
             tripPlanApplicationRepository = inMemoryTripPlanApplicationRepository,
             tripApplicationRepository = inMemoryTripApplicationRepository,
@@ -66,8 +66,8 @@ class GetDriverTripDetailTest {
         )
         inMemorySectionRepository.save(section)
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -83,8 +83,8 @@ class GetDriverTripDetailTest {
         )
         inMemorySectionRepository.save(section)
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -102,8 +102,8 @@ class GetDriverTripDetailTest {
         inMemorySectionRepository.save(section)
 
         // when
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -119,8 +119,8 @@ class GetDriverTripDetailTest {
             .build()
         inMemorySectionRepository.save(section)
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -135,8 +135,8 @@ class GetDriverTripDetailTest {
             .build()
         inMemorySectionRepository.save(section)
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -151,8 +151,8 @@ class GetDriverTripDetailTest {
             .build()
         inMemorySectionRepository.save(section)
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId
             )
         )
@@ -165,8 +165,8 @@ class GetDriverTripDetailTest {
         val section = SectionFactory.avCabildo()
         inMemorySectionRepository.save(section)
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -205,8 +205,8 @@ class GetDriverTripDetailTest {
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -243,8 +243,8 @@ class GetDriverTripDetailTest {
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -275,8 +275,8 @@ class GetDriverTripDetailTest {
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -307,8 +307,8 @@ class GetDriverTripDetailTest {
         val section = SectionFactory.avCabildo()
         inMemorySectionRepository.save(section)
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )
@@ -335,8 +335,8 @@ class GetDriverTripDetailTest {
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripDetail = getDriverTripDetail(
-            GetDriverTripDetail.Input(
+        val driverTripDetail = retrieveDriverTripDetail(
+            RetrieveDriverTripDetail.Input(
                 tripId = section.tripId,
             )
         )

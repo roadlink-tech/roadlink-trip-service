@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.config
+package com.roadlink.tripservice.config.trip_application
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
@@ -16,7 +16,7 @@ import org.hibernate.Session
 import java.util.*
 
 @Factory
-class TripApplicationDefinition {
+class TripApplicationConfig {
 
     @Singleton
     fun tripApplicationRepository(
@@ -51,8 +51,8 @@ class TripApplicationDefinition {
     @Singleton
     fun getTripPlanApplication(
         tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<GetTripPlanApplicationInput, GetTripPlanApplicationOutput> {
-        return GetTripPlanApplication(tripPlanApplicationRepository)
+    ): UseCase<RetrieveTripPlanApplicationInput, RetrieveTripPlanApplicationOutput> {
+        return RetrieveTripPlanApplication(tripPlanApplicationRepository)
     }
 
     @Singleton

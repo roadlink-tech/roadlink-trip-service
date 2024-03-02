@@ -1,9 +1,9 @@
-package com.roadlink.tripservice.config
+package com.roadlink.tripservice.config.trip_application
 
 import com.roadlink.tripservice.domain.RatingRepository
 import com.roadlink.tripservice.domain.UserRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
-import com.roadlink.tripservice.usecases.trip_application.GetDriverTripApplications
+import com.roadlink.tripservice.usecases.trip_application.RetrieveDriverTripApplications
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
@@ -14,8 +14,8 @@ class GetDriverTripApplicationsConfig {
         tripApplicationRepository: TripApplicationRepository,
         userRepository: UserRepository,
         ratingRepository: RatingRepository,
-    ): GetDriverTripApplications {
-        return GetDriverTripApplications(
+    ): RetrieveDriverTripApplications {
+        return RetrieveDriverTripApplications(
             tripApplicationRepository = tripApplicationRepository,
             userRepository = userRepository,
             ratingRepository = ratingRepository,

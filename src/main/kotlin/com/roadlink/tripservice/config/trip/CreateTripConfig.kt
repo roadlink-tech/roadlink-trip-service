@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.config
+package com.roadlink.tripservice.config.trip
 
 import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.time.DefaultTimeProvider
