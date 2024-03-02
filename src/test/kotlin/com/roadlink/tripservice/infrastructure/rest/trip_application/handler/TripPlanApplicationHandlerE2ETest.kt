@@ -3,9 +3,9 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application.handler
 import com.fasterxml.jackson.databind.JsonNode
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.usecases.trip.domain.SectionFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
+import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient

@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.trip
+package com.roadlink.tripservice.config
 
 import com.roadlink.tripservice.domain.trip.events.CommandBus
 import com.roadlink.tripservice.domain.trip.events.command_responses.CommandResponse

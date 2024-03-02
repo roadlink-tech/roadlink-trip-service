@@ -2,8 +2,8 @@ package com.roadlink.tripservice.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.TripRepository
-import com.roadlink.tripservice.usecases.trip.domain.InstantFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
+import com.roadlink.tripservice.usecases.factory.InstantFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*

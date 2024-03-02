@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.infrastructure.factories
 
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.infrastructure.rest.responses.TripExpectedResponse
 
 object TripResponseFactory {

@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.trip.domain
+package com.roadlink.tripservice.usecases.factory
 
 import com.roadlink.tripservice.domain.Location
 

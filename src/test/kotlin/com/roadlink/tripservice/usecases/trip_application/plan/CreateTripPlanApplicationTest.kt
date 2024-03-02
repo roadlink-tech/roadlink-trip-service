@@ -1,11 +1,8 @@
-package com.roadlink.tripservice.usecases.trip_plan
+package com.roadlink.tripservice.usecases.trip_application.plan
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.usecases.trip.domain.SectionFactory
-import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplication
-import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationInput
-import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.factory.SectionFactory
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.*

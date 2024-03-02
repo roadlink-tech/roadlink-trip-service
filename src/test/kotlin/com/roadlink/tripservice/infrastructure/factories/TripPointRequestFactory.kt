@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.infrastructure.factories
 
-import com.roadlink.tripservice.usecases.trip.domain.InstantFactory
+import com.roadlink.tripservice.usecases.factory.InstantFactory
 import com.roadlink.tripservice.infrastructure.requests.TripPointExpectedRequest
 import java.time.Instant
 

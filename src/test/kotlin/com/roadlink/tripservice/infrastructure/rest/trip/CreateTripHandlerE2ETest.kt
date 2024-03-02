@@ -6,9 +6,9 @@ import com.roadlink.tripservice.domain.time.TimeRange
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
-import com.roadlink.tripservice.usecases.trip.SpyCommandBus
-import com.roadlink.tripservice.usecases.trip.StubIdGenerator
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
+import com.roadlink.tripservice.config.SpyCommandBus
+import com.roadlink.tripservice.config.StubIdGenerator
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.infrastructure.factories.AlreadyExistsTripByDriverInTimeRangeResponseFactory
 import com.roadlink.tripservice.infrastructure.factories.CreateTripRequestFactory
 import com.roadlink.tripservice.infrastructure.factories.InvalidTripTimeRangeResponseFactory

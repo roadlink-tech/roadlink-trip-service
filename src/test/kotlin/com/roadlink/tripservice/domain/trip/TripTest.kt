@@ -2,7 +2,7 @@ package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

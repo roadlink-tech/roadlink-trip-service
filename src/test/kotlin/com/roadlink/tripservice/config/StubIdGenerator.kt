@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.trip
+package com.roadlink.tripservice.config
 
 import com.roadlink.tripservice.domain.IdGenerator
 

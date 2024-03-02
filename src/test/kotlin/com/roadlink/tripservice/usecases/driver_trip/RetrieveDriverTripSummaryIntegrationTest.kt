@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.trip_summary
+package com.roadlink.tripservice.usecases.driver_trip
 
 import com.roadlink.tripservice.domain.IdGenerator
 import com.roadlink.tripservice.domain.trip.Trip
@@ -12,10 +12,8 @@ import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionReposi
 import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripPlanApplicationFactory
-import com.roadlink.tripservice.usecases.driver_trip.RetrieveDriverTripSummary
-import com.roadlink.tripservice.usecases.driver_trip.RetrieveDriverTripSummaryOutput
+import com.roadlink.tripservice.usecases.trip.TripFactory
+import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

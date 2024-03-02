@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.infrastructure.factories
 
 import com.roadlink.tripservice.infrastructure.rest.responses.*
-import com.roadlink.tripservice.usecases.trip.domain.SectionFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
+import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
 
 object DriverTripDetailResponseFactory {
     fun avCabildoWithASingleTripApplicationConfirmed(tripId: String = TripFactory.avCabildo_id ): DriverTripDetailExpectedResponse =

@@ -1,12 +1,10 @@
-package com.roadlink.tripservice.usecases.trip.usecases
+package com.roadlink.tripservice.usecases.trip_search
 
 import com.roadlink.tripservice.domain.trip_search.BruteForceSearchEngine
 import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
-import com.roadlink.tripservice.usecases.trip.domain.InstantFactory
-import com.roadlink.tripservice.usecases.trip.domain.LocationFactory
-import com.roadlink.tripservice.usecases.trip.domain.SectionFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripPlanFactory
-import com.roadlink.tripservice.usecases.trip_search.SearchTrip
+import com.roadlink.tripservice.usecases.factory.InstantFactory
+import com.roadlink.tripservice.usecases.factory.LocationFactory
+import com.roadlink.tripservice.usecases.factory.SectionFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

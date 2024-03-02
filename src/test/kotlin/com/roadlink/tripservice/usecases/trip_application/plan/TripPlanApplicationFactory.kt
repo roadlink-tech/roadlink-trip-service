@@ -1,10 +1,11 @@
-package com.roadlink.tripservice.usecases.trip.domain
+package com.roadlink.tripservice.usecases.trip_application.plan
 
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
+import com.roadlink.tripservice.usecases.factory.SectionFactory
 import java.util.*
 
 object TripPlanApplicationFactory {

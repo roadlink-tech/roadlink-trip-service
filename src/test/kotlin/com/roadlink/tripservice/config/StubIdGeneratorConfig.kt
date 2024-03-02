@@ -1,6 +1,5 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.usecases.trip.StubIdGenerator
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 

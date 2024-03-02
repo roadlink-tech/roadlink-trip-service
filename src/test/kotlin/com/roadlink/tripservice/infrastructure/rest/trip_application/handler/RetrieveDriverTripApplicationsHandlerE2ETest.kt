@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.usecases.trip.domain.SectionFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
+import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripApplicationResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripApplicationExpectedResponse
@@ -24,7 +24,7 @@ import java.util.*
 import kotlin.collections.List
 
 @MicronautTest
-class RetrieveDriverTripApplicationsHandlerTest : End2EndTest() {
+class RetrieveDriverTripApplicationsHandlerE2ETest : End2EndTest() {
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient

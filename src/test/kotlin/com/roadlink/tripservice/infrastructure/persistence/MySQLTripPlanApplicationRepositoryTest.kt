@@ -3,9 +3,9 @@ package com.roadlink.tripservice.infrastructure.persistence
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.usecases.trip.domain.SectionFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripApplicationFactory
-import com.roadlink.tripservice.usecases.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip_application.TripApplicationFactory
+import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*
