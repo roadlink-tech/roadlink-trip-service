@@ -1,7 +1,6 @@
 package com.roadlink.tripservice.domain.driver_trip
 
-import com.roadlink.tripservice.domain.PassengerResult
-import com.roadlink.tripservice.domain.trip.Address
+import com.roadlink.tripservice.domain.common.address.Address
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import java.util.UUID
 

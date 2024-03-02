@@ -1,11 +1,14 @@
 package com.roadlink.tripservice.domain.trip_application
 
-import com.roadlink.tripservice.domain.DomainError
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.DomainError
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.domain.trip.section.Section
 import java.util.*
 
+/**
+ * A trip plan cam contain more than one trip application, because you can take a trip with more than one driver.
+ * */
 data class TripPlanApplication(
     val id: UUID = UUID.randomUUID(),
     val tripApplications: MutableList<TripApplication> = mutableListOf()
@@ -26,7 +29,7 @@ data class TripPlanApplication(
         }
 
         fun driverId(): UUID {
-            return UUID.fromString(this.sections.first().driver)
+            return UUID.fromString(this.sections.first().driverId)
         }
 
         fun tripId(): UUID {
@@ -65,12 +68,12 @@ data class TripPlanApplication(
         }
     }
 
-    fun confirmApplicationById(applicationId: UUID, callerId: UUID) {
-        val application = this.tripApplications.find { it.id == applicationId }
-            ?: throw TripApplicationError.NotFound(applicationId)
+    fun confirmApplicationById(tripApplicationId: UUID, callerId: UUID) {
+        val application = this.tripApplications.find { it.id == tripApplicationId }
+            ?: throw TripApplicationError.NotFound(tripApplicationId)
 
         if (isAnyDriverTryingToJoinAsPassenger(callerId)) {
-            throw TripApplicationError.DriverTryingToJoinAsPassenger(applicationId, callerId)
+            throw TripApplicationError.DriverTryingToJoinAsPassenger(tripApplicationId, callerId)
         }
 
         application.sections.forEach { section ->

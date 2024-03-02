@@ -1,12 +1,12 @@
 package com.roadlink.tripservice.usecases.trip
 
-import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
-import com.roadlink.tripservice.domain.IdGenerator
-import com.roadlink.tripservice.domain.time.TimeProvider
-import com.roadlink.tripservice.domain.time.TimeRange
-import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRange
+import com.roadlink.tripservice.domain.trip.exception.AlreadyExistsTripByDriverInTimeRange
+import com.roadlink.tripservice.domain.common.IdGenerator
+import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
+import com.roadlink.tripservice.domain.common.utils.time.TimeRange
+import com.roadlink.tripservice.domain.common.utils.time.exception.InvalidTripTimeRange
 import com.roadlink.tripservice.domain.trip.Trip
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.events.CommandBus
 import com.roadlink.tripservice.domain.trip.events.command_responses.TripCreatedCommandResponse

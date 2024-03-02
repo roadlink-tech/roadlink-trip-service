@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.infrastructure.rest.error.handlers
 
-import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
+import com.roadlink.tripservice.domain.trip.exception.AlreadyExistsTripByDriverInTimeRange
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponse
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponseCode
 import io.micronaut.context.annotation.Requires

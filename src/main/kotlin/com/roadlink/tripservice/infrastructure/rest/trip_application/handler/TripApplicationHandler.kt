@@ -1,9 +1,11 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_application.handler
 
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
-import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationPlanResponseFactory
+import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripPlanApplicationResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_plan.*
+import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationInput
+import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.RejectTripApplicationOutput
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Header
@@ -16,7 +18,7 @@ import java.util.*
 class TripApplicationHandler(
     private val rejectTripApplication: UseCase<UUID, RejectTripApplicationOutput>,
     private val acceptTripApplication: UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput>,
-    private val responseFactory: TripApplicationPlanResponseFactory,
+    private val responseFactory: TripPlanApplicationResponseFactory,
 ) {
     @Put("/{id}/non-acceptance")
     fun nonAcceptance(@PathVariable id: String): HttpResponse<ApiResponse> {
@@ -31,7 +33,7 @@ class TripApplicationHandler(
     ): HttpResponse<ApiResponse> {
         val output = acceptTripApplication(
             AcceptTripApplicationInput(
-                tripApplication = UUID.fromString(id),
+                tripApplicationId = UUID.fromString(id),
                 callerId = UUID.fromString(callerId)
             )
         )

@@ -6,8 +6,8 @@ import com.roadlink.tripservice.dev_tools.infrastructure.network.Get
 import com.roadlink.tripservice.dev_tools.infrastructure.network.QueryParameter
 import com.roadlink.tripservice.dev_tools.infrastructure.network.ReadRequest
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Response
-import com.roadlink.tripservice.domain.Location
-import com.roadlink.tripservice.domain.trip.Address
+import com.roadlink.tripservice.domain.common.Location
+import com.roadlink.tripservice.domain.common.address.Address
 
 class HttpGeoapify(
     private val get: Get,
@@ -48,7 +48,7 @@ class HttpGeoapify(
                 street = properties.get("street").asText(),
                 city = properties.get("city").asText(),
                 country = properties.get("country").asText(),
-                housenumber = properties.get("housenumber").asText(),
+                houseNumber = properties.get("housenumber").asText(),
             )
         }.firstOrNull()
 }

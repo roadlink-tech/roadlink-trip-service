@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_application.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlanApplicationInput
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationInput
 
 data class CreateTripPlanApplicationRequest(
     @JsonProperty("passenger_id")

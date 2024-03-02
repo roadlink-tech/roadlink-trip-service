@@ -1,7 +1,6 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_search.mapper
 
-import com.roadlink.tripservice.domain.trip.TripPlan
-import com.roadlink.tripservice.infrastructure.rest.trip_plan.mapper.TripPlanResponseMapper
+import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
 
 object SearchTripResponseMapper {

@@ -1,7 +1,8 @@
 package com.roadlink.tripservice.domain.trip
 
-import com.roadlink.tripservice.domain.IdGenerator
-import com.roadlink.tripservice.domain.time.TimeRange
+import com.roadlink.tripservice.domain.common.IdGenerator
+import com.roadlink.tripservice.domain.common.TripPoint
+import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.section.Section
 import java.util.*
 
@@ -36,8 +37,9 @@ data class Trip(
                 departure = allTripPoints[i],
                 arrival = allTripPoints[i + 1],
                 distanceInMeters = 0.0,
-                driver = driverId,
-                vehicle = vehicle,
+                driverId = driverId,
+                vehicleId = vehicle,
+
                 initialAmountOfSeats = availableSeats,
                 bookedSeats = 0
             )

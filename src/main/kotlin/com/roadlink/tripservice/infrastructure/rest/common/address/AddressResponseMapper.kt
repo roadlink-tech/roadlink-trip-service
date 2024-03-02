@@ -1,7 +1,8 @@
 package com.roadlink.tripservice.infrastructure.rest.common.address
 
-import com.roadlink.tripservice.domain.Location
-import com.roadlink.tripservice.domain.trip.Address
+import com.roadlink.tripservice.domain.common.Location
+import com.roadlink.tripservice.domain.common.address.Address
+
 
 object AddressResponseMapper {
     fun map(address: Address) =
@@ -11,7 +12,7 @@ object AddressResponseMapper {
             street = address.street,
             city = address.city,
             country = address.country,
-            housenumber = address.housenumber,
+            housenumber = address.houseNumber,
         )
 }
 
