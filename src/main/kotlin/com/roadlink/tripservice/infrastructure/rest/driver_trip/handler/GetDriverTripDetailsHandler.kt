@@ -17,7 +17,6 @@ class GetDriverTripDetailsHandler(
     @Get("/driver-trip-detail")
     fun handle(@QueryValue tripId: String): HttpResponse<DriverTripDetailResponse> {
         val driverTripDetail = retrieveDriverTripDetail(RetrieveDriverTripDetail.Input(tripId = UUID.fromString(tripId)))
-
         return HttpResponse.ok(DriverTripDetailResponseMapper.map(driverTripDetail))
     }
 }

@@ -26,6 +26,7 @@ import java.util.*
 
 @MicronautTest
 internal class SearchTripRestHandlerE2ETest : End2EndTest() {
+
     @Inject
     @field:Client("/")
     lateinit var client: HttpClient

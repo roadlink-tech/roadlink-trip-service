@@ -57,7 +57,9 @@ class TripPlanApplicationResponseFactory {
 
 }
 
+
 class TripPlanApplicationHasBeenRejectedResponse :
     ErrorResponse(code = ErrorResponseCode.TRIP_PLAN_APPLICATION_HAS_BEEN_REJECTED)
+
 
 class InsufficientAmountOfSeatsResponse : ErrorResponse(code = ErrorResponseCode.INSUFFICIENT_AMOUNT_OF_SEATS)

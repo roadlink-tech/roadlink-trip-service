@@ -5,6 +5,7 @@ import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
 import com.roadlink.tripservice.domain.driver_trip.PassengerResult
 
+
 object PassengerResultResponseMapper {
     fun map(passengerResult: PassengerResult): PassengerResultResponse =
         when (passengerResult) {

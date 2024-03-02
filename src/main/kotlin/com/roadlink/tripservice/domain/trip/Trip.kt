@@ -39,6 +39,7 @@ data class Trip(
                 distanceInMeters = 0.0,
                 driverId = driverId,
                 vehicleId = vehicle,
+
                 initialAmountOfSeats = availableSeats,
                 bookedSeats = 0
             )

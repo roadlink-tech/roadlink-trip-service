@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.infrastructure.rest
+package com.roadlink.tripservice.infrastructure
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient

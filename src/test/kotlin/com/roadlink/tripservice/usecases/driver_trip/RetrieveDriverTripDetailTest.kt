@@ -15,6 +15,7 @@ import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
 import com.roadlink.tripservice.domain.trip.TripStatus.*
 import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
+
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory

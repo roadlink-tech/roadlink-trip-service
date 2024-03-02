@@ -3,6 +3,7 @@ package com.roadlink.tripservice.infrastructure.rest.common.address
 import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.common.address.Address
 
+
 object AddressResponseMapper {
     fun map(address: Address) =
         AddressResponse(

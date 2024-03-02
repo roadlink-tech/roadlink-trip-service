@@ -7,6 +7,7 @@ import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApp
 import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
 import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationInput
 import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput
+
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 
@@ -15,6 +16,7 @@ class TripPlanApplicationHandler(
     private val createTripPlanApplication: UseCase<CreateTripPlanApplicationInput, CreateTripPlanApplicationOutput>,
     private val getTripPlanApplication: UseCase<RetrieveTripPlanApplicationInput, RetrieveTripPlanApplicationOutput>,
     private val responseFactory: TripPlanApplicationResponseFactory
+
 ) {
     @Post
     fun create(@Body request: CreateTripPlanApplicationRequest): HttpResponse<*> {
@@ -22,11 +24,11 @@ class TripPlanApplicationHandler(
         val output = createTripPlanApplication(input)
         return responseFactory.from(output)
     }
-
     @Get("/{tripPlanApplicationId}")
     fun get(@PathVariable("tripPlanApplicationId") tripPlanApplicationId: String): HttpResponse<*> {
         val input = RetrieveTripPlanApplicationInput(tripPlanApplicationId)
         val output = getTripPlanApplication(input)
         return responseFactory.from(output)
     }
+
 }

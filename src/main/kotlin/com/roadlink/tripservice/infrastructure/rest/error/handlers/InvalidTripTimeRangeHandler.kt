@@ -1,6 +1,7 @@
 package com.roadlink.tripservice.infrastructure.rest.error.handlers
 
 import com.roadlink.tripservice.domain.common.utils.time.exception.InvalidTripTimeRange
+
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponse
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponseCode
 import io.micronaut.context.annotation.Requires
