@@ -1,7 +1,6 @@
 package com.roadlink.tripservice.domain.driver_trip
 
-import com.roadlink.tripservice.domain.PassengerResult
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.TripPoint
 
 data class DriverSectionDetail(
     val sectionId: String,

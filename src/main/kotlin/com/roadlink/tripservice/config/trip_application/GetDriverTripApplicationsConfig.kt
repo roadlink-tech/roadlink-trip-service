@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.config.trip_application
 
 import com.roadlink.tripservice.domain.RatingRepository
-import com.roadlink.tripservice.domain.UserRepository
+import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.usecases.trip_application.RetrieveDriverTripApplications
 import io.micronaut.context.annotation.Factory

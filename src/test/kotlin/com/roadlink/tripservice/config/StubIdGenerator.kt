@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.domain.IdGenerator
+import com.roadlink.tripservice.domain.common.IdGenerator
 
 class StubIdGenerator(
     private val idsToGenerate: MutableList<String> = mutableListOf(),

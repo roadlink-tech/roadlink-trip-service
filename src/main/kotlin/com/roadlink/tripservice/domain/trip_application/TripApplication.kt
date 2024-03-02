@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.domain.trip_application
 
-import com.roadlink.tripservice.domain.DomainError
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.DomainError
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.domain.trip.section.Section
 import java.util.*

@@ -1,9 +1,9 @@
 package com.roadlink.tripservice.usecases.trip_search
 
 import com.roadlink.tripservice.domain.trip_search.BruteForceSearchEngine
-import com.roadlink.tripservice.infrastructure.persistence.InMemorySectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
 import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.usecases.factory.LocationFactory
+import com.roadlink.tripservice.usecases.common.LocationFactory
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

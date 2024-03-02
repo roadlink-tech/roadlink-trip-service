@@ -1,14 +1,14 @@
 package com.roadlink.tripservice.usecases.trip_application
 
 import com.roadlink.tripservice.domain.driver_trip.DriverTripApplication
-import com.roadlink.tripservice.domain.Passenger
+import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.Rated
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
-import com.roadlink.tripservice.infrastructure.persistence.FixedUserRepository
+import com.roadlink.tripservice.infrastructure.persistence.user.FixedUserRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripPlanApplicationRepository
-import com.roadlink.tripservice.usecases.factory.AddressFactory
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanApplicationRepository
+import com.roadlink.tripservice.usecases.common.address.AddressFactory
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory

@@ -2,7 +2,10 @@ package com.roadlink.tripservice.usecases.trip_application
 
 import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.domain.driver_trip.DriverTripApplication
+import com.roadlink.tripservice.domain.driver_trip.Passenger
+import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
+import com.roadlink.tripservice.domain.user.UserRepository
 import java.util.UUID
 
 class RetrieveDriverTripApplications(

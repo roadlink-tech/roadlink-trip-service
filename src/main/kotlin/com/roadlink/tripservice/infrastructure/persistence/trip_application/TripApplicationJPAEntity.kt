@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.infrastructure.persistence.trip_application
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
-import com.roadlink.tripservice.infrastructure.persistence.SectionJPAEntity
+import com.roadlink.tripservice.infrastructure.persistence.section.SectionJPAEntity
 import jakarta.persistence.*
 import jakarta.persistence.CascadeType.*
 import org.hibernate.annotations.JdbcTypeCode

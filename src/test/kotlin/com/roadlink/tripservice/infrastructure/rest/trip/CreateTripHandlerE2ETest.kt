@@ -2,7 +2,7 @@ package com.roadlink.tripservice.infrastructure.rest.trip
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.roadlink.tripservice.domain.time.TimeRange
+import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
@@ -142,7 +142,8 @@ class CreateTripHandlerE2ETest : End2EndTest() {
     private fun thenTripExists(trip: Trip) {
         assertTrue { tripRepository.existsByDriverAndInTimeRange(
             driver = trip.driverId,
-            timeRange = TimeRange(trip.departure.estimatedArrivalTime, trip.arrival.estimatedArrivalTime))
+            timeRange = TimeRange(trip.departure.estimatedArrivalTime, trip.arrival.estimatedArrivalTime)
+        )
         }
     }
 

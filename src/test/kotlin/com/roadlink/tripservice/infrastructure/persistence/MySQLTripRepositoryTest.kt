@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.infrastructure.persistence
 
-import com.roadlink.tripservice.domain.time.TimeRange
+import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.usecases.factory.InstantFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory

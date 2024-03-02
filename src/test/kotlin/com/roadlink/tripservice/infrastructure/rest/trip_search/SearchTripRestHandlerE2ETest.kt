@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.usecases.factory.LocationFactory
+import com.roadlink.tripservice.usecases.common.LocationFactory
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest

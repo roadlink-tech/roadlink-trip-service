@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.config.trip_application
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripPlanApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.MySQLTripPlanApplicationRepository
 import io.micronaut.context.annotation.Factory
 import io.micronaut.transaction.TransactionOperations
 import jakarta.inject.Singleton

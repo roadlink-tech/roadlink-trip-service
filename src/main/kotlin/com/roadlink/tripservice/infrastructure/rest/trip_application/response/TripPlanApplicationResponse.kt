@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_application.response
 
-import com.roadlink.tripservice.domain.trip.Address
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.address.Address
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse

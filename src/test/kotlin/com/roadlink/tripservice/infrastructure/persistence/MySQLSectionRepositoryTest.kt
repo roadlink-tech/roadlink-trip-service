@@ -4,7 +4,7 @@ import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.usecases.factory.LocationFactory
+import com.roadlink.tripservice.usecases.common.LocationFactory
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject

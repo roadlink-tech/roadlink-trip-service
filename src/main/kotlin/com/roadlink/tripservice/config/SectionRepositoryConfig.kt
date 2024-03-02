@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.config
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.MySQLSectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.section.MySQLSectionRepository
 import io.micronaut.context.annotation.Factory
 import io.micronaut.transaction.TransactionOperations
 import jakarta.inject.Singleton

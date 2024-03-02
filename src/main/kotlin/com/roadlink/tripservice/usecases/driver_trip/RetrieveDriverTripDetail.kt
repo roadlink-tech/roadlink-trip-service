@@ -1,17 +1,16 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
 import com.roadlink.tripservice.domain.*
-import com.roadlink.tripservice.domain.time.TimeProvider
+import com.roadlink.tripservice.domain.driver_trip.*
+import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
-import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
-import com.roadlink.tripservice.domain.driver_trip.DriverTripDetail
-import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus
 import com.roadlink.tripservice.domain.trip.TripStatus
 import com.roadlink.tripservice.domain.trip.TripStatus.*
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
+import com.roadlink.tripservice.domain.user.UserRepository
 import java.util.UUID
 
 class RetrieveDriverTripDetail(

@@ -1,9 +1,9 @@
 package com.roadlink.tripservice.infrastructure.rest.trip.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.roadlink.tripservice.domain.Location
-import com.roadlink.tripservice.domain.trip.Address
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.Location
+import com.roadlink.tripservice.domain.common.address.Address
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.usecases.trip.CreateTrip
 import java.time.Instant
 

@@ -1,7 +1,8 @@
 package com.roadlink.tripservice.usecases.factory
 
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.usecases.common.TripPointFactory
 import java.util.*
 
 object SectionFactory {

@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.usecases.trip_search
 
-import com.roadlink.tripservice.domain.Location
+import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip_search.SearchEngine
 import com.roadlink.tripservice.domain.trip_search.TripPlan
 import java.time.Instant

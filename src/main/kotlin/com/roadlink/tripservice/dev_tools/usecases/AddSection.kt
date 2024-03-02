@@ -2,8 +2,8 @@ package com.roadlink.tripservice.dev_tools.usecases
 
 import com.roadlink.tripservice.dev_tools.domain.Geoapify
 import com.roadlink.tripservice.dev_tools.domain.AddressNotExists
-import com.roadlink.tripservice.domain.IdGenerator
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.IdGenerator
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import java.time.Instant

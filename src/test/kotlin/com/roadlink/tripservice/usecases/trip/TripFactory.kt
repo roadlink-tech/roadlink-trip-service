@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.usecases.trip
 
 import com.roadlink.tripservice.domain.trip.Trip
-import com.roadlink.tripservice.usecases.factory.TripPointFactory
+import com.roadlink.tripservice.usecases.common.TripPointFactory
 
 object TripFactory {
 

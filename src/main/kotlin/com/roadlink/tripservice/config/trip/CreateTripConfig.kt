@@ -1,8 +1,7 @@
 package com.roadlink.tripservice.config.trip
 
-import com.roadlink.tripservice.domain.IdGenerator
-import com.roadlink.tripservice.domain.time.DefaultTimeProvider
-import com.roadlink.tripservice.domain.time.TimeProvider
+import com.roadlink.tripservice.domain.common.IdGenerator
+import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.events.CommandBus
 import com.roadlink.tripservice.usecases.trip.CreateTrip

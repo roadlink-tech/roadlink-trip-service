@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.domain.trip
 
-import com.roadlink.tripservice.domain.time.TimeRange
+import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import java.util.*
 
 interface TripRepository {

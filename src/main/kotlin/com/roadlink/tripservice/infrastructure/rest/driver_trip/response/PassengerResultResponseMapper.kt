@@ -1,6 +1,9 @@
 package com.roadlink.tripservice.infrastructure.rest.driver_trip.response
 
 import com.roadlink.tripservice.domain.*
+import com.roadlink.tripservice.domain.driver_trip.Passenger
+import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
+import com.roadlink.tripservice.domain.driver_trip.PassengerResult
 
 object PassengerResultResponseMapper {
     fun map(passengerResult: PassengerResult): PassengerResultResponse =

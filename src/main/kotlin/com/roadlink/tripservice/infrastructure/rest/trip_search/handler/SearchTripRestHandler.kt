@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_search.handler
 
-import com.roadlink.tripservice.domain.Location
+import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
 import com.roadlink.tripservice.infrastructure.rest.trip_search.mapper.SearchTripResponseMapper
 import com.roadlink.tripservice.usecases.trip_search.SearchTrip

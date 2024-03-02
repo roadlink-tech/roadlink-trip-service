@@ -1,14 +1,14 @@
 package com.roadlink.tripservice.usecases.trip
 
-import com.roadlink.tripservice.domain.AlreadyExistsTripByDriverInTimeRange
-import com.roadlink.tripservice.domain.time.exception.InvalidTripTimeRange
-import com.roadlink.tripservice.infrastructure.persistence.InMemoryTripRepository
+import com.roadlink.tripservice.domain.trip.exception.AlreadyExistsTripByDriverInTimeRange
+import com.roadlink.tripservice.domain.common.utils.time.exception.InvalidTripTimeRange
+import com.roadlink.tripservice.infrastructure.persistence.trip.InMemoryTripRepository
 import com.roadlink.tripservice.config.SpyCommandBus
 import com.roadlink.tripservice.config.StubCreateTripHandler
 import com.roadlink.tripservice.config.StubIdGenerator
 import com.roadlink.tripservice.config.StubTimeProvider
+import com.roadlink.tripservice.usecases.common.TripPointFactory
 import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.usecases.factory.TripPointFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

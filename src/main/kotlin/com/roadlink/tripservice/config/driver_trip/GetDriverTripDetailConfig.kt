@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.config.driver_trip
 
 import com.roadlink.tripservice.domain.RatingRepository
-import com.roadlink.tripservice.domain.UserRepository
-import com.roadlink.tripservice.domain.time.TimeProvider
+import com.roadlink.tripservice.domain.user.UserRepository
+import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository

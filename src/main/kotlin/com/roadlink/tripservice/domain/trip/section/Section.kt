@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.domain.trip.section
 
-import com.roadlink.tripservice.domain.DomainError
-import com.roadlink.tripservice.domain.Location
-import com.roadlink.tripservice.domain.trip.TripPoint
+import com.roadlink.tripservice.domain.common.DomainError
+import com.roadlink.tripservice.domain.common.Location
+import com.roadlink.tripservice.domain.common.TripPoint
 import java.time.Instant
 import java.util.UUID
 

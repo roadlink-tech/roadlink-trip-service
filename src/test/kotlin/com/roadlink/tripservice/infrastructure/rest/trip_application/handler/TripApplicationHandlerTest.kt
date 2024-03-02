@@ -8,7 +8,6 @@ import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplication
 import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationOutput
 import com.roadlink.tripservice.usecases.trip_application.RejectTripApplication
 import com.roadlink.tripservice.usecases.trip_application.RejectTripApplicationOutput
-import com.roadlink.tripservice.usecases.trip_plan.*
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.http.HttpRequest

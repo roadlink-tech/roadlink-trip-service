@@ -1,7 +1,8 @@
 package com.roadlink.tripservice.domain.trip
 
-import com.roadlink.tripservice.domain.IdGenerator
-import com.roadlink.tripservice.domain.time.TimeRange
+import com.roadlink.tripservice.domain.common.IdGenerator
+import com.roadlink.tripservice.domain.common.TripPoint
+import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.section.Section
 import java.util.*
 

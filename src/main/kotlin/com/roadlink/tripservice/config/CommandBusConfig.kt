@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.domain.IdGenerator
+import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.trip.events.CommandBus
 import com.roadlink.tripservice.domain.trip.events.SimpleCommandBus
 import com.roadlink.tripservice.domain.trip.events.handlers.CreateTripHandler
