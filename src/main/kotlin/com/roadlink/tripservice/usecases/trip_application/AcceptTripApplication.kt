@@ -9,14 +9,14 @@ class AcceptTripApplication(
 ) : UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput> {
 
     override operator fun invoke(input: AcceptTripApplicationInput): AcceptTripApplicationOutput {
-        val tripPlanApplication = tripPlanApplicationRepository.findByTripApplicationId(input.tripApplication)
+        val tripPlanApplication = tripPlanApplicationRepository.findByTripApplicationId(input.tripApplicationId)
             ?: return AcceptTripApplicationOutput.TripPlanApplicationNotExists
 
         if (tripPlanApplication.isRejected()) {
             return AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected
         }
 
-        tripPlanApplication.confirmApplicationById(input.tripApplication, input.callerId)
+        tripPlanApplication.confirmApplicationById(input.tripApplicationId, input.callerId)
         return AcceptTripApplicationOutput.TripApplicationAccepted.also {
             tripPlanApplicationRepository.update(tripPlanApplication)
         }
@@ -24,7 +24,7 @@ class AcceptTripApplication(
 }
 
 data class AcceptTripApplicationInput(
-    val tripApplication: UUID,
+    val tripApplicationId: UUID,
     val callerId: UUID
 )
 

@@ -33,7 +33,7 @@ class TripApplicationHandler(
     ): HttpResponse<ApiResponse> {
         val output = acceptTripApplication(
             AcceptTripApplicationInput(
-                tripApplication = UUID.fromString(id),
+                tripApplicationId = UUID.fromString(id),
                 callerId = UUID.fromString(callerId)
             )
         )

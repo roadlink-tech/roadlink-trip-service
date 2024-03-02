@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.usecases.trip_plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip.domain.TripPlanApplicationFactory
 import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplication
 import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationInput
 import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationOutput
@@ -50,15 +50,15 @@ class AcceptTripApplicationTest {
     @Test
     fun `when accept a trip plan application, then an expected response must be retrieved and it must be saved`() {
         // GIVEN
-        val tripPlanApplicationId = UUID.randomUUID()
+        val tripApplicationId = UUID.randomUUID()
         val callerId = UUID.randomUUID()
         every { tripPlanApplicationRepository.update(any()) } just runs
         every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplication(
-            tripPlanApplicationId
+            tripApplicationId = tripApplicationId
         )
 
         // WHEN
-        val output = acceptTripApplication(AcceptTripApplicationInput(tripPlanApplicationId, callerId))
+        val output = acceptTripApplication(AcceptTripApplicationInput(tripApplicationId, callerId))
 
         // THEN
         assertInstanceOf(AcceptTripApplicationOutput.TripApplicationAccepted::class.java, output)

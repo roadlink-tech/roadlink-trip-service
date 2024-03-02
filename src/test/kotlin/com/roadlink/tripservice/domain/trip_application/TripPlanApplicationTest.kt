@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.domain.trip_application
 
 import com.roadlink.tripservice.domain.trip.section.SectionError
-import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory
-import com.roadlink.tripservice.trip.domain.TripPlanApplicationFactory.johnSmithDriverId
+import com.roadlink.tripservice.usecases.trip.domain.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip.domain.TripPlanApplicationFactory.johnSmithDriverId
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.util.*
