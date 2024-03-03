@@ -19,7 +19,7 @@ val mockkVersion = "1.13.4"
 val micronautTestJunit5 = "4.0.0-M3"
 val testContainersVersion = "1.19.1"
 val jakartaPersistenceApiVersion = "2.2.3"
-val okhttpVersion = "4.10.0"
+val okhttpVersion = "4.12.0"
 
 dependencies {
     // KOTLIN
@@ -51,7 +51,6 @@ dependencies {
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     // HTTP CLIENT
-
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
 
     // DB
