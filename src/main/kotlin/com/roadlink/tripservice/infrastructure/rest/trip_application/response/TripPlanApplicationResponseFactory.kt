@@ -8,7 +8,7 @@ import com.roadlink.tripservice.usecases.trip_application.RejectTripApplicationO
 import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus.*
-
+import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput
 class TripPlanApplicationResponseFactory {
 
     fun from(output: CreateTripPlanApplicationOutput): HttpResponse<ApiResponse> =
@@ -22,12 +22,12 @@ class TripPlanApplicationResponseFactory {
                     .body(InsufficientAmountOfSeatsResponse())
         }
 
-    fun from(output: com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput): HttpResponse<ApiResponse> {
+    fun from(output: RetrieveTripPlanApplicationOutput): HttpResponse<ApiResponse> {
         return when (output) {
-            is com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput.TripPlanApplicationFound ->
+            is RetrieveTripPlanApplicationOutput.TripPlanApplicationFound ->
                 HttpResponse.ok(TripPlanApplicationResponse.from(output.tripPlanApplication))
 
-            is com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput.TripPlanApplicationNotFound ->
+            is RetrieveTripPlanApplicationOutput.TripPlanApplicationNotFound ->
                 HttpResponse.status(NOT_FOUND)
         }
     }

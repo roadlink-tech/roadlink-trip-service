@@ -43,7 +43,7 @@ class MySQLTripPlanApplicationRepository(
         }
     }
 
-    override fun findTripApplicationBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
         return transactionManager.executeRead {
             entityManager.createQuery(
                 """

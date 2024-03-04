@@ -72,7 +72,7 @@ class MySQLTripPlanApplicationRepositoryTest {
         val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
         givenExists(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
 
-        val result = repository.findTripApplicationBySectionId(avCabildoSection.id)
+        val result = repository.findBySectionId(avCabildoSection.id)
 
         assertEquals(setOf(tripApplication), result)
     }
@@ -83,7 +83,7 @@ class MySQLTripPlanApplicationRepositoryTest {
         val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
         givenExists(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
 
-        val result = repository.findTripApplicationBySectionId(SectionFactory.virreyDelPino_id)
+        val result = repository.findBySectionId(SectionFactory.virreyDelPino_id)
 
         assertTrue { result.isEmpty() }
     }

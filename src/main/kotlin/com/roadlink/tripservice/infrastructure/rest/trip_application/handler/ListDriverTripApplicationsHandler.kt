@@ -11,7 +11,7 @@ import java.util.*
 import kotlin.collections.List
 
 @Controller("/trip-service")
-class GetDriverTripApplicationsHandler(
+class ListDriverTripApplicationsHandler(
     private val retrieveDriverTripApplications: RetrieveDriverTripApplications,
 ) {
     @Get("/driver-trip-applications")
