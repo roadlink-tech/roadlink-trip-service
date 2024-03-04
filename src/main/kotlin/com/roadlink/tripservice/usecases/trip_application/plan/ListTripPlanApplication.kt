@@ -1,9 +1,8 @@
 package com.roadlink.tripservice.usecases.trip_application.plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.*
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripApplicationStatusResponse
 import com.roadlink.tripservice.usecases.UseCase
 import java.util.*
 
