@@ -30,6 +30,10 @@ class InMemoryTripPlanApplicationRepository(
             .firstOrNull { it.tripApplications.any { tripApplication -> tripApplication.id == tripApplicationId } }
     }
 
+    override fun findById(id: UUID): TripPlanApplication? {
+        return tripPlanApplications.firstOrNull { it.id == id }
+    }
+
     override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
         return tripPlanApplications
             .flatMap { it.tripApplications }
