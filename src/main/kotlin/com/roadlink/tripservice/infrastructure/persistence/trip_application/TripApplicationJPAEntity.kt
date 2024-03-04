@@ -9,7 +9,10 @@ import org.hibernate.type.SqlTypes
 import java.util.*
 
 @Entity
-@Table(name = "trip_application")
+@Table(
+    name = "trip_application",
+    indexes = [Index(name = "idx_passenger_id", columnList = "passengerId")]
+)
 data class TripApplicationJPAEntity(
     @Id
     @JdbcTypeCode(SqlTypes.CHAR)

@@ -7,6 +7,11 @@ interface TripPlanApplicationRepository {
     fun update(application: TripPlanApplication)
     fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication?
     fun findById(id: UUID): TripPlanApplication?
+    fun findAllByPassengerIdAndTripApplicationStatus(
+        passengerId: UUID,
+        tripApplicationStatus: TripPlanApplication.TripApplication.Status? = null
+    ): List<TripPlanApplication>
+
     // TODO move this behave to a TripApplicationRepository
     fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication>
 }

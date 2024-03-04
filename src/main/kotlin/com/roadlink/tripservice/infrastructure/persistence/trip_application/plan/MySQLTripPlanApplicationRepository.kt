@@ -13,7 +13,7 @@ import java.util.*
 class MySQLTripPlanApplicationRepository(
     private val entityManager: EntityManager,
     private val transactionManager: TransactionOperations<Session>,
-): TripPlanApplicationRepository {
+) : TripPlanApplicationRepository {
 
     override fun insert(application: TripPlanApplication) {
         transactionManager.executeWrite {
@@ -36,12 +36,8 @@ class MySQLTripPlanApplicationRepository(
                     |FROM TripPlanApplicationJPAEntity tpa 
                     |JOIN tpa.tripApplications ta
                     |WHERE ta.id = :id
-                    """.trimMargin(),
-                    TripPlanApplicationJPAEntity::class.java
-                )
-                    .setParameter("id", tripApplicationId)
-                    .singleResult
-                    .toDomain()
+                    """.trimMargin(), TripPlanApplicationJPAEntity::class.java
+                ).setParameter("id", tripApplicationId).singleResult.toDomain()
             } catch (e: NoResultException) {
                 null
             }
@@ -54,16 +50,43 @@ class MySQLTripPlanApplicationRepository(
                 entityManager.createQuery(
                     "SELECT tpa FROM TripPlanApplicationJPAEntity tpa WHERE tpa.id = :id",
                     TripPlanApplicationJPAEntity::class.java
-                )
-                    .setParameter("id", id)
-                    .singleResult
-                    .toDomain()
+                ).setParameter("id", id).singleResult.toDomain()
             } catch (e: NoResultException) {
                 null
             }
         }
     }
 
+    override fun findAllByPassengerIdAndTripApplicationStatus(
+        passengerId: UUID, tripApplicationStatus: TripPlanApplication.TripApplication.Status?
+    ): List<TripPlanApplication> {
+        return transactionManager.executeRead {
+            try {
+                val query = entityManager.createQuery(
+                    """
+                    |SELECT tpa 
+                    |FROM TripPlanApplicationJPAEntity tpa
+                    |JOIN tpa.tripApplications ta
+                    |WHERE ta.passengerId = :passengerId
+                    | ${
+                        if (!tripApplicationStatus?.toString()
+                                .isNullOrBlank()
+                        ) "AND ta.status = :status" else ""
+                    }
+                    """.trimMargin(), TripPlanApplicationJPAEntity::class.java
+                ).setParameter("passengerId", passengerId.toString())
+
+                if (!tripApplicationStatus?.toString().isNullOrBlank()) {
+                    query.setParameter("status", tripApplicationStatus.toString())
+                }
+                query.resultList.map { it.toDomain() }
+            } catch (e: NoResultException) {
+                emptyList()
+            }
+        }
+    }
+
+    // TODO This method must be written in TripApplicationRepository
     override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
         return transactionManager.executeRead {
             entityManager.createQuery(
@@ -71,13 +94,8 @@ class MySQLTripPlanApplicationRepository(
                 |SELECT ta FROM TripApplicationJPAEntity ta
                 |JOIN ta.sections s
                 |WHERE s.id = :sectionId
-                |""".trimMargin(),
-                TripApplicationJPAEntity::class.java
-            )
-                .setParameter("sectionId", sectionId)
-                .resultList
-                .map { it.toDomain() }
-                .toSet()
+                |""".trimMargin(), TripApplicationJPAEntity::class.java
+            ).setParameter("sectionId", sectionId).resultList.map { it.toDomain() }.toSet()
         }
     }
 
