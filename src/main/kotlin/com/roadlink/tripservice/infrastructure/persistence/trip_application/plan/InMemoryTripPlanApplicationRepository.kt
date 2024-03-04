@@ -34,9 +34,8 @@ class InMemoryTripPlanApplicationRepository(
         return tripPlanApplications.firstOrNull { it.id == id }
     }
 
-    override fun findAllByPassengerIdAndTripApplicationStatus(
-        passengerId: UUID,
-        tripApplicationStatus: TripPlanApplication.TripApplication.Status?
+    override fun findAllByPassengerId(
+        passengerId: UUID
     ): List<TripPlanApplication> {
         TODO("Not yet implemented")
     }

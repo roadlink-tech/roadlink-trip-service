@@ -11,7 +11,6 @@ import java.util.*
 @Entity
 @Table(
     name = "trip_application",
-    indexes = [Index(name = "idx_passenger_id", columnList = "passengerId")]
 )
 data class TripApplicationJPAEntity(
     @Id

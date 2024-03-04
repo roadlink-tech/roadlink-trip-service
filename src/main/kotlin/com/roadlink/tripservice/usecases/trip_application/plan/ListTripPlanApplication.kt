@@ -1,7 +1,6 @@
 package com.roadlink.tripservice.usecases.trip_application.plan
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.UseCase
 import java.util.*
@@ -12,10 +11,12 @@ class ListTripPlanApplications(
 
     override fun invoke(input: Input): Output {
         val tripPlanApplications =
-            tripPlanApplicationRepository.findAllByPassengerIdAndTripApplicationStatus(
-                input.passengerId,
-                input.toTripApplicationStatus()
+            tripPlanApplicationRepository.findAllByPassengerId(
+                input.passengerId
             )
+        if (input.status() != null) {
+            return Output(tripPlanApplications.filter { it.status() == input.status() })
+        }
         return Output(tripPlanApplications)
     }
 
@@ -23,10 +24,10 @@ class ListTripPlanApplications(
         val passengerId: UUID,
         val tripApplicationStatus: String? = null
     ) {
-        fun toTripApplicationStatus(): TripApplication.Status? {
+        fun status(): TripPlanApplication.Status? {
             return tripApplicationStatus?.let {
                 try {
-                    TripPlanApplication.TripApplication.Status.valueOf(it.uppercase(Locale.getDefault()))
+                    TripPlanApplication.Status.valueOf(it.uppercase(Locale.getDefault()))
                 } catch (e: IllegalArgumentException) {
                     null
                 }

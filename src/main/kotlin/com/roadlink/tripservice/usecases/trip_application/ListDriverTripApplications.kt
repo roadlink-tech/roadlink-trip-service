@@ -16,7 +16,7 @@ class ListDriverTripApplications(
     operator fun invoke(input: Input): List<DriverTripApplication> {
         return tripApplicationRepository.findByTripId(input.tripId)
             .filter { tripApplication ->
-                tripApplication.isPending()
+                tripApplication.isPendingApproval()
             }
             .map { tripApplication ->
                 val passengerId = tripApplication.passengerId

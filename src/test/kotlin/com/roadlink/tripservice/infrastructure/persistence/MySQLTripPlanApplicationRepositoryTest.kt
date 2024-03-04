@@ -2,8 +2,6 @@ package com.roadlink.tripservice.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.*
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.*
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
@@ -40,7 +38,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             listOf(tripPlanApplication),
-            repository.findAllByPassengerIdAndTripApplicationStatus(passengerId)
+            repository.findAllByPassengerId(passengerId)
         )
     }
 
@@ -61,28 +59,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             listOf(tripPlanApplication),
-            repository.findAllByPassengerIdAndTripApplicationStatus(passengerId, REJECTED)
-        )
-    }
-
-    @Test
-    fun `when find trip plan application by passenger id and trip plan application, but there no is anything, then an empty list must be retrieved`() {
-        val tripApplicationId = UUID.randomUUID()
-        val passengerId = UUID.randomUUID()
-        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication(
-            tripApplicationId = tripApplicationId,
-            passengerId = passengerId.toString(),
-            tripApplicationStatus = REJECTED
-        )
-        tripPlanApplication.tripApplications.flatMap { it.sections }.forEach {
-            sectionRepository.save(it)
-        }
-
-        repository.insert(tripPlanApplication)
-
-        assertEquals(
-            listOf<TripPlanApplication>(),
-            repository.findAllByPassengerIdAndTripApplicationStatus(passengerId, PENDING_APPROVAL)
+            repository.findAllByPassengerId(passengerId)
         )
     }
 
@@ -92,7 +69,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             listOf<TripPlanApplication>(),
-            repository.findAllByPassengerIdAndTripApplicationStatus(passengerId)
+            repository.findAllByPassengerId(passengerId)
         )
     }
 

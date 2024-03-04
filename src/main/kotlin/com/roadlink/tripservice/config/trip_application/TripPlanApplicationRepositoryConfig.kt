@@ -1,7 +1,13 @@
 package com.roadlink.tripservice.config.trip_application
 
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.MySQLTripPlanApplicationRepository
+import com.roadlink.tripservice.usecases.UseCase
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplication
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationInput
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.plan.ListTripPlanApplications
 import io.micronaut.context.annotation.Factory
 import io.micronaut.transaction.TransactionOperations
 import jakarta.inject.Singleton
@@ -20,4 +26,12 @@ class TripPlanApplicationRepositoryConfig {
             transactionManager = transactionManager
         )
     }
+
+    @Singleton
+    fun listTripPlanApplication(
+        tripPlanApplicationRepository: TripPlanApplicationRepository
+    ): UseCase<ListTripPlanApplications.Input, ListTripPlanApplications.Output> {
+        return ListTripPlanApplications(tripPlanApplicationRepository)
+    }
+
 }

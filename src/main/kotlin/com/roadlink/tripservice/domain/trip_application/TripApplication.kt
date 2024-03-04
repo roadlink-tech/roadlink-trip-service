@@ -4,6 +4,7 @@ import com.roadlink.tripservice.domain.common.DomainError
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.domain.trip.section.Section
+import java.lang.RuntimeException
 import java.util.*
 
 /**
@@ -13,6 +14,12 @@ data class TripPlanApplication(
     val id: UUID = UUID.randomUUID(),
     val tripApplications: MutableList<TripApplication> = mutableListOf()
 ) {
+    // Todo move this to a common class
+    enum class Status {
+        PENDING_APPROVAL,
+        REJECTED,
+        CONFIRMED
+    }
 
     data class TripApplication(
         val id: UUID = UUID.randomUUID(),
@@ -42,7 +49,7 @@ data class TripPlanApplication(
         fun arrivalTripPoint(): TripPoint =
             sections.last().arrival
 
-        internal fun isPending(): Boolean {
+        internal fun isPendingApproval(): Boolean {
             return this.status == PENDING_APPROVAL
         }
 
@@ -90,8 +97,29 @@ data class TripPlanApplication(
         return this.tripApplications.any { it.isRejected() }
     }
 
+    private fun isConfirmed(): Boolean {
+        return this.tripApplications.all { it.isConfirmed() }
+    }
+
+    private fun isPendingApproval(): Boolean {
+        return !this.tripApplications.any { it.isRejected() } && this.tripApplications.any { it.isPendingApproval() }
+    }
+
     fun include(application: TripApplication) {
         this.tripApplications.add(application)
+    }
+
+    fun status(): Status {
+        if (isConfirmed()) {
+            return Status.CONFIRMED
+        }
+        if (isRejected()) {
+            return Status.REJECTED
+        }
+        if (isPendingApproval()) {
+            return Status.PENDING_APPROVAL
+        }
+        throw TripPlanApplicationError.CanNotDeterminateStatus(this.id)
     }
 
     fun reject() {
@@ -102,6 +130,13 @@ data class TripPlanApplication(
         }
     }
 }
+
+sealed class TripPlanApplicationError(message: String) : DomainError(message) {
+
+    class CanNotDeterminateStatus(id: UUID) :
+        TripPlanApplicationError("Can not determinate status for trip plan application $id ")
+}
+
 
 sealed class TripApplicationError(message: String) : DomainError(message) {
     class NotFound(application: UUID) : TripApplicationError("Trip application $application does not exist")

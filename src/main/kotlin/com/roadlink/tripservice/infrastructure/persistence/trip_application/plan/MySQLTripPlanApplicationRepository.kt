@@ -57,29 +57,22 @@ class MySQLTripPlanApplicationRepository(
         }
     }
 
-    override fun findAllByPassengerIdAndTripApplicationStatus(
-        passengerId: UUID, tripApplicationStatus: TripPlanApplication.TripApplication.Status?
+    override fun findAllByPassengerId(
+        passengerId: UUID
     ): List<TripPlanApplication> {
         return transactionManager.executeRead {
             try {
-                val query = entityManager.createQuery(
+                entityManager.createQuery(
                     """
                     |SELECT tpa 
                     |FROM TripPlanApplicationJPAEntity tpa
                     |JOIN tpa.tripApplications ta
                     |WHERE ta.passengerId = :passengerId
-                    | ${
-                        if (!tripApplicationStatus?.toString()
-                                .isNullOrBlank()
-                        ) "AND ta.status = :status" else ""
-                    }
                     """.trimMargin(), TripPlanApplicationJPAEntity::class.java
-                ).setParameter("passengerId", passengerId.toString())
-
-                if (!tripApplicationStatus?.toString().isNullOrBlank()) {
-                    query.setParameter("status", tripApplicationStatus.toString())
-                }
-                query.resultList.map { it.toDomain() }
+                )
+                    .setParameter("passengerId", passengerId.toString())
+                    .resultList
+                    .map { it.toDomain() }
             } catch (e: NoResultException) {
                 emptyList()
             }
