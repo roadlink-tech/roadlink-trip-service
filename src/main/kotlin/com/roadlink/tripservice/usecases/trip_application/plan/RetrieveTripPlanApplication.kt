@@ -11,7 +11,7 @@ class RetrieveTripPlanApplication(
 
     override fun invoke(input: RetrieveTripPlanApplicationInput): RetrieveTripPlanApplicationOutput {
         val tripPlanApplication =
-            tripPlanApplicationRepository.findByTripApplicationId(UUID.fromString(input.tripPlanApplicationId))
+            tripPlanApplicationRepository.findById(UUID.fromString(input.tripPlanApplicationId))
                 ?: return RetrieveTripPlanApplicationOutput.TripPlanApplicationNotFound
         return RetrieveTripPlanApplicationOutput.TripPlanApplicationFound(tripPlanApplication)
     }

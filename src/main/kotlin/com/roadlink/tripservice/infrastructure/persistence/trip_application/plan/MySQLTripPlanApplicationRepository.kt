@@ -31,10 +31,31 @@ class MySQLTripPlanApplicationRepository(
         return transactionManager.executeRead {
             try {
                 entityManager.createQuery(
-                    "SELECT tpa FROM TripPlanApplicationJPAEntity tpa WHERE tpa.id = :id",
+                    """
+                    |SELECT tpa 
+                    |FROM TripPlanApplicationJPAEntity tpa 
+                    |JOIN tpa.tripApplications ta
+                    |WHERE ta.id = :id
+                    """.trimMargin(),
                     TripPlanApplicationJPAEntity::class.java
                 )
                     .setParameter("id", tripApplicationId)
+                    .singleResult
+                    .toDomain()
+            } catch (e: NoResultException) {
+                null
+            }
+        }
+    }
+
+    override fun findById(id: UUID): TripPlanApplication? {
+        return transactionManager.executeRead {
+            try {
+                entityManager.createQuery(
+                    "SELECT tpa FROM TripPlanApplicationJPAEntity tpa WHERE tpa.id = :id",
+                    TripPlanApplicationJPAEntity::class.java
+                )
+                    .setParameter("id", id)
                     .singleResult
                     .toDomain()
             } catch (e: NoResultException) {

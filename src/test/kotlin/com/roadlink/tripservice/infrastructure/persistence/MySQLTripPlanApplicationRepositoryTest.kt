@@ -23,7 +23,8 @@ class MySQLTripPlanApplicationRepositoryTest {
 
     @Test
     fun `given no trip plan application when save one then should be able to find it`() {
-        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication()
+        val tripApplicationId = UUID.randomUUID()
+        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication(tripApplicationId = tripApplicationId)
         tripPlanApplication.tripApplications.flatMap { it.sections }.forEach {
             sectionRepository.save(it)
         }
@@ -32,17 +33,20 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             tripPlanApplication,
-            repository.findByTripApplicationId(tripPlanApplication.id)
+            repository.findByTripApplicationId(tripApplicationId)
         )
     }
 
     @Test
     fun `given trip plan application exists and it is modified when update it then should retrieve it`() {
         val passengerId = UUID.randomUUID()
+        val tripApplicationId = UUID.randomUUID()
         val tripPlanApplication = givenExists(
             TripPlanApplicationFactory.withASingleTripApplication(
-            passengerId = passengerId.toString(),
-        ))
+                tripApplicationId = tripApplicationId,
+                passengerId = passengerId.toString(),
+            )
+        )
         tripPlanApplication.confirmApplicationById(
             tripPlanApplication.tripApplications.first().id,
             passengerId
@@ -52,16 +56,16 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             tripPlanApplication,
-            repository.findByTripApplicationId(tripPlanApplication.id)
+            repository.findByTripApplicationId(tripApplicationId)
         )
     }
 
     @Test
-    fun `given no trip plan application exists with the given id when find by id then should return null`() {
-        val otherTripPlanApplicationId = UUID.randomUUID()
+    fun `given no trip plan application exists with the given id when find by trip application id then should return null`() {
+        val otherTripApplicationId = UUID.randomUUID()
         givenExists(TripPlanApplicationFactory.withASingleTripApplication())
 
-        val result = repository.findByTripApplicationId(otherTripPlanApplicationId)
+        val result = repository.findByTripApplicationId(otherTripApplicationId)
 
         assertNull(result)
     }
@@ -86,6 +90,51 @@ class MySQLTripPlanApplicationRepositoryTest {
         val result = repository.findTripApplicationBySectionId(SectionFactory.virreyDelPino_id)
 
         assertTrue { result.isEmpty() }
+    }
+
+    @Test
+    fun `given no trip plan application when save one then should be able to find it by id`() {
+        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication()
+        tripPlanApplication.tripApplications.flatMap { it.sections }.forEach {
+            sectionRepository.save(it)
+        }
+
+        repository.insert(tripPlanApplication)
+
+        assertEquals(
+            tripPlanApplication,
+            repository.findById(tripPlanApplication.id)
+        )
+    }
+
+    @Test
+    fun `given trip plan application exists and it is modified when update it then should retrieve it by id`() {
+        val passengerId = UUID.randomUUID()
+        val tripPlanApplication = givenExists(
+            TripPlanApplicationFactory.withASingleTripApplication(
+                passengerId = passengerId.toString(),
+            ))
+        tripPlanApplication.confirmApplicationById(
+            tripPlanApplication.tripApplications.first().id,
+            passengerId
+        )
+
+        repository.update(tripPlanApplication)
+
+        assertEquals(
+            tripPlanApplication,
+            repository.findById(tripPlanApplication.id)
+        )
+    }
+
+    @Test
+    fun `given no trip plan application exists with the given id when find by id then should return null`() {
+        val otherTripPlanApplicationId = UUID.randomUUID()
+        givenExists(TripPlanApplicationFactory.withASingleTripApplication())
+
+        val result = repository.findById(otherTripPlanApplicationId)
+
+        assertNull(result)
     }
 
     private fun givenExists(tripPlanApplication: TripPlanApplication): TripPlanApplication {

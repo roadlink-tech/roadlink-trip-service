@@ -24,6 +24,7 @@ class TripPlanApplicationHandler(
         val output = createTripPlanApplication(input)
         return responseFactory.from(output)
     }
+
     @Get("/{tripPlanApplicationId}")
     fun get(@PathVariable("tripPlanApplicationId") tripPlanApplicationId: String): HttpResponse<*> {
         val input = RetrieveTripPlanApplicationInput(tripPlanApplicationId)
