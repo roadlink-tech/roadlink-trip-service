@@ -16,7 +16,7 @@ class InMemoryTripApplicationRepository(
         this.tripApplications.addAll(tripApplications)
     }
 
-    override fun findAllByDriverId(driverId: UUID): List<TripPlanApplication.TripApplication> {
+    private fun findAllByDriverId(driverId: UUID): List<TripPlanApplication.TripApplication> {
         return tripApplications.filter { tripApplication -> tripApplication.driverId() == driverId }
     }
 

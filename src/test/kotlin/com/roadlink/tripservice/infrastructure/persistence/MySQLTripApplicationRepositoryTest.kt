@@ -31,7 +31,7 @@ class MySQLTripApplicationRepositoryTest {
         val otherDriverId = UUID.randomUUID()
         givenASavedTripPlanApplicationWithSections(TripApplicationFactory.any())
 
-        val result = tripApplicationRepository.findAllByDriverId(otherDriverId)
+        val result = tripApplicationRepository.find(TripApplicationRepository.CommandQuery(driverId = otherDriverId))
 
         assertTrue { result.isEmpty() }
     }
@@ -45,7 +45,7 @@ class MySQLTripApplicationRepositoryTest {
         val otherDriverId = UUID.randomUUID()
         givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withDriver(otherDriverId))
 
-        val result = tripApplicationRepository.findAllByDriverId(driverId)
+        val result = tripApplicationRepository.find(TripApplicationRepository.CommandQuery(driverId = driverId))
 
         assertEquals(2, result.size)
         assertTrue { result.containsAll(setOf(tripApplication1, tripApplication2)) }
