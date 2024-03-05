@@ -24,7 +24,7 @@ class AcceptTripApplicationTest {
 
     @Test
     fun `when try to accept a trip application but the plan does not exit, then an expected error must be retrieved`() {
-        every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns null
+        every { tripPlanApplicationRepository.find(any()) } returns emptyList()
 
         // WHEN
         val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID(), UUID.randomUUID()))
@@ -35,7 +35,7 @@ class AcceptTripApplicationTest {
 
     @Test
     fun `when try to accept a trip plan but the it has been already rejected, then an error response must be retrieved`() {
-        every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplicationRejected()
+        every { tripPlanApplicationRepository.find(any()) } returns listOf(TripPlanApplicationFactory.withASingleTripApplicationRejected())
 
         // WHEN
         val output = acceptTripApplication(AcceptTripApplicationInput(UUID.randomUUID(), UUID.randomUUID()))
@@ -50,8 +50,10 @@ class AcceptTripApplicationTest {
         val tripApplicationId = UUID.randomUUID()
         val callerId = UUID.randomUUID()
         every { tripPlanApplicationRepository.update(any()) } just runs
-        every { tripPlanApplicationRepository.findByTripApplicationId(any()) } returns TripPlanApplicationFactory.withASingleTripApplication(
-            tripApplicationId = tripApplicationId
+        every { tripPlanApplicationRepository.find(any()) } returns listOf(
+            TripPlanApplicationFactory.withASingleTripApplication(
+                tripApplicationId = tripApplicationId
+            )
         )
 
         // WHEN

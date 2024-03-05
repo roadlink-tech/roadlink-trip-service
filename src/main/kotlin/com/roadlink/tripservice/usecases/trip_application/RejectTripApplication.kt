@@ -10,8 +10,9 @@ class RejectTripApplication(
 ) : UseCase<UUID, RejectTripApplicationOutput> {
 
     override operator fun invoke(input: UUID): RejectTripApplicationOutput {
-        val tripPlanApplication = tripPlanApplicationRepository.findByTripApplicationId(input)
-            ?: return RejectTripApplicationOutput.TripPlanApplicationNotExists
+        val tripPlanApplication =
+            tripPlanApplicationRepository.find(TripPlanApplicationRepository.CommandQuery(tripApplicationId = input))
+                .firstOrNull() ?: return RejectTripApplicationOutput.TripPlanApplicationNotExists
 
         tripPlanApplication.reject()
         tripPlanApplicationRepository.update(tripPlanApplication)

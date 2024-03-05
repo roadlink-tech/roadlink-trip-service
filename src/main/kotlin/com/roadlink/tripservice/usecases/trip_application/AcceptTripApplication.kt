@@ -9,15 +9,16 @@ class AcceptTripApplication(
 ) : UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput> {
 
     override operator fun invoke(input: AcceptTripApplicationInput): AcceptTripApplicationOutput {
-        val tripPlanApplication = tripPlanApplicationRepository.findByTripApplicationId(input.tripApplicationId)
-            ?: return AcceptTripApplicationOutput.TripPlanApplicationNotExists
+        val tripPlanApplication = tripPlanApplicationRepository
+            .find(TripPlanApplicationRepository.CommandQuery(tripApplicationId = input.tripApplicationId))
+            .firstOrNull() ?: return AcceptTripApplicationOutput.TripPlanApplicationNotExists
 
         if (tripPlanApplication.isRejected()) {
             return AcceptTripApplicationOutput.TripApplicationPlanHasBeenRejected
         }
 
-        tripPlanApplication.confirmApplicationById(input.tripApplicationId, input.callerId)
         return AcceptTripApplicationOutput.TripApplicationAccepted.also {
+            tripPlanApplication.confirmApplicationById(input.tripApplicationId, input.callerId)
             tripPlanApplicationRepository.update(tripPlanApplication)
         }
     }
@@ -26,7 +27,7 @@ class AcceptTripApplication(
 data class AcceptTripApplicationInput(
     val tripApplicationId: UUID,
     // TODO fix it when the header has been change from the frontend
-    val callerId: UUID ? = null,
+    val callerId: UUID? = null,
 )
 
 sealed class AcceptTripApplicationOutput {

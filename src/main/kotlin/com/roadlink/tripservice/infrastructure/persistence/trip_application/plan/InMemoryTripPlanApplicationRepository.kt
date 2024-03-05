@@ -25,7 +25,7 @@ class InMemoryTripPlanApplicationRepository(
         tripApplicationRepository.saveAll(tripPlanApplication.tripApplications)
     }
 
-    override fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication? {
+    private fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication? {
         return tripPlanApplications
             .firstOrNull { it.tripApplications.any { tripApplication -> tripApplication.id == tripApplicationId } }
     }

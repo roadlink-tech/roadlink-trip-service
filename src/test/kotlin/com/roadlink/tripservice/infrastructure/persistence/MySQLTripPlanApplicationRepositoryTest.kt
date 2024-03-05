@@ -86,7 +86,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             tripPlanApplication,
-            repository.findByTripApplicationId(tripApplicationId)
+            repository.find(TripPlanApplicationRepository.CommandQuery(tripApplicationId = tripApplicationId)).first()
         )
     }
 
@@ -109,7 +109,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             tripPlanApplication,
-            repository.findByTripApplicationId(tripApplicationId)
+            repository.find(TripPlanApplicationRepository.CommandQuery(tripApplicationId = tripApplicationId)).first()
         )
     }
 
@@ -118,9 +118,10 @@ class MySQLTripPlanApplicationRepositoryTest {
         val otherTripApplicationId = UUID.randomUUID()
         givenExists(TripPlanApplicationFactory.withASingleTripApplication())
 
-        val result = repository.findByTripApplicationId(otherTripApplicationId)
+        val result =
+            repository.find(TripPlanApplicationRepository.CommandQuery(tripApplicationId = otherTripApplicationId))
 
-        assertNull(result)
+        assertTrue(result.isEmpty())
     }
 
 
