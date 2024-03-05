@@ -17,12 +17,13 @@ object TripApplicationFactory {
         )
     }
 
-    fun withDriver(driverId: UUID): TripPlanApplication.TripApplication {
+    fun withDriver(driverId: UUID, tripId: UUID = UUID.randomUUID()): TripPlanApplication.TripApplication {
         return TripPlanApplication.TripApplication(
             id = UUID.randomUUID(),
             sections = listOf(
                 SectionFactory.withDriver(
                     driverId = driverId,
+                    tripId = tripId
                 )
             ),
             status = PENDING_APPROVAL,

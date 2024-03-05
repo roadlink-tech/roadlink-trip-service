@@ -30,7 +30,7 @@ class ListTripPlanApplicationsTest {
         val status = "CONFIRMED"
         val input = ListTripPlanApplications.Input(passengerId = passengerId, status = status)
 
-        every { tripPlanApplicationRepository.findAllByPassengerId(passengerId) } returns listOf(
+        every { tripPlanApplicationRepository.find(TripPlanApplicationRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
             TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanApplication.TripApplication.Status.CONFIRMED),
             TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanApplication.TripApplication.Status.REJECTED),
             TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanApplication.TripApplication.Status.PENDING_APPROVAL),
@@ -44,7 +44,8 @@ class ListTripPlanApplicationsTest {
         Assertions.assertEquals(2, output.tripPlanApplications.size)
         Assertions.assertEquals(
             2,
-            output.tripPlanApplications.filter { it.status() == TripPlanApplication.Status.CONFIRMED }.size)
+            output.tripPlanApplications.filter { it.status() == TripPlanApplication.Status.CONFIRMED }.size
+        )
     }
 
     @Test
@@ -54,7 +55,7 @@ class ListTripPlanApplicationsTest {
         val status = "PENDING_APPROVAL"
         val input = ListTripPlanApplications.Input(passengerId = passengerId, status = status)
 
-        every { tripPlanApplicationRepository.findAllByPassengerId(passengerId) } returns listOf(
+        every { tripPlanApplicationRepository.find(TripPlanApplicationRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
             TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanApplication.TripApplication.Status.CONFIRMED),
         )
 

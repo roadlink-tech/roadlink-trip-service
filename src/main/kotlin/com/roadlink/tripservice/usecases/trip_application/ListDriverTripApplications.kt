@@ -14,7 +14,7 @@ class ListDriverTripApplications(
     private val ratingRepository: RatingRepository,
 ) {
     operator fun invoke(input: Input): List<DriverTripApplication> {
-        return tripApplicationRepository.findByTripId(input.tripId)
+        return tripApplicationRepository.find(TripApplicationRepository.CommandQuery(tripId = input.tripId))
             .filter { tripApplication ->
                 tripApplication.isPendingApproval()
             }

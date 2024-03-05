@@ -2,10 +2,13 @@ package com.roadlink.tripservice.infrastructure.persistence.trip_application.pla
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.section.SectionJPAEntity
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.TripApplicationJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.NoResultException
+import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
 import java.util.*
 
@@ -15,81 +18,73 @@ class MySQLTripPlanApplicationRepository(
     private val transactionManager: TransactionOperations<Session>,
 ) : TripPlanApplicationRepository {
 
-    override fun insert(application: TripPlanApplication) {
+    override fun insert(tripPlanApplication: TripPlanApplication) {
         transactionManager.executeWrite {
-            entityManager.persist(TripPlanApplicationJPAEntity.from(application))
+            entityManager.persist(TripPlanApplicationJPAEntity.from(tripPlanApplication))
         }
     }
 
-    override fun update(application: TripPlanApplication) {
+    override fun update(tripPlanApplication: TripPlanApplication) {
         transactionManager.executeWrite {
-            entityManager.merge(TripPlanApplicationJPAEntity.from(application))
+            entityManager.merge(TripPlanApplicationJPAEntity.from(tripPlanApplication))
         }
     }
 
-    override fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication? {
+    override fun find(commandQuery: TripPlanApplicationRepository.CommandQuery): List<TripPlanApplication> {
+        val cq = TripPlanApplicationCommandQuery.from(commandQuery)
         return transactionManager.executeRead {
-            try {
-                entityManager.createQuery(
-                    """
-                    |SELECT tpa 
-                    |FROM TripPlanApplicationJPAEntity tpa 
-                    |JOIN tpa.tripApplications ta
-                    |WHERE ta.id = :id
-                    """.trimMargin(), TripPlanApplicationJPAEntity::class.java
-                ).setParameter("id", tripApplicationId).singleResult.toDomain()
-            } catch (e: NoResultException) {
-                null
+            val cb = entityManager.criteriaBuilder
+            val criteriaQuery = cb.createQuery(TripPlanApplicationJPAEntity::class.java)
+            val root = criteriaQuery.from(TripPlanApplicationJPAEntity::class.java)
+
+            val predicates = mutableListOf<Predicate>()
+
+            if (cq.ids.isNotEmpty()) {
+                val idPredicate = root.get<UUID>("id").`in`(cq.ids)
+                predicates.add(idPredicate)
+            }
+
+            if (cq.passengerId != null) {
+                val tripApplicationsJoin =
+                    root.join<TripPlanApplicationJPAEntity, TripApplicationJPAEntity>("tripApplications")
+                val passengerIdPredicate =
+                    cb.equal(tripApplicationsJoin.get<String>("passengerId"), cq.passengerId.toString())
+                predicates.add(passengerIdPredicate)
+            }
+
+            if (cq.tripApplicationId != null) {
+                val tripApplicationsJoin = root.join<TripPlanApplicationJPAEntity, TripApplicationJPAEntity>("tripApplications")
+                val tripApplicationIdPredicate = cb.equal(tripApplicationsJoin.get<UUID>("id"), cq.tripApplicationId)
+                predicates.add(tripApplicationIdPredicate)
+            }
+
+            criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))
+
+            entityManager.createQuery(criteriaQuery).resultList.map { it.toDomain() }
+        }
+
+    }
+
+    data class TripPlanApplicationCommandQuery(
+        val ids: List<UUID> = emptyList(),
+        val tripApplicationId: UUID? = null,
+        val passengerId: UUID? = null,
+    ) {
+        init {
+            require(ids.isNotEmpty() || tripApplicationId != null || passengerId != null) {
+                "At least one field must be not null or empty"
             }
         }
-    }
 
-    override fun findById(id: UUID): TripPlanApplication? {
-        return transactionManager.executeRead {
-            try {
-                entityManager.createQuery(
-                    "SELECT tpa FROM TripPlanApplicationJPAEntity tpa WHERE tpa.id = :id",
-                    TripPlanApplicationJPAEntity::class.java
-                ).setParameter("id", id).singleResult.toDomain()
-            } catch (e: NoResultException) {
-                null
-            }
-        }
-    }
+        companion object {
 
-    override fun findAllByPassengerId(
-        passengerId: UUID
-    ): List<TripPlanApplication> {
-        return transactionManager.executeRead {
-            try {
-                entityManager.createQuery(
-                    """
-                    |SELECT tpa 
-                    |FROM TripPlanApplicationJPAEntity tpa
-                    |JOIN tpa.tripApplications ta
-                    |WHERE ta.passengerId = :passengerId
-                    """.trimMargin(), TripPlanApplicationJPAEntity::class.java
+            fun from(domainCommandQuery: TripPlanApplicationRepository.CommandQuery): TripPlanApplicationCommandQuery {
+                return TripPlanApplicationCommandQuery(
+                    ids = domainCommandQuery.ids,
+                    tripApplicationId = domainCommandQuery.tripApplicationId,
+                    passengerId = domainCommandQuery.passengerId
                 )
-                    .setParameter("passengerId", passengerId.toString())
-                    .resultList
-                    .map { it.toDomain() }
-            } catch (e: NoResultException) {
-                emptyList()
             }
         }
     }
-
-    // TODO This method must be written in TripApplicationRepository
-    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
-        return transactionManager.executeRead {
-            entityManager.createQuery(
-                """
-                |SELECT ta FROM TripApplicationJPAEntity ta
-                |JOIN ta.sections s
-                |WHERE s.id = :sectionId
-                |""".trimMargin(), TripApplicationJPAEntity::class.java
-            ).setParameter("sectionId", sectionId).resultList.map { it.toDomain() }.toSet()
-        }
-    }
-
 }

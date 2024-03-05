@@ -11,8 +11,10 @@ class ListTripPlanApplications(
 
     override fun invoke(input: Input): Output {
         val tripPlanApplications =
-            tripPlanApplicationRepository.findAllByPassengerId(
-                input.passengerId
+            tripPlanApplicationRepository.find(
+                TripPlanApplicationRepository.CommandQuery(
+                    passengerId = input.passengerId
+                )
             )
         if (input.status() != null) {
             return Output(tripPlanApplications.filter { it.status() == input.status() })

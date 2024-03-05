@@ -5,7 +5,6 @@ import com.roadlink.tripservice.domain.driver_trip.*
 import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.trip.TripStatus
 import com.roadlink.tripservice.domain.trip.TripStatus.*
@@ -15,14 +14,14 @@ import java.util.UUID
 
 class RetrieveDriverTripDetail(
     private val sectionRepository: SectionRepository,
-    private val tripPlanApplicationRepository: TripPlanApplicationRepository,
     private val tripApplicationRepository: TripApplicationRepository,
     private val userRepository: UserRepository,
     private val ratingRepository: RatingRepository,
     private val timeProvider: TimeProvider,
 ) {
-    operator fun invoke(input: Input): DriverTripDetail =
-        sectionRepository.findByTripId(input.tripId).let { tripPlan ->
+    operator fun invoke(input: Input): DriverTripDetail {
+        val sections = sectionRepository.findAllByTripIdOrFail(input.tripId)
+        return TripPlan(sections).let { tripPlan ->
             DriverTripDetail(
                 tripId = input.tripId,
                 tripStatus = tripStatusOf(tripPlan),
@@ -36,7 +35,7 @@ class RetrieveDriverTripDetail(
                             arrival = section.arrival,
                             occupiedSeats = section.occupiedSeats(),
                             availableSeats = section.availableSeats(),
-                            passengers = tripPlanApplicationRepository.findBySectionId(section.id)
+                            passengers = tripApplicationRepository.find(TripApplicationRepository.CommandQuery(sectionId = section.id))
                                 .filter { it.isConfirmed() }
                                 .map { it.passengerId }
                                 .map { passengerId ->
@@ -58,6 +57,7 @@ class RetrieveDriverTripDetail(
                     },
             )
         }
+    }
 
     private fun tripStatusOf(tripPlan: TripPlan): TripStatus =
         when {
@@ -74,7 +74,7 @@ class RetrieveDriverTripDetail(
         }
 
     private fun hasPendingApplications(tripId: UUID): Boolean =
-        tripApplicationRepository.findByTripId(tripId)
+        tripApplicationRepository.find(TripApplicationRepository.CommandQuery(tripId = tripId))
             .any { tripApplication -> tripApplication.isPendingApproval() }
 
     data class Input(val tripId: UUID)

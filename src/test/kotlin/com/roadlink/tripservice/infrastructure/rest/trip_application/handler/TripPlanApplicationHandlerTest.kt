@@ -2,7 +2,6 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application.handler
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripPlanApplicationCreatedResponse
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.usecases.UseCase
@@ -20,7 +19,6 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.*
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,21 +35,12 @@ class TripPlanApplicationHandlerTest : End2EndTest() {
     private lateinit var objectMapper: ObjectMapper
 
     @Inject
-    private lateinit var tripPlanApplicationRepository: TripPlanApplicationRepository
-
-    @Inject
-    lateinit var createTripPlanApplication: UseCase<CreateTripPlanApplicationInput, CreateTripPlanApplicationOutput>
-
-    @Inject
-    lateinit var retrieveTripPlanApplication: UseCase<RetrieveTripPlanApplicationInput, RetrieveTripPlanApplicationOutput>
-
-    @Inject
-    private lateinit var entityManager: EntityManager
+    lateinit var createTripPlanApplication: UseCase<CreateTripPlanApplication.Input, CreateTripPlanApplication.Output>
 
     @Primary
     @Singleton
     @Replaces(CreateTripPlanApplication::class)
-    fun createTripPlanApplication(): UseCase<CreateTripPlanApplicationInput, CreateTripPlanApplicationOutput> {
+    fun createTripPlanApplication(): UseCase<CreateTripPlanApplication.Input, CreateTripPlanApplication.Output> {
         return mockk(relaxed = true)
     }
 
@@ -66,7 +55,7 @@ class TripPlanApplicationHandlerTest : End2EndTest() {
      */
     @Test
     fun `when create a trip plan and all the sections can receive a passenger, then it must be created successfully`() {
-        every { createTripPlanApplication.invoke(any()) } returns CreateTripPlanApplicationOutput.TripPlanApplicationCreated(
+        every { createTripPlanApplication.invoke(any()) } returns CreateTripPlanApplication.Output.TripPlanApplicationCreated(
             UUID.randomUUID()
         )
 
@@ -94,7 +83,7 @@ class TripPlanApplicationHandlerTest : End2EndTest() {
     @Test
     fun `when one of the section can not receive any passenger, then an error must be retrieved`() {
         // GIVEN
-        every { createTripPlanApplication.invoke(any()) } returns CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger(
+        every { createTripPlanApplication.invoke(any()) } returns CreateTripPlanApplication.Output.OneOfTheSectionCanNotReceivePassenger(
             message = "The following section could not receive any passenger"
         )
 
@@ -121,7 +110,6 @@ class TripPlanApplicationHandlerTest : End2EndTest() {
         // THEN
         assertEquals(PRECONDITION_FAILED.code, response.code())
     }
-
 
 
     private fun thenTheTripPlanApplicationHasAnId(response: HttpResponse<JsonNode>) {

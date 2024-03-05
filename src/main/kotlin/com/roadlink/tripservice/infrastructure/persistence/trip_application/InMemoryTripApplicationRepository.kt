@@ -16,11 +16,32 @@ class InMemoryTripApplicationRepository(
         this.tripApplications.addAll(tripApplications)
     }
 
-    override fun findAllByDriverId(driverId: UUID): List<TripPlanApplication.TripApplication> {
+    private fun findAllByDriverId(driverId: UUID): List<TripPlanApplication.TripApplication> {
         return tripApplications.filter { tripApplication -> tripApplication.driverId() == driverId }
     }
 
-    override fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
+    private fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
         return tripApplications.filter { it.tripId() == tripId }
+    }
+
+    private fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+        return tripApplications
+            .filter { tripApplication ->
+                tripApplication.sections.any { it.id == sectionId }
+            }
+            .toSet()
+    }
+
+    override fun find(commandQuery: TripApplicationRepository.CommandQuery): List<TripPlanApplication.TripApplication> {
+        if (commandQuery.sectionId.isNotEmpty()) {
+            return findBySectionId(commandQuery.sectionId).toMutableList()
+        }
+        if (commandQuery.tripId != null) {
+            return findByTripId(commandQuery.tripId)
+        }
+        if (commandQuery.driverId != null) {
+            return findAllByDriverId(commandQuery.driverId)
+        }
+        TODO()
     }
 }

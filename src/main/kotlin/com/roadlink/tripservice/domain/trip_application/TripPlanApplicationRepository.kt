@@ -3,12 +3,12 @@ package com.roadlink.tripservice.domain.trip_application
 import java.util.*
 
 interface TripPlanApplicationRepository {
-    fun insert(application: TripPlanApplication)
-    fun update(application: TripPlanApplication)
-    fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication?
-    fun findById(id: UUID): TripPlanApplication?
-    fun findAllByPassengerId(passengerId: UUID): List<TripPlanApplication>
-
-    // TODO move this behave to a TripApplicationRepository
-    fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication>
+    fun insert(tripPlanApplication: TripPlanApplication)
+    fun update(tripPlanApplication: TripPlanApplication)
+    fun find(commandQuery: CommandQuery): List<TripPlanApplication>
+    data class CommandQuery(
+        val ids: List<UUID> = emptyList(),
+        val tripApplicationId: UUID? = null,
+        val passengerId: UUID? = null,
+    )
 }

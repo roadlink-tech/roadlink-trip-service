@@ -5,18 +5,19 @@ import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponse
 import com.roadlink.tripservice.infrastructure.rest.error.ErrorResponseCode
 import com.roadlink.tripservice.usecases.trip_application.AcceptTripApplicationOutput
 import com.roadlink.tripservice.usecases.trip_application.RejectTripApplicationOutput
-import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplication
+import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus.*
-import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput
+
 class TripPlanApplicationResponseFactory {
 
-    fun from(output: CreateTripPlanApplicationOutput): HttpResponse<ApiResponse> =
+    fun from(output: CreateTripPlanApplication.Output): HttpResponse<ApiResponse> =
         when (output) {
-            is CreateTripPlanApplicationOutput.TripPlanApplicationCreated ->
+            is CreateTripPlanApplication.Output.TripPlanApplicationCreated ->
                 HttpResponse.created(TripPlanApplicationCreatedResponse.from(output))
 
-            is CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger ->
+            is CreateTripPlanApplication.Output.OneOfTheSectionCanNotReceivePassenger ->
                 HttpResponse
                     .status<InsufficientAmountOfSeatsResponse>(PRECONDITION_FAILED)
                     .body(InsufficientAmountOfSeatsResponse())

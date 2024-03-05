@@ -29,7 +29,8 @@ class RetrieveDriverTripSummary(
     }
 
     private fun mapTripsThatHasPendingApplications(driverId: UUID): Map<UUID, Boolean> {
-        val tripApplications = tripApplicationRepository.findAllByDriverId(driverId)
+        val tripApplications =
+            tripApplicationRepository.find(TripApplicationRepository.CommandQuery(driverId = driverId))
         val tipApplicationsGroupByTripId = groupTripApplicationsByTripId(tripApplications)
         val hasPendingApplicationsByTripId: Map<UUID, Boolean> = tipApplicationsGroupByTripId.map { entry ->
             Pair(entry.key, entry.value.any { it.isPendingApproval() })

@@ -183,8 +183,8 @@ object SectionFactory {
             tripId = tripId
         )
 
-    fun withDriver(driverId: UUID) =
-        Section(
+    fun withDriver(driverId: UUID, tripId: UUID = UUID.randomUUID()): Section {
+        return Section(
             id = UUID.randomUUID().toString(),
             departure = TripPointFactory.virreyDelPino_2880(),
             arrival = TripPointFactory.virreyDelPino_1800(),
@@ -193,8 +193,9 @@ object SectionFactory {
             vehicleId = "Ford mustang",
             initialAmountOfSeats = 4,
             bookedSeats = 0,
-            tripId = UUID.randomUUID()
+            tripId = tripId
         )
+    }
 
     class Builder(private var section: Section) {
 

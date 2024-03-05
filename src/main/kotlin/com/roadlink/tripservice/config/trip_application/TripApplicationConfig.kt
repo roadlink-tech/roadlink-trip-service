@@ -44,7 +44,7 @@ class TripApplicationConfig {
     fun createTripPlanApplication(
         sectionRepository: SectionRepository,
         tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<CreateTripPlanApplicationInput, CreateTripPlanApplicationOutput> {
+    ): UseCase<CreateTripPlanApplication.Input, CreateTripPlanApplication.Output> {
         return CreateTripPlanApplication(sectionRepository, tripPlanApplicationRepository)
     }
 
