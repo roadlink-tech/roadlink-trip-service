@@ -47,19 +47,6 @@ class MySQLTripPlanApplicationRepository(
         }
     }
 
-    override fun findById(id: UUID): TripPlanApplication? {
-        return transactionManager.executeRead {
-            try {
-                entityManager.createQuery(
-                    "SELECT tpa FROM TripPlanApplicationJPAEntity tpa WHERE tpa.id = :id",
-                    TripPlanApplicationJPAEntity::class.java
-                ).setParameter("id", id).singleResult.toDomain()
-            } catch (e: NoResultException) {
-                null
-            }
-        }
-    }
-
     override fun find(commandQuery: TripPlanApplicationRepository.CommandQuery): List<TripPlanApplication> {
         val cq = TripPlanApplicationCommandQuery.from(commandQuery)
         return transactionManager.executeRead {
@@ -69,6 +56,10 @@ class MySQLTripPlanApplicationRepository(
 
             val predicates = mutableListOf<Predicate>()
 
+            if (cq.ids.isNotEmpty()) {
+                val idPredicate = root.get<UUID>("id").`in`(cq.ids)
+                predicates.add(idPredicate)
+            }
 
             if (cq.passengerId != null) {
                 val tripApplicationsJoin =

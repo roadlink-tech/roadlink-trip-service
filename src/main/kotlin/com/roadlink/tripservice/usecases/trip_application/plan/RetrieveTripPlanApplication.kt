@@ -10,10 +10,19 @@ class RetrieveTripPlanApplication(
 ) : UseCase<RetrieveTripPlanApplicationInput, RetrieveTripPlanApplicationOutput> {
 
     override fun invoke(input: RetrieveTripPlanApplicationInput): RetrieveTripPlanApplicationOutput {
-        val tripPlanApplication =
-            tripPlanApplicationRepository.findById(UUID.fromString(input.tripPlanApplicationId))
-                ?: return RetrieveTripPlanApplicationOutput.TripPlanApplicationNotFound
-        return RetrieveTripPlanApplicationOutput.TripPlanApplicationFound(tripPlanApplication)
+        val tripPlanApplications = tripPlanApplicationRepository.find(
+            TripPlanApplicationRepository.CommandQuery(
+                ids = listOf(
+                    UUID.fromString(
+                        input.tripPlanApplicationId
+                    )
+                )
+            )
+        )
+        if (tripPlanApplications.isEmpty()) {
+            return RetrieveTripPlanApplicationOutput.TripPlanApplicationNotFound
+        }
+        return RetrieveTripPlanApplicationOutput.TripPlanApplicationFound(tripPlanApplications.first())
     }
 }
 
@@ -22,6 +31,8 @@ data class RetrieveTripPlanApplicationInput(
 )
 
 sealed class RetrieveTripPlanApplicationOutput {
-    data class TripPlanApplicationFound(val tripPlanApplication: TripPlanApplication) : RetrieveTripPlanApplicationOutput()
+    data class TripPlanApplicationFound(val tripPlanApplication: TripPlanApplication) :
+        RetrieveTripPlanApplicationOutput()
+
     object TripPlanApplicationNotFound : RetrieveTripPlanApplicationOutput()
 }

@@ -30,7 +30,7 @@ class InMemoryTripPlanApplicationRepository(
             .firstOrNull { it.tripApplications.any { tripApplication -> tripApplication.id == tripApplicationId } }
     }
 
-    override fun findById(id: UUID): TripPlanApplication? {
+    private fun findById(id: UUID): TripPlanApplication? {
         return tripPlanApplications.firstOrNull { it.id == id }
     }
 

@@ -135,7 +135,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             tripPlanApplication,
-            repository.findById(tripPlanApplication.id)
+            repository.find(TripPlanApplicationRepository.CommandQuery(ids = listOf(tripPlanApplication.id))).first()
         )
     }
 
@@ -156,18 +156,20 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             tripPlanApplication,
-            repository.findById(tripPlanApplication.id)
+            repository.find(TripPlanApplicationRepository.CommandQuery(ids = listOf(tripPlanApplication.id))).first()
         )
     }
 
     @Test
-    fun `given no trip plan application exists with the given id when find by id then should return null`() {
+    fun `given no trip plan application exists with the given id when find by id then should return an empty list`() {
         val otherTripPlanApplicationId = UUID.randomUUID()
         givenExists(TripPlanApplicationFactory.withASingleTripApplication())
 
-        val result = repository.findById(otherTripPlanApplicationId)
+        val result = repository.find(
+            TripPlanApplicationRepository.CommandQuery(ids = listOf(otherTripPlanApplicationId))
+        )
 
-        assertNull(result)
+        assertTrue(result.isEmpty())
     }
 
     private fun givenExists(tripPlanApplication: TripPlanApplication): TripPlanApplication {
