@@ -2,10 +2,13 @@ package com.roadlink.tripservice.infrastructure.persistence.trip_application.pla
 
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.section.SectionJPAEntity
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripApplicationRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.TripApplicationJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.NoResultException
+import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
 import java.util.*
 
@@ -57,39 +60,51 @@ class MySQLTripPlanApplicationRepository(
         }
     }
 
-    override fun findAllByPassengerId(
-        passengerId: UUID
-    ): List<TripPlanApplication> {
+    override fun find(commandQuery: TripPlanApplicationRepository.CommandQuery): List<TripPlanApplication> {
+        val cq = TripPlanApplicationCommandQuery.from(commandQuery)
         return transactionManager.executeRead {
-            try {
-                entityManager.createQuery(
-                    """
-                    |SELECT tpa 
-                    |FROM TripPlanApplicationJPAEntity tpa
-                    |JOIN tpa.tripApplications ta
-                    |WHERE ta.passengerId = :passengerId
-                    """.trimMargin(), TripPlanApplicationJPAEntity::class.java
+            val cb = entityManager.criteriaBuilder
+            val criteriaQuery = cb.createQuery(TripPlanApplicationJPAEntity::class.java)
+            val root = criteriaQuery.from(TripPlanApplicationJPAEntity::class.java)
+
+            val predicates = mutableListOf<Predicate>()
+
+
+            if (cq.passengerId != null) {
+                val tripApplicationsJoin =
+                    root.join<TripPlanApplicationJPAEntity, TripApplicationJPAEntity>("tripApplications")
+                val passengerIdPredicate =
+                    cb.equal(tripApplicationsJoin.get<String>("passengerId"), cq.passengerId.toString())
+                predicates.add(passengerIdPredicate)
+            }
+
+            criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))
+
+            entityManager.createQuery(criteriaQuery).resultList.map { it.toDomain() }
+        }
+
+    }
+
+    data class TripPlanApplicationCommandQuery(
+        val ids: List<UUID> = emptyList(),
+        val tripApplicationId: UUID? = null,
+        val passengerId: UUID? = null,
+    ) {
+        init {
+            require(ids.isNotEmpty() || tripApplicationId != null || passengerId != null) {
+                "At least one field must be not null or empty"
+            }
+        }
+
+        companion object {
+
+            fun from(domainCommandQuery: TripPlanApplicationRepository.CommandQuery): TripPlanApplicationCommandQuery {
+                return TripPlanApplicationCommandQuery(
+                    ids = domainCommandQuery.ids,
+                    tripApplicationId = domainCommandQuery.tripApplicationId,
+                    passengerId = domainCommandQuery.passengerId
                 )
-                    .setParameter("passengerId", passengerId.toString())
-                    .resultList
-                    .map { it.toDomain() }
-            } catch (e: NoResultException) {
-                emptyList()
             }
         }
     }
-
-    // TODO This method must be written in TripApplicationRepository
-//    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
-//        return transactionManager.executeRead {
-//            entityManager.createQuery(
-//                """
-//                |SELECT ta FROM TripApplicationJPAEntity ta
-//                |JOIN ta.sections s
-//                |WHERE s.id = :sectionId
-//                |""".trimMargin(), TripApplicationJPAEntity::class.java
-//            ).setParameter("sectionId", sectionId).resultList.map { it.toDomain() }.toSet()
-//        }
-//    }
-
 }

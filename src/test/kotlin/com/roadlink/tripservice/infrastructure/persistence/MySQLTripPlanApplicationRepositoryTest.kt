@@ -38,7 +38,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             listOf(tripPlanApplication),
-            repository.findAllByPassengerId(passengerId)
+            repository.find(TripPlanApplicationRepository.CommandQuery(passengerId = passengerId))
         )
     }
 
@@ -59,7 +59,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             listOf(tripPlanApplication),
-            repository.findAllByPassengerId(passengerId)
+            repository.find(TripPlanApplicationRepository.CommandQuery(passengerId = passengerId))
         )
     }
 
@@ -69,7 +69,7 @@ class MySQLTripPlanApplicationRepositoryTest {
 
         assertEquals(
             listOf<TripPlanApplication>(),
-            repository.findAllByPassengerId(passengerId)
+            repository.find(TripPlanApplicationRepository.CommandQuery(passengerId = passengerId))
         )
     }
 

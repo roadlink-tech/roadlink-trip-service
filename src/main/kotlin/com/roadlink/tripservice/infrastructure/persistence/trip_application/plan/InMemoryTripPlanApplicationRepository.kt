@@ -34,10 +34,23 @@ class InMemoryTripPlanApplicationRepository(
         return tripPlanApplications.firstOrNull { it.id == id }
     }
 
-    override fun findAllByPassengerId(
-        passengerId: UUID
-    ): List<TripPlanApplication> {
-        TODO("Not yet implemented")
+    override fun find(commandQuery: TripPlanApplicationRepository.CommandQuery): List<TripPlanApplication> {
+        if (commandQuery.ids.isNotEmpty()) {
+            val result = findById(commandQuery.ids.first())
+            return if (result != null) {
+                return listOf(result)
+            } else emptyList()
+        }
+        if (commandQuery.passengerId != null) {
+            return emptyList()
+        }
+        if (commandQuery.tripApplicationId != null) {
+            val result = findByTripApplicationId(commandQuery.tripApplicationId)
+            return if (result != null) {
+                return listOf(result)
+            } else emptyList()
+        }
+        TODO()
     }
 
     fun deleteAll() {

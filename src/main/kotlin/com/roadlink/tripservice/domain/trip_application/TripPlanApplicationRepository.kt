@@ -7,5 +7,10 @@ interface TripPlanApplicationRepository {
     fun update(tripPlanApplication: TripPlanApplication)
     fun findByTripApplicationId(tripApplicationId: UUID): TripPlanApplication?
     fun findById(id: UUID): TripPlanApplication?
-    fun findAllByPassengerId(passengerId: UUID): List<TripPlanApplication>
+    fun find(commandQuery: CommandQuery): List<TripPlanApplication>
+    data class CommandQuery(
+        val ids: List<UUID> = emptyList(),
+        val tripApplicationId: UUID? = null,
+        val passengerId: UUID? = null,
+    )
 }
