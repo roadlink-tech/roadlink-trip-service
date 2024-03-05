@@ -15,15 +15,15 @@ class MySQLTripPlanApplicationRepository(
     private val transactionManager: TransactionOperations<Session>,
 ) : TripPlanApplicationRepository {
 
-    override fun insert(application: TripPlanApplication) {
+    override fun insert(tripPlanApplication: TripPlanApplication) {
         transactionManager.executeWrite {
-            entityManager.persist(TripPlanApplicationJPAEntity.from(application))
+            entityManager.persist(TripPlanApplicationJPAEntity.from(tripPlanApplication))
         }
     }
 
-    override fun update(application: TripPlanApplication) {
+    override fun update(tripPlanApplication: TripPlanApplication) {
         transactionManager.executeWrite {
-            entityManager.merge(TripPlanApplicationJPAEntity.from(application))
+            entityManager.merge(TripPlanApplicationJPAEntity.from(tripPlanApplication))
         }
     }
 
@@ -80,16 +80,16 @@ class MySQLTripPlanApplicationRepository(
     }
 
     // TODO This method must be written in TripApplicationRepository
-    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
-        return transactionManager.executeRead {
-            entityManager.createQuery(
-                """
-                |SELECT ta FROM TripApplicationJPAEntity ta
-                |JOIN ta.sections s
-                |WHERE s.id = :sectionId
-                |""".trimMargin(), TripApplicationJPAEntity::class.java
-            ).setParameter("sectionId", sectionId).resultList.map { it.toDomain() }.toSet()
-        }
-    }
+//    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+//        return transactionManager.executeRead {
+//            entityManager.createQuery(
+//                """
+//                |SELECT ta FROM TripApplicationJPAEntity ta
+//                |JOIN ta.sections s
+//                |WHERE s.id = :sectionId
+//                |""".trimMargin(), TripApplicationJPAEntity::class.java
+//            ).setParameter("sectionId", sectionId).resultList.map { it.toDomain() }.toSet()
+//        }
+//    }
 
 }

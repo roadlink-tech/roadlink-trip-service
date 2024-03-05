@@ -43,7 +43,7 @@ class MySQLTripApplicationRepositoryTest {
         val tripApplication2 = givenExists(TripApplicationFactory.withDriver(driverId))
 
         val otherDriverId = UUID.randomUUID()
-        val tripApplication3 = givenExists(TripApplicationFactory.withDriver(otherDriverId))
+        givenExists(TripApplicationFactory.withDriver(otherDriverId))
 
         val result = tripApplicationRepository.findAllByDriverId(driverId)
 
@@ -68,12 +68,34 @@ class MySQLTripApplicationRepositoryTest {
         val tripApplication2 = givenExists(TripApplicationFactory.withSections(listOf(avCabildoSection)))
 
         val virreyDelPinoSection = SectionFactory.virreyDelPino(tripId = UUID.randomUUID())
-        val tripApplication3 = givenExists(TripApplicationFactory.withSections(listOf(virreyDelPinoSection)))
+        givenExists(TripApplicationFactory.withSections(listOf(virreyDelPinoSection)))
 
         val result = tripApplicationRepository.findByTripId(avCabildoSection.tripId)
 
         assertEquals(2, result.size)
         assertTrue { result.containsAll(setOf(tripApplication1, tripApplication2)) }
+    }
+
+    @Test
+    fun `given trip application has the given section when find by section then should return empty it`() {
+        val avCabildoSection = SectionFactory.avCabildo()
+        val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
+        givenASavedTripPlanApplication(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
+
+        val result = tripApplicationRepository.findBySectionId(avCabildoSection.id)
+
+        assertEquals(setOf(tripApplication), result)
+    }
+
+    @Test
+    fun `given no trip application has the given section when find by section then should return empty set`() {
+        val avCabildoSection = SectionFactory.avCabildo()
+        val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
+        givenASavedTripPlanApplication(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
+
+        val result = tripApplicationRepository.findBySectionId(SectionFactory.virreyDelPino_id)
+
+        assertTrue { result.isEmpty() }
     }
 
     private fun givenExists(tripApplication: TripPlanApplication.TripApplication): TripPlanApplication.TripApplication {
@@ -86,5 +108,15 @@ class MySQLTripApplicationRepositoryTest {
         )
 
         return tripApplication
+    }
+
+    private fun givenASavedTripPlanApplication(tripPlanApplication: TripPlanApplication): TripPlanApplication {
+        tripPlanApplication.tripApplications.flatMap { it.sections }.forEach {
+            sectionRepository.save(it)
+        }
+
+        tripPlanApplicationRepository.insert(tripPlanApplication)
+
+        return tripPlanApplication
     }
 }

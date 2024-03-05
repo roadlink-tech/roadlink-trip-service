@@ -50,5 +50,15 @@ class MySQLTripApplicationRepository(
                 .map { it.toDomain() }
         }
     }
-
+    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+        return transactionManager.executeRead {
+            entityManager.createQuery(
+                """
+                |SELECT ta FROM TripApplicationJPAEntity ta
+                |JOIN ta.sections s
+                |WHERE s.id = :sectionId
+                |""".trimMargin(), TripApplicationJPAEntity::class.java
+            ).setParameter("sectionId", sectionId).resultList.map { it.toDomain() }.toSet()
+        }
+    }
 }

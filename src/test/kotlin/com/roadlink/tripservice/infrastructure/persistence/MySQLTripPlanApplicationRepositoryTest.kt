@@ -123,27 +123,6 @@ class MySQLTripPlanApplicationRepositoryTest {
         assertNull(result)
     }
 
-    @Test
-    fun `given trip application has the given section when find by section then should return empty it`() {
-        val avCabildoSection = SectionFactory.avCabildo()
-        val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
-        givenExists(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
-
-        val result = repository.findBySectionId(avCabildoSection.id)
-
-        assertEquals(setOf(tripApplication), result)
-    }
-
-    @Test
-    fun `given no trip application has the given section when find by section then should return empty set`() {
-        val avCabildoSection = SectionFactory.avCabildo()
-        val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
-        givenExists(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
-
-        val result = repository.findBySectionId(SectionFactory.virreyDelPino_id)
-
-        assertTrue { result.isEmpty() }
-    }
 
     @Test
     fun `given no trip plan application when save one then should be able to find it by id`() {

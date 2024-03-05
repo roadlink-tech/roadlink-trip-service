@@ -23,4 +23,12 @@ class InMemoryTripApplicationRepository(
     override fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
         return tripApplications.filter { it.tripId() == tripId }
     }
+
+    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+        return tripApplications
+            .filter { tripApplication ->
+                tripApplication.sections.any { it.id == sectionId }
+            }
+            .toSet()
+    }
 }
