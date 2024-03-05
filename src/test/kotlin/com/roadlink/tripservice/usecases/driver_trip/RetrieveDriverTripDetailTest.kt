@@ -1,27 +1,27 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
-import com.roadlink.tripservice.domain.*
-import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
-import com.roadlink.tripservice.infrastructure.persistence.user.FixedUserRepository
 import com.roadlink.tripservice.config.StubTimeProvider
+import com.roadlink.tripservice.domain.NotBeenRated
+import com.roadlink.tripservice.domain.Rated
+import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
+import com.roadlink.tripservice.domain.driver_trip.Passenger
+import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
+import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
+import com.roadlink.tripservice.domain.trip.TripStatus.*
+import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
+import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.user.FixedUserRepository
+import com.roadlink.tripservice.usecases.common.TripPointFactory
 import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_12hs
 import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_13hs
 import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_15hs
 import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_18hs
 import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_7hs
-import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
-import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
-import com.roadlink.tripservice.domain.driver_trip.Passenger
-import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
-import com.roadlink.tripservice.domain.trip.TripStatus.*
-import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
-
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
-import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
-import com.roadlink.tripservice.usecases.common.TripPointFactory
 import com.roadlink.tripservice.usecases.factory.builder
+import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -55,7 +55,6 @@ class RetrieveDriverTripDetailTest {
 
         retrieveDriverTripDetail = RetrieveDriverTripDetail(
             sectionRepository = inMemorySectionRepository,
-            tripPlanApplicationRepository = inMemoryTripPlanApplicationRepository,
             tripApplicationRepository = inMemoryTripApplicationRepository,
             userRepository = fixedUserRepository,
             ratingRepository = fixedRatingRepository,

@@ -5,7 +5,6 @@ import com.roadlink.tripservice.domain.driver_trip.*
 import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.trip.TripStatus
 import com.roadlink.tripservice.domain.trip.TripStatus.*
@@ -15,7 +14,6 @@ import java.util.UUID
 
 class RetrieveDriverTripDetail(
     private val sectionRepository: SectionRepository,
-    private val tripPlanApplicationRepository: TripPlanApplicationRepository,
     private val tripApplicationRepository: TripApplicationRepository,
     private val userRepository: UserRepository,
     private val ratingRepository: RatingRepository,
