@@ -31,4 +31,8 @@ class InMemoryTripApplicationRepository(
             }
             .toSet()
     }
+
+    override fun find(commandQuery: TripApplicationRepository.CommandQuery): List<TripPlanApplication.TripApplication> {
+        TODO("Not yet implemented")
+    }
 }

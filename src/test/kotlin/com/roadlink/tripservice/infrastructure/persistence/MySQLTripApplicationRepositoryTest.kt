@@ -29,7 +29,7 @@ class MySQLTripApplicationRepositoryTest {
     @Test
     fun `given no trip application exists with the given driver id when find all by driver id then should return empty list`() {
         val otherDriverId = UUID.randomUUID()
-        givenExists(TripApplicationFactory.any())
+        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.any())
 
         val result = tripApplicationRepository.findAllByDriverId(otherDriverId)
 
@@ -39,22 +39,70 @@ class MySQLTripApplicationRepositoryTest {
     @Test
     fun `given trip applications exists with the given driver id when find all by driver id then should return them`() {
         val driverId = UUID.randomUUID()
-        val tripApplication1 = givenExists(TripApplicationFactory.withDriver(driverId))
-        val tripApplication2 = givenExists(TripApplicationFactory.withDriver(driverId))
+        val tripApplication1 = givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withDriver(driverId))
+        val tripApplication2 = givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withDriver(driverId))
 
         val otherDriverId = UUID.randomUUID()
-        givenExists(TripApplicationFactory.withDriver(otherDriverId))
+        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withDriver(otherDriverId))
 
         val result = tripApplicationRepository.findAllByDriverId(driverId)
 
         assertEquals(2, result.size)
         assertTrue { result.containsAll(setOf(tripApplication1, tripApplication2)) }
     }
+    
+    @Test
+    fun `given some trip plan application saved, when find by driver id and trip id then it must be retrieved `() {
+        val driverId = UUID.randomUUID()
+        val tripId = UUID.randomUUID()
+        val tripApplication1 =
+            givenASavedTripPlanApplicationWithSections(
+                TripApplicationFactory.withDriver(
+                    driverId = driverId,
+                    tripId = tripId
+                )
+            )
+        val tripApplication2 =
+            givenASavedTripPlanApplicationWithSections(
+                TripApplicationFactory.withDriver(
+                    driverId = driverId,
+                    tripId = tripId
+                )
+            )
+
+        val otherDriverId = UUID.randomUUID()
+        val otherTripId = UUID.randomUUID()
+        val tripApplication3 = givenASavedTripPlanApplicationWithSections(
+            TripApplicationFactory.withDriver(
+                driverId = otherDriverId,
+                tripId = otherTripId
+            )
+        )
+
+
+        // THEN
+        assertTrue {
+            tripApplicationRepository.find(
+                TripApplicationRepository.CommandQuery(
+                    driverId = driverId,
+                    tripId = tripId
+                )
+            ).containsAll(setOf(tripApplication1, tripApplication2))
+        }
+        assertTrue {
+            tripApplicationRepository.find(
+                TripApplicationRepository.CommandQuery(
+                    driverId = otherDriverId,
+                    tripId = otherTripId
+                )
+            ).containsAll(setOf(tripApplication3))
+        }
+    }
 
     @Test
     fun `given no trip application exists with the given trip id when find by trip id then should return empty list`() {
         val otherTripId = UUID.randomUUID()
-        givenExists(TripApplicationFactory.any())
+        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.any())
 
         val result = tripApplicationRepository.findByTripId(otherTripId)
 
@@ -64,11 +112,13 @@ class MySQLTripApplicationRepositoryTest {
     @Test
     fun `given trip applications exists with the given trip id when find by trip id then should return them`() {
         val avCabildoSection = SectionFactory.avCabildo()
-        val tripApplication1 = givenExists(TripApplicationFactory.withSections(listOf(avCabildoSection)))
-        val tripApplication2 = givenExists(TripApplicationFactory.withSections(listOf(avCabildoSection)))
+        val tripApplication1 =
+            givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withSections(listOf(avCabildoSection)))
+        val tripApplication2 =
+            givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withSections(listOf(avCabildoSection)))
 
         val virreyDelPinoSection = SectionFactory.virreyDelPino(tripId = UUID.randomUUID())
-        givenExists(TripApplicationFactory.withSections(listOf(virreyDelPinoSection)))
+        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withSections(listOf(virreyDelPinoSection)))
 
         val result = tripApplicationRepository.findByTripId(avCabildoSection.tripId)
 
@@ -98,10 +148,11 @@ class MySQLTripApplicationRepositoryTest {
         assertTrue { result.isEmpty() }
     }
 
-    private fun givenExists(tripApplication: TripPlanApplication.TripApplication): TripPlanApplication.TripApplication {
+    private fun givenASavedTripPlanApplicationWithSections(tripApplication: TripPlanApplication.TripApplication): TripPlanApplication.TripApplication {
         tripApplication.sections.forEach {
-            if (sectionRepository.findAllById(setOf(it.id)).isEmpty())
+            if (sectionRepository.findAllById(setOf(it.id)).isEmpty()) {
                 sectionRepository.save(it)
+            }
         }
         tripPlanApplicationRepository.insert(
             TripPlanApplicationFactory.withApplications(listOf(tripApplication))
