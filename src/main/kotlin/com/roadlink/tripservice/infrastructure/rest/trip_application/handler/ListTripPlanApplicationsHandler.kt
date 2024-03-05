@@ -22,7 +22,7 @@ class ListTripPlanApplicationsHandler(
         val response = listTripPlanApplications(
             ListTripPlanApplications.Input(
                 passengerId = UUID.fromString(passengerId),
-                tripApplicationStatus = status
+                status = status
             )
         )
 

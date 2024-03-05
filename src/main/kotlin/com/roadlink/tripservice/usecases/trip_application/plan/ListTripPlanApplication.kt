@@ -22,10 +22,10 @@ class ListTripPlanApplications(
 
     data class Input(
         val passengerId: UUID,
-        val tripApplicationStatus: String? = null
+        val status: String? = null
     ) {
         fun status(): TripPlanApplication.Status? {
-            return tripApplicationStatus?.let {
+            return status?.let {
                 try {
                     TripPlanApplication.Status.valueOf(it.uppercase(Locale.getDefault()))
                 } catch (e: IllegalArgumentException) {
