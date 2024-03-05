@@ -2,14 +2,11 @@ package com.roadlink.tripservice.infrastructure.persistence.trip_application
 
 import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
-import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
-import com.roadlink.tripservice.infrastructure.persistence.section.SectionCommandQuery
 import com.roadlink.tripservice.infrastructure.persistence.section.SectionJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
-import java.time.Instant
 import java.util.*
 
 class MySQLTripApplicationRepository(
@@ -34,40 +31,36 @@ class MySQLTripApplicationRepository(
         }
     }
 
-    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+    override fun find(commandQuery: TripApplicationRepository.CommandQuery): List<TripPlanApplication.TripApplication> {
+        val cq = TripApplicationCommandQuery.from(commandQuery)
         return transactionManager.executeRead {
-            find(TripApplicationRepository.CommandQuery(sectionId)).toMutableSet()
+            val cb = entityManager.criteriaBuilder
+            val criteriaQuery = cb.createQuery(TripApplicationJPAEntity::class.java)
+            val root = criteriaQuery.from(TripApplicationJPAEntity::class.java)
+
+            val predicates = mutableListOf<Predicate>()
+
+            if (cq.sectionId.isNotEmpty()) {
+                val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
+                val predicate = cb.equal(sections.get<String>("id"), cq.sectionId)
+                predicates.add(predicate)
+            }
+
+            if (cq.tripId != null) {
+                val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
+                val tripIdPredicate = cb.equal(sections.get<String>("tripId"), cq.tripId)
+                predicates.add(tripIdPredicate)
+            }
+
+            if (cq.driverId != null) {
+                val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
+                val driverIdPredicate = cb.equal(sections.get<String>("driverId"), cq.driverId.toString())
+                predicates.add(driverIdPredicate)
+            }
+            criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))
+
+            entityManager.createQuery(criteriaQuery).resultList.map { it.toDomain() }
         }
-    }
-
-    override fun find(domainCommandQuery: TripApplicationRepository.CommandQuery): List<TripPlanApplication.TripApplication> {
-        val commandQuery = TripApplicationCommandQuery.from(domainCommandQuery)
-        val cb = entityManager.criteriaBuilder
-        val criteriaQuery = cb.createQuery(TripApplicationJPAEntity::class.java)
-        val root = criteriaQuery.from(TripApplicationJPAEntity::class.java)
-
-        val predicates = mutableListOf<Predicate>()
-
-        if (commandQuery.sectionId.isNotEmpty()) {
-            val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
-            val predicate = cb.equal(sections.get<String>("id"), commandQuery.sectionId)
-            predicates.add(predicate)
-        }
-
-        if (commandQuery.tripId != null) {
-            val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
-            val tripIdPredicate = cb.equal(sections.get<String>("tripId"), commandQuery.tripId)
-            predicates.add(tripIdPredicate)
-        }
-
-        if (commandQuery.driverId != null) {
-            val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
-            val driverIdPredicate = cb.equal(sections.get<String>("driverId"), commandQuery.driverId.toString())
-            predicates.add(driverIdPredicate)
-        }
-        criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))
-
-        return entityManager.createQuery(criteriaQuery).resultList.map { it.toDomain() }
     }
 
     data class TripApplicationCommandQuery(

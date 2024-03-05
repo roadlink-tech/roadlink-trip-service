@@ -24,7 +24,7 @@ class InMemoryTripApplicationRepository(
         return tripApplications.filter { it.tripId() == tripId }
     }
 
-    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+    private fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
         return tripApplications
             .filter { tripApplication ->
                 tripApplication.sections.any { it.id == sectionId }
@@ -33,6 +33,15 @@ class InMemoryTripApplicationRepository(
     }
 
     override fun find(commandQuery: TripApplicationRepository.CommandQuery): List<TripPlanApplication.TripApplication> {
-        TODO("Not yet implemented")
+        if (commandQuery.sectionId.isNotEmpty()) {
+            return findBySectionId(commandQuery.sectionId).toMutableList()
+        }
+        if (commandQuery.tripId != null) {
+            return findByTripId(commandQuery.tripId)
+        }
+        if (commandQuery.driverId != null) {
+            return findAllByDriverId(commandQuery.driverId)
+        }
+        TODO()
     }
 }

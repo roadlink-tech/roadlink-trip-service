@@ -35,7 +35,7 @@ class RetrieveDriverTripDetail(
                             arrival = section.arrival,
                             occupiedSeats = section.occupiedSeats(),
                             availableSeats = section.availableSeats(),
-                            passengers = tripApplicationRepository.findBySectionId(section.id)
+                            passengers = tripApplicationRepository.find(TripApplicationRepository.CommandQuery(sectionId = section.id))
                                 .filter { it.isConfirmed() }
                                 .map { it.passengerId }
                                 .map { passengerId ->

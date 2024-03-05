@@ -40,15 +40,6 @@ class InMemoryTripPlanApplicationRepository(
         TODO("Not yet implemented")
     }
 
-//    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
-//        return tripPlanApplications
-//            .flatMap { it.tripApplications }
-//            .filter { tripApplication ->
-//                tripApplication.sections.any { it.id == sectionId }
-//            }
-//            .toSet()
-//    }
-
     fun deleteAll() {
         this.tripPlanApplications.clear()
     }

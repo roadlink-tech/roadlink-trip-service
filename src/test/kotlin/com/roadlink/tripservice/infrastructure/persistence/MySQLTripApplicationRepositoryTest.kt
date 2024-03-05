@@ -50,7 +50,7 @@ class MySQLTripApplicationRepositoryTest {
         assertEquals(2, result.size)
         assertTrue { result.containsAll(setOf(tripApplication1, tripApplication2)) }
     }
-    
+
     @Test
     fun `given some trip plan application saved, when find by driver id and trip id then it must be retrieved `() {
         val driverId = UUID.randomUUID()
@@ -132,9 +132,10 @@ class MySQLTripApplicationRepositoryTest {
         val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
         givenASavedTripPlanApplication(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
 
-        val result = tripApplicationRepository.findBySectionId(avCabildoSection.id)
+        val result =
+            tripApplicationRepository.find(TripApplicationRepository.CommandQuery(sectionId = avCabildoSection.id))
 
-        assertEquals(setOf(tripApplication), result)
+        assertEquals(listOf(tripApplication), result)
     }
 
     @Test
@@ -143,7 +144,8 @@ class MySQLTripApplicationRepositoryTest {
         val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
         givenASavedTripPlanApplication(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
 
-        val result = tripApplicationRepository.findBySectionId(SectionFactory.virreyDelPino_id)
+        val result =
+            tripApplicationRepository.find(TripApplicationRepository.CommandQuery(sectionId = SectionFactory.virreyDelPino_id))
 
         assertTrue { result.isEmpty() }
     }
