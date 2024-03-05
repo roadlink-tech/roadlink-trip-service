@@ -18,8 +18,11 @@ data class TripApplicationJPAEntity(
     val id: UUID,
     @ManyToMany(cascade = [MERGE, REMOVE, REFRESH, DETACH], fetch = FetchType.EAGER)
     val sections: List<SectionJPAEntity>,
+    @Column(name = "passenger_id")
     val passengerId: String,
+    @Column(name = "status")
     val status: String,
+    @Column(name = "authorizer_id")
     val authorizerId: String
 ) {
     companion object {

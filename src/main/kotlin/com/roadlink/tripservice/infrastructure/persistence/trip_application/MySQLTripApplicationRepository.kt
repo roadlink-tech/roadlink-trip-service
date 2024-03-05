@@ -24,7 +24,7 @@ class MySQLTripApplicationRepository(
                 |SELECT ta 
                 |FROM TripApplicationJPAEntity ta
                 |JOIN ta.sections s
-                |WHERE s.driver = :driverId
+                |WHERE s.driverId = :driverId
                 |""".trimMargin(),
                 TripApplicationJPAEntity::class.java
             )

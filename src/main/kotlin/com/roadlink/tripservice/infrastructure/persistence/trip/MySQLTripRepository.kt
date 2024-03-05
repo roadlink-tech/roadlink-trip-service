@@ -25,7 +25,7 @@ class MySQLTripRepository(
             |SELECT t 
             |FROM TripJPAEntity t
             |WHERE 
-            |   t.driver = :driverId
+            |   t.driverId = :driverId
             |   AND NOT :to <= t.departure.estimatedArrivalTime
             |   AND NOT :from >= t.arrival.estimatedArrivalTime
             |""".trimMargin(),
@@ -46,7 +46,7 @@ class MySQLTripRepository(
                 """
                 |SELECT t 
                 |FROM TripJPAEntity t
-                |WHERE t.driver = :driverId
+                |WHERE t.driverId = :driverId
                 |""".trimMargin(),
                 TripJPAEntity::class.java
             )

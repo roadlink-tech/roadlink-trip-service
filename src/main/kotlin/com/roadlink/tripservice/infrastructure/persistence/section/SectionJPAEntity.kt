@@ -15,7 +15,7 @@ import java.util.*
 data class SectionJPAEntity(
     @Id val id: String,
     @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(name = "tripId", nullable = false, updatable = false, columnDefinition = "VARCHAR(36)")
+    @Column(name = "trip_id", nullable = false, updatable = false, columnDefinition = "VARCHAR(36)")
     val tripId: UUID,
 
     @Embedded
@@ -43,12 +43,15 @@ data class SectionJPAEntity(
         AttributeOverride(name = "longitude", column = Column(name = "arrival_longitude"))
     )
     val arrival: TripPointJPAEntity,
-
+    @Column(name = "distance_in_meters")
     val distanceInMeters: Double,
-    // TODO esto es el driverId?
-    val driver: String,
-    val vehicle: String,
+    @Column(name = "driver_id")
+    val driverId: String,
+    @Column(name = "vehicle_id")
+    val vehicleId: String,
+    @Column(name = "initial_amount_of_seats")
     var initialAmountOfSeats: Int,
+    @Column(name = "booked_seats")
     var bookedSeats: Int
 ) {
     companion object {
@@ -59,8 +62,8 @@ data class SectionJPAEntity(
                 departure = TripPointJPAEntity.from(section.departure),
                 arrival = TripPointJPAEntity.from(section.arrival),
                 distanceInMeters = section.distanceInMeters,
-                driver = section.driverId,
-                vehicle = section.vehicleId,
+                driverId = section.driverId,
+                vehicleId = section.vehicleId,
                 initialAmountOfSeats = section.initialAmountOfSeats,
                 bookedSeats = section.bookedSeats
             )
@@ -74,8 +77,8 @@ data class SectionJPAEntity(
             departure = departure.toDomain(),
             arrival = arrival.toDomain(),
             distanceInMeters = distanceInMeters,
-            driverId = driver,
-            vehicleId = vehicle,
+            driverId = driverId,
+            vehicleId = vehicleId,
             initialAmountOfSeats = initialAmountOfSeats,
             bookedSeats = bookedSeats,
         )

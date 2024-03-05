@@ -8,8 +8,10 @@ import jakarta.persistence.*
 @Table(name = "trip")
 data class TripJPAEntity(
     @Id val id: String,
-    val driver: String,
-    val vehicle: String,
+    @Column(name = "driver_id")
+    val driverId: String,
+    @Column(name = "vehicle_id")
+    val vehicleId: String,
     @Embedded
     @AttributeOverrides(
         AttributeOverride(name = "estimatedArrivalTime", column = Column(name = "departure_estimated_arrival_time")),
@@ -43,8 +45,8 @@ data class TripJPAEntity(
         fun from(trip: Trip): TripJPAEntity {
             return TripJPAEntity(
                 id = trip.id,
-                driver = trip.driverId,
-                vehicle = trip.vehicle,
+                driverId = trip.driverId,
+                vehicleId = trip.vehicle,
                 departure = TripPointJPAEntity.from(trip.departure),
                 arrival = TripPointJPAEntity.from(trip.arrival),
                 meetingPoints = trip.meetingPoints.map { TripPointJPAEntity.from(it) },
@@ -57,8 +59,8 @@ data class TripJPAEntity(
     fun toDomain(): Trip {
         return Trip(
             id = id,
-            driverId = driver,
-            vehicle = vehicle,
+            driverId = driverId,
+            vehicle = vehicleId,
             departure = departure.toDomain(),
             arrival = arrival.toDomain(),
             meetingPoints = meetingPoints.map { it.toDomain() },
