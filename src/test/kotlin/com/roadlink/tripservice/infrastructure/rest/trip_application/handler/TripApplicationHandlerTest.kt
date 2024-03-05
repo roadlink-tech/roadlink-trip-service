@@ -36,9 +36,6 @@ class TripApplicationHandlerTest : End2EndTest() {
     lateinit var client: HttpClient
 
     @Inject
-    private lateinit var objectMapper: ObjectMapper
-
-    @Inject
     lateinit var rejectTripApplication: UseCase<UUID, RejectTripApplicationOutput>
 
     @Inject

@@ -2,6 +2,7 @@ package com.roadlink.tripservice.infrastructure.persistence
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
+import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
 import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip_application.TripApplicationFactory
@@ -22,9 +23,61 @@ class MySQLTripPlanApplicationRepositoryTest {
     lateinit var repository: TripPlanApplicationRepository
 
     @Test
+    fun `given a trip plan application stored, when find it by passenger id then it must be retrieved`() {
+        val tripApplicationId = UUID.randomUUID()
+        val passengerId = UUID.randomUUID()
+        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication(
+            tripApplicationId = tripApplicationId,
+            passengerId = passengerId.toString()
+        )
+        tripPlanApplication.tripApplications.flatMap { it.sections }.forEach {
+            sectionRepository.save(it)
+        }
+
+        repository.insert(tripPlanApplication)
+
+        assertEquals(
+            listOf(tripPlanApplication),
+            repository.findAllByPassengerId(passengerId)
+        )
+    }
+
+    @Test
+    fun `given a trip plan application stored, when find it by passenger id and trip application status then it must be retrieved`() {
+        val tripApplicationId = UUID.randomUUID()
+        val passengerId = UUID.randomUUID()
+        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication(
+            tripApplicationId = tripApplicationId,
+            passengerId = passengerId.toString(),
+            tripApplicationStatus = REJECTED
+        )
+        tripPlanApplication.tripApplications.flatMap { it.sections }.forEach {
+            sectionRepository.save(it)
+        }
+
+        repository.insert(tripPlanApplication)
+
+        assertEquals(
+            listOf(tripPlanApplication),
+            repository.findAllByPassengerId(passengerId)
+        )
+    }
+
+    @Test
+    fun `when find trip plan application by passenger id, but there no is anything, then an empty list must be retrieved`() {
+        val passengerId = UUID.randomUUID()
+
+        assertEquals(
+            listOf<TripPlanApplication>(),
+            repository.findAllByPassengerId(passengerId)
+        )
+    }
+
+    @Test
     fun `given no trip plan application when save one then should be able to find it`() {
         val tripApplicationId = UUID.randomUUID()
-        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication(tripApplicationId = tripApplicationId)
+        val tripPlanApplication =
+            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationId = tripApplicationId)
         tripPlanApplication.tripApplications.flatMap { it.sections }.forEach {
             sectionRepository.save(it)
         }
@@ -76,7 +129,7 @@ class MySQLTripPlanApplicationRepositoryTest {
         val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
         givenExists(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
 
-        val result = repository.findTripApplicationBySectionId(avCabildoSection.id)
+        val result = repository.findBySectionId(avCabildoSection.id)
 
         assertEquals(setOf(tripApplication), result)
     }
@@ -87,7 +140,7 @@ class MySQLTripPlanApplicationRepositoryTest {
         val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
         givenExists(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
 
-        val result = repository.findTripApplicationBySectionId(SectionFactory.virreyDelPino_id)
+        val result = repository.findBySectionId(SectionFactory.virreyDelPino_id)
 
         assertTrue { result.isEmpty() }
     }
@@ -113,7 +166,8 @@ class MySQLTripPlanApplicationRepositoryTest {
         val tripPlanApplication = givenExists(
             TripPlanApplicationFactory.withASingleTripApplication(
                 passengerId = passengerId.toString(),
-            ))
+            )
+        )
         tripPlanApplication.confirmApplicationById(
             tripPlanApplication.tripApplications.first().id,
             passengerId

@@ -55,13 +55,14 @@ internal class CreateTripTest {
         assertThrows<AlreadyExistsTripByDriverInTimeRange> {
             createTrip(
                 CreateTrip.Input(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(),
-                meetingPoints = emptyList(),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(),
+                    meetingPoints = emptyList(),
+                    availableSeats = 4,
+                )
+            )
         }
         assertEquals(listOf(TripFactory.avCabildo4853_to_avCabildo20()), inMemoryTripRepository.findAll())
         theCommandHasNotBeenPublished()
@@ -72,15 +73,16 @@ internal class CreateTripTest {
         assertThrows<InvalidTripTimeRange> {
             createTrip(
                 CreateTrip.Input(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(
-                    at = InstantFactory.october15_7hs(),
-                ),
-                meetingPoints = emptyList(),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(
+                        at = InstantFactory.october15_7hs(),
+                    ),
+                    meetingPoints = emptyList(),
+                    availableSeats = 4,
+                )
+            )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
         theCommandHasNotBeenPublished()
@@ -91,17 +93,18 @@ internal class CreateTripTest {
         assertThrows<InvalidTripTimeRange> {
             createTrip(
                 CreateTrip.Input(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(),
-                meetingPoints = listOf(
-                    TripPointFactory.virreyDelPino_1800(
-                        at = InstantFactory.october15_7hs(),
-                    )
-                ),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(),
+                    meetingPoints = listOf(
+                        TripPointFactory.virreyDelPino_1800(
+                            at = InstantFactory.october15_7hs(),
+                        )
+                    ),
+                    availableSeats = 4,
+                )
+            )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
         theCommandHasNotBeenPublished()
@@ -112,17 +115,18 @@ internal class CreateTripTest {
         assertThrows<InvalidTripTimeRange> {
             createTrip(
                 CreateTrip.Input(
-                driver = "John Smith",
-                vehicle = "Ford mustang",
-                departure = TripPointFactory.avCabildo_4853(),
-                arrival = TripPointFactory.avCabildo_20(),
-                meetingPoints = listOf(
-                    TripPointFactory.virreyDelPino_1800(
-                        at = InstantFactory.october15_22hs(),
-                    )
-                ),
-                availableSeats = 4,
-            ))
+                    driver = "John Smith",
+                    vehicle = "Ford mustang",
+                    departure = TripPointFactory.avCabildo_4853(),
+                    arrival = TripPointFactory.avCabildo_20(),
+                    meetingPoints = listOf(
+                        TripPointFactory.virreyDelPino_1800(
+                            at = InstantFactory.october15_22hs(),
+                        )
+                    ),
+                    availableSeats = 4,
+                )
+            )
         }
         assertTrue(inMemoryTripRepository.isEmpty())
         theCommandHasNotBeenPublished()
@@ -134,13 +138,14 @@ internal class CreateTripTest {
 
         val result = createTrip(
             CreateTrip.Input(
-            driver = "John Smith",
-            vehicle = "Ford mustang",
-            departure = TripPointFactory.avCabildo_4853(),
-            arrival = TripPointFactory.avCabildo_20(),
-            meetingPoints = emptyList(),
-            availableSeats = 4,
-        ))
+                driver = "John Smith",
+                vehicle = "Ford mustang",
+                departure = TripPointFactory.avCabildo_4853(),
+                arrival = TripPointFactory.avCabildo_20(),
+                meetingPoints = emptyList(),
+                availableSeats = 4,
+            )
+        )
 
         assertEquals(TripFactory.avCabildo4853_to_avCabildo20(), result)
         assertEquals(listOf(TripFactory.avCabildo4853_to_avCabildo20()), inMemoryTripRepository.findAll())
@@ -153,13 +158,14 @@ internal class CreateTripTest {
 
         val result = createTrip(
             CreateTrip.Input(
-            driver = "John Smith",
-            vehicle = "Ford mustang",
-            departure = TripPointFactory.avCabildo_4853(),
-            arrival = TripPointFactory.avCabildo_20(),
-            meetingPoints = listOf(TripPointFactory.virreyDelPino_1800()),
-            availableSeats = 5,
-        ))
+                driver = "John Smith",
+                vehicle = "Ford mustang",
+                departure = TripPointFactory.avCabildo_4853(),
+                arrival = TripPointFactory.avCabildo_20(),
+                meetingPoints = listOf(TripPointFactory.virreyDelPino_1800()),
+                availableSeats = 5,
+            )
+        )
 
         assertEquals(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), result)
         assertEquals(

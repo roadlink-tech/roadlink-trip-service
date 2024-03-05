@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
-class RetrieveDriverTripApplicationsTest {
+class ListDriverTripApplicationsTest {
 
     private lateinit var inMemoryTripApplicationRepository: InMemoryTripApplicationRepository
 
@@ -28,7 +28,7 @@ class RetrieveDriverTripApplicationsTest {
 
     private lateinit var fixedRatingRepository: FixedRatingRepository
 
-    private lateinit var retrieveDriverTripApplications: RetrieveDriverTripApplications
+    private lateinit var listDriverTripApplications: ListDriverTripApplications
 
     @BeforeEach
     fun setUp() {
@@ -39,7 +39,7 @@ class RetrieveDriverTripApplicationsTest {
         fixedUserRepository = FixedUserRepository()
         fixedRatingRepository = FixedRatingRepository()
 
-        retrieveDriverTripApplications = RetrieveDriverTripApplications(
+        listDriverTripApplications = ListDriverTripApplications(
             tripApplicationRepository = inMemoryTripApplicationRepository,
             userRepository = fixedUserRepository,
             ratingRepository = fixedRatingRepository,
@@ -50,8 +50,8 @@ class RetrieveDriverTripApplicationsTest {
     fun `given no trip applications for the trip then should return empty list`() {
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
 
-        val driverTripApplications = retrieveDriverTripApplications(
-            RetrieveDriverTripApplications.Input(
+        val driverTripApplications = listDriverTripApplications(
+            ListDriverTripApplications.Input(
             tripId = tripId,
         ))
 
@@ -73,8 +73,8 @@ class RetrieveDriverTripApplicationsTest {
             ),
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripApplications = retrieveDriverTripApplications(
-            RetrieveDriverTripApplications.Input(
+        val driverTripApplications = listDriverTripApplications(
+            ListDriverTripApplications.Input(
                 tripId = tripId,
             ))
 
@@ -103,8 +103,8 @@ class RetrieveDriverTripApplicationsTest {
             tripPlanApplicationConfirmed,
         ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
 
-        val driverTripApplications = retrieveDriverTripApplications(
-            RetrieveDriverTripApplications.Input(
+        val driverTripApplications = listDriverTripApplications(
+            ListDriverTripApplications.Input(
                 tripId = tripId,
             ))
 

@@ -34,7 +34,13 @@ class InMemoryTripPlanApplicationRepository(
         return tripPlanApplications.firstOrNull { it.id == id }
     }
 
-    override fun findTripApplicationBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
+    override fun findAllByPassengerId(
+        passengerId: UUID
+    ): List<TripPlanApplication> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findBySectionId(sectionId: String): Set<TripPlanApplication.TripApplication> {
         return tripPlanApplications
             .flatMap { it.tripApplications }
             .filter { tripApplication ->

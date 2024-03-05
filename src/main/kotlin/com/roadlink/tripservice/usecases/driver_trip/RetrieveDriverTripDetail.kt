@@ -36,7 +36,7 @@ class RetrieveDriverTripDetail(
                             arrival = section.arrival,
                             occupiedSeats = section.occupiedSeats(),
                             availableSeats = section.availableSeats(),
-                            passengers = tripPlanApplicationRepository.findTripApplicationBySectionId(section.id)
+                            passengers = tripPlanApplicationRepository.findBySectionId(section.id)
                                 .filter { it.isConfirmed() }
                                 .map { it.passengerId }
                                 .map { passengerId ->
@@ -75,7 +75,7 @@ class RetrieveDriverTripDetail(
 
     private fun hasPendingApplications(tripId: UUID): Boolean =
         tripApplicationRepository.findByTripId(tripId)
-            .any { tripApplication -> tripApplication.isPending() }
+            .any { tripApplication -> tripApplication.isPendingApproval() }
 
     data class Input(val tripId: UUID)
 }

@@ -15,7 +15,7 @@ class CreateTripPlanApplication(
 
     override operator fun invoke(input: CreateTripPlanApplicationInput): CreateTripPlanApplicationOutput {
         val tripPlanApplication = TripPlanApplication()
-
+        // TODO cuando creamos el trip plan, las seciiones deberían estar ordenadas por arrival time: primero la más proxima en el tiempo y después las más lejanas en el tiempo
         input.trips.forEach { tripSectionsDTO ->
             val sections = sectionRepository.findAllById(tripSectionsDTO.sectionsIds)
             sections.forEach { section ->

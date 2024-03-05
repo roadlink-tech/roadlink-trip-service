@@ -15,11 +15,13 @@ abstract class End2EndTest {
     }
 
     private fun deleteAllFromDatabase() {
-        setOf("TripJPAEntity", "SectionJPAEntity", "TripPlanApplicationJPAEntity",
-            "TripApplicationJPAEntity"
+        // Please do not change the entity deletion sort, because those are taking into account the referencial integrity.
+        // Also consider to implement a CASCADE deletion strategy
+        setOf(
+            "TripJPAEntity", "TripApplicationJPAEntity", "TripPlanApplicationJPAEntity", "SectionJPAEntity"
         ).forEach {
-                entityManager.createQuery("DELETE FROM $it")
-                    .executeUpdate()
-            }
+            entityManager.createQuery("DELETE FROM $it")
+                .executeUpdate()
+        }
     }
 }

@@ -10,7 +10,8 @@ import java.util.*
 
 data class TripPlanApplicationResponse(
     val id: UUID,
-    val tripApplications: List<TripApplicationResponse>
+    val tripApplications: List<TripApplicationResponse>,
+    val status: String
 ) : ApiResponse {
     data class TripApplicationResponse(
         val id: UUID,
@@ -98,7 +99,8 @@ data class TripPlanApplicationResponse(
                         sections = SectionResponse.from(it.sections),
                         authorizerId = it.authorizerId
                     )
-                }
+                },
+                status = output.status().toString()
             )
         }
     }

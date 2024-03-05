@@ -68,6 +68,7 @@ object TripPlanApplicationFactory {
         initialAmountOfSeats: Int = 4,
         driverId: String = johnSmithDriverId.toString(),
         passengerId: String = "passengerId",
+        tripApplicationStatus: Status = PENDING_APPROVAL
     ): TripPlanApplication {
         return TripPlanApplication(
             id = id,
@@ -80,6 +81,7 @@ object TripPlanApplicationFactory {
                             driverId = driverId
                         )
                     ),
+                    status = tripApplicationStatus,
                     passengerId = passengerId,
                     authorizerId = "authorizerId"
                 ),

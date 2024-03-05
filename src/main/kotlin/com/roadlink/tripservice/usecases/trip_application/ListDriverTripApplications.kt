@@ -8,7 +8,7 @@ import com.roadlink.tripservice.domain.trip_application.TripApplicationRepositor
 import com.roadlink.tripservice.domain.user.UserRepository
 import java.util.UUID
 
-class RetrieveDriverTripApplications(
+class ListDriverTripApplications(
     private val tripApplicationRepository: TripApplicationRepository,
     private val userRepository: UserRepository,
     private val ratingRepository: RatingRepository,
@@ -16,7 +16,7 @@ class RetrieveDriverTripApplications(
     operator fun invoke(input: Input): List<DriverTripApplication> {
         return tripApplicationRepository.findByTripId(input.tripId)
             .filter { tripApplication ->
-                tripApplication.isPending()
+                tripApplication.isPendingApproval()
             }
             .map { tripApplication ->
                 val passengerId = tripApplication.passengerId
