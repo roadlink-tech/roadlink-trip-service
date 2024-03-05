@@ -1,7 +1,6 @@
 package com.roadlink.tripservice.infrastructure.persistence.section
 
 import com.roadlink.tripservice.domain.common.Location
-import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import java.time.Instant
@@ -41,11 +40,10 @@ class InMemorySectionRepository(
             .toSet()
     }
 
-    override fun findByTripId(tripId: UUID): TripPlan {
+    override fun findAllByTripIdOrFail(tripId: UUID): List<Section> {
         return sections
             .filter { it.tripId == tripId }
             .sortedBy { it.departure.estimatedArrivalTime }
-            .let { TripPlan(it) }
     }
 
     fun deleteAll() {

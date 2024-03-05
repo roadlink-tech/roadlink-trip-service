@@ -1,7 +1,6 @@
 package com.roadlink.tripservice.infrastructure.persistence.section
 
 import com.roadlink.tripservice.domain.common.Location
-import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
@@ -52,19 +51,9 @@ class MySQLSectionRepository(
         }
     }
 
-    // TODO esto lo podemos mover a un repositorio de TripPlan
-    override fun findByTripId(tripId: UUID): TripPlan {
+    override fun findAllByTripIdOrFail(tripId: UUID): List<Section> {
         return transactionManager.executeRead {
-            entityManager.createQuery(
-                "SELECT s FROM SectionJPAEntity s WHERE s.tripId = :tripId ORDER BY s.departure.estimatedArrivalTime",
-                SectionJPAEntity::class.java
-            )
-                .setParameter("tripId", tripId)
-                .resultList
-                .map { it.toDomain() }
-                .let { sections ->
-                    TripPlan(sections)
-                }
+            find(SectionCommandQuery(tripIds = listOf(tripId))).map { it.toDomain() }
         }
     }
 

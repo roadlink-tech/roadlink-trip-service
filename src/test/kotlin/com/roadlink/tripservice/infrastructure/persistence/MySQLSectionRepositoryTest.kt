@@ -1,10 +1,9 @@
 package com.roadlink.tripservice.infrastructure.persistence
 
-import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.usecases.factory.InstantFactory
 import com.roadlink.tripservice.usecases.common.LocationFactory
+import com.roadlink.tripservice.usecases.factory.InstantFactory
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -33,9 +32,9 @@ class MySQLSectionRepositoryTest {
     fun `given no sections when find by trip id then should return empty result`() {
         val section = SectionFactory.avCabildo()
 
-        val result = repository.findByTripId(section.tripId)
+        val result = repository.findAllByTripIdOrFail(section.tripId)
 
-        assertEquals(TripPlan(listOf()), result)
+        assertTrue(result.isEmpty())
     }
 
     @Test
@@ -46,9 +45,9 @@ class MySQLSectionRepositoryTest {
 
         repository.saveAll(setOf(sectionTrip1, sectionTrip2))
 
-        val result = repository.findByTripId(sectionTrip1.tripId)
+        val result = repository.findAllByTripIdOrFail(sectionTrip1.tripId)
 
-        assertEquals(TripPlan(listOf(sectionTrip1)), result)
+        assertEquals(listOf(sectionTrip1), result)
     }
 
     @Test
@@ -59,9 +58,9 @@ class MySQLSectionRepositoryTest {
 
         repository.saveAll(setOf(sectionTrip1, sectionTrip1b, sectionTrip2))
 
-        val result = repository.findByTripId(sectionTrip1.tripId)
+        val result = repository.findAllByTripIdOrFail(sectionTrip1.tripId)
 
-        assertEquals(TripPlan(listOf(sectionTrip1, sectionTrip1b)), result)
+        assertEquals(listOf(sectionTrip1b, sectionTrip1), result)
     }
 
     @Test

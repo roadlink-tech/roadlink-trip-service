@@ -21,8 +21,9 @@ class RetrieveDriverTripDetail(
     private val ratingRepository: RatingRepository,
     private val timeProvider: TimeProvider,
 ) {
-    operator fun invoke(input: Input): DriverTripDetail =
-        sectionRepository.findByTripId(input.tripId).let { tripPlan ->
+    operator fun invoke(input: Input): DriverTripDetail {
+        val sections = sectionRepository.findAllByTripIdOrFail(input.tripId)
+        return TripPlan(sections).let { tripPlan ->
             DriverTripDetail(
                 tripId = input.tripId,
                 tripStatus = tripStatusOf(tripPlan),
@@ -58,6 +59,7 @@ class RetrieveDriverTripDetail(
                     },
             )
         }
+    }
 
     private fun tripStatusOf(tripPlan: TripPlan): TripStatus =
         when {
