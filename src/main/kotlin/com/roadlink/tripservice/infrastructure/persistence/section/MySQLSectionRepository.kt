@@ -4,6 +4,7 @@ import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip_search.TripPlan
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.Predicate

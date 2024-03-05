@@ -1,13 +1,10 @@
 package com.roadlink.tripservice.infrastructure.persistence.section
 
-import com.roadlink.tripservice.domain.common.Location
-import com.roadlink.tripservice.domain.common.address.Address
-import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
-import java.time.Instant
 import java.util.*
 
 @Entity
@@ -25,7 +22,7 @@ data class SectionJPAEntity(
         AttributeOverride(name = "street", column = Column(name = "departure_street")),
         AttributeOverride(name = "city", column = Column(name = "departure_city")),
         AttributeOverride(name = "country", column = Column(name = "departure_country")),
-        AttributeOverride(name = "housenumber", column = Column(name = "departure_housenumber")),
+        AttributeOverride(name = "houseNumber", column = Column(name = "departure_house_number")),
         AttributeOverride(name = "latitude", column = Column(name = "departure_latitude")),
         AttributeOverride(name = "longitude", column = Column(name = "departure_longitude"))
     )
@@ -38,7 +35,7 @@ data class SectionJPAEntity(
         AttributeOverride(name = "street", column = Column(name = "arrival_street")),
         AttributeOverride(name = "city", column = Column(name = "arrival_city")),
         AttributeOverride(name = "country", column = Column(name = "arrival_country")),
-        AttributeOverride(name = "housenumber", column = Column(name = "arrival_housenumber")),
+        AttributeOverride(name = "houseNumber", column = Column(name = "arrival_house_number")),
         AttributeOverride(name = "latitude", column = Column(name = "arrival_latitude")),
         AttributeOverride(name = "longitude", column = Column(name = "arrival_longitude"))
     )
@@ -84,45 +81,3 @@ data class SectionJPAEntity(
         )
 }
 
-@Embeddable
-data class TripPointJPAEntity(
-    val estimatedArrivalTime: Instant,
-    val latitude: Double,
-    val longitude: Double,
-    val fullAddress: String,
-    val street: String,
-    val city: String,
-    val country: String,
-    val housenumber: String,
-) {
-    companion object {
-        fun from(trip: TripPoint): TripPointJPAEntity {
-            return TripPointJPAEntity(
-                estimatedArrivalTime = trip.estimatedArrivalTime,
-                latitude = trip.address.location.latitude,
-                longitude = trip.address.location.longitude,
-                fullAddress = trip.address.fullAddress,
-                city = trip.address.city,
-                country = trip.address.country,
-                street = trip.address.street,
-                housenumber = trip.address.houseNumber
-            )
-        }
-    }
-
-    fun toDomain(): TripPoint =
-        TripPoint(
-            estimatedArrivalTime = estimatedArrivalTime,
-            address = Address(
-                location = Location(
-                    latitude = latitude,
-                    longitude = longitude,
-                ),
-                fullAddress = fullAddress,
-                street = street,
-                city = city,
-                country = country,
-                houseNumber = housenumber,
-            ),
-        )
-}
