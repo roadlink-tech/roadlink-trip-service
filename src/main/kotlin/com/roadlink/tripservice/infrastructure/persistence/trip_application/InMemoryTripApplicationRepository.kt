@@ -20,7 +20,7 @@ class InMemoryTripApplicationRepository(
         return tripApplications.filter { tripApplication -> tripApplication.driverId() == driverId }
     }
 
-    override fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
+    private fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
         return tripApplications.filter { it.tripId() == tripId }
     }
 

@@ -104,7 +104,7 @@ class MySQLTripApplicationRepositoryTest {
         val otherTripId = UUID.randomUUID()
         givenASavedTripPlanApplicationWithSections(TripApplicationFactory.any())
 
-        val result = tripApplicationRepository.findByTripId(otherTripId)
+        val result = tripApplicationRepository.find(TripApplicationRepository.CommandQuery(tripId = otherTripId))
 
         assertTrue { result.isEmpty() }
     }
@@ -120,7 +120,8 @@ class MySQLTripApplicationRepositoryTest {
         val virreyDelPinoSection = SectionFactory.virreyDelPino(tripId = UUID.randomUUID())
         givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withSections(listOf(virreyDelPinoSection)))
 
-        val result = tripApplicationRepository.findByTripId(avCabildoSection.tripId)
+        val result =
+            tripApplicationRepository.find(TripApplicationRepository.CommandQuery(tripId = avCabildoSection.tripId))
 
         assertEquals(2, result.size)
         assertTrue { result.containsAll(setOf(tripApplication1, tripApplication2)) }

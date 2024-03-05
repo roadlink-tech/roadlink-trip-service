@@ -74,7 +74,7 @@ class RetrieveDriverTripDetail(
         }
 
     private fun hasPendingApplications(tripId: UUID): Boolean =
-        tripApplicationRepository.findByTripId(tripId)
+        tripApplicationRepository.find(TripApplicationRepository.CommandQuery(tripId = tripId))
             .any { tripApplication -> tripApplication.isPendingApproval() }
 
     data class Input(val tripId: UUID)

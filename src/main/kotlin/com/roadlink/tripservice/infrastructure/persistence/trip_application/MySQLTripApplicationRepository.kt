@@ -25,12 +25,6 @@ class MySQLTripApplicationRepository(
         }
     }
 
-    override fun findByTripId(tripId: UUID): List<TripPlanApplication.TripApplication> {
-        return transactionManager.executeRead {
-            find(TripApplicationRepository.CommandQuery(tripId = tripId)).toMutableList()
-        }
-    }
-
     override fun find(commandQuery: TripApplicationRepository.CommandQuery): List<TripPlanApplication.TripApplication> {
         val cq = TripApplicationCommandQuery.from(commandQuery)
         return transactionManager.executeRead {
