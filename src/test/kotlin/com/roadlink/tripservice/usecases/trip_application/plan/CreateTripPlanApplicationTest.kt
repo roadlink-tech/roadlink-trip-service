@@ -32,14 +32,14 @@ class CreateTripPlanApplicationTest {
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800()
         every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
         every { tripPlanApplicationRepository.insert(any()) } just runs
-        val application = CreateTripPlanApplicationInput(
+        val application = CreateTripPlanApplication.Input(
             passengerId = "chorch",
             trips = listOf(
-                CreateTripPlanApplicationInput.TripSections(
+                CreateTripPlanApplication.Input.TripSections(
                     tripId = "1",
                     sectionsIds = setOf(sectionOne.id)
                 ),
-                CreateTripPlanApplicationInput.TripSections(
+                CreateTripPlanApplication.Input.TripSections(
                     tripId = "2",
                     sectionsIds = setOf(sectionTwo.id)
                 )
@@ -65,14 +65,14 @@ class CreateTripPlanApplicationTest {
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800_completed()
         every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
         every { tripPlanApplicationRepository.insert(any()) } just runs
-        val application = CreateTripPlanApplicationInput(
+        val application = CreateTripPlanApplication.Input(
             passengerId = "chorch",
             trips = listOf(
-                CreateTripPlanApplicationInput.TripSections(
+                CreateTripPlanApplication.Input.TripSections(
                     tripId = "1",
                     sectionsIds = setOf(sectionOne.id)
                 ),
-                CreateTripPlanApplicationInput.TripSections(
+                CreateTripPlanApplication.Input.TripSections(
                     tripId = "2",
                     sectionsIds = setOf(sectionTwo.id)
                 )
@@ -91,18 +91,18 @@ class CreateTripPlanApplicationTest {
         verify(exactly = 0) { tripPlanApplicationRepository.insert(any()) }
     }
 
-    private fun thenTheTripPlanCouldNotBeCreated(output: CreateTripPlanApplicationOutput) {
+    private fun thenTheTripPlanCouldNotBeCreated(output: CreateTripPlanApplication.Output) {
         assertInstanceOf(
-            CreateTripPlanApplicationOutput.OneOfTheSectionCanNotReceivePassenger::class.java,
+            CreateTripPlanApplication.Output.OneOfTheSectionCanNotReceivePassenger::class.java,
             output
         )
     }
 
-    private fun thenTheTripPlanWasCreated(output: CreateTripPlanApplicationOutput) {
+    private fun thenTheTripPlanWasCreated(output: CreateTripPlanApplication.Output) {
         extracted(output)
     }
 
-    private fun extracted(output: CreateTripPlanApplicationOutput) {
-        assertInstanceOf(CreateTripPlanApplicationOutput.TripPlanApplicationCreated::class.java, output)
+    private fun extracted(output: CreateTripPlanApplication.Output) {
+        assertInstanceOf(CreateTripPlanApplication.Output.TripPlanApplicationCreated::class.java, output)
     }
 }

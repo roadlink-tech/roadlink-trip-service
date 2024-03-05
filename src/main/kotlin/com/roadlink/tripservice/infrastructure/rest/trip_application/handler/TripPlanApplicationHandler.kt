@@ -3,17 +3,14 @@ package com.roadlink.tripservice.infrastructure.rest.trip_application.handler
 import com.roadlink.tripservice.infrastructure.rest.trip_application.request.CreateTripPlanApplicationRequest
 import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripPlanApplicationResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationInput
-import com.roadlink.tripservice.usecases.trip_application.plan.CreateTripPlanApplicationOutput
-import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationInput
-import com.roadlink.tripservice.usecases.trip_application.plan.RetrieveTripPlanApplicationOutput
+import com.roadlink.tripservice.usecases.trip_application.plan.*
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 
 @Controller("/trip-service/trip_plan_application")
 class TripPlanApplicationHandler(
-    private val createTripPlanApplication: UseCase<CreateTripPlanApplicationInput, CreateTripPlanApplicationOutput>,
+    private val createTripPlanApplication: UseCase<CreateTripPlanApplication.Input, CreateTripPlanApplication.Output>,
     private val getTripPlanApplication: UseCase<RetrieveTripPlanApplicationInput, RetrieveTripPlanApplicationOutput>,
     private val responseFactory: TripPlanApplicationResponseFactory
 
