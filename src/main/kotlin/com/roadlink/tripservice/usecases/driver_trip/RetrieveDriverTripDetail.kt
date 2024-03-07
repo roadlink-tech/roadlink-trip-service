@@ -8,13 +8,13 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.trip.TripStatus
 import com.roadlink.tripservice.domain.trip.TripStatus.*
-import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserRepository
 import java.util.UUID
 
 class RetrieveDriverTripDetail(
     private val sectionRepository: SectionRepository,
-    private val tripApplicationRepository: TripApplicationRepository,
+    private val tripLegSolicitudeRepository: TripLegSolicitudeRepository,
     private val userRepository: UserRepository,
     private val ratingRepository: RatingRepository,
     private val timeProvider: TimeProvider,
@@ -35,7 +35,7 @@ class RetrieveDriverTripDetail(
                             arrival = section.arrival,
                             occupiedSeats = section.occupiedSeats(),
                             availableSeats = section.availableSeats(),
-                            passengers = tripApplicationRepository.find(TripApplicationRepository.CommandQuery(sectionId = section.id))
+                            passengers = tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(sectionId = section.id))
                                 .filter { it.isConfirmed() }
                                 .map { it.passengerId }
                                 .map { passengerId ->
@@ -74,7 +74,7 @@ class RetrieveDriverTripDetail(
         }
 
     private fun hasPendingApplications(tripId: UUID): Boolean =
-        tripApplicationRepository.find(TripApplicationRepository.CommandQuery(tripId = tripId))
+        tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(tripId = tripId))
             .any { tripApplication -> tripApplication.isPendingApproval() }
 
     data class Input(val tripId: UUID)

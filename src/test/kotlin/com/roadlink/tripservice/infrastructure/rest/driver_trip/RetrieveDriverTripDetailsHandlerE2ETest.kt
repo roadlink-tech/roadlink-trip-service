@@ -3,9 +3,9 @@ package com.roadlink.tripservice.infrastructure.rest.driver_trip
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
-import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripDetailResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripDetailExpectedResponse
@@ -33,7 +33,7 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
     private lateinit var sectionRepository: SectionRepository
 
     @Inject
-    private lateinit var tripPlanApplicationRepository: TripPlanApplicationRepository
+    private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 
     @Inject
     private lateinit var entityManager: EntityManager
@@ -46,11 +46,11 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
         )
         sectionRepository.save(section)
         listOf(
-            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
                 sections = listOf(SectionFactory.avCabildo()),
                 passengerId = "PAINN",
             ),
-        ).forEach { tripPlanApplicationRepository.insert(it) }
+        ).forEach { tripPlanSolicitudeRepository.insert(it) }
 
         entityManager.transaction.commit()
 

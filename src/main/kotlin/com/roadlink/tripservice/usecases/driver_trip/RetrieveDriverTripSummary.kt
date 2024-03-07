@@ -4,8 +4,8 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_summary.driver.DriverTripSummary
 import com.roadlink.tripservice.usecases.UseCase
 import java.util.*
@@ -14,7 +14,7 @@ import java.util.*
 class RetrieveDriverTripSummary(
     private val tripRepository: TripRepository,
     private val sectionsRepository: SectionRepository,
-    private val tripApplicationRepository: TripApplicationRepository
+    private val tripLegSolicitudeRepository: TripLegSolicitudeRepository
 ) : UseCase<String, RetrieveDriverTripSummaryOutput> {
 
     // TODO change the input value by UUID, when driver type into Trip entity was update
@@ -30,7 +30,7 @@ class RetrieveDriverTripSummary(
 
     private fun mapTripsThatHasPendingApplications(driverId: UUID): Map<UUID, Boolean> {
         val tripApplications =
-            tripApplicationRepository.find(TripApplicationRepository.CommandQuery(driverId = driverId))
+            tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(driverId = driverId))
         val tipApplicationsGroupByTripId = groupTripApplicationsByTripId(tripApplications)
         val hasPendingApplicationsByTripId: Map<UUID, Boolean> = tipApplicationsGroupByTripId.map { entry ->
             Pair(entry.key, entry.value.any { it.isPendingApproval() })
@@ -38,9 +38,9 @@ class RetrieveDriverTripSummary(
         return hasPendingApplicationsByTripId
     }
 
-    private fun groupTripApplicationsByTripId(tripApplications: List<TripPlanApplication.TripApplication>)
-            : Map<UUID, List<TripPlanApplication.TripApplication>> {
-        return tripApplications.groupBy { it.tripId() }
+    private fun groupTripApplicationsByTripId(tripLegSolicitudes: List<TripPlanSolicitude.TripLegSolicitude>)
+            : Map<UUID, List<TripPlanSolicitude.TripLegSolicitude>> {
+        return tripLegSolicitudes.groupBy { it.tripId() }
     }
 
     private fun mapTripsThatCanReceivePassengers(trips: List<Trip>): Map<UUID, Boolean> {
