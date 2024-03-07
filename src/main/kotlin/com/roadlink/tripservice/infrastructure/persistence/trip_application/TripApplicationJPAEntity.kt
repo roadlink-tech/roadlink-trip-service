@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.infrastructure.persistence.trip_application
 
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.infrastructure.persistence.section.SectionJPAEntity
 import jakarta.persistence.*
 import jakarta.persistence.CascadeType.*
@@ -10,7 +10,7 @@ import java.util.*
 
 @Entity
 @Table(
-    name = "trip_application",
+    name = "trip_solicitude",
 )
 data class TripApplicationJPAEntity(
     @Id
@@ -26,7 +26,7 @@ data class TripApplicationJPAEntity(
     val authorizerId: String
 ) {
     companion object {
-        fun from(application: TripPlanApplication.TripApplication): TripApplicationJPAEntity {
+        fun from(application: TripPlanSolicitude.TripLegSolicitude): TripApplicationJPAEntity {
             return TripApplicationJPAEntity(
                 id = application.id,
                 sections = application.sections.map { SectionJPAEntity.from(it) },
@@ -37,12 +37,12 @@ data class TripApplicationJPAEntity(
         }
     }
 
-    fun toDomain(): TripPlanApplication.TripApplication {
-        return TripPlanApplication.TripApplication(
+    fun toDomain(): TripPlanSolicitude.TripLegSolicitude {
+        return TripPlanSolicitude.TripLegSolicitude(
             id = id,
             sections = sections.map { it.toDomain() },
             passengerId = passengerId,
-            status = TripPlanApplication.TripApplication.Status.valueOf(status),
+            status = TripPlanSolicitude.TripLegSolicitude.Status.valueOf(status),
             authorizerId = authorizerId,
         )
     }

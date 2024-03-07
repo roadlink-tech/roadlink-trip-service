@@ -1,0 +1,155 @@
+package com.roadlink.tripservice.usecases.trip_solicitude.plan
+
+import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
+import com.roadlink.tripservice.usecases.factory.SectionFactory
+import java.util.*
+
+object TripPlanApplicationFactory {
+
+    val johnSmithDriverId = UUID.fromString("806d4a73-eb1f-466f-a646-b71962df512c")
+
+    fun completed(
+        tripApplicationId: UUID = UUID.randomUUID(),
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = UUID.randomUUID(),
+            tripLegSolicitudes = mutableListOf(
+                TripLegSolicitude(
+                    id = tripApplicationId,
+                    sections = listOf(
+                        SectionFactory.avCabildo(
+                            initialAmountOfSeats = 5,
+                            bookedSeats = 5,
+                            driverId = johnSmithDriverId.toString(),
+                        ),
+                    ),
+                    passengerId = "passengerId",
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleBooking(
+        tripApplicationId: UUID = UUID.randomUUID(),
+        initialAmountOfSeats: Int = 4,
+        tripId: UUID = UUID.randomUUID(),
+        status: Status = PENDING_APPROVAL,
+        driverId: String = johnSmithDriverId.toString()
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = UUID.randomUUID(),
+            tripLegSolicitudes = mutableListOf(
+                TripLegSolicitude(
+                    id = tripApplicationId,
+                    sections = listOf(
+                        SectionFactory.avCabildo(
+                            initialAmountOfSeats = initialAmountOfSeats,
+                            bookedSeats = 1,
+                            tripId = tripId,
+                            driverId = driverId
+                        )
+                    ),
+                    status = status,
+                    passengerId = "passengerId",
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleTripApplication(
+        id: UUID = UUID.randomUUID(),
+        tripApplicationId: UUID = UUID.randomUUID(),
+        initialAmountOfSeats: Int = 4,
+        driverId: String = johnSmithDriverId.toString(),
+        passengerId: String = "passengerId",
+        tripApplicationStatus: Status = PENDING_APPROVAL
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = id,
+            tripLegSolicitudes = mutableListOf(
+                TripLegSolicitude(
+                    id = tripApplicationId,
+                    sections = listOf(
+                        SectionFactory.avCabildo(
+                            initialAmountOfSeats = initialAmountOfSeats,
+                            driverId = driverId
+                        )
+                    ),
+                    status = tripApplicationStatus,
+                    passengerId = passengerId,
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleTripApplicationRejected(
+        sections: List<Section> = emptyList(),
+        passengerId: String = "passengerId",
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = UUID.randomUUID(),
+            tripLegSolicitudes = mutableListOf(
+                TripLegSolicitude(
+                    id = UUID.randomUUID(),
+                    sections = sections,
+                    passengerId = passengerId,
+                    status = REJECTED,
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleTripApplicationConfirmed(
+        sections: List<Section> = emptyList(),
+        passengerId: String = "passengerId",
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = UUID.randomUUID(),
+            tripLegSolicitudes = mutableListOf(
+                TripLegSolicitude(
+                    id = UUID.randomUUID(),
+                    sections = sections,
+                    passengerId = passengerId,
+                    status = CONFIRMED,
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withASingleTripApplicationPendingApproval(
+        sections: List<Section> = emptyList(),
+        passengerId: String = "passengerId",
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = UUID.randomUUID(),
+            tripLegSolicitudes = mutableListOf(
+                TripLegSolicitude(
+                    id = UUID.randomUUID(),
+                    sections = sections,
+                    passengerId = passengerId,
+                    status = PENDING_APPROVAL,
+                    authorizerId = "authorizerId"
+                ),
+            )
+        )
+    }
+
+    fun withApplications(
+        tripLegSolicitudes: List<TripLegSolicitude>
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = UUID.randomUUID(),
+            tripLegSolicitudes = tripLegSolicitudes.toMutableList()
+        )
+    }
+
+}

@@ -4,16 +4,16 @@ import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.*
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication.TripApplication.Status.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
 import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
 import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip.InMemoryTripRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripApplicationRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanApplicationRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripLegSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.usecases.trip_application.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -28,9 +28,9 @@ class RetrieveDriverTripSummaryIntegrationTest {
 
     private lateinit var sectionsRepository: SectionRepository
 
-    private lateinit var tripPlanApplicationRepository: InMemoryTripPlanApplicationRepository
+    private lateinit var tripPlanApplicationRepository: InMemoryTripPlanSolicitudeRepository
 
-    private lateinit var tripApplicationRepository: TripApplicationRepository
+    private lateinit var tripLegSolicitudeRepository: TripLegSolicitudeRepository
 
     private lateinit var retrieveDriverTripSummary: RetrieveDriverTripSummary
 
@@ -39,11 +39,11 @@ class RetrieveDriverTripSummaryIntegrationTest {
         idGenerator = UUIDIdGenerator()
         tripRepository = InMemoryTripRepository()
         sectionsRepository = InMemorySectionRepository()
-        tripApplicationRepository = InMemoryTripApplicationRepository()
+        tripLegSolicitudeRepository = InMemoryTripLegSolicitudeRepository()
         tripPlanApplicationRepository =
-            InMemoryTripPlanApplicationRepository(tripApplicationRepository = tripApplicationRepository)
+            InMemoryTripPlanSolicitudeRepository(tripLegSolicitudeRepository = tripLegSolicitudeRepository)
         retrieveDriverTripSummary =
-            RetrieveDriverTripSummary(tripRepository, sectionsRepository, tripApplicationRepository)
+            RetrieveDriverTripSummary(tripRepository, sectionsRepository, tripLegSolicitudeRepository)
     }
 
     @AfterEach

@@ -2,8 +2,8 @@ package com.roadlink.tripservice.config.trip_application
 
 import com.roadlink.tripservice.domain.RatingRepository
 import com.roadlink.tripservice.domain.user.UserRepository
-import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
-import com.roadlink.tripservice.usecases.trip_application.ListDriverTripApplications
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripApplications
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
@@ -11,12 +11,12 @@ import jakarta.inject.Singleton
 class GetDriverTripApplicationsConfig {
     @Singleton
     fun getDriverTripApplications(
-        tripApplicationRepository: TripApplicationRepository,
+        tripLegSolicitudeRepository: TripLegSolicitudeRepository,
         userRepository: UserRepository,
         ratingRepository: RatingRepository,
     ): ListDriverTripApplications {
         return ListDriverTripApplications(
-            tripApplicationRepository = tripApplicationRepository,
+            tripLegSolicitudeRepository = tripLegSolicitudeRepository,
             userRepository = userRepository,
             ratingRepository = ratingRepository,
         )

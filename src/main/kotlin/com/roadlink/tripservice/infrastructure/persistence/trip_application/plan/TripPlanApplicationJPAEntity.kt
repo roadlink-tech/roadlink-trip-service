@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.infrastructure.persistence.trip_application.plan
 
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplication
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.TripApplicationJPAEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
@@ -18,18 +18,18 @@ data class TripPlanApplicationJPAEntity(
     val tripApplications: List<TripApplicationJPAEntity>,
 ) {
     companion object {
-        fun from(application: TripPlanApplication): TripPlanApplicationJPAEntity {
+        fun from(application: TripPlanSolicitude): TripPlanApplicationJPAEntity {
             return TripPlanApplicationJPAEntity(
                 id = application.id,
-                tripApplications = application.tripApplications.map { TripApplicationJPAEntity.from(it) }
+                tripApplications = application.tripLegSolicitudes.map { TripApplicationJPAEntity.from(it) }
             )
         }
     }
 
-    fun toDomain(): TripPlanApplication {
-        return TripPlanApplication(
+    fun toDomain(): TripPlanSolicitude {
+        return TripPlanSolicitude(
             id = id,
-            tripApplications = tripApplications.map { it.toDomain() }.toMutableList(),
+            tripLegSolicitudes = tripApplications.map { it.toDomain() }.toMutableList(),
         )
     }
 }

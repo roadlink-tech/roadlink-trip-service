@@ -2,7 +2,7 @@ package com.roadlink.tripservice.config.driver_trip
 
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripSummaryResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.driver_trip.RetrieveDriverTripSummary
@@ -16,12 +16,12 @@ class DriverTripSummaryConfig {
     fun retrieveDriverTripSummary(
         tripRepository: TripRepository,
         sectionsRepository: SectionRepository,
-        tripApplicationRepository: TripApplicationRepository
+        tripLegSolicitudeRepository: TripLegSolicitudeRepository
     ): UseCase<String, RetrieveDriverTripSummaryOutput> {
         return RetrieveDriverTripSummary(
             tripRepository,
             sectionsRepository,
-            tripApplicationRepository
+            tripLegSolicitudeRepository
         )
     }
 

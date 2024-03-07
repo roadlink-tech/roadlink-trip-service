@@ -1,13 +1,13 @@
 package com.roadlink.tripservice.config.trip_application
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_application.TripApplicationRepository
-import com.roadlink.tripservice.domain.trip_application.TripPlanApplicationRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripApplicationRepository
-import com.roadlink.tripservice.infrastructure.rest.trip_application.response.TripPlanApplicationResponseFactory
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_application.MySQLTripLegSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripPlanSolicitudeResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_application.*
-import com.roadlink.tripservice.usecases.trip_application.plan.*
+import com.roadlink.tripservice.usecases.trip_solicitude.*
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.*
 import io.micronaut.context.annotation.Factory
 import io.micronaut.transaction.TransactionOperations
 import jakarta.inject.Singleton
@@ -22,41 +22,41 @@ class TripApplicationConfig {
     fun tripApplicationRepository(
         entityManager: EntityManager,
         transactionManager: TransactionOperations<Session>
-    ): TripApplicationRepository {
-        return MySQLTripApplicationRepository(entityManager = entityManager, transactionManager = transactionManager)
+    ): TripLegSolicitudeRepository {
+        return MySQLTripLegSolicitudeRepository(entityManager = entityManager, transactionManager = transactionManager)
     }
 
     @Singleton
     fun acceptTripApplication(
-        tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<AcceptTripApplicationInput, AcceptTripApplicationOutput> {
-        return AcceptTripApplication(tripPlanApplicationRepository)
+        tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
+    ): UseCase<AcceptTripLegSolicitudeInput, AcceptTripLegSolicitudeOutput> {
+        return AcceptTripLegSolicitude(tripPlanSolicitudeRepository)
     }
 
     @Singleton
     fun rejectTripApplication(
-        tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<UUID, RejectTripApplicationOutput> {
-        return RejectTripApplication(tripPlanApplicationRepository)
+        tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
+    ): UseCase<UUID, RejectTripLegSolicitudeOutput> {
+        return RejectTripLegSolicitude(tripPlanSolicitudeRepository)
     }
 
     @Singleton
     fun createTripPlanApplication(
         sectionRepository: SectionRepository,
-        tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<CreateTripPlanApplication.Input, CreateTripPlanApplication.Output> {
-        return CreateTripPlanApplication(sectionRepository, tripPlanApplicationRepository)
+        tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
+    ): UseCase<CreateTripPlanSolicitude.Input, CreateTripPlanSolicitude.Output> {
+        return CreateTripPlanSolicitude(sectionRepository, tripPlanSolicitudeRepository)
     }
 
     @Singleton
     fun getTripPlanApplication(
-        tripPlanApplicationRepository: TripPlanApplicationRepository
-    ): UseCase<RetrieveTripPlanApplicationInput, RetrieveTripPlanApplicationOutput> {
-        return RetrieveTripPlanApplication(tripPlanApplicationRepository)
+        tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
+    ): UseCase<RetrieveTripPlanSolicitudeInput, RetrieveTripPlanSolicitudeOutput> {
+        return RetrieveTripPlanApplication(tripPlanSolicitudeRepository)
     }
 
     @Singleton
-    fun tripApplicationPlanResponseFactory(): TripPlanApplicationResponseFactory {
-        return TripPlanApplicationResponseFactory()
+    fun tripApplicationPlanResponseFactory(): TripPlanSolicitudeResponseFactory {
+        return TripPlanSolicitudeResponseFactory()
     }
 }
