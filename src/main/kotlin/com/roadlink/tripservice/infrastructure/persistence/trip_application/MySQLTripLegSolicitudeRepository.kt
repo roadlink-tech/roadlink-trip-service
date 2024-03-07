@@ -15,7 +15,7 @@ class MySQLTripLegSolicitudeRepository(
 ) : TripLegSolicitudeRepository {
     override fun saveAll(tripLegSolicitudes: List<TripPlanSolicitude.TripLegSolicitude>) {
         for (tripApplication in tripLegSolicitudes) {
-            entityManager.persist(TripApplicationJPAEntity.from(tripApplication))
+            entityManager.persist(TripLegSolicitudeJPAEntity.from(tripApplication))
         }
     }
 
@@ -23,25 +23,25 @@ class MySQLTripLegSolicitudeRepository(
         val cq = TripApplicationCommandQuery.from(commandQuery)
         return transactionManager.executeRead {
             val cb = entityManager.criteriaBuilder
-            val criteriaQuery = cb.createQuery(TripApplicationJPAEntity::class.java)
-            val root = criteriaQuery.from(TripApplicationJPAEntity::class.java)
+            val criteriaQuery = cb.createQuery(TripLegSolicitudeJPAEntity::class.java)
+            val root = criteriaQuery.from(TripLegSolicitudeJPAEntity::class.java)
 
             val predicates = mutableListOf<Predicate>()
 
             if (cq.sectionId.isNotEmpty()) {
-                val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
+                val sections = root.join<TripLegSolicitudeJPAEntity, SectionJPAEntity>("sections")
                 val predicate = cb.equal(sections.get<String>("id"), cq.sectionId)
                 predicates.add(predicate)
             }
 
             if (cq.tripId != null) {
-                val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
+                val sections = root.join<TripLegSolicitudeJPAEntity, SectionJPAEntity>("sections")
                 val tripIdPredicate = cb.equal(sections.get<String>("tripId"), cq.tripId)
                 predicates.add(tripIdPredicate)
             }
 
             if (cq.driverId != null) {
-                val sections = root.join<TripApplicationJPAEntity, SectionJPAEntity>("sections")
+                val sections = root.join<TripLegSolicitudeJPAEntity, SectionJPAEntity>("sections")
                 val driverIdPredicate = cb.equal(sections.get<String>("driverId"), cq.driverId.toString())
                 predicates.add(driverIdPredicate)
             }

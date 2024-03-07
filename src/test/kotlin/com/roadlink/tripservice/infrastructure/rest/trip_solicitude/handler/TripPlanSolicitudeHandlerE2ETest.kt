@@ -135,7 +135,7 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
      * List Trip Plan Application
      */
     @Test
-    fun `listing all the trip plan applications by passenger id`() {
+    fun `listing all the trip plan solicitudes by passenger id`() {
         // GIVEN
         val tripPlanSolicitudeId = UUID.randomUUID()
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
@@ -146,7 +146,7 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
         entityManager.transaction.commit()
 
         val request: HttpRequest<Any> = HttpRequest.GET(
-            UriBuilder.of("/trip-service/users/$passengerId/trip_plan_applications").build(),
+            UriBuilder.of("/trip-service/users/$passengerId/trip_plan_solicitudes").build(),
         )
 
         // WHEN
@@ -237,7 +237,7 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
         entityManager.transaction.commit()
 
         val request: HttpRequest<Any> = HttpRequest.GET(
-            UriBuilder.of("/trip-service/users/$passengerId/trip_plan_applications?status=REJECTED")
+            UriBuilder.of("/trip-service/users/$passengerId/trip_plan_solicitudes?status=REJECTED")
                 .build(),
         )
 

@@ -18,7 +18,7 @@ abstract class End2EndTest {
         // Please do not change the entity deletion sort, because those are taking into account the referencial integrity.
         // Also consider to implement a CASCADE deletion strategy
         setOf(
-            "TripJPAEntity", "TripApplicationJPAEntity", "TripPlanApplicationJPAEntity", "SectionJPAEntity"
+            "TripJPAEntity", "TripLegSolicitudeJPAEntity", "TripPlanSolicitudeJPAEntity", "SectionJPAEntity"
         ).forEach {
             entityManager.createQuery("DELETE FROM $it")
                 .executeUpdate()

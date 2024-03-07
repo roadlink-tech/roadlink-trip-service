@@ -14,7 +14,7 @@ import java.util.*
 class ListTripPlanSolicitudesHandler(
     private val listTripPlanSolicitudes: UseCase<ListTripPlanSolicitudes.Input, ListTripPlanSolicitudes.Output>,
 ) {
-    @Get("/trip_plan_applications")
+    @Get("/trip_plan_solicitudes")
     fun list(
         @PathVariable("userId") passengerId: String,
         @QueryValue("status") status: String? = null,

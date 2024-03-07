@@ -10,9 +10,9 @@ import java.util.*
 
 @Entity
 @Table(
-    name = "trip_solicitude",
+    name = "trip_leg_solicitudes",
 )
-data class TripApplicationJPAEntity(
+data class TripLegSolicitudeJPAEntity(
     @Id
     @JdbcTypeCode(SqlTypes.CHAR)
     val id: UUID,
@@ -26,8 +26,8 @@ data class TripApplicationJPAEntity(
     val authorizerId: String
 ) {
     companion object {
-        fun from(application: TripPlanSolicitude.TripLegSolicitude): TripApplicationJPAEntity {
-            return TripApplicationJPAEntity(
+        fun from(application: TripPlanSolicitude.TripLegSolicitude): TripLegSolicitudeJPAEntity {
+            return TripLegSolicitudeJPAEntity(
                 id = application.id,
                 sections = application.sections.map { SectionJPAEntity.from(it) },
                 passengerId = application.passengerId,
