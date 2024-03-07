@@ -9,17 +9,17 @@ class AcceptTripLegSolicitude(
 ) : UseCase<AcceptTripLegSolicitudeInput, AcceptTripLegSolicitudeOutput> {
 
     override operator fun invoke(input: AcceptTripLegSolicitudeInput): AcceptTripLegSolicitudeOutput {
-        val tripPlanApplication = tripPlanSolicitudeRepository
+        val tripPlanSolicitude = tripPlanSolicitudeRepository
             .find(TripPlanSolicitudeRepository.CommandQuery(tripApplicationId = input.tripApplicationId))
             .firstOrNull() ?: return AcceptTripLegSolicitudeOutput.TripPlanSolicitudeNotExists
 
-        if (tripPlanApplication.isRejected()) {
+        if (tripPlanSolicitude.isRejected()) {
             return AcceptTripLegSolicitudeOutput.TripLegSolicitudePlanHasBeenRejected
         }
 
         return AcceptTripLegSolicitudeOutput.TripLegSolicitudeAccepted.also {
-            tripPlanApplication.confirmApplicationById(input.tripApplicationId, input.callerId)
-            tripPlanSolicitudeRepository.update(tripPlanApplication)
+            tripPlanSolicitude.confirmApplicationById(input.tripApplicationId, input.callerId)
+            tripPlanSolicitudeRepository.update(tripPlanSolicitude)
         }
     }
 }

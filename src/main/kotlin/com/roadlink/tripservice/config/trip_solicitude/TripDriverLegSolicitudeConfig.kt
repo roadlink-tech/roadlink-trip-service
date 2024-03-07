@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.config.trip_application
+package com.roadlink.tripservice.config.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
@@ -16,14 +16,17 @@ import org.hibernate.Session
 import java.util.*
 
 @Factory
-class TripApplicationConfig {
+class TripDriverLegSolicitudeConfig {
 
     @Singleton
     fun tripApplicationRepository(
         entityManager: EntityManager,
         transactionManager: TransactionOperations<Session>
     ): TripLegSolicitudeRepository {
-        return MySQLTripLegSolicitudeRepository(entityManager = entityManager, transactionManager = transactionManager)
+        return MySQLTripLegSolicitudeRepository(
+            entityManager = entityManager,
+            transactionManager = transactionManager
+        )
     }
 
     @Singleton
@@ -41,7 +44,7 @@ class TripApplicationConfig {
     }
 
     @Singleton
-    fun createTripPlanApplication(
+    fun createTripPlanSolicitude(
         sectionRepository: SectionRepository,
         tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
     ): UseCase<CreateTripPlanSolicitude.Input, CreateTripPlanSolicitude.Output> {
@@ -49,10 +52,10 @@ class TripApplicationConfig {
     }
 
     @Singleton
-    fun getTripPlanApplication(
+    fun getTripPlanSolicitude(
         tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
     ): UseCase<RetrieveTripPlanSolicitudeInput, RetrieveTripPlanSolicitudeOutput> {
-        return RetrieveTripPlanApplication(tripPlanSolicitudeRepository)
+        return RetrieveTripPlanSolicitude(tripPlanSolicitudeRepository)
     }
 
     @Singleton

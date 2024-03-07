@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.usecases.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.assertInstanceOf
@@ -35,7 +35,7 @@ class AcceptTripLegSolicitudeTest {
 
     @Test
     fun `when try to accept a trip plan but the it has been already rejected, then an error response must be retrieved`() {
-        every { tripPlanSolicitudeRepository.find(any()) } returns listOf(TripPlanApplicationFactory.withASingleTripApplicationRejected())
+        every { tripPlanSolicitudeRepository.find(any()) } returns listOf(TripPlanSolicitudeFactory.withASingleTripApplicationRejected())
 
         // WHEN
         val output = acceptTripLegSolicitude(AcceptTripLegSolicitudeInput(UUID.randomUUID(), UUID.randomUUID()))
@@ -51,7 +51,7 @@ class AcceptTripLegSolicitudeTest {
         val callerId = UUID.randomUUID()
         every { tripPlanSolicitudeRepository.update(any()) } just runs
         every { tripPlanSolicitudeRepository.find(any()) } returns listOf(
-            TripPlanApplicationFactory.withASingleTripApplication(
+            TripPlanSolicitudeFactory.withASingleTripApplication(
                 tripApplicationId = tripApplicationId
             )
         )

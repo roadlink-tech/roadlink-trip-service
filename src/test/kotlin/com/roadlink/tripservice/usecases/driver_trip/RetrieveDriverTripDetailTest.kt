@@ -21,7 +21,7 @@ import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_18hs
 import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_7hs
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.factory.builder
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,7 +30,7 @@ class RetrieveDriverTripDetailTest {
 
     private lateinit var inMemorySectionRepository: InMemorySectionRepository
 
-    private lateinit var inMemoryTripPlanApplicationRepository: InMemoryTripPlanSolicitudeRepository
+    private lateinit var inMemoryTripPlanSolicitudeRepository: InMemoryTripPlanSolicitudeRepository
 
     private lateinit var inMemoryTripApplicationRepository: InMemoryTripLegSolicitudeRepository
 
@@ -46,7 +46,7 @@ class RetrieveDriverTripDetailTest {
     fun setUp() {
         inMemorySectionRepository = InMemorySectionRepository()
         inMemoryTripApplicationRepository = InMemoryTripLegSolicitudeRepository()
-        inMemoryTripPlanApplicationRepository = InMemoryTripPlanSolicitudeRepository(
+        inMemoryTripPlanSolicitudeRepository = InMemoryTripPlanSolicitudeRepository(
             tripLegSolicitudeRepository = inMemoryTripApplicationRepository
         )
         fixedUserRepository = FixedUserRepository()
@@ -195,19 +195,19 @@ class RetrieveDriverTripDetailTest {
         val section = SectionFactory.avCabildo()
         inMemorySectionRepository.save(section)
         listOf(
-            TripPlanApplicationFactory.withASingleTripApplicationPendingApproval(
+            TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval(
                 sections = listOf(section),
                 passengerId = "JOHN",
             ),
-            TripPlanApplicationFactory.withASingleTripApplicationRejected(
+            TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
                 sections = listOf(section),
                 passengerId = "JENNA",
             ),
-            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
                 sections = listOf(section),
                 passengerId = "BJNOVAK",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
+        ).forEach { inMemoryTripPlanSolicitudeRepository.insert(it) }
 
         val driverTripDetail = retrieveDriverTripDetail(
             RetrieveDriverTripDetail.Input(
@@ -241,11 +241,11 @@ class RetrieveDriverTripDetailTest {
         val section = SectionFactory.avCabildo()
         inMemorySectionRepository.save(section)
         listOf(
-            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
                 sections = listOf(section),
                 passengerId = "ANGELA",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
+        ).forEach { inMemoryTripPlanSolicitudeRepository.insert(it) }
 
         val driverTripDetail = retrieveDriverTripDetail(
             RetrieveDriverTripDetail.Input(
@@ -273,11 +273,11 @@ class RetrieveDriverTripDetailTest {
         val section = SectionFactory.avCabildo()
         inMemorySectionRepository.save(section)
         listOf(
-            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
                 sections = listOf(section),
                 passengerId = "PAINN",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
+        ).forEach { inMemoryTripPlanSolicitudeRepository.insert(it) }
 
         val driverTripDetail = retrieveDriverTripDetail(
             RetrieveDriverTripDetail.Input(
@@ -325,19 +325,19 @@ class RetrieveDriverTripDetailTest {
         val section = SectionFactory.avCabildo()
         inMemorySectionRepository.save(section)
         listOf(
-            TripPlanApplicationFactory.withASingleTripApplicationPendingApproval(
+            TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval(
                 sections = listOf(section),
                 passengerId = "JOHN",
             ),
-            TripPlanApplicationFactory.withASingleTripApplicationRejected(
+            TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
                 sections = listOf(section),
                 passengerId = "JENNA",
             ),
-            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
                 sections = listOf(section),
                 passengerId = "BJNOVAK",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
+        ).forEach { inMemoryTripPlanSolicitudeRepository.insert(it) }
 
         val driverTripDetail = retrieveDriverTripDetail(
             RetrieveDriverTripDetail.Input(

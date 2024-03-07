@@ -8,7 +8,7 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLe
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import java.util.*
 
-object TripPlanApplicationFactory {
+object TripPlanSolicitudeFactory {
 
     val johnSmithDriverId = UUID.fromString("806d4a73-eb1f-466f-a646-b71962df512c")
 

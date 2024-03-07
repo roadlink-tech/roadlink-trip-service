@@ -5,8 +5,8 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeReposito
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.TripApplicationFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.TripLegSolicitudeFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -29,7 +29,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
     @Test
     fun `given no trip application exists with the given driver id when find all by driver id then should return empty list`() {
         val otherDriverId = UUID.randomUUID()
-        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.any())
+        givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.any())
 
         val result = tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(driverId = otherDriverId))
 
@@ -39,11 +39,11 @@ class MySQLTripLegSolicitudeRepositoryTest {
     @Test
     fun `given trip applications exists with the given driver id when find all by driver id then should return them`() {
         val driverId = UUID.randomUUID()
-        val tripApplication1 = givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withDriver(driverId))
-        val tripApplication2 = givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withDriver(driverId))
+        val tripApplication1 = givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.withDriver(driverId))
+        val tripApplication2 = givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.withDriver(driverId))
 
         val otherDriverId = UUID.randomUUID()
-        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withDriver(otherDriverId))
+        givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.withDriver(otherDriverId))
 
         val result = tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(driverId = driverId))
 
@@ -57,14 +57,14 @@ class MySQLTripLegSolicitudeRepositoryTest {
         val tripId = UUID.randomUUID()
         val tripApplication1 =
             givenASavedTripPlanApplicationWithSections(
-                TripApplicationFactory.withDriver(
+                TripLegSolicitudeFactory.withDriver(
                     driverId = driverId,
                     tripId = tripId
                 )
             )
         val tripApplication2 =
             givenASavedTripPlanApplicationWithSections(
-                TripApplicationFactory.withDriver(
+                TripLegSolicitudeFactory.withDriver(
                     driverId = driverId,
                     tripId = tripId
                 )
@@ -73,7 +73,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
         val otherDriverId = UUID.randomUUID()
         val otherTripId = UUID.randomUUID()
         val tripApplication3 = givenASavedTripPlanApplicationWithSections(
-            TripApplicationFactory.withDriver(
+            TripLegSolicitudeFactory.withDriver(
                 driverId = otherDriverId,
                 tripId = otherTripId
             )
@@ -102,7 +102,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
     @Test
     fun `given no trip application exists with the given trip id when find by trip id then should return empty list`() {
         val otherTripId = UUID.randomUUID()
-        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.any())
+        givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.any())
 
         val result = tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(tripId = otherTripId))
 
@@ -113,12 +113,12 @@ class MySQLTripLegSolicitudeRepositoryTest {
     fun `given trip applications exists with the given trip id when find by trip id then should return them`() {
         val avCabildoSection = SectionFactory.avCabildo()
         val tripApplication1 =
-            givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withSections(listOf(avCabildoSection)))
+            givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.withSections(listOf(avCabildoSection)))
         val tripApplication2 =
-            givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withSections(listOf(avCabildoSection)))
+            givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.withSections(listOf(avCabildoSection)))
 
         val virreyDelPinoSection = SectionFactory.virreyDelPino(tripId = UUID.randomUUID())
-        givenASavedTripPlanApplicationWithSections(TripApplicationFactory.withSections(listOf(virreyDelPinoSection)))
+        givenASavedTripPlanApplicationWithSections(TripLegSolicitudeFactory.withSections(listOf(virreyDelPinoSection)))
 
         val result =
             tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(tripId = avCabildoSection.tripId))
@@ -130,8 +130,8 @@ class MySQLTripLegSolicitudeRepositoryTest {
     @Test
     fun `given trip application has the given section when find by section then should return empty it`() {
         val avCabildoSection = SectionFactory.avCabildo()
-        val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
-        givenASavedTripPlanApplication(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
+        val tripApplication = TripLegSolicitudeFactory.withSections(listOf(avCabildoSection))
+        givenASavedTripPlanApplication(TripPlanSolicitudeFactory.withApplications(listOf(tripApplication)))
 
         val result =
             tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(sectionId = avCabildoSection.id))
@@ -142,8 +142,8 @@ class MySQLTripLegSolicitudeRepositoryTest {
     @Test
     fun `given no trip application has the given section when find by section then should return empty set`() {
         val avCabildoSection = SectionFactory.avCabildo()
-        val tripApplication = TripApplicationFactory.withSections(listOf(avCabildoSection))
-        givenASavedTripPlanApplication(TripPlanApplicationFactory.withApplications(listOf(tripApplication)))
+        val tripApplication = TripLegSolicitudeFactory.withSections(listOf(avCabildoSection))
+        givenASavedTripPlanApplication(TripPlanSolicitudeFactory.withApplications(listOf(tripApplication)))
 
         val result =
             tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(sectionId = SectionFactory.virreyDelPino_id))
@@ -158,7 +158,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
             }
         }
         tripPlanSolicitudeRepository.insert(
-            TripPlanApplicationFactory.withApplications(listOf(tripLegSolicitude))
+            TripPlanSolicitudeFactory.withApplications(listOf(tripLegSolicitude))
         )
 
         return tripLegSolicitude

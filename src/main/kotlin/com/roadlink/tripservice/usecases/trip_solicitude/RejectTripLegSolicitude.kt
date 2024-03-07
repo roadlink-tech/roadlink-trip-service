@@ -10,12 +10,17 @@ class RejectTripLegSolicitude(
 ) : UseCase<UUID, RejectTripLegSolicitudeOutput> {
 
     override operator fun invoke(input: UUID): RejectTripLegSolicitudeOutput {
-        val tripPlanApplication =
-            tripPlanSolicitudeRepository.find(TripPlanSolicitudeRepository.CommandQuery(tripApplicationId = input))
-                .firstOrNull() ?: return RejectTripLegSolicitudeOutput.TripPlanLegSolicitudeNotExists
+        val tripPlanSolicitude =
+            tripPlanSolicitudeRepository.find(
+                TripPlanSolicitudeRepository.CommandQuery(
+                    tripApplicationId = input
+                )
+            )
+                .firstOrNull()
+                ?: return RejectTripLegSolicitudeOutput.TripPlanLegSolicitudeNotExists
 
-        tripPlanApplication.reject()
-        tripPlanSolicitudeRepository.update(tripPlanApplication)
+        tripPlanSolicitude.reject()
+        tripPlanSolicitudeRepository.update(tripPlanSolicitude)
         return RejectTripLegSolicitudeOutput.TripLegSolicitudeRejected
     }
 }

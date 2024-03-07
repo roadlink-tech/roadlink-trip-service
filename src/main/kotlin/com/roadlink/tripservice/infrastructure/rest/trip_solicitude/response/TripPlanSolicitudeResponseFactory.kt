@@ -14,8 +14,8 @@ class TripPlanSolicitudeResponseFactory {
 
     fun from(output: CreateTripPlanSolicitude.Output): HttpResponse<ApiResponse> =
         when (output) {
-            is CreateTripPlanSolicitude.Output.TripPlanApplicationCreated ->
-                HttpResponse.created(TripPlanApplicationCreatedResponse.from(output))
+            is CreateTripPlanSolicitude.Output.TripPlanSolicitudeCreated ->
+                HttpResponse.created(TripPlanSolicitudeCreatedResponse.from(output))
 
             is CreateTripPlanSolicitude.Output.OneOfTheSectionCanNotReceivePassenger ->
                 HttpResponse
@@ -26,7 +26,7 @@ class TripPlanSolicitudeResponseFactory {
     fun from(output: RetrieveTripPlanSolicitudeOutput): HttpResponse<ApiResponse> {
         return when (output) {
             is RetrieveTripPlanSolicitudeOutput.TripPlanSolicitudeFound ->
-                HttpResponse.ok(TripPlanApplicationResponse.from(output.tripPlanSolicitude))
+                HttpResponse.ok(TripPlanSolicitudeResponse.from(output.tripPlanSolicitude))
 
             is RetrieveTripPlanSolicitudeOutput.TripPlanSolicitudeNotFound ->
                 HttpResponse.status(NOT_FOUND)

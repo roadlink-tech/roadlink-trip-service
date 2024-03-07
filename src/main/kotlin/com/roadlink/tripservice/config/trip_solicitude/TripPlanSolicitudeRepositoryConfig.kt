@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.config.trip_application
+package com.roadlink.tripservice.config.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.MySQLTripPlanSolicitudeRepository
@@ -11,9 +11,9 @@ import jakarta.persistence.EntityManager
 import org.hibernate.Session
 
 @Factory
-class TripPlanApplicationRepositoryConfig {
+class TripPlanSolicitudeRepositoryConfig {
     @Singleton
-    fun tripPlanApplicationRepository(
+    fun tripPlanSolicitudeRepository(
         entityManager: EntityManager,
         transactionManager: TransactionOperations<Session>
     ): TripPlanSolicitudeRepository {
@@ -24,7 +24,7 @@ class TripPlanApplicationRepositoryConfig {
     }
 
     @Singleton
-    fun listTripPlanApplication(
+    fun listTripPlanSolicitudes(
         tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
     ): UseCase<ListTripPlanSolicitudes.Input, ListTripPlanSolicitudes.Output> {
         return ListTripPlanSolicitudes(tripPlanSolicitudeRepository)

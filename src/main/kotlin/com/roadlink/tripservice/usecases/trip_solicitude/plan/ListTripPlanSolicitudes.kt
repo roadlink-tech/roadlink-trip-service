@@ -10,16 +10,16 @@ class ListTripPlanSolicitudes(
 ) : UseCase<ListTripPlanSolicitudes.Input, ListTripPlanSolicitudes.Output> {
 
     override fun invoke(input: Input): Output {
-        val tripPlanApplications =
+        val tripPlanSolicitudes =
             tripPlanSolicitudeRepository.find(
                 TripPlanSolicitudeRepository.CommandQuery(
                     passengerId = input.passengerId
                 )
             )
         if (input.status() != null) {
-            return Output(tripPlanApplications.filter { it.status() == input.status() })
+            return Output(tripPlanSolicitudes.filter { it.status() == input.status() })
         }
-        return Output(tripPlanApplications)
+        return Output(tripPlanSolicitudes)
     }
 
     data class Input(

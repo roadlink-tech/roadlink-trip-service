@@ -6,7 +6,7 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLe
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import java.util.*
 
-object TripApplicationFactory {
+object TripLegSolicitudeFactory {
     fun withSections(sections: List<Section>): TripPlanSolicitude.TripLegSolicitude {
         return TripPlanSolicitude.TripLegSolicitude(
             id = UUID.randomUUID(),

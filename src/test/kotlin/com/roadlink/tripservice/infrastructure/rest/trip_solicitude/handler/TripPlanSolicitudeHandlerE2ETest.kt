@@ -8,7 +8,7 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeReposit
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
@@ -47,8 +47,8 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
         val tripLegSolicitudeId = UUID.randomUUID()
         val passengerId: UUID = UUID.randomUUID()
         givenASavedSection(tripId)
-        givenASavedTripPlanApplication(
-            tripPlanApplicationId = tripPlanSolicitudeId,
+        givenASavedTripPlanSolicitude(
+            tripPlanSolicitudeId = tripPlanSolicitudeId,
             passengerId = passengerId,
             tripApplicationId = tripLegSolicitudeId,
             tripLegSolicitudeStatus = TripLegSolicitude.Status.PENDING_APPROVAL
@@ -115,15 +115,15 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
         sectionRepository.save(SectionFactory.avCabildo(tripId = tripId))
     }
 
-    private fun givenASavedTripPlanApplication(
-        tripPlanApplicationId: UUID,
+    private fun givenASavedTripPlanSolicitude(
+        tripPlanSolicitudeId: UUID,
         tripApplicationId: UUID,
         passengerId: UUID = UUID.randomUUID(),
         tripLegSolicitudeStatus: TripLegSolicitude.Status = TripLegSolicitude.Status.PENDING_APPROVAL
     ) {
         tripPlanSolicitudeRepository.insert(
-            TripPlanApplicationFactory.withASingleTripApplication(
-                id = tripPlanApplicationId,
+            TripPlanSolicitudeFactory.withASingleTripApplication(
+                id = tripPlanSolicitudeId,
                 tripApplicationId = tripApplicationId,
                 passengerId = passengerId.toString(),
                 tripApplicationStatus = tripLegSolicitudeStatus,
@@ -137,12 +137,12 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
     @Test
     fun `listing all the trip plan applications by passenger id`() {
         // GIVEN
-        val tripPlanApplicationId = UUID.randomUUID()
+        val tripPlanSolicitudeId = UUID.randomUUID()
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
         val passengerId = UUID.randomUUID()
         val tripApplicationId = UUID.randomUUID()
         givenASavedSection(tripId)
-        givenASavedTripPlanApplication(tripPlanApplicationId, tripApplicationId, passengerId)
+        givenASavedTripPlanSolicitude(tripPlanSolicitudeId, tripApplicationId, passengerId)
         entityManager.transaction.commit()
 
         val request: HttpRequest<Any> = HttpRequest.GET(
@@ -157,7 +157,7 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
             """
             [
                {
-                  "id":"$tripPlanApplicationId",
+                  "id":"$tripPlanSolicitudeId",
                   "tripApplications":[
                      {
                         "id":"$tripApplicationId",
@@ -213,22 +213,22 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
         givenASavedSection(tripId)
 
-        val tripPlanApplicationId = UUID.randomUUID()
+        val tripPlanSolicitudeId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
         val tripApplicationId = UUID.randomUUID()
-        givenASavedTripPlanApplication(
-            tripPlanApplicationId,
+        givenASavedTripPlanSolicitude(
+            tripPlanSolicitudeId,
             tripApplicationId,
             passengerId,
             TripLegSolicitude.Status.REJECTED
         )
 
-        val anotherTripPlanApplicationId = UUID.randomUUID()
+        val anotherTripPlanSolicitudeId = UUID.randomUUID()
         val anotherPassengerId = UUID.randomUUID()
         val anotherTripApplicationId = UUID.randomUUID()
 
-        givenASavedTripPlanApplication(
-            anotherTripPlanApplicationId,
+        givenASavedTripPlanSolicitude(
+            anotherTripPlanSolicitudeId,
             anotherPassengerId,
             anotherTripApplicationId,
             TripLegSolicitude.Status.PENDING_APPROVAL
@@ -249,7 +249,7 @@ class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
             """
             [
                {
-                  "id":"$tripPlanApplicationId",
+                  "id":"$tripPlanSolicitudeId",
                   "tripApplications":[
                      {
                         "id":"$tripApplicationId",

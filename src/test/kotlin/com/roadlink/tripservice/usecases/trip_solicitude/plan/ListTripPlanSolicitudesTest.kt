@@ -15,12 +15,12 @@ class ListTripPlanSolicitudesTest {
     @MockK
     lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 
-    private lateinit var listTripPlanApplication: ListTripPlanSolicitudes
+    private lateinit var listTripPlanSolicitude: ListTripPlanSolicitudes
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        listTripPlanApplication = ListTripPlanSolicitudes(tripPlanSolicitudeRepository)
+        listTripPlanSolicitude = ListTripPlanSolicitudes(tripPlanSolicitudeRepository)
     }
 
     @Test
@@ -31,14 +31,14 @@ class ListTripPlanSolicitudesTest {
         val input = ListTripPlanSolicitudes.Input(passengerId = passengerId, status = status)
 
         every { tripPlanSolicitudeRepository.find(TripPlanSolicitudeRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
-            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED),
-            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.REJECTED),
-            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL),
-            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED)
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED),
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.REJECTED),
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL),
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED)
         )
 
         // WHEN
-        val output = listTripPlanApplication(input)
+        val output = listTripPlanSolicitude(input)
 
         // THEN
         Assertions.assertEquals(2, output.tripPlanSolicitudes.size)
@@ -56,11 +56,11 @@ class ListTripPlanSolicitudesTest {
         val input = ListTripPlanSolicitudes.Input(passengerId = passengerId, status = status)
 
         every { tripPlanSolicitudeRepository.find(TripPlanSolicitudeRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
-            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED),
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED),
         )
 
         // WHEN
-        val output = listTripPlanApplication(input)
+        val output = listTripPlanSolicitude(input)
 
         // THEN
         Assertions.assertTrue(output.tripPlanSolicitudes.isEmpty())

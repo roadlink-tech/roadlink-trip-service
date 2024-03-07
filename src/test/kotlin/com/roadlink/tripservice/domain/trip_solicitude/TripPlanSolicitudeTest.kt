@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.domain.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.SectionError
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory.johnSmithDriverId
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory.johnSmithDriverId
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -14,14 +14,14 @@ class TripPlanSolicitudeTest {
         // GIVEN
         val id = UUID.randomUUID()
         val callerId = UUID.randomUUID()
-        val tripPlanApplication =
-            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
+        val tripPlanSolicitude =
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
 
         // WHEN
-        tripPlanApplication.confirmApplicationById(id, callerId)
+        tripPlanSolicitude.confirmApplicationById(id, callerId)
 
         // THEN
-        val section = tripPlanApplication.tripLegSolicitudes.first().sections.first()
+        val section = tripPlanSolicitude.tripLegSolicitudes.first().sections.first()
         assertEquals(3, section.availableSeats())
     }
 
@@ -30,8 +30,8 @@ class TripPlanSolicitudeTest {
         // GIVEN
         val id = UUID.randomUUID()
         val driverId = UUID.randomUUID()
-        val tripPlanApplication =
-            TripPlanApplicationFactory.withASingleTripApplication(
+        val tripPlanSolicitude =
+            TripPlanSolicitudeFactory.withASingleTripApplication(
                 tripApplicationId = id,
                 initialAmountOfSeats = 4,
                 driverId = driverId.toString()
@@ -39,7 +39,7 @@ class TripPlanSolicitudeTest {
 
         // WHEN
         val ex = assertThrows(TripApplicationError.DriverTryingToJoinAsPassenger::class.java) {
-            tripPlanApplication.confirmApplicationById(id, driverId)
+            tripPlanSolicitude.confirmApplicationById(id, driverId)
         }
 
         // THEN
@@ -52,16 +52,16 @@ class TripPlanSolicitudeTest {
         // GIVEN
         val id = UUID.randomUUID()
         val callerId = UUID.randomUUID()
-        val tripPlanApplication =
-            TripPlanApplicationFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
+        val tripPlanSolicitude =
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
 
         // WHEN
         repeat(2) {
-            tripPlanApplication.confirmApplicationById(id, callerId)
+            tripPlanSolicitude.confirmApplicationById(id, callerId)
         }
 
         // THEN
-        val section = tripPlanApplication.tripLegSolicitudes.first().sections.first()
+        val section = tripPlanSolicitude.tripLegSolicitudes.first().sections.first()
         assertEquals(2, section.availableSeats())
     }
 
@@ -70,12 +70,12 @@ class TripPlanSolicitudeTest {
         // GIVEN
         val id = UUID.randomUUID()
         val callerId = UUID.randomUUID()
-        val tripPlanApplication =
-            TripPlanApplicationFactory.completed(tripApplicationId = id)
+        val tripPlanSolicitude =
+            TripPlanSolicitudeFactory.completed(tripApplicationId = id)
 
         // WHEN
         assertThrows(SectionError.InsufficientAvailableSeats::class.java) {
-            tripPlanApplication.confirmApplicationById(id, callerId)
+            tripPlanSolicitude.confirmApplicationById(id, callerId)
         }
     }
 
@@ -83,24 +83,24 @@ class TripPlanSolicitudeTest {
     fun `when try to confirm an application that not exist, then an exception must be retrieved`() {
         // GIVEN
         val id = UUID.randomUUID()
-        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication()
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication()
 
         // WHEN
         assertThrows(TripApplicationError.NotFound::class.java) {
-            tripPlanApplication.confirmApplicationById(id, johnSmithDriverId)
+            tripPlanSolicitude.confirmApplicationById(id, johnSmithDriverId)
         }
     }
 
     @Test
     fun `when reject an application which does not have any booking, then it must work`() {
         // GIVEN
-        val tripPlanApplication = TripPlanApplicationFactory.withASingleTripApplication()
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication()
 
         // WHEN
-        tripPlanApplication.reject()
+        tripPlanSolicitude.reject()
 
         // THEN
-        assertTrue(tripPlanApplication.isRejected())
+        assertTrue(tripPlanSolicitude.isRejected())
     }
 
 }

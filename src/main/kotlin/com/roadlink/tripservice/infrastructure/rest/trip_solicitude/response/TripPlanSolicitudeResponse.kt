@@ -8,12 +8,12 @@ import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import java.time.Instant
 import java.util.*
 
-data class TripPlanApplicationResponse(
+data class TripPlanSolicitudeResponse(
     val id: UUID,
-    val tripApplications: List<TripApplicationResponse>,
+    val tripApplications: List<TripLegSolicitudeResponse>,
     val status: String
 ) : ApiResponse {
-    data class TripApplicationResponse(
+    data class TripLegSolicitudeResponse(
         val id: UUID,
         val passengerId: String,
         val sections: List<SectionResponse>,
@@ -88,11 +88,11 @@ data class TripPlanApplicationResponse(
     }
 
     companion object {
-        fun from(output: TripPlanSolicitude): TripPlanApplicationResponse {
-            return TripPlanApplicationResponse(
+        fun from(output: TripPlanSolicitude): TripPlanSolicitudeResponse {
+            return TripPlanSolicitudeResponse(
                 id = output.id,
                 tripApplications = output.tripLegSolicitudes.map {
-                    TripApplicationResponse(
+                    TripLegSolicitudeResponse(
                         id = it.id,
                         passengerId = it.passengerId,
                         status = it.status.toString(),

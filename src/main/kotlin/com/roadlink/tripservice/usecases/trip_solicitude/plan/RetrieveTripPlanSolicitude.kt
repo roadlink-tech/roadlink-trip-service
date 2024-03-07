@@ -5,29 +5,29 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeReposit
 import com.roadlink.tripservice.usecases.UseCase
 import java.util.*
 
-class RetrieveTripPlanApplication(
+class RetrieveTripPlanSolicitude(
     private val tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 ) : UseCase<RetrieveTripPlanSolicitudeInput, RetrieveTripPlanSolicitudeOutput> {
 
     override fun invoke(input: RetrieveTripPlanSolicitudeInput): RetrieveTripPlanSolicitudeOutput {
-        val tripPlanApplications = tripPlanSolicitudeRepository.find(
+        val tripPlanSolicitudes = tripPlanSolicitudeRepository.find(
             TripPlanSolicitudeRepository.CommandQuery(
                 ids = listOf(
                     UUID.fromString(
-                        input.tripPlanApplicationId
+                        input.tripPlanSolicitudeId
                     )
                 )
             )
         )
-        if (tripPlanApplications.isEmpty()) {
+        if (tripPlanSolicitudes.isEmpty()) {
             return RetrieveTripPlanSolicitudeOutput.TripPlanSolicitudeNotFound
         }
-        return RetrieveTripPlanSolicitudeOutput.TripPlanSolicitudeFound(tripPlanApplications.first())
+        return RetrieveTripPlanSolicitudeOutput.TripPlanSolicitudeFound(tripPlanSolicitudes.first())
     }
 }
 
 data class RetrieveTripPlanSolicitudeInput(
-    val tripPlanApplicationId: String,
+    val tripPlanSolicitudeId: String,
 )
 
 sealed class RetrieveTripPlanSolicitudeOutput {

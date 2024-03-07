@@ -6,7 +6,7 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripApplicationResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripApplicationExpectedResponse
@@ -46,23 +46,23 @@ class ListDriverDriverTripApplicationsHandlerE2ETest : End2EndTest() {
     fun `can handle driver trip applications request`() {
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
         val section = SectionFactory.avCabildo(tripId = tripId)
-        val tripPlanApplicationPendingApproval = TripPlanApplicationFactory.withASingleTripApplicationPendingApproval(
+        val tripPlanSolicitudePendingApproval = TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval(
             sections = listOf(section),
             passengerId = "JOHN",
         )
-        val tripPlanApplicationRejected = TripPlanApplicationFactory.withASingleTripApplicationRejected(
+        val tripPlanSolicitudeRejected = TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
             sections = listOf(section),
             passengerId = "JENNA",
         )
-        val tripPlanApplicationConfirmed = TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+        val tripPlanSolicitudeConfirmed = TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
             sections = listOf(section),
             passengerId = "BJNOVAK",
         )
         sectionRepository.save(section)
         listOf(
-            tripPlanApplicationPendingApproval,
-            tripPlanApplicationRejected,
-            tripPlanApplicationConfirmed,
+            tripPlanSolicitudePendingApproval,
+            tripPlanSolicitudeRejected,
+            tripPlanSolicitudeConfirmed,
         ).forEach { tripPlanSolicitudeRepository.insert(it) }
 
         entityManager.transaction.commit()
@@ -79,7 +79,7 @@ class ListDriverDriverTripApplicationsHandlerE2ETest : End2EndTest() {
         assertOkBody(
             listOf(
                 DriverTripApplicationResponseFactory.avCabildoWithASingleTripApplicationPendingApproval(
-                    tripApplicationId = tripPlanApplicationPendingApproval.tripLegSolicitudes.first().id,
+                    tripApplicationId = tripPlanSolicitudePendingApproval.tripLegSolicitudes.first().id,
                 )
             ),
             response

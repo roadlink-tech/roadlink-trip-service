@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripDetailResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripDetailExpectedResponse
@@ -46,7 +46,7 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
         )
         sectionRepository.save(section)
         listOf(
-            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
                 sections = listOf(SectionFactory.avCabildo()),
                 passengerId = "PAINN",
             ),

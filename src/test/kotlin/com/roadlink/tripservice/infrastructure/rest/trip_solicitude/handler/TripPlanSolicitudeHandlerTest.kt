@@ -2,7 +2,7 @@ package com.roadlink.tripservice.infrastructure.rest.trip_solicitude.handler
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripPlanApplicationCreatedResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripPlanSolicitudeCreatedResponse
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.*
@@ -40,7 +40,7 @@ class TripPlanSolicitudeHandlerTest : End2EndTest() {
     @Primary
     @Singleton
     @Replaces(CreateTripPlanSolicitude::class)
-    fun createTripPlanApplication(): UseCase<CreateTripPlanSolicitude.Input, CreateTripPlanSolicitude.Output> {
+    fun createTripPlanSolicitude(): UseCase<CreateTripPlanSolicitude.Input, CreateTripPlanSolicitude.Output> {
         return mockk(relaxed = true)
     }
 
@@ -55,7 +55,7 @@ class TripPlanSolicitudeHandlerTest : End2EndTest() {
      */
     @Test
     fun `when create a trip plan solicitude and all the sections can receive a passenger, then it must be created successfully`() {
-        every { createTripPlanSolicitude.invoke(any()) } returns CreateTripPlanSolicitude.Output.TripPlanApplicationCreated(
+        every { createTripPlanSolicitude.invoke(any()) } returns CreateTripPlanSolicitude.Output.TripPlanSolicitudeCreated(
             UUID.randomUUID()
         )
 
@@ -77,7 +77,7 @@ class TripPlanSolicitudeHandlerTest : End2EndTest() {
 
         // THEN
         thenTheTripPlanWasCreated(response)
-        thenTheTripPlanApplicationHasAnId(response)
+        thenTheTripPlanSolicitudeHasAnId(response)
     }
 
     @Test
@@ -112,9 +112,9 @@ class TripPlanSolicitudeHandlerTest : End2EndTest() {
     }
 
 
-    private fun thenTheTripPlanApplicationHasAnId(response: HttpResponse<JsonNode>) {
+    private fun thenTheTripPlanSolicitudeHasAnId(response: HttpResponse<JsonNode>) {
         val apiResponse =
-            objectMapper.readValue(response.body()!!.toString(), TripPlanApplicationCreatedResponse::class.java)
+            objectMapper.readValue(response.body()!!.toString(), TripPlanSolicitudeCreatedResponse::class.java)
         assertNotNull(apiResponse)
     }
 

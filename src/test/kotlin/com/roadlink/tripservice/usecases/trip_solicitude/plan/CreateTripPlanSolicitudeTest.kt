@@ -103,6 +103,6 @@ class CreateTripPlanSolicitudeTest {
     }
 
     private fun extracted(output: CreateTripPlanSolicitude.Output) {
-        assertInstanceOf(CreateTripPlanSolicitude.Output.TripPlanApplicationCreated::class.java, output)
+        assertInstanceOf(CreateTripPlanSolicitude.Output.TripPlanSolicitudeCreated::class.java, output)
     }
 }

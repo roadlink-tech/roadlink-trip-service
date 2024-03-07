@@ -33,11 +33,11 @@ class CreateTripPlanSolicitude(
 
         // TODO ver cómo informar o mostrar a los driver que tienen una solicitud pendiente de aceptación o rechazo
         tripPlanSolicitudeRepository.insert(tripPlanSolicitude)
-        return Output.TripPlanApplicationCreated(tripPlanSolicitude.id)
+        return Output.TripPlanSolicitudeCreated(tripPlanSolicitude.id)
     }
 
     sealed class Output {
-        data class TripPlanApplicationCreated(val tripPlanApplicationId: UUID) : Output()
+        data class TripPlanSolicitudeCreated(val tripPlanSolicitudeId: UUID) : Output()
         data class OneOfTheSectionCanNotReceivePassenger(val message: String) : Output()
     }
 

@@ -12,18 +12,18 @@ import com.roadlink.tripservice.usecases.common.address.AddressFactory
 import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripApplications
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
-class ListDriverDriverTripApplicationsTest {
+class ListDriverTripSolicitudesTest {
 
     private lateinit var inMemoryTripApplicationRepository: InMemoryTripLegSolicitudeRepository
 
-    private lateinit var inMemoryTripPlanApplicationRepository: InMemoryTripPlanSolicitudeRepository
+    private lateinit var inMemorytripPlanSolicitudeRepository: InMemoryTripPlanSolicitudeRepository
 
     private lateinit var fixedUserRepository: FixedUserRepository
 
@@ -34,7 +34,7 @@ class ListDriverDriverTripApplicationsTest {
     @BeforeEach
     fun setUp() {
         inMemoryTripApplicationRepository = InMemoryTripLegSolicitudeRepository()
-        inMemoryTripPlanApplicationRepository = InMemoryTripPlanSolicitudeRepository(
+        inMemorytripPlanSolicitudeRepository = InMemoryTripPlanSolicitudeRepository(
             tripLegSolicitudeRepository = inMemoryTripApplicationRepository
         )
         fixedUserRepository = FixedUserRepository()
@@ -64,15 +64,15 @@ class ListDriverDriverTripApplicationsTest {
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
         val section = SectionFactory.avCabildo(tripId = tripId)
         listOf(
-            TripPlanApplicationFactory.withASingleTripApplicationRejected(
+            TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
                 sections = listOf(section),
                 passengerId = "JENNA",
             ),
-            TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
                 sections = listOf(section),
                 passengerId = "BJNOVAK",
             ),
-        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
+        ).forEach { inMemorytripPlanSolicitudeRepository.insert(it) }
 
         val driverTripApplications = listDriverTripApplications(
             ListDriverTripApplications.Input(
@@ -86,23 +86,23 @@ class ListDriverDriverTripApplicationsTest {
     fun `driver trip applications only consider applications who has pending approval`() {
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
         val section = SectionFactory.avCabildo(tripId = tripId)
-        val tripPlanApplicationPendingApproval = TripPlanApplicationFactory.withASingleTripApplicationPendingApproval(
+        val tripPlanSolicitudePendingApproval = TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval(
             sections = listOf(section),
             passengerId = "JOHN",
         )
-        val tripPlanApplicationRejected = TripPlanApplicationFactory.withASingleTripApplicationRejected(
+        val tripPlanSolicitudeRejected = TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
             sections = listOf(section),
             passengerId = "JENNA",
         )
-        val tripPlanApplicationConfirmed = TripPlanApplicationFactory.withASingleTripApplicationConfirmed(
+        val tripPlanSolicitudeConfirmed = TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
             sections = listOf(section),
             passengerId = "BJNOVAK",
         )
         listOf(
-            tripPlanApplicationPendingApproval,
-            tripPlanApplicationRejected,
-            tripPlanApplicationConfirmed,
-        ).forEach { inMemoryTripPlanApplicationRepository.insert(it) }
+            tripPlanSolicitudePendingApproval,
+            tripPlanSolicitudeRejected,
+            tripPlanSolicitudeConfirmed,
+        ).forEach { inMemorytripPlanSolicitudeRepository.insert(it) }
 
         val driverTripApplications = listDriverTripApplications(
             ListDriverTripApplications.Input(
@@ -112,7 +112,7 @@ class ListDriverDriverTripApplicationsTest {
         assertEquals(
             listOf(
                 DriverTripApplication(
-                    tripApplicationId = tripPlanApplicationPendingApproval.tripLegSolicitudes.first().id,
+                    tripApplicationId = tripPlanSolicitudePendingApproval.tripLegSolicitudes.first().id,
                     passenger = Passenger(
                         id = "JOHN",
                         fullName = "John Krasinski",

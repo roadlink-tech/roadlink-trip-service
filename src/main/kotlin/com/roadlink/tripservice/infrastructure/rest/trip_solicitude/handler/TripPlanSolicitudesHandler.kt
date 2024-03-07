@@ -11,7 +11,7 @@ import io.micronaut.http.annotation.*
 @Controller("/trip-service/trip_plan_solicitudes")
 class TripPlanSolicitudesHandler(
     private val createTripPlanSolicitude: UseCase<CreateTripPlanSolicitude.Input, CreateTripPlanSolicitude.Output>,
-    private val getTripPlanApplication: UseCase<RetrieveTripPlanSolicitudeInput, RetrieveTripPlanSolicitudeOutput>,
+    private val getTripPlanSolicitude: UseCase<RetrieveTripPlanSolicitudeInput, RetrieveTripPlanSolicitudeOutput>,
     private val responseFactory: TripPlanSolicitudeResponseFactory
 
 ) {
@@ -23,9 +23,9 @@ class TripPlanSolicitudesHandler(
     }
 
     @Get("/{tripPlanSolicitudeId}")
-    fun get(@PathVariable("tripPlanSolicitudeId") tripPlanApplicationId: String): HttpResponse<*> {
-        val input = RetrieveTripPlanSolicitudeInput(tripPlanApplicationId)
-        val output = getTripPlanApplication(input)
+    fun get(@PathVariable("tripPlanSolicitudeId") tripPlanSolicitudeId: String): HttpResponse<*> {
+        val input = RetrieveTripPlanSolicitudeInput(tripPlanSolicitudeId)
+        val output = getTripPlanSolicitude(input)
         return responseFactory.from(output)
     }
 

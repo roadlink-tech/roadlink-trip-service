@@ -13,7 +13,7 @@ import com.roadlink.tripservice.infrastructure.persistence.trip.InMemoryTripRepo
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripLegSolicitudeRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanApplicationFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -28,7 +28,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
 
     private lateinit var sectionsRepository: SectionRepository
 
-    private lateinit var tripPlanApplicationRepository: InMemoryTripPlanSolicitudeRepository
+    private lateinit var tripPlanSolicitudeRepository: InMemoryTripPlanSolicitudeRepository
 
     private lateinit var tripLegSolicitudeRepository: TripLegSolicitudeRepository
 
@@ -40,7 +40,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
         tripRepository = InMemoryTripRepository()
         sectionsRepository = InMemorySectionRepository()
         tripLegSolicitudeRepository = InMemoryTripLegSolicitudeRepository()
-        tripPlanApplicationRepository =
+        tripPlanSolicitudeRepository =
             InMemoryTripPlanSolicitudeRepository(tripLegSolicitudeRepository = tripLegSolicitudeRepository)
         retrieveDriverTripSummary =
             RetrieveDriverTripSummary(tripRepository, sectionsRepository, tripLegSolicitudeRepository)
@@ -48,7 +48,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
 
     @AfterEach
     fun afterEach() {
-        tripPlanApplicationRepository.deleteAll()
+        tripPlanSolicitudeRepository.deleteAll()
     }
 
     @Test
@@ -56,7 +56,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
         // GIVEN
         val driverId = UUID.randomUUID()
         val trip = givenACreatedTrip(driverId = driverId)
-        givenATripPlanApplicationFor(trip.id, driverId)
+        givenATripPlanSolicitudeFor(trip.id, driverId)
 
         // WHEN
         val summary = retrieveDriverTripSummary(trip.driverId)
@@ -82,7 +82,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
         // GIVEN
         val driverId = UUID.randomUUID()
         val trip = givenACreatedTrip(driverId, availableSeats = 0)
-        givenATripPlanApplicationFor(trip.id, driverId)
+        givenATripPlanSolicitudeFor(trip.id, driverId)
 
         // WHEN
         val summary = retrieveDriverTripSummary(driverId.toString())
@@ -97,7 +97,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val driverId = UUID.randomUUID()
         repeat(5) {
             val trip = givenACreatedTrip(driverId)
-            givenATripPlanApplicationFor(trip.id, driverId)
+            givenATripPlanSolicitudeFor(trip.id, driverId)
         }
 
         // WHEN
@@ -113,7 +113,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val driverId = UUID.randomUUID()
 
         val trip = givenACreatedTrip(driverId)
-        givenATripPlanApplicationFor(trip.id, driverId, CONFIRMED)
+        givenATripPlanSolicitudeFor(trip.id, driverId, CONFIRMED)
 
         // WHEN
         val summary = retrieveDriverTripSummary(driverId.toString())
@@ -143,17 +143,17 @@ class RetrieveDriverTripSummaryIntegrationTest {
         assertTrue((summary as RetrieveDriverTripSummaryOutput.DriverTripSummariesFound).trips.any { !it.hasAvailableSeats })
     }
 
-    private fun givenATripPlanApplicationFor(
+    private fun givenATripPlanSolicitudeFor(
         tripId: String,
         driverId: UUID,
         status: Status = PENDING_APPROVAL
     ) {
-        val tripPlanApplication = TripPlanApplicationFactory.withASingleBooking(
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleBooking(
             tripId = UUID.fromString(tripId),
             driverId = driverId.toString(),
             status = status
         )
-        tripPlanApplicationRepository.insert(tripPlanApplication)
+        tripPlanSolicitudeRepository.insert(tripPlanSolicitude)
     }
 
     private fun givenACreatedTrip(

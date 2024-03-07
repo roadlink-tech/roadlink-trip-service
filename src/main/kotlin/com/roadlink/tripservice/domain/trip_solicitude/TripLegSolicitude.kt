@@ -117,7 +117,7 @@ data class TripPlanSolicitude(
         if (isPendingApproval()) {
             return Status.PENDING_APPROVAL
         }
-        throw TripPlanApplicationError.CanNotDeterminateStatus(this.id)
+        throw TripPlanSolicitudeError.CanNotDeterminateStatus(this.id)
     }
 
     fun reject() {
@@ -129,10 +129,10 @@ data class TripPlanSolicitude(
     }
 }
 
-sealed class TripPlanApplicationError(message: String) : DomainError(message) {
+sealed class TripPlanSolicitudeError(message: String) : DomainError(message) {
 
     class CanNotDeterminateStatus(id: UUID) :
-        TripPlanApplicationError("Can not determinate status for trip plan application $id ")
+        TripPlanSolicitudeError("Can not determinate status for trip plan application $id ")
 }
 
 
