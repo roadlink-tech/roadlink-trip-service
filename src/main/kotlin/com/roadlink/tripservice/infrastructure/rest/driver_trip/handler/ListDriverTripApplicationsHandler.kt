@@ -1,8 +1,8 @@
 package com.roadlink.tripservice.infrastructure.rest.driver_trip.handler
 
-import com.roadlink.tripservice.infrastructure.rest.driver_trip.mapper.DriverTripApplicationResponseMapper
-import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripApplicationResponse
-import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripApplications
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.mapper.DriverTripLegSolicitudeResponseMapper
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripLegSolicitudeResponse
+import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripLegSolicitudes
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -12,17 +12,18 @@ import kotlin.collections.List
 
 @Controller("/trip-service")
 class ListDriverTripApplicationsHandler(
-    private val listDriverTripApplications: ListDriverTripApplications,
+    private val listDriverTripLegSolicitudes: ListDriverTripLegSolicitudes,
 ) {
-    @Get("/driver-trip-applications")
-    fun handle(@QueryValue tripId: String): HttpResponse<List<DriverTripApplicationResponse>> {
-        val driverTripApplications = listDriverTripApplications(
-            ListDriverTripApplications.Input(
+    @Get("/driver_trip_leg_solicitudes")
+    fun handle(@QueryValue tripId: String): HttpResponse<List<DriverTripLegSolicitudeResponse>> {
+        val input = ListDriverTripLegSolicitudes.Input(
             tripId = UUID.fromString(tripId)
-        ))
+        )
 
-        return HttpResponse.ok(driverTripApplications.map {
-            DriverTripApplicationResponseMapper.map(it)
+        val driverTripLegSolicitudes = listDriverTripLegSolicitudes(input)
+
+        return HttpResponse.ok(driverTripLegSolicitudes.map {
+            DriverTripLegSolicitudeResponseMapper.map(it)
         })
     }
 }

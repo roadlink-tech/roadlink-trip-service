@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.usecases.trip_solicitude
 
-import com.roadlink.tripservice.domain.driver_trip.DriverTripApplication
+import com.roadlink.tripservice.domain.driver_trip.DriverTripLegSolicitude
 import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.Rated
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
@@ -9,7 +9,7 @@ import com.roadlink.tripservice.infrastructure.persistence.user.FixedUserReposit
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripLegSolicitudeRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.common.address.AddressFactory
-import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripApplications
+import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripLegSolicitudes
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
@@ -29,7 +29,7 @@ class ListDriverTripSolicitudesTest {
 
     private lateinit var fixedRatingRepository: FixedRatingRepository
 
-    private lateinit var listDriverTripApplications: ListDriverTripApplications
+    private lateinit var listDriverTriplegSolicitudes: ListDriverTripLegSolicitudes
 
     @BeforeEach
     fun setUp() {
@@ -40,7 +40,7 @@ class ListDriverTripSolicitudesTest {
         fixedUserRepository = FixedUserRepository()
         fixedRatingRepository = FixedRatingRepository()
 
-        listDriverTripApplications = ListDriverTripApplications(
+        listDriverTriplegSolicitudes = ListDriverTripLegSolicitudes(
             tripLegSolicitudeRepository = inMemoryTripApplicationRepository,
             userRepository = fixedUserRepository,
             ratingRepository = fixedRatingRepository,
@@ -51,8 +51,8 @@ class ListDriverTripSolicitudesTest {
     fun `given no trip applications for the trip then should return empty list`() {
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
 
-        val driverTripApplications = listDriverTripApplications(
-            ListDriverTripApplications.Input(
+        val driverTripApplications = listDriverTriplegSolicitudes(
+            ListDriverTripLegSolicitudes.Input(
             tripId = tripId,
         ))
 
@@ -74,8 +74,8 @@ class ListDriverTripSolicitudesTest {
             ),
         ).forEach { inMemorytripPlanSolicitudeRepository.insert(it) }
 
-        val driverTripApplications = listDriverTripApplications(
-            ListDriverTripApplications.Input(
+        val driverTripApplications = listDriverTriplegSolicitudes(
+            ListDriverTripLegSolicitudes.Input(
                 tripId = tripId,
             ))
 
@@ -104,21 +104,21 @@ class ListDriverTripSolicitudesTest {
             tripPlanSolicitudeConfirmed,
         ).forEach { inMemorytripPlanSolicitudeRepository.insert(it) }
 
-        val driverTripApplications = listDriverTripApplications(
-            ListDriverTripApplications.Input(
+        val driverTripApplications = listDriverTriplegSolicitudes(
+            ListDriverTripLegSolicitudes.Input(
                 tripId = tripId,
             ))
 
         assertEquals(
             listOf(
-                DriverTripApplication(
-                    tripApplicationId = tripPlanSolicitudePendingApproval.tripLegSolicitudes.first().id,
+                DriverTripLegSolicitude(
+                    tripLegSolicitudeId = tripPlanSolicitudePendingApproval.tripLegSolicitudes.first().id,
                     passenger = Passenger(
                         id = "JOHN",
                         fullName = "John Krasinski",
                         rating = Rated(rating = 1.3),
                     ),
-                    applicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL,
+                    status = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL,
                     addressJoinStart = AddressFactory.avCabildo_4853(),
                     addressJoinEnd = AddressFactory.avCabildo_20(),
                 )
