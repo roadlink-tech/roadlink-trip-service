@@ -69,7 +69,7 @@ class ListDriverDriverTripApplicationsHandlerE2ETest : End2EndTest() {
 
         val request: HttpRequest<Any> = HttpRequest
             .GET(
-                UriBuilder.of("/trip-service/driver-trip-applications")
+                UriBuilder.of("/trip-service/driver_trip_leg_solicitudes")
                     .queryParam("tripId", tripId)
                     .build()
             )
@@ -92,7 +92,7 @@ class ListDriverDriverTripApplicationsHandlerE2ETest : End2EndTest() {
 
         val request: HttpRequest<Any> = HttpRequest
             .GET(
-                UriBuilder.of("/trip-service/driver-trip-applications")
+                UriBuilder.of("/trip-service/driver_trip_leg_solicitudes")
                     .queryParam("tripId", tripId)
                     .build()
             )
