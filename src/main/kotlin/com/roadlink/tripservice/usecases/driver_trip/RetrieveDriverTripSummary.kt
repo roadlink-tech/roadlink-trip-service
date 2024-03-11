@@ -6,7 +6,7 @@ import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
-import com.roadlink.tripservice.domain.trip_summary.driver.DriverTripSummary
+import com.roadlink.tripservice.domain.driver_trip.DriverTripSummary
 import com.roadlink.tripservice.usecases.UseCase
 import java.util.*
 

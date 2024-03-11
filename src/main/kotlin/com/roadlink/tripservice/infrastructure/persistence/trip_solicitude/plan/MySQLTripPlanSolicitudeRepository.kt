@@ -1,8 +1,8 @@
-package com.roadlink.tripservice.infrastructure.persistence.trip_application.plan
+package com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan
 
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.TripLegSolicitudeJPAEntity
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.TripLegSolicitudeJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.Predicate

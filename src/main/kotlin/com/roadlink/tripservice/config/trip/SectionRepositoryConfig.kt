@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.config
+package com.roadlink.tripservice.config.trip
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.section.MySQLSectionRepository

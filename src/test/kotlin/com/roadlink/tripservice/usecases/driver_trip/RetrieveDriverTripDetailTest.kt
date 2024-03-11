@@ -10,8 +10,8 @@ import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.trip.TripStatus.*
 import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
 import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripLegSolicitudeRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.InMemoryTripLegSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan.InMemoryTripPlanSolicitudeRepository
 import com.roadlink.tripservice.infrastructure.persistence.user.FixedUserRepository
 import com.roadlink.tripservice.usecases.common.TripPointFactory
 import com.roadlink.tripservice.usecases.factory.InstantFactory.october15_12hs

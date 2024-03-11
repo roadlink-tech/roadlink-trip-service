@@ -6,8 +6,8 @@ import com.roadlink.tripservice.domain.Rated
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
 import com.roadlink.tripservice.infrastructure.persistence.user.FixedUserRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripLegSolicitudeRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.InMemoryTripLegSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan.InMemoryTripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.common.address.AddressFactory
 import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripLegSolicitudes
 import com.roadlink.tripservice.usecases.factory.SectionFactory

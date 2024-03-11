@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.config.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.MySQLTripPlanSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan.MySQLTripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.ListTripPlanSolicitudes
 import io.micronaut.context.annotation.Factory

@@ -10,8 +10,8 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLe
 import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
 import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip.InMemoryTripRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.InMemoryTripLegSolicitudeRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_application.plan.InMemoryTripPlanSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.InMemoryTripLegSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan.InMemoryTripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import org.junit.jupiter.api.AfterEach

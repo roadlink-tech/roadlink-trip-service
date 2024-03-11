@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.util.*
 
-class TripPlanSolicitudeTest {
+class TripSearchPlanResultSolicitudeTest {
 
     @Test
     fun `when confirm an application, then the available seats must decrease by one`() {

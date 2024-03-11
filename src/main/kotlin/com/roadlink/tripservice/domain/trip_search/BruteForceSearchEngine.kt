@@ -8,25 +8,25 @@ import java.time.Instant
 class BruteForceSearchEngine(
     private val sectionRepository: SectionRepository,
 ) : SearchEngine {
-    override fun search(departure: Location, arrival: Location, at: Instant): List<TripPlan> {
-        val tripPlans = mutableListOf<TripPlan>()
+    override fun search(departure: Location, arrival: Location, at: Instant): List<TripSearchPlanResult> {
+        val tripSearchPlanResults = mutableListOf<TripSearchPlanResult>()
 
-        val stack = mutableListOf<TripPlan>()
+        val stack = mutableListOf<TripSearchPlanResult>()
         sectionRepository.findNextSections(departure, at).forEach { nextSection ->
-            stack.add(TripPlan(listOf(nextSection)))
+            stack.add(TripSearchPlanResult(listOf(nextSection)))
         }
 
         while (stack.isNotEmpty()) {
             val actualTripPlan = stack.removeLast()
             val actualSection = actualTripPlan.last()
             if (actualSection.arrivesTo(arrival)) {
-                tripPlans.add(actualTripPlan)
+                tripSearchPlanResults.add(actualTripPlan)
             }
             sectionRepository.findNextSections(actualSection.arrival(), at).forEach { nextSection ->
                 stack.add(actualTripPlan + nextSection)
             }
         }
 
-        return tripPlans.sortedBy { it.distance() }
+        return tripSearchPlanResults.sortedBy { it.distance() }
     }
 }

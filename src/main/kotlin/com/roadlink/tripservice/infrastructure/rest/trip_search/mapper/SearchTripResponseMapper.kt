@@ -1,11 +1,11 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_search.mapper
 
-import com.roadlink.tripservice.domain.trip_search.TripPlan
+import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
 
 object SearchTripResponseMapper {
-    fun map(tripPlans: List<TripPlan>) =
+    fun map(tripSearchPlanResults: List<TripSearchPlanResult>) =
         SearchTripResponse(
-            tripPlans = tripPlans.map { TripPlanResponseMapper.map(it) }
+            tripPlans = tripSearchPlanResults.map { TripPlanResponseMapper.map(it) }
         )
 }

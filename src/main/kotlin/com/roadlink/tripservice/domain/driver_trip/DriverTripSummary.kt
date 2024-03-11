@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.domain.trip_summary.driver
+package com.roadlink.tripservice.domain.driver_trip
 
 import com.roadlink.tripservice.domain.trip.Trip
 

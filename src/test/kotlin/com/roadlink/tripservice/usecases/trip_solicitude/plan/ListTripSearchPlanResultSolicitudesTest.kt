@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
 
-class ListTripPlanSolicitudesTest {
+class ListTripSearchPlanResultSolicitudesTest {
 
     @MockK
     lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository

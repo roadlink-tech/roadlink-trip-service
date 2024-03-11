@@ -3,7 +3,7 @@ package com.roadlink.tripservice.usecases.driver_trip
 import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.domain.driver_trip.*
 import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
-import com.roadlink.tripservice.domain.trip_search.TripPlan
+import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.trip.TripStatus
@@ -21,7 +21,7 @@ class RetrieveDriverTripDetail(
 ) {
     operator fun invoke(input: Input): DriverTripDetail {
         val sections = sectionRepository.findAllByTripIdOrFail(input.tripId)
-        return TripPlan(sections).let { tripPlan ->
+        return TripSearchPlanResult(sections).let { tripPlan ->
             DriverTripDetail(
                 tripId = input.tripId,
                 tripStatus = tripStatusOf(tripPlan),
@@ -59,17 +59,17 @@ class RetrieveDriverTripDetail(
         }
     }
 
-    private fun tripStatusOf(tripPlan: TripPlan): TripStatus =
+    private fun tripStatusOf(tripSearchPlanResult: TripSearchPlanResult): TripStatus =
         when {
-            tripPlan.departureAt().isAfter(timeProvider.now()) -> NOT_STARTED
-            tripPlan.arriveAt().isBefore(timeProvider.now()) -> FINISHED
+            tripSearchPlanResult.departureAt().isAfter(timeProvider.now()) -> NOT_STARTED
+            tripSearchPlanResult.arriveAt().isBefore(timeProvider.now()) -> FINISHED
             else -> IN_PROGRESS
         }
 
-    private fun seatsAvailabilityStatusOf(tripPlan: TripPlan): SeatsAvailabilityStatus =
+    private fun seatsAvailabilityStatusOf(tripSearchPlanResult: TripSearchPlanResult): SeatsAvailabilityStatus =
         when {
-            tripPlan.hasNoSeatsAvailable() -> NO_SEATS_AVAILABLE
-            tripPlan.hasAllSeatsAvailable() -> ALL_SEATS_AVAILABLE
+            tripSearchPlanResult.hasNoSeatsAvailable() -> NO_SEATS_AVAILABLE
+            tripSearchPlanResult.hasAllSeatsAvailable() -> ALL_SEATS_AVAILABLE
             else -> SOME_SEATS_AVAILABLE
         }
 

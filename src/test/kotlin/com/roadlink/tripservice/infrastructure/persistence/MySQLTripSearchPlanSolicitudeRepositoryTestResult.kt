@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class MySQLTripPlanSolicitudeRepositoryTest {
+class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
 
     @Inject
     private lateinit var sectionRepository: SectionRepository

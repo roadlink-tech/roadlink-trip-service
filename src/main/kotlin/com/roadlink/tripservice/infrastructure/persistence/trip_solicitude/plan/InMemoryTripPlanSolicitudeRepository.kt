@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.infrastructure.persistence.trip_application.plan
+package com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan
 
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude

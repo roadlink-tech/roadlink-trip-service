@@ -21,7 +21,7 @@ import org.skyscreamer.jsonassert.JSONAssert
 import java.util.*
 
 @MicronautTest
-class TripPlanSolicitudeHandlerE2ETest : End2EndTest() {
+class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
 
     @Inject
     @field:Client("/")
