@@ -66,7 +66,7 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
             """
             {
               "id": "$tripPlanSolicitudeId",
-              "tripApplications": [
+              "tripLegSolicitudes": [
                 {
                   "id": "$tripLegSolicitudeId",
                   "passengerId": "$passengerId",
@@ -77,6 +77,10 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
                       "departure": {
                         "estimatedArrivalTime": 1665835200,
                         "address": {
+                          "location": {
+                            "latitude": -34.540412,
+                            "longitude": -58.474732
+                          },
                           "fullAddress": "Av. Cabildo 4853, Buenos Aires",
                           "street": "Av. Cabildo",
                           "city": "Buenos Aires",
@@ -87,6 +91,10 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
                       "arrival": {
                         "estimatedArrivalTime": 1665856800,
                         "address": {
+                          "location": {
+                            "latitude": -34.574810,
+                            "longitude": -58.435990
+                          },
                           "fullAddress": "Av. Cabildo 20, Buenos Aires",
                           "street": "Av. Cabildo",
                           "city": "Buenos Aires",
@@ -158,7 +166,7 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
             [
                {
                   "id":"$tripPlanSolicitudeId",
-                  "tripApplications":[
+                  "tripLegSolicitudes":[
                      {
                         "id":"$tripApplicationId",
                         "passengerId":"$passengerId",
@@ -169,6 +177,10 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
                               "departure":{
                                  "estimatedArrivalTime":1.6658352E9,
                                  "address":{
+                                    "location": {
+                                      "latitude": -34.540412,
+                                      "longitude": -58.474732
+                                    },
                                     "fullAddress":"Av. Cabildo 4853, Buenos Aires",
                                     "street":"Av. Cabildo",
                                     "city":"Buenos Aires",
@@ -179,6 +191,10 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
                               "arrival":{
                                  "estimatedArrivalTime":1.6658568E9,
                                  "address":{
+                                    "location": {
+                                      "latitude": -34.574810,
+                                      "longitude": -58.435990
+                                    },
                                     "fullAddress":"Av. Cabildo 20, Buenos Aires",
                                     "street":"Av. Cabildo",
                                     "city":"Buenos Aires",
@@ -250,7 +266,7 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
             [
                {
                   "id":"$tripPlanSolicitudeId",
-                  "tripApplications":[
+                  "tripLegSolicitudes":[
                      {
                         "id":"$tripApplicationId",
                         "passengerId":"$passengerId",
@@ -261,6 +277,10 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
                               "departure":{
                                  "estimatedArrivalTime":1.6658352E9,
                                  "address":{
+                                    "location": {
+                                      "latitude": -34.540412,
+                                      "longitude": -58.474732
+                                    },
                                     "fullAddress":"Av. Cabildo 4853, Buenos Aires",
                                     "street":"Av. Cabildo",
                                     "city":"Buenos Aires",
@@ -271,6 +291,10 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
                               "arrival":{
                                  "estimatedArrivalTime":1.6658568E9,
                                  "address":{
+                                    "location": {
+                                      "latitude": -34.574810,
+                                      "longitude": -58.435990
+                                    },
                                     "fullAddress":"Av. Cabildo 20, Buenos Aires",
                                     "street":"Av. Cabildo",
                                     "city":"Buenos Aires",

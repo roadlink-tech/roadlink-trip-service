@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response
 
+import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.common.address.Address
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
@@ -10,7 +11,7 @@ import java.util.*
 
 data class TripPlanSolicitudeResponse(
     val id: UUID,
-    val tripApplications: List<TripLegSolicitudeResponse>,
+    val tripLegSolicitudes: List<TripLegSolicitudeResponse>,
     val status: String
 ) : ApiResponse {
     data class TripLegSolicitudeResponse(
@@ -21,7 +22,21 @@ data class TripPlanSolicitudeResponse(
         val authorizerId: String
     )
 
+    data class LocationResponse(
+        val latitude: Double,
+        val longitude: Double
+    ) {
+        companion object {
+            fun from(location: Location): LocationResponse =
+                LocationResponse(
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                )
+        }
+    }
+
     data class AddressResponse(
+        val location: LocationResponse,
         val fullAddress: String,
         val street: String,
         val city: String,
@@ -32,6 +47,7 @@ data class TripPlanSolicitudeResponse(
         companion object {
             fun from(address: Address): AddressResponse {
                 return AddressResponse(
+                    location = LocationResponse.from(address.location),
                     fullAddress = address.fullAddress,
                     street = address.street,
                     city = address.city,
@@ -91,7 +107,7 @@ data class TripPlanSolicitudeResponse(
         fun from(output: TripPlanSolicitude): TripPlanSolicitudeResponse {
             return TripPlanSolicitudeResponse(
                 id = output.id,
-                tripApplications = output.tripLegSolicitudes.map {
+                tripLegSolicitudes = output.tripLegSolicitudes.map {
                     TripLegSolicitudeResponse(
                         id = it.id,
                         passengerId = it.passengerId,
