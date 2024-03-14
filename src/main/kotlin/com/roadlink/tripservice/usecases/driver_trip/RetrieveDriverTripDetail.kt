@@ -1,6 +1,5 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
-import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.domain.driver_trip.*
 import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
@@ -9,14 +8,16 @@ import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
 import com.roadlink.tripservice.domain.trip.TripStatus
 import com.roadlink.tripservice.domain.trip.TripStatus.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.domain.user.UserError
 import com.roadlink.tripservice.domain.user.UserRepository
+import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import java.util.UUID
 
 class RetrieveDriverTripDetail(
     private val sectionRepository: SectionRepository,
     private val tripLegSolicitudeRepository: TripLegSolicitudeRepository,
     private val userRepository: UserRepository,
-    private val ratingRepository: RatingRepository,
+    private val userTrustScoreRepository: UserTrustScoreRepository,
     private val timeProvider: TimeProvider,
 ) {
     operator fun invoke(input: Input): DriverTripDetail {
@@ -35,23 +36,17 @@ class RetrieveDriverTripDetail(
                             arrival = section.arrival,
                             occupiedSeats = section.occupiedSeats(),
                             availableSeats = section.availableSeats(),
-                            passengers = tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(sectionId = section.id))
+                            passengers = tripLegSolicitudeRepository.find(
+                                TripLegSolicitudeRepository.CommandQuery(sectionId = section.id)
+                            )
                                 .filter { it.isConfirmed() }
                                 .map { it.passengerId }
                                 .map { passengerId ->
-                                    userRepository.findFullNameById(passengerId)
-                                        ?.let { fullName ->
-                                            Passenger(
-                                                id = passengerId,
-                                                fullName = fullName,
-                                                rating = ratingRepository.findByUserId(passengerId)
-                                                    ?.let { rating ->
-                                                        Rated(rating)
-                                                    }
-                                                    ?: NotBeenRated,
-                                            )
-                                        }
-                                        ?: PassengerNotExists(id = passengerId)
+                                    val user = userRepository.findByUserId(passengerId)
+                                        ?: throw UserError.NotExists(passengerId)
+                                    val userTrustScore =
+                                        userTrustScoreRepository.findById(passengerId)
+                                    user.asPassengerWith(userTrustScore)
                                 },
                         )
                     },

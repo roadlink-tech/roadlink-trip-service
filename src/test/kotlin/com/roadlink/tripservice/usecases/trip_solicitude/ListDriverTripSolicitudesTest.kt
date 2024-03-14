@@ -117,6 +117,7 @@ class ListDriverTripSolicitudesTest {
                         id = "JOHN",
                         fullName = "John Krasinski",
                         rating = Rated(rating = 1.3),
+                        profilePhotoUrl = "",
                     ),
                     status = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL,
                     addressJoinStart = AddressFactory.avCabildo_4853(),

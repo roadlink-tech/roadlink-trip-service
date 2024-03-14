@@ -57,7 +57,7 @@ class RetrieveDriverTripDetailTest {
             sectionRepository = inMemorySectionRepository,
             tripLegSolicitudeRepository = inMemoryTripApplicationRepository,
             userRepository = fixedUserRepository,
-            ratingRepository = fixedRatingRepository,
+            userTrustScoreRepository = fixedRatingRepository,
             timeProvider = stubTimeProvider,
         )
     }
@@ -228,6 +228,7 @@ class RetrieveDriverTripDetailTest {
                             id = "BJNOVAK",
                             fullName = "B.J.Novak",
                             rating = Rated(rating = 2.7),
+                            profilePhotoUrl = "",
                         )
                     ),
                 )
@@ -298,6 +299,7 @@ class RetrieveDriverTripDetailTest {
                             id = "PAINN",
                             fullName = "Painn Wilson",
                             rating = NotBeenRated,
+                            profilePhotoUrl = "",
                         )
                     ),
                 )

@@ -13,9 +13,10 @@ object PassengerResultResponseMapper {
                 PassengerResponse(
                     id = passengerResult.id,
                     fullName = passengerResult.fullName,
-                    rating = when (passengerResult.rating) {
-                        is Rated -> RatedResponse(rating = passengerResult.rating.rating)
-                        NotBeenRated -> NotBeenRatedResponse()
+                    rating = if (passengerResult.hasBeenRated) {
+                        RatedResponse(rating = passengerResult.score)
+                    } else {
+                        NotBeenRatedResponse()
                     },
                 )
 
