@@ -1,10 +1,8 @@
 package com.roadlink.tripservice.infrastructure.factories
 
-import com.roadlink.tripservice.infrastructure.rest.common.address.AddressResponse
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripLegSolicitudeResponse
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.PassengerResultResponse
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.*
 import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripLegSolicitudeStatusResponse
 import java.util.*
 
