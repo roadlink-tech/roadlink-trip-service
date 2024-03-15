@@ -1,20 +1,19 @@
-package com.roadlink.tripservice.config
+package com.roadlink.tripservice.config.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Get
-import com.roadlink.tripservice.domain.RatingRepository
-import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
-import com.roadlink.tripservice.infrastructure.remote.HttpRatingRepository
+import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
+import com.roadlink.tripservice.infrastructure.remote.HttpUserTrustScoreRepository
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 
 @Factory
-class RatingRepositoryConfig {
+class UserTrustScoreRepositoryConfig {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(RatingRepositoryConfig::class.java)
+        private val logger = LoggerFactory.getLogger(UserTrustScoreRepositoryConfig::class.java)
     }
 
     @Value("\${http-get-user-trust-score.scheme}")
@@ -30,10 +29,10 @@ class RatingRepositoryConfig {
     private lateinit var getUserTrustScoreEndpoint: String
 
     @Singleton
-    fun ratingRepository(get: Get, objectMapper: ObjectMapper): RatingRepository {
+    fun userTrustScoreRepository(get: Get, objectMapper: ObjectMapper): UserTrustScoreRepository {
         logger.debug("Initializing http get user trust score with scheme: {}, host: {}, port: {}, endpoint: {}", getUserTrustScoreScheme, getUserTrustScoreHost, getUserTrustScorePort, getUserTrustScoreEndpoint)
 
-        return HttpRatingRepository(
+        return HttpUserTrustScoreRepository(
             get = get,
             scheme = getUserTrustScoreScheme,
             host = getUserTrustScoreHost,

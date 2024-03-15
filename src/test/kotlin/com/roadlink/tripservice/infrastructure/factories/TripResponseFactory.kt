@@ -1,11 +1,11 @@
 package com.roadlink.tripservice.infrastructure.factories
 
+import com.roadlink.tripservice.infrastructure.rest.trip.response.TripResponse
 import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.infrastructure.rest.responses.TripExpectedResponse
 
 object TripResponseFactory {
     fun avCabildo() =
-        TripExpectedResponse(
+        TripResponse(
             id = TripFactory.avCabildo_id,
             driver = "John Smith",
             vehicle = "Ford mustang",
@@ -16,7 +16,7 @@ object TripResponseFactory {
         )
 
     fun avCabildo4853_virreyDelPino1800_avCabildo20() =
-        TripExpectedResponse(
+        TripResponse(
             id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             driver = "John Smith",
             vehicle = "Ford mustang",

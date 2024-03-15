@@ -1,13 +1,13 @@
 package com.roadlink.tripservice.infrastructure.factories
 
-import com.roadlink.tripservice.infrastructure.rest.responses.SearchTripExpectedResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
 
 object SearchTripResponseFactory {
     fun empty() =
-        SearchTripExpectedResponse(tripPlans = emptyList())
+        SearchTripResponse(tripPlans = emptyList())
 
     fun avCabildo4853_virreyDelPino1800_avCabildo20() =
-        SearchTripExpectedResponse(tripPlans = listOf(
+        SearchTripResponse(tripPlans = listOf(
             TripPlanResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
         ))
 }

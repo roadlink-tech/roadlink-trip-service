@@ -125,6 +125,21 @@ object TripPlanSolicitudeFactory {
         )
     }
 
+    fun withASingleTripLegSolicitude(
+        tripLeg: TripLegSolicitude = TripLegSolicitude(
+            id = UUID.randomUUID(),
+            sections = listOf(SectionFactory.avCabildo1621_virreyDelPino1800()),
+            passengerId = "passengerId",
+            status = CONFIRMED,
+            authorizerId = "authorizerId"
+        ),
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = UUID.randomUUID(),
+            tripLegSolicitudes = mutableListOf(tripLeg)
+        )
+    }
+
     fun withASingleTripApplicationPendingApproval(
         sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",

@@ -2,123 +2,165 @@ package com.roadlink.tripservice.usecases.trip_solicitude
 
 import com.roadlink.tripservice.domain.driver_trip.DriverTripLegSolicitude
 import com.roadlink.tripservice.domain.driver_trip.Passenger
-import com.roadlink.tripservice.domain.Rated
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
-import com.roadlink.tripservice.infrastructure.persistence.FixedRatingRepository
-import com.roadlink.tripservice.infrastructure.persistence.user.FixedUserRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.InMemoryTripLegSolicitudeRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan.InMemoryTripPlanSolicitudeRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.domain.user.UserRepository
+import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import com.roadlink.tripservice.usecases.common.address.AddressFactory
 import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripLegSolicitudes
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
+import com.roadlink.tripservice.usecases.user.UserFactory
+import com.roadlink.tripservice.usecases.user.UserTrustScoreFactory
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.UUID
+import java.util.*
 
 class ListDriverTripSolicitudesTest {
 
-    private lateinit var inMemoryTripApplicationRepository: InMemoryTripLegSolicitudeRepository
+    @MockK
+    private lateinit var tripLegSolicitudeRepository: TripLegSolicitudeRepository
 
-    private lateinit var inMemorytripPlanSolicitudeRepository: InMemoryTripPlanSolicitudeRepository
+    @MockK
+    private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 
-    private lateinit var fixedUserRepository: FixedUserRepository
+    @MockK
+    private lateinit var userRepository: UserRepository
 
-    private lateinit var fixedRatingRepository: FixedRatingRepository
+    @MockK
+    private lateinit var userTrustScoreRepository: UserTrustScoreRepository
 
-    private lateinit var listDriverTriplegSolicitudes: ListDriverTripLegSolicitudes
+    private lateinit var listDriverTripLegSolicitudes: ListDriverTripLegSolicitudes
 
     @BeforeEach
     fun setUp() {
-        inMemoryTripApplicationRepository = InMemoryTripLegSolicitudeRepository()
-        inMemorytripPlanSolicitudeRepository = InMemoryTripPlanSolicitudeRepository(
-            tripLegSolicitudeRepository = inMemoryTripApplicationRepository
-        )
-        fixedUserRepository = FixedUserRepository()
-        fixedRatingRepository = FixedRatingRepository()
-
-        listDriverTriplegSolicitudes = ListDriverTripLegSolicitudes(
-            tripLegSolicitudeRepository = inMemoryTripApplicationRepository,
-            userRepository = fixedUserRepository,
-            ratingRepository = fixedRatingRepository,
+        MockKAnnotations.init(this)
+        listDriverTripLegSolicitudes = ListDriverTripLegSolicitudes(
+            tripLegSolicitudeRepository = tripLegSolicitudeRepository,
+            userRepository = userRepository,
+            userTrustScoreRepository = userTrustScoreRepository,
         )
     }
 
     @Test
-    fun `given no trip applications for the trip then should return empty list`() {
+    fun `given no trip applications for the trip, then should return empty list`() {
+        // given
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
+        every { tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(tripId = tripId)) } returns emptyList()
 
-        val driverTripApplications = listDriverTriplegSolicitudes(
+        // when
+        val driverTripApplications = listDriverTripLegSolicitudes(
             ListDriverTripLegSolicitudes.Input(
-            tripId = tripId,
-        ))
+                tripId = tripId,
+            )
+        )
 
+        // then
         assertTrue { driverTripApplications.isEmpty() }
     }
 
     @Test
     fun `given no pending trip applications for the trip then should return empty list`() {
+        // given
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
-        val section = SectionFactory.avCabildo(tripId = tripId)
-        listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
-                sections = listOf(section),
-                passengerId = "JENNA",
-            ),
-            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
-                sections = listOf(section),
-                passengerId = "BJNOVAK",
-            ),
-        ).forEach { inMemorytripPlanSolicitudeRepository.insert(it) }
+        val tripLegSolicitude = TripLegSolicitude(
+            id = UUID.randomUUID(),
+            sections = listOf(SectionFactory.avCabildo(tripId = tripId)),
+            passengerId = "passengerId",
+            status = CONFIRMED,
+            authorizerId = "authorizerId"
+        )
+        every { tripLegSolicitudeRepository.find(any()) } returns listOf(tripLegSolicitude)
 
-        val driverTripApplications = listDriverTriplegSolicitudes(
+        // when
+        val driverTripApplications = listDriverTripLegSolicitudes(
             ListDriverTripLegSolicitudes.Input(
                 tripId = tripId,
-            ))
+            )
+        )
 
+        // then
         assertTrue { driverTripApplications.isEmpty() }
     }
 
     @Test
-    fun `driver trip applications only consider applications who has pending approval`() {
+    fun `driver trip plan solicitudes only consider solicitudes which has pending approval`() {
+        // given
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
+        val userId = UUID.randomUUID()
         val section = SectionFactory.avCabildo(tripId = tripId)
-        val tripPlanSolicitudePendingApproval = TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval(
+        val pendingApprovalTripLegSolicitude = TripLegSolicitude(
+            id = UUID.randomUUID(),
             sections = listOf(section),
-            passengerId = "JOHN",
+            passengerId = "passengerId",
+            status = PENDING_APPROVAL,
+            authorizerId = "authorizerId"
         )
-        val tripPlanSolicitudeRejected = TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
+        val rejectedTripLegSolicitude = TripLegSolicitude(
+            id = UUID.randomUUID(),
             sections = listOf(section),
-            passengerId = "JENNA",
+            passengerId = "passengerId",
+            status = REJECTED,
+            authorizerId = "authorizerId"
         )
-        val tripPlanSolicitudeConfirmed = TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
+        val confirmedTripLegSolicitude = TripLegSolicitude(
+            id = UUID.randomUUID(),
             sections = listOf(section),
-            passengerId = "BJNOVAK",
+            passengerId = "passengerId",
+            status = CONFIRMED,
+            authorizerId = "authorizerId"
         )
-        listOf(
+
+        val tripPlanSolicitudePendingApproval =
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(pendingApprovalTripLegSolicitude)
+        val tripPlanSolicitudeRejected =
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(rejectedTripLegSolicitude)
+        val tripPlanSolicitudeConfirmed =
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(confirmedTripLegSolicitude)
+
+        val tripPlanSolicitudes = listOf(
             tripPlanSolicitudePendingApproval,
             tripPlanSolicitudeRejected,
             tripPlanSolicitudeConfirmed,
-        ).forEach { inMemorytripPlanSolicitudeRepository.insert(it) }
+        )
 
-        val driverTripApplications = listDriverTriplegSolicitudes(
+        every { tripPlanSolicitudeRepository.find(any()) } returns tripPlanSolicitudes
+        every { tripLegSolicitudeRepository.find(any()) } returns listOf(
+            pendingApprovalTripLegSolicitude,
+            rejectedTripLegSolicitude,
+            confirmedTripLegSolicitude
+        )
+        every { userRepository.findByUserId(any()) } returns UserFactory.common(id = userId)
+        every { userTrustScoreRepository.findById(any()) } returns UserTrustScoreFactory.common(score = 1.3)
+
+        // when
+        val driverTripApplications = listDriverTripLegSolicitudes(
             ListDriverTripLegSolicitudes.Input(
                 tripId = tripId,
-            ))
+            )
+        )
 
+        // then
         assertEquals(
             listOf(
                 DriverTripLegSolicitude(
                     tripLegSolicitudeId = tripPlanSolicitudePendingApproval.tripLegSolicitudes.first().id,
                     passenger = Passenger(
-                        id = "JOHN",
+                        id = userId.toString(),
                         fullName = "John Krasinski",
-                        rating = Rated(rating = 1.3),
+                        score = 1.3,
+                        hasBeenScored = true,
+                        profilePhotoUrl = "http//profile.photo.com",
                     ),
-                    status = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL,
+                    status = PENDING_APPROVAL,
                     addressJoinStart = AddressFactory.avCabildo_4853(),
                     addressJoinEnd = AddressFactory.avCabildo_20(),
                 )
@@ -126,4 +168,5 @@ class ListDriverTripSolicitudesTest {
             driverTripApplications
         )
     }
+
 }

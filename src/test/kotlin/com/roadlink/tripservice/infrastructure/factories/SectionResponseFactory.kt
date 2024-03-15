@@ -2,11 +2,11 @@ package com.roadlink.tripservice.infrastructure.factories
 
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.infrastructure.rest.responses.SectionExpectedResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SectionResponse
 
 object SectionResponseFactory {
     fun avCabildo4853_virreyDelPino1800() =
-        SectionExpectedResponse(
+        SectionResponse(
             id = SectionFactory.avCabildo4853_virreyDelPino1800_id,
             tripId = TripFactory.avCabildo_id,
             departure = TripPointResponseFactory.avCabildo_4853(),
@@ -17,7 +17,7 @@ object SectionResponseFactory {
         )
 
     fun virreyDelPino1800_avCabildo20() =
-        SectionExpectedResponse(
+        SectionResponse(
             id = SectionFactory.virreyDelPino1800_avCabildo20_id,
             tripId = TripFactory.avCabildo_id,
             departure = TripPointResponseFactory.virreyDelPino1800(),

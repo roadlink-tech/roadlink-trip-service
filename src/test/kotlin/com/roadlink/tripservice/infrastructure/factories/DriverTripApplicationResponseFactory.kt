@@ -1,21 +1,24 @@
 package com.roadlink.tripservice.infrastructure.factories
 
-import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripApplicationExpectedResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.PassengerExpectedResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.RatedExpectedResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.TripApplicationStatusExpectedResponse
-import java.util.UUID
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripLegSolicitudeResponse
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.PassengerResultResponse
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripLegSolicitudeStatusResponse
+import java.util.*
 
 object DriverTripApplicationResponseFactory {
-    fun avCabildoWithASingleTripApplicationPendingApproval(tripApplicationId: UUID): DriverTripApplicationExpectedResponse =
-        DriverTripApplicationExpectedResponse(
+    fun avCabildoWithASingleTripApplicationPendingApproval(
+        tripApplicationId: UUID,
+        userId: UUID
+    ): DriverTripLegSolicitudeResponse =
+        DriverTripLegSolicitudeResponse(
             tripLegSolicitudeId = tripApplicationId.toString(),
-            passenger = PassengerExpectedResponse(
-                id = "JOHN",
+            passenger = PassengerResultResponse.PassengerResponse(
+                id = userId.toString(),
                 fullName = "John Krasinski",
-                rating = RatedExpectedResponse(rating = 1.3),
+                rating = ScoreResultResponse.ScoreResponse(score = 1.3),
             ),
-            status = TripApplicationStatusExpectedResponse.PENDING_APPROVAL,
+            status = TripLegSolicitudeStatusResponse.PENDING_APPROVAL,
             addressJoinStart = AddressResponseFactory.avCabildo_4853(),
             addressJoinEnd = AddressResponseFactory.avCabildo_20(),
         )

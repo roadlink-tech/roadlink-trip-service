@@ -16,11 +16,11 @@ class ListDriverTripApplicationsHandler(
 ) {
     @Get("/driver_trip_leg_solicitudes")
     fun handle(@QueryValue tripId: String): HttpResponse<List<DriverTripLegSolicitudeResponse>> {
-        val input = ListDriverTripLegSolicitudes.Input(
-            tripId = UUID.fromString(tripId)
+        val driverTripLegSolicitudes = listDriverTripLegSolicitudes(
+            ListDriverTripLegSolicitudes.Input(
+                tripId = UUID.fromString(tripId)
+            )
         )
-
-        val driverTripLegSolicitudes = listDriverTripLegSolicitudes(input)
 
         return HttpResponse.ok(driverTripLegSolicitudes.map {
             DriverTripLegSolicitudeResponseMapper.map(it)

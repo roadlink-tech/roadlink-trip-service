@@ -1,17 +1,16 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
-import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.domain.driver_trip.DriverTripLegSolicitude
-import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserRepository
+import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import java.util.UUID
 
 class ListDriverTripLegSolicitudes(
     private val tripLegSolicitudeRepository: TripLegSolicitudeRepository,
     private val userRepository: UserRepository,
-    private val ratingRepository: RatingRepository,
+    private val userTrustScoreRepository: UserTrustScoreRepository,
 ) {
     operator fun invoke(input: Input): List<DriverTripLegSolicitude> {
         return tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(tripId = input.tripId))
@@ -22,19 +21,11 @@ class ListDriverTripLegSolicitudes(
                 val passengerId = tripLegSolicitude.passengerId
                 DriverTripLegSolicitude(
                     tripLegSolicitudeId = tripLegSolicitude.id,
-                    passenger = userRepository.findFullNameById(passengerId)
-                        ?.let { fullName ->
-                            Passenger(
-                                id = passengerId,
-                                fullName = fullName,
-                                rating = ratingRepository.findByUserId(passengerId)
-                                    ?.let { rating ->
-                                        Rated(rating)
-                                    }
-                                    ?: NotBeenRated,
-                            )
-                        }
-                        ?: PassengerNotExists(id = passengerId),
+                    passenger = userRepository.findByUserId(passengerId)
+                        ?.let { user ->
+                            val userTrustScore = userTrustScoreRepository.findById(passengerId)
+                            user.asPassengerWith(userTrustScore)
+                        } ?: PassengerNotExists(id = passengerId),
                     status = tripLegSolicitude.status,
                     addressJoinStart = tripLegSolicitude.departureTripPoint().address,
                     addressJoinEnd = tripLegSolicitude.arrivalTripPoint().address,
