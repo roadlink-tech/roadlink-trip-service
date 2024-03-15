@@ -60,6 +60,7 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.micronaut.test:micronaut-test-junit5:$micronautTestJunit5")
     testImplementation("org.skyscreamer:jsonassert:1.5.0")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:2.31.0")
 
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:mysql:$testContainersVersion")
