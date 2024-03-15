@@ -18,7 +18,7 @@ data class User(
             fullName = this.fullName(),
             score = userTrustScore.score,
             profilePhotoUrl = profilePhotoUrl,
-            hasBeenRated = userTrustScore.hasAnyFeedbackReceived()
+            hasBeenScored = userTrustScore.hasAnyFeedbackReceived()
         )
     }
 }

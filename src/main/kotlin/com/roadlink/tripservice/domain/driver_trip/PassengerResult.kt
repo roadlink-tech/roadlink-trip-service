@@ -6,7 +6,7 @@ data class Passenger(
     val id: String,
     val fullName: String,
     val score: Double,
-    val hasBeenRated: Boolean,
+    val hasBeenScored: Boolean,
     val profilePhotoUrl: String
 ) : PassengerResult()
 

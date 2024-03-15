@@ -1,6 +1,5 @@
 package com.roadlink.tripservice.config.trip_solicitude
 
-import com.roadlink.tripservice.domain.RatingRepository
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository

@@ -7,7 +7,6 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLe
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserRepository
-import com.roadlink.tripservice.domain.user.UserTrustScore
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import com.roadlink.tripservice.usecases.common.address.AddressFactory
 import com.roadlink.tripservice.usecases.driver_trip.ListDriverTripLegSolicitudes
@@ -158,7 +157,7 @@ class ListDriverTripSolicitudesTest {
                         id = userId.toString(),
                         fullName = "John Krasinski",
                         score = 1.3,
-                        hasBeenRated = true,
+                        hasBeenScored = true,
                         profilePhotoUrl = "http//profile.photo.com",
                     ),
                     status = PENDING_APPROVAL,

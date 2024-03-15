@@ -13,6 +13,7 @@ import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripDetailResponseFactory
 import com.roadlink.tripservice.infrastructure.remote.HttpUserRepository
 import com.roadlink.tripservice.infrastructure.remote.HttpUserTrustScoreRepository
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripDetailResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripDetailExpectedResponse
 import com.roadlink.tripservice.usecases.user.UserFactory
 import com.roadlink.tripservice.usecases.user.UserTrustScoreFactory
@@ -122,7 +123,7 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
     }
 
     private fun assertOkBody(
-        driverTripDetailResponse: DriverTripDetailExpectedResponse,
+        driverTripDetailResponse: DriverTripDetailResponse,
         httpResponse: HttpResponse<JsonNode>
     ) {
         assertEquals(

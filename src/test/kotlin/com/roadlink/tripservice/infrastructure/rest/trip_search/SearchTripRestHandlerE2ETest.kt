@@ -3,13 +3,13 @@ package com.roadlink.tripservice.infrastructure.rest.trip_search
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.usecases.common.LocationFactory
-import com.roadlink.tripservice.usecases.factory.SectionFactory
-import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.SearchTripResponseFactory
-import com.roadlink.tripservice.infrastructure.rest.responses.SearchTripExpectedResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
+import com.roadlink.tripservice.usecases.common.LocationFactory
+import com.roadlink.tripservice.usecases.factory.InstantFactory
+import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -84,7 +84,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
         assertOkBody(SearchTripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(), response)
     }
 
-    private fun assertOkBody(searchTripResponse: SearchTripExpectedResponse, httpResponse: HttpResponse<JsonNode>) {
+    private fun assertOkBody(searchTripResponse: SearchTripResponse, httpResponse: HttpResponse<JsonNode>) {
         assertEquals(
             objectMapper.readTree(objectMapper.writeValueAsString(searchTripResponse)),
             httpResponse.body()!!

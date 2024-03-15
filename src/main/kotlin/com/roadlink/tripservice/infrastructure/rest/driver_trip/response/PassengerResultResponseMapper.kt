@@ -1,9 +1,14 @@
 package com.roadlink.tripservice.infrastructure.rest.driver_trip.response
 
-import com.roadlink.tripservice.domain.*
 import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
 import com.roadlink.tripservice.domain.driver_trip.PassengerResult
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.PassengerResultResponse.PassengerNotExistsResponse
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.PassengerResultResponse.PassengerResponse
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponse.NotBeenScoredResponse
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponse.ScoreResponse
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponseType.NOT_BEEN_SCORED
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponseType.SCORED
 
 
 object PassengerResultResponseMapper {
@@ -13,10 +18,10 @@ object PassengerResultResponseMapper {
                 PassengerResponse(
                     id = passengerResult.id,
                     fullName = passengerResult.fullName,
-                    rating = if (passengerResult.hasBeenRated) {
-                        RatedResponse(rating = passengerResult.score)
+                    rating = if (passengerResult.hasBeenScored) {
+                        ScoreResponse(score = passengerResult.score)
                     } else {
-                        NotBeenRatedResponse()
+                        NotBeenScoredResponse()
                     },
                 )
 
@@ -25,17 +30,18 @@ object PassengerResultResponseMapper {
         }
 }
 
-data class RatedResponse(
-    override val type: RatingResultResponseType = RatingResultResponseType.RATED,
-    val rating: Double,
-) : RatingResultResponse(type)
+sealed class ScoreResultResponse(open val type: ScoreResultResponseType) {
+    data class ScoreResponse(
+        override val type: ScoreResultResponseType = SCORED,
+        val score: Double,
+    ) : ScoreResultResponse(type)
 
-data class NotBeenRatedResponse(
-    override val type: RatingResultResponseType = RatingResultResponseType.NOT_BEEN_RATED,
-) : RatingResultResponse(type)
+    data class NotBeenScoredResponse(
+        override val type: ScoreResultResponseType = NOT_BEEN_SCORED,
+    ) : ScoreResultResponse(type)
+}
 
-sealed class RatingResultResponse(open val type: RatingResultResponseType)
-enum class RatingResultResponseType {
-    RATED,
-    NOT_BEEN_RATED,
+enum class ScoreResultResponseType {
+    SCORED,
+    NOT_BEEN_SCORED,
 }

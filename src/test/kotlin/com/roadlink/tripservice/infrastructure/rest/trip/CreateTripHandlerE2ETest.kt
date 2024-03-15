@@ -15,6 +15,7 @@ import com.roadlink.tripservice.infrastructure.factories.InvalidTripTimeRangeRes
 import com.roadlink.tripservice.infrastructure.factories.TripResponseFactory
 import com.roadlink.tripservice.infrastructure.requests.CreateTripExpectedRequest
 import com.roadlink.tripservice.infrastructure.rest.responses.TripExpectedResponse
+import com.roadlink.tripservice.infrastructure.rest.trip.response.TripResponse
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -125,7 +126,7 @@ class CreateTripHandlerE2ETest : End2EndTest() {
         return HttpRequest.POST(UriBuilder.of("/trip-service/trip").build(), body)
     }
 
-    private fun assertOkBody(tripResponse: TripExpectedResponse, httpResponse: HttpResponse<JsonNode>) {
+    private fun assertOkBody(tripResponse: TripResponse, httpResponse: HttpResponse<JsonNode>) {
         assertEquals(
             objectMapper.readTree(objectMapper.writeValueAsString(tripResponse)),
             httpResponse.body()!!

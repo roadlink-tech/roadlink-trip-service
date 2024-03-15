@@ -1,22 +1,21 @@
 package com.roadlink.tripservice.infrastructure.rest.responses
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponseType
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponseType.*
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.SeatsAvailabilityStatusResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.PassengerResultExpectedResponseType.PASSENGER
-import com.roadlink.tripservice.infrastructure.rest.responses.PassengerResultExpectedResponseType.PASSENGER_NOT_EXISTS
-import com.roadlink.tripservice.infrastructure.rest.responses.RatingResultExpectedResponseType.NOT_BEEN_RATED
-import com.roadlink.tripservice.infrastructure.rest.responses.RatingResultExpectedResponseType.RATED
 
 data class DriverTripDetailExpectedResponse(
     val tripId: String,
     val tripStatus: TripStatusExpectedResponse,
-    val seatStatus: SeatsAvailabilityStatusExpectedResponse,
+    val seatStatus: SeatsAvailabilityStatusResponse,
     val hasPendingApplications: Boolean,
     val sectionDetails: List<DriverSectionDetailExpectedResponse>
 )
 
 enum class TripStatusExpectedResponse { NOT_STARTED, IN_PROGRESS, FINISHED }
 
-enum class SeatsAvailabilityStatusExpectedResponse { ALL_SEATS_AVAILABLE, SOME_SEATS_AVAILABLE, NO_SEATS_AVAILABLE }
 
 data class DriverSectionDetailExpectedResponse(
     val sectionId: String,
@@ -39,26 +38,18 @@ data class PassengerExpectedResponse(
     override val type: PassengerResultExpectedResponseType = PASSENGER,
     val id: String,
     val fullName: String,
-    val rating: RatingResultExpectedResponse,
+    val rating: ScoreResultExpectedResponse,
 ) : PassengerResultExpectedResponse(type)
 
-data class PassengerNotExistsExpectedResponse(
-    override val type: PassengerResultExpectedResponseType = PASSENGER_NOT_EXISTS,
-    val id: String,
-) : PassengerResultExpectedResponse(type)
+sealed class ScoreResultExpectedResponse(open val type: ScoreResultResponseType) {
+    data class ScoredExpectedResponse(
+        override val type: ScoreResultResponseType = SCORED,
+        val rating: Double,
+    ) : ScoreResultExpectedResponse(type)
 
-sealed class RatingResultExpectedResponse(open val type: RatingResultExpectedResponseType)
+    data class NotBeenScoredExpectedResponse(
+        override val type: ScoreResultResponseType = NOT_BEEN_SCORED,
+    ) : ScoreResultExpectedResponse(type)
 
-enum class RatingResultExpectedResponseType {
-    RATED,
-    NOT_BEEN_RATED,
 }
 
-data class RatedExpectedResponse(
-    override val type: RatingResultExpectedResponseType = RATED,
-    val rating: Double,
-) : RatingResultExpectedResponse(type)
-
-data class NotBeenRatedExpectedResponse(
-    override val type: RatingResultExpectedResponseType = NOT_BEEN_RATED,
-) : RatingResultExpectedResponse(type)

@@ -147,7 +147,7 @@ class ListDriverTripApplicationsHandlerE2ETest : End2EndTest() {
     }
 
     private fun assertOkBody(
-        driverTripApplicationsResponse: List<DriverTripApplicationExpectedResponse>,
+        driverTripApplicationsResponse: List<DriverTripLegSolicitudeResponse>,
         httpResponse: HttpResponse<JsonNode>
     ) {
         assertEquals(
