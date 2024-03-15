@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.common
+package com.roadlink.tripservice.usecases.common.address
 
 import com.roadlink.tripservice.domain.common.Location
 

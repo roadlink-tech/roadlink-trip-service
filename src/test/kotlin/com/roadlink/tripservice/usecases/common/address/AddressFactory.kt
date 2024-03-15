@@ -1,7 +1,6 @@
 package com.roadlink.tripservice.usecases.common.address
 
 import com.roadlink.tripservice.domain.common.address.Address
-import com.roadlink.tripservice.usecases.common.LocationFactory
 
 object AddressFactory {
     fun avCabildo_4853() =

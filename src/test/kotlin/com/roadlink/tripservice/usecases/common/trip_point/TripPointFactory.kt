@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.common
+package com.roadlink.tripservice.usecases.common.trip_point
 
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.usecases.common.address.AddressFactory
