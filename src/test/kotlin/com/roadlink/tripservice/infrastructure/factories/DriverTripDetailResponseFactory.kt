@@ -3,9 +3,13 @@ package com.roadlink.tripservice.infrastructure.factories
 import com.roadlink.tripservice.infrastructure.rest.responses.*
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
+import java.util.UUID
 
 object DriverTripDetailResponseFactory {
-    fun avCabildoWithASingleTripApplicationConfirmed(tripId: String = TripFactory.avCabildo_id ): DriverTripDetailExpectedResponse =
+    fun avCabildoWithASingleTripApplicationConfirmed(
+        tripId: String = TripFactory.avCabildo_id,
+        userId: UUID
+    ): DriverTripDetailExpectedResponse =
         DriverTripDetailExpectedResponse(
             tripId = tripId,
             tripStatus = TripStatusExpectedResponse.FINISHED,
@@ -21,7 +25,7 @@ object DriverTripDetailResponseFactory {
                     passengers = listOf(
                         PassengerExpectedResponse(
                             type = PassengerResultExpectedResponseType.PASSENGER,
-                            id = "PAINN",
+                            id = userId.toString(),//"PAINN",
                             fullName = "Painn Wilson",
                             rating = NotBeenRatedExpectedResponse(),
                         )

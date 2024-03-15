@@ -4,14 +4,18 @@ import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripApplicat
 import com.roadlink.tripservice.infrastructure.rest.responses.PassengerExpectedResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.RatedExpectedResponse
 import com.roadlink.tripservice.infrastructure.rest.responses.TripApplicationStatusExpectedResponse
+import io.mockk.InternalPlatformDsl.toStr
 import java.util.UUID
 
 object DriverTripApplicationResponseFactory {
-    fun avCabildoWithASingleTripApplicationPendingApproval(tripApplicationId: UUID): DriverTripApplicationExpectedResponse =
+    fun avCabildoWithASingleTripApplicationPendingApproval(
+        tripApplicationId: UUID,
+        userId: UUID
+    ): DriverTripApplicationExpectedResponse =
         DriverTripApplicationExpectedResponse(
             tripLegSolicitudeId = tripApplicationId.toString(),
             passenger = PassengerExpectedResponse(
-                id = "JOHN",
+                id = userId.toString(),
                 fullName = "John Krasinski",
                 rating = RatedExpectedResponse(rating = 1.3),
             ),
