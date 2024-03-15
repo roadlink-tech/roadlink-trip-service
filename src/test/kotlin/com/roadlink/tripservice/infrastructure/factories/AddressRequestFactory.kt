@@ -1,10 +1,10 @@
 package com.roadlink.tripservice.infrastructure.factories
 
-import com.roadlink.tripservice.infrastructure.requests.AddressExpectedRequest
+import com.roadlink.tripservice.infrastructure.rest.trip.request.AddressRequest
 
 object AddressRequestFactory {
     fun avCabildo_4853() =
-        AddressExpectedRequest(
+        AddressRequest(
             location = LocationRequestFactory.avCabildo_4853(),
             street = "Av. Cabildo",
             city = "Buenos Aires",
@@ -13,7 +13,7 @@ object AddressRequestFactory {
         )
 
     fun avCabildo_20() =
-        AddressExpectedRequest(
+        AddressRequest(
             location = LocationRequestFactory.avCabildo_20(),
             street = "Av. Cabildo",
             city = "Buenos Aires",
@@ -22,7 +22,7 @@ object AddressRequestFactory {
         )
 
     fun virreyDelPino_1800() =
-        AddressExpectedRequest(
+        AddressRequest(
             location = LocationRequestFactory.virreyDelPino_1800(),
             street = "Virrey del Pino",
             city = "Buenos Aires",
