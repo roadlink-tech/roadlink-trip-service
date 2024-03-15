@@ -2,7 +2,6 @@ package com.roadlink.tripservice.infrastructure.factories
 
 import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponse
 import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.infrastructure.rest.responses.TripPointExpectedResponse
 
 object TripPointResponseFactory {
     fun avCabildo_4853() =

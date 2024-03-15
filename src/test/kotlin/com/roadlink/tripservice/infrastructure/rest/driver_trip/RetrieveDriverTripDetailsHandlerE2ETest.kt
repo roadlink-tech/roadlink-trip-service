@@ -7,14 +7,13 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeReposit
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.user.UserTrustScore
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
-import com.roadlink.tripservice.usecases.factory.SectionFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripDetailResponseFactory
 import com.roadlink.tripservice.infrastructure.remote.HttpUserRepository
 import com.roadlink.tripservice.infrastructure.remote.HttpUserTrustScoreRepository
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripDetailResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripDetailExpectedResponse
+import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.usecases.user.UserFactory
 import com.roadlink.tripservice.usecases.user.UserTrustScoreFactory
 import io.micronaut.context.annotation.Primary

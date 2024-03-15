@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserRepository
-import com.roadlink.tripservice.domain.user.UserTrustScore
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
@@ -15,12 +14,6 @@ import com.roadlink.tripservice.infrastructure.factories.DriverTripApplicationRe
 import com.roadlink.tripservice.infrastructure.remote.HttpUserRepository
 import com.roadlink.tripservice.infrastructure.remote.HttpUserTrustScoreRepository
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripLegSolicitudeResponse
-import com.roadlink.tripservice.infrastructure.rest.responses.DriverTripApplicationExpectedResponse
-import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_solicitude.AcceptTripLegSolicitude
-import com.roadlink.tripservice.usecases.trip_solicitude.AcceptTripLegSolicitudeOutput
-import com.roadlink.tripservice.usecases.trip_solicitude.RejectTripLegSolicitude
-import com.roadlink.tripservice.usecases.trip_solicitude.RejectTripLegSolicitudeOutput
 import com.roadlink.tripservice.usecases.user.UserFactory
 import com.roadlink.tripservice.usecases.user.UserTrustScoreFactory
 import io.micronaut.context.annotation.Primary
