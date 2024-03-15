@@ -1,11 +1,11 @@
 package com.roadlink.tripservice.infrastructure.factories
 
+import com.roadlink.tripservice.infrastructure.rest.trip.request.CreateTripRequest
 import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.infrastructure.requests.CreateTripExpectedRequest
 
 object CreateTripRequestFactory {
     fun avCabildo() =
-        CreateTripExpectedRequest(
+        CreateTripRequest(
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointRequestFactory.avCabildo_4853(),
@@ -15,7 +15,7 @@ object CreateTripRequestFactory {
         )
 
     fun avCabildo_invalidTimeRange() =
-        CreateTripExpectedRequest(
+        CreateTripRequest(
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointRequestFactory.avCabildo_4853(),
@@ -27,7 +27,7 @@ object CreateTripRequestFactory {
         )
 
     fun avCabildo4853_virreyDelPino1800_avCabildo20() =
-        CreateTripExpectedRequest(
+        CreateTripRequest(
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointRequestFactory.avCabildo_4853(),

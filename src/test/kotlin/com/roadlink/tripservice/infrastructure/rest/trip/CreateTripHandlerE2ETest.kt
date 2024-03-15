@@ -13,8 +13,7 @@ import com.roadlink.tripservice.infrastructure.factories.AlreadyExistsTripByDriv
 import com.roadlink.tripservice.infrastructure.factories.CreateTripRequestFactory
 import com.roadlink.tripservice.infrastructure.factories.InvalidTripTimeRangeResponseFactory
 import com.roadlink.tripservice.infrastructure.factories.TripResponseFactory
-import com.roadlink.tripservice.infrastructure.requests.CreateTripExpectedRequest
-import com.roadlink.tripservice.infrastructure.rest.responses.TripExpectedResponse
+import com.roadlink.tripservice.infrastructure.rest.trip.request.CreateTripRequest
 import com.roadlink.tripservice.infrastructure.rest.trip.response.TripResponse
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
@@ -121,7 +120,7 @@ class CreateTripHandlerE2ETest : End2EndTest() {
         theCommandHasNotBeenPublished()
     }
 
-    private fun request(createTripRequest: CreateTripExpectedRequest): HttpRequest<String> {
+    private fun request(createTripRequest: CreateTripRequest): HttpRequest<String> {
         val body = objectMapper.writeValueAsString(createTripRequest)
         return HttpRequest.POST(UriBuilder.of("/trip-service/trip").build(), body)
     }

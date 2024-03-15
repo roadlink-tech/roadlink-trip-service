@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.infrastructure.rest.trip.request
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.common.address.Address
@@ -12,7 +13,7 @@ data class CreateTripRequest(
     @JsonProperty(value = "vehicle") val vehicle: String,
     @JsonProperty(value = "departure") val departure: TripPointRequest,
     @JsonProperty(value = "arrival") val arrival: TripPointRequest,
-    @JsonProperty(value = "meeting_points") val meetingPoints: List<TripPointRequest>,
+    @JsonProperty(value = "meeting_points") @JsonInclude(JsonInclude.Include.ALWAYS) val meetingPoints: List<TripPointRequest>,
     @JsonProperty(value = "available_seats") val availableSeats: Int,
 ) {
     fun toDomain(): CreateTrip.Input {
