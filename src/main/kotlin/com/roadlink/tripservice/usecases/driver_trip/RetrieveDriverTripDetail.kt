@@ -1,9 +1,7 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
 import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
-import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
-import com.roadlink.tripservice.domain.driver_trip.DriverTripDetail
-import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus
+import com.roadlink.tripservice.domain.driver_trip.*
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.ALL_SEATS_AVAILABLE
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.NO_SEATS_AVAILABLE
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.SOME_SEATS_AVAILABLE
@@ -14,6 +12,7 @@ import com.roadlink.tripservice.domain.trip.TripStatus.NOT_STARTED
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
 import com.roadlink.tripservice.domain.user.UserError
 import com.roadlink.tripservice.domain.user.UserRepository
@@ -44,12 +43,14 @@ class RetrieveDriverTripDetail(
                         occupiedSeats = section.occupiedSeats(),
                         availableSeats = section.availableSeats(),
                         passengers = tripLegSolicitudeRepository.find(
-                            TripLegSolicitudeRepository.CommandQuery(sectionId = section.id)
-                        ).filter { it.isConfirmed() }.map { it.passengerId }.map { passengerId ->
-                            val user = userRepository.findByUserId(passengerId)
-                                ?: throw UserError.NotExists(passengerId)
-                            val userTrustScore = userTrustScoreRepository.findById(passengerId)
-                            user.asPassengerWith(userTrustScore)
+                            TripLegSolicitudeRepository.CommandQuery(sectionId = section.id, status = CONFIRMED)
+                        ).map { it.passengerId }.map { passengerId ->
+                            userRepository.findByUserId(passengerId)?.let {
+                                val userTrustScore = userTrustScoreRepository.findById(passengerId)
+                                it.asPassengerWith(userTrustScore)
+                            } ?: kotlin.run {
+                                PassengerNotExists(passengerId)
+                            }
                         },
                     )
                 },

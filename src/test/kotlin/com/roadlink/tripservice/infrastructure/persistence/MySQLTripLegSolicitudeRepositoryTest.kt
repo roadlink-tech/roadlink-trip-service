@@ -135,6 +135,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
 
     @Test
     fun `given some trip plan application saved, when find by driver id and trip id then it must be retrieved `() {
+        // given
         val driverId = UUID.randomUUID()
         val tripId = UUID.randomUUID()
         val tripApplication1 =
@@ -161,7 +162,6 @@ class MySQLTripLegSolicitudeRepositoryTest {
             )
         )
 
-
         // THEN
         assertTrue {
             tripLegSolicitudeRepository.find(
@@ -182,7 +182,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
     }
 
     @Test
-    fun `given no trip application exists with the given trip id when find by trip id then should return empty list`() {
+    fun `given no existing trip leg solicitude with the given trip id when find by trip id then should return empty list`() {
         val otherTripId = UUID.randomUUID()
         givenASavedTripPlanSolicitudeWithSections(TripLegSolicitudeFactory.any())
 
@@ -193,7 +193,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
     }
 
     @Test
-    fun `given trip applications exists with the given trip id when find by trip id then should return them`() {
+    fun `given existing trip leg solicitudes with the given trip id when find by trip id then should return them`() {
         val avCabildoSection = SectionFactory.avCabildo()
         val tripApplication1 =
             givenASavedTripPlanSolicitudeWithSections(
