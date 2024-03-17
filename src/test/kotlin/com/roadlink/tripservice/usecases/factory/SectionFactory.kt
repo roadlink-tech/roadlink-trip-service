@@ -15,7 +15,8 @@ object SectionFactory {
     const val virreyDelPino2880_avCabildo20_id = "SectionFactory-virreyDelPino2880_avCabildo20"
     const val virreyDelPino2880_avCabildo1621_id = "SectionFactory-virreyDelPino2880_avCabildo1621"
     const val avCabildo1621_virreyDelPino1800_id = "SectionFactory-avCabildo1621_virreyDelPino1800"
-    const val virreyDelPino1800_avDelLibertador5000_id = "SectionFactory-virreyDelPino1800_avDelLibertador5000"
+    const val virreyDelPino1800_avDelLibertador5000_id =
+        "SectionFactory-virreyDelPino1800_avDelLibertador5000"
     const val avDelLibertador5000_avCabildo20_id = "SectionFactory-avDelLibertador5000_avCabildo20"
 
     fun avCabildo(
