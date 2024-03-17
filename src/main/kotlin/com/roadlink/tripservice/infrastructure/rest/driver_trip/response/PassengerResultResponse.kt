@@ -18,7 +18,7 @@ sealed class PassengerResultResponse(open val type: PassengerResultResponseType)
         override val type: PassengerResultResponseType = PASSENGER,
         val id: String,
         val fullName: String,
-        val rating: ScoreResultResponse,
+        val score: ScoreResultResponse,
     ) : PassengerResultResponse(type)
 }
 

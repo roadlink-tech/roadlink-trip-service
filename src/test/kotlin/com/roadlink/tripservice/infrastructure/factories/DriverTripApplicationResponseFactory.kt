@@ -16,7 +16,7 @@ object DriverTripApplicationResponseFactory {
             passenger = PassengerResultResponse.PassengerResponse(
                 id = userId.toString(),
                 fullName = "John Krasinski",
-                rating = ScoreResultResponse.ScoreResponse(score = 1.3),
+                score = ScoreResultResponse.ScoreResponse(score = 1.3),
             ),
             status = TripLegSolicitudeStatusResponse.PENDING_APPROVAL,
             addressJoinStart = AddressResponseFactory.avCabildo_4853(),

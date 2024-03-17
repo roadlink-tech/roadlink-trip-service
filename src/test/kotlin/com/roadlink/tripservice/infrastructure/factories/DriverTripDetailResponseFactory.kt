@@ -27,7 +27,7 @@ object DriverTripDetailResponseFactory {
                             type = PassengerResultResponseType.PASSENGER,
                             id = userId.toString(),
                             fullName = "Painn Wilson",
-                            rating = ScoreResultResponse.NotBeenScoredResponse(),
+                            score = ScoreResultResponse.NotBeenScoredResponse(),
                         )
                     ),
                 )
