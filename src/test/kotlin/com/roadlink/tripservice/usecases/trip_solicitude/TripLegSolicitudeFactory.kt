@@ -2,23 +2,32 @@ package com.roadlink.tripservice.usecases.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
 import com.roadlink.tripservice.usecases.factory.SectionFactory
 import java.util.*
 
 object TripLegSolicitudeFactory {
-    fun withSections(sections: List<Section>): TripPlanSolicitude.TripLegSolicitude {
-        return TripPlanSolicitude.TripLegSolicitude(
+    fun withSections(
+        sections: List<Section>,
+        status: TripLegSolicitude.Status = PENDING_APPROVAL,
+        passengerId: String = "passengerId",
+    ): TripLegSolicitude {
+        return TripLegSolicitude(
             id = UUID.randomUUID(),
             sections = sections,
-            status = PENDING_APPROVAL,
-            passengerId = "passengerId",
+            status = status,
+            passengerId = passengerId,
             authorizerId = "authorizerId"
         )
     }
 
-    fun withDriver(driverId: UUID, tripId: UUID = UUID.randomUUID()): TripPlanSolicitude.TripLegSolicitude {
-        return TripPlanSolicitude.TripLegSolicitude(
+    fun withDriver(
+        driverId: UUID,
+        tripId: UUID = UUID.randomUUID(),
+        status: TripLegSolicitude.Status = PENDING_APPROVAL
+    ): TripLegSolicitude {
+        return TripLegSolicitude(
             id = UUID.randomUUID(),
             sections = listOf(
                 SectionFactory.withDriver(
@@ -26,14 +35,14 @@ object TripLegSolicitudeFactory {
                     tripId = tripId
                 )
             ),
-            status = PENDING_APPROVAL,
+            status = status,
             passengerId = "passengerId",
             authorizerId = "authorizerId"
         )
     }
 
-    fun any(): TripPlanSolicitude.TripLegSolicitude {
-        return TripPlanSolicitude.TripLegSolicitude(
+    fun any(): TripLegSolicitude {
+        return TripLegSolicitude(
             id = UUID.randomUUID(),
             sections = listOf(
                 SectionFactory.withDriver(

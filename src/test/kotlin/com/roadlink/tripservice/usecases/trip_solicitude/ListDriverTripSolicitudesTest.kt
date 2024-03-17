@@ -4,7 +4,7 @@ import com.roadlink.tripservice.domain.driver_trip.DriverTripLegSolicitude
 import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
@@ -30,9 +30,6 @@ class ListDriverTripSolicitudesTest {
     private lateinit var tripLegSolicitudeRepository: TripLegSolicitudeRepository
 
     @MockK
-    private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
-
-    @MockK
     private lateinit var userRepository: UserRepository
 
     @MockK
@@ -51,10 +48,17 @@ class ListDriverTripSolicitudesTest {
     }
 
     @Test
-    fun `given no trip applications for the trip, then should return empty list`() {
+    fun `given no trip leg solicitudes for the trip, then should return empty list`() {
         // given
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
-        every { tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(tripId = tripId)) } returns emptyList()
+        every {
+            tripLegSolicitudeRepository.find(
+                TripLegSolicitudeRepository.CommandQuery(
+                    tripId = tripId,
+                    status = PENDING_APPROVAL
+                )
+            )
+        } returns emptyList()
 
         // when
         val driverTripApplications = listDriverTripLegSolicitudes(
@@ -68,17 +72,20 @@ class ListDriverTripSolicitudesTest {
     }
 
     @Test
-    fun `given no pending trip applications for the trip then should return empty list`() {
+    fun `given no pending trip leg solicitudes for the trip then should return empty list`() {
         // given
         val tripId = UUID.fromString(TripFactory.avCabildo_id)
-        val tripLegSolicitude = TripLegSolicitude(
-            id = UUID.randomUUID(),
-            sections = listOf(SectionFactory.avCabildo(tripId = tripId)),
-            passengerId = "passengerId",
-            status = CONFIRMED,
-            authorizerId = "authorizerId"
-        )
-        every { tripLegSolicitudeRepository.find(any()) } returns listOf(tripLegSolicitude)
+        val passengerId = UUID.randomUUID()
+        every {
+            tripLegSolicitudeRepository.find(
+                TripLegSolicitudeRepository.CommandQuery(
+                    tripId = tripId,
+                    status = PENDING_APPROVAL
+                )
+            )
+        } returns emptyList()
+        every { userRepository.findByUserId(passengerId.toString()) } returns UserFactory.common(id = passengerId)
+        every { userTrustScoreRepository.findById(any()) } returns UserTrustScoreFactory.common()
 
         // when
         val driverTripApplications = listDriverTripLegSolicitudes(
@@ -104,39 +111,13 @@ class ListDriverTripSolicitudesTest {
             status = PENDING_APPROVAL,
             authorizerId = "authorizerId"
         )
-        val rejectedTripLegSolicitude = TripLegSolicitude(
-            id = UUID.randomUUID(),
-            sections = listOf(section),
-            passengerId = "passengerId",
-            status = REJECTED,
-            authorizerId = "authorizerId"
-        )
-        val confirmedTripLegSolicitude = TripLegSolicitude(
-            id = UUID.randomUUID(),
-            sections = listOf(section),
-            passengerId = "passengerId",
-            status = CONFIRMED,
-            authorizerId = "authorizerId"
-        )
 
         val tripPlanSolicitudePendingApproval =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitude(pendingApprovalTripLegSolicitude)
-        val tripPlanSolicitudeRejected =
-            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(rejectedTripLegSolicitude)
-        val tripPlanSolicitudeConfirmed =
-            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(confirmedTripLegSolicitude)
 
-        val tripPlanSolicitudes = listOf(
-            tripPlanSolicitudePendingApproval,
-            tripPlanSolicitudeRejected,
-            tripPlanSolicitudeConfirmed,
-        )
 
-        every { tripPlanSolicitudeRepository.find(any()) } returns tripPlanSolicitudes
-        every { tripLegSolicitudeRepository.find(any()) } returns listOf(
-            pendingApprovalTripLegSolicitude,
-            rejectedTripLegSolicitude,
-            confirmedTripLegSolicitude
+        every { tripLegSolicitudeRepository.find(commandQuery = match { it.tripId == tripId && it.status == PENDING_APPROVAL }) } returns listOf(
+            pendingApprovalTripLegSolicitude
         )
         every { userRepository.findByUserId(any()) } returns UserFactory.common(id = userId)
         every { userTrustScoreRepository.findById(any()) } returns UserTrustScoreFactory.common(score = 1.3)
