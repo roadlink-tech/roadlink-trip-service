@@ -18,7 +18,7 @@ object PassengerResultResponseMapper {
                 PassengerResponse(
                     id = passengerResult.id,
                     fullName = passengerResult.fullName,
-                    rating = if (passengerResult.hasBeenScored) {
+                    score = if (passengerResult.hasBeenScored) {
                         ScoreResponse(score = passengerResult.score)
                     } else {
                         NotBeenScoredResponse()
