@@ -30,9 +30,6 @@ class ListDriverTripSolicitudesTest {
     private lateinit var tripLegSolicitudeRepository: TripLegSolicitudeRepository
 
     @MockK
-    private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
-
-    @MockK
     private lateinit var userRepository: UserRepository
 
     @MockK
@@ -114,7 +111,7 @@ class ListDriverTripSolicitudesTest {
             status = PENDING_APPROVAL,
             authorizerId = "authorizerId"
         )
-        
+
         val tripPlanSolicitudePendingApproval =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitude(pendingApprovalTripLegSolicitude)
 
