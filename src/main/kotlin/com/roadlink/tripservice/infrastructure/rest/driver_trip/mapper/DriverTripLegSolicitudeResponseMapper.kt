@@ -23,7 +23,7 @@ object DriverTripLegSolicitudeResponseMapper {
                 TripLegSolicitudeStatusResponse.PENDING_APPROVAL
             TripPlanSolicitude.TripLegSolicitude.Status.REJECTED ->
                 TripLegSolicitudeStatusResponse.REJECTED
-            TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED ->
+            TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED ->
                 TripLegSolicitudeStatusResponse.CONFIRMED
         }
 

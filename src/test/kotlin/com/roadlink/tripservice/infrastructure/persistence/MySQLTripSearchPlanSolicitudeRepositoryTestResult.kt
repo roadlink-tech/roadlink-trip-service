@@ -84,7 +84,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
 
         assertEquals(
             tripPlanSolicitude,
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripApplicationId = tripApplicationId)).first()
+            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = tripApplicationId)).first()
         )
     }
 
@@ -98,7 +98,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
                 passengerId = passengerId.toString(),
             )
         )
-        tripPlanSolicitude.confirmApplicationById(
+        tripPlanSolicitude.acceptTripLegSolicitude(
             tripPlanSolicitude.tripLegSolicitudes.first().id,
             passengerId
         )
@@ -107,7 +107,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
 
         assertEquals(
             tripPlanSolicitude,
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripApplicationId = tripApplicationId)).first()
+            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = tripApplicationId)).first()
         )
     }
 
@@ -117,7 +117,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
         givenExists(TripPlanSolicitudeFactory.withASingleTripApplication())
 
         val result =
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripApplicationId = otherTripApplicationId))
+            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = otherTripApplicationId))
 
         assertTrue(result.isEmpty())
     }
@@ -146,7 +146,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
                 passengerId = passengerId.toString(),
             )
         )
-        tripPlanSolicitude.confirmApplicationById(
+        tripPlanSolicitude.acceptTripLegSolicitude(
             tripPlanSolicitude.tripLegSolicitudes.first().id,
             passengerId
         )

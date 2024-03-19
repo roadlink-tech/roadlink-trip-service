@@ -49,9 +49,9 @@ class MySQLTripPlanSolicitudeRepository(
                 predicates.add(passengerIdPredicate)
             }
 
-            if (cq.tripApplicationId != null) {
+            if (cq.tripLegSolicitudeId != null) {
                 val tripApplicationsJoin = root.join<TripPlanSolicitudeJPAEntity, TripLegSolicitudeJPAEntity>("tripLegSolicitudes")
-                val tripApplicationIdPredicate = cb.equal(tripApplicationsJoin.get<UUID>("id"), cq.tripApplicationId)
+                val tripApplicationIdPredicate = cb.equal(tripApplicationsJoin.get<UUID>("id"), cq.tripLegSolicitudeId)
                 predicates.add(tripApplicationIdPredicate)
             }
 
@@ -64,11 +64,11 @@ class MySQLTripPlanSolicitudeRepository(
 
     data class TripPlanSolicitudeCommandQuery(
         val ids: List<UUID> = emptyList(),
-        val tripApplicationId: UUID? = null,
+        val tripLegSolicitudeId: UUID? = null,
         val passengerId: UUID? = null,
     ) {
         init {
-            require(ids.isNotEmpty() || tripApplicationId != null || passengerId != null) {
+            require(ids.isNotEmpty() || tripLegSolicitudeId != null || passengerId != null) {
                 "At least one field must be not null or empty"
             }
         }
@@ -78,7 +78,7 @@ class MySQLTripPlanSolicitudeRepository(
             fun from(domainCommandQuery: TripPlanSolicitudeRepository.CommandQuery): TripPlanSolicitudeCommandQuery {
                 return TripPlanSolicitudeCommandQuery(
                     ids = domainCommandQuery.ids,
-                    tripApplicationId = domainCommandQuery.tripApplicationId,
+                    tripLegSolicitudeId = domainCommandQuery.tripLegSolicitudeId,
                     passengerId = domainCommandQuery.passengerId
                 )
             }

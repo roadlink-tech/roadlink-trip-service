@@ -68,7 +68,8 @@ object TripPlanSolicitudeFactory {
         initialAmountOfSeats: Int = 4,
         driverId: String = johnSmithDriverId.toString(),
         passengerId: String = "passengerId",
-        tripApplicationStatus: Status = PENDING_APPROVAL
+        tripApplicationStatus: Status = PENDING_APPROVAL,
+        vehicleId: String = "Ford mustang"
     ): TripPlanSolicitude {
         return TripPlanSolicitude(
             id = id,
@@ -78,7 +79,8 @@ object TripPlanSolicitudeFactory {
                     sections = listOf(
                         SectionFactory.avCabildo(
                             initialAmountOfSeats = initialAmountOfSeats,
-                            driverId = driverId
+                            driverId = driverId,
+                            vehicleId = vehicleId
                         )
                     ),
                     status = tripApplicationStatus,
@@ -118,7 +120,7 @@ object TripPlanSolicitudeFactory {
                     id = UUID.randomUUID(),
                     sections = sections,
                     passengerId = passengerId,
-                    status = CONFIRMED,
+                    status = ACCEPTED,
                     authorizerId = "authorizerId"
                 ),
             )
@@ -130,7 +132,7 @@ object TripPlanSolicitudeFactory {
             id = UUID.randomUUID(),
             sections = listOf(SectionFactory.avCabildo1621_virreyDelPino1800()),
             passengerId = "passengerId",
-            status = CONFIRMED,
+            status = ACCEPTED,
             authorizerId = "authorizerId"
         ),
     ): TripPlanSolicitude {

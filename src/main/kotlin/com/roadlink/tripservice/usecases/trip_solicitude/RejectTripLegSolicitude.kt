@@ -13,7 +13,7 @@ class RejectTripLegSolicitude(
         val tripPlanSolicitude =
             tripPlanSolicitudeRepository.find(
                 TripPlanSolicitudeRepository.CommandQuery(
-                    tripApplicationId = input
+                    tripLegSolicitudeId = input
                 )
             )
                 .firstOrNull()

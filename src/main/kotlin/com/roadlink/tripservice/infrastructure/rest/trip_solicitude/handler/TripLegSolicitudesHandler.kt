@@ -33,7 +33,7 @@ class TripLegSolicitudesHandler(
     ): HttpResponse<ApiResponse> {
         val output = acceptTripApplication(
             AcceptTripLegSolicitudeInput(
-                tripApplicationId = UUID.fromString(id),
+                tripLegSolicitudeId = UUID.fromString(id),
                 callerId = callerId?.let { UUID.fromString(it) }
             )
         )

@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.domain.trip.events.CommandBus
+import com.roadlink.tripservice.domain.common.events.CommandBus
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
