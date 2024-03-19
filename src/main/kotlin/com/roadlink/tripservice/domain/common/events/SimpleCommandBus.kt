@@ -1,8 +1,5 @@
-package com.roadlink.tripservice.domain.trip.events
+package com.roadlink.tripservice.domain.common.events
 
-import com.roadlink.tripservice.domain.trip.events.command_responses.CommandResponse
-import com.roadlink.tripservice.domain.trip.events.commands.Command
-import com.roadlink.tripservice.domain.trip.events.handlers.CommandHandler
 import kotlin.reflect.KClass
 
 class SimpleCommandBus : CommandBus {

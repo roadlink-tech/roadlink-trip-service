@@ -18,7 +18,7 @@ class TripSearchPlanResultSolicitudeTest {
             TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
 
         // WHEN
-        tripPlanSolicitude.confirmApplicationById(id, callerId)
+        tripPlanSolicitude.acceptTripLegSolicitude(id, callerId)
 
         // THEN
         val section = tripPlanSolicitude.tripLegSolicitudes.first().sections.first()
@@ -38,8 +38,8 @@ class TripSearchPlanResultSolicitudeTest {
             )
 
         // WHEN
-        val ex = assertThrows(TripApplicationError.DriverTryingToJoinAsPassenger::class.java) {
-            tripPlanSolicitude.confirmApplicationById(id, driverId)
+        val ex = assertThrows(TripLegSolicitudeError.DriverTryingToJoinAsPassenger::class.java) {
+            tripPlanSolicitude.acceptTripLegSolicitude(id, driverId)
         }
 
         // THEN
@@ -57,7 +57,7 @@ class TripSearchPlanResultSolicitudeTest {
 
         // WHEN
         repeat(2) {
-            tripPlanSolicitude.confirmApplicationById(id, callerId)
+            tripPlanSolicitude.acceptTripLegSolicitude(id, callerId)
         }
 
         // THEN
@@ -75,7 +75,7 @@ class TripSearchPlanResultSolicitudeTest {
 
         // WHEN
         assertThrows(SectionError.InsufficientAvailableSeats::class.java) {
-            tripPlanSolicitude.confirmApplicationById(id, callerId)
+            tripPlanSolicitude.acceptTripLegSolicitude(id, callerId)
         }
     }
 
@@ -86,8 +86,8 @@ class TripSearchPlanResultSolicitudeTest {
         val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication()
 
         // WHEN
-        assertThrows(TripApplicationError.NotFound::class.java) {
-            tripPlanSolicitude.confirmApplicationById(id, johnSmithDriverId)
+        assertThrows(TripLegSolicitudeError.NotFound::class.java) {
+            tripPlanSolicitude.acceptTripLegSolicitude(id, johnSmithDriverId)
         }
     }
 

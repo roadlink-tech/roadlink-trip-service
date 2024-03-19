@@ -25,7 +25,8 @@ object SectionFactory {
         initialAmountOfSeats: Int = 4,
         bookedSeats: Int = 0,
         tripId: UUID = UUID.fromString("ad2e7d11-0fbb-4711-8f0c-a0f31529241f"),
-        driverId: String = "John Smith"
+        driverId: String = "John Smith",
+        vehicleId: String = "Ford mustang"
     ) =
         Section(
             id = avCabildo_id,
@@ -33,7 +34,7 @@ object SectionFactory {
             arrival = arrival,
             distanceInMeters = 6070.0,
             driverId = driverId,
-            vehicleId = "Ford mustang",
+            vehicleId = vehicleId,
             initialAmountOfSeats = initialAmountOfSeats,
             bookedSeats = bookedSeats,
             tripId = tripId

@@ -12,9 +12,8 @@ import com.roadlink.tripservice.domain.trip.TripStatus.NOT_STARTED
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
-import com.roadlink.tripservice.domain.user.UserError
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import java.util.*
@@ -43,7 +42,7 @@ class RetrieveDriverTripDetail(
                         occupiedSeats = section.occupiedSeats(),
                         availableSeats = section.availableSeats(),
                         passengers = tripLegSolicitudeRepository.find(
-                            TripLegSolicitudeRepository.CommandQuery(sectionId = section.id, status = CONFIRMED)
+                            TripLegSolicitudeRepository.CommandQuery(sectionId = section.id, status = ACCEPTED)
                         ).map { it.passengerId }.map { passengerId ->
                             userRepository.findByUserId(passengerId)?.let {
                                 val userTrustScore = userTrustScoreRepository.findById(passengerId)

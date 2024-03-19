@@ -69,7 +69,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
         givenASavedTripPlanSolicitudeWithSections(
             TripLegSolicitudeFactory.withDriver(
                 driverId,
-                status = CONFIRMED
+                status = ACCEPTED
             )
         )
 

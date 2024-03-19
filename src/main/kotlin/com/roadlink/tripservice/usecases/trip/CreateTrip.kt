@@ -8,9 +8,9 @@ import com.roadlink.tripservice.domain.common.utils.time.exception.InvalidTripTi
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.TripRepository
-import com.roadlink.tripservice.domain.trip.events.CommandBus
-import com.roadlink.tripservice.domain.trip.events.command_responses.TripCreatedCommandResponse
-import com.roadlink.tripservice.domain.trip.events.commands.TripCreatedCommand
+import com.roadlink.tripservice.domain.common.events.CommandBus
+import com.roadlink.tripservice.domain.trip.events.TripCreatedEventResponse
+import com.roadlink.tripservice.domain.trip.events.TripCreatedEvent
 
 class CreateTrip(
     private val tripRepository: TripRepository,
@@ -63,8 +63,8 @@ class CreateTrip(
     }
 
     private fun publishTripCreatedEvent(trip: Trip) {
-        commandBus.publish<TripCreatedCommand, TripCreatedCommandResponse>(
-            TripCreatedCommand(
+        commandBus.publish<TripCreatedEvent, TripCreatedEventResponse>(
+            TripCreatedEvent(
                 trip = trip,
                 at = timeProvider.now()
             )

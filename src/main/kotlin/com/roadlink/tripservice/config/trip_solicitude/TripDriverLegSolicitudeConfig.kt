@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.config.trip_solicitude
 
+import com.roadlink.tripservice.domain.common.events.CommandBus
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
@@ -31,9 +32,10 @@ class TripDriverLegSolicitudeConfig {
 
     @Singleton
     fun acceptTripApplication(
-        tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
+        tripPlanSolicitudeRepository: TripPlanSolicitudeRepository,
+        commandBus: CommandBus,
     ): UseCase<AcceptTripLegSolicitudeInput, AcceptTripLegSolicitudeOutput> {
-        return AcceptTripLegSolicitude(tripPlanSolicitudeRepository)
+        return AcceptTripLegSolicitude(tripPlanSolicitudeRepository, commandBus)
     }
 
     @Singleton

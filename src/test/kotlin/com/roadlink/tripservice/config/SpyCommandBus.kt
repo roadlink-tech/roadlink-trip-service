@@ -1,19 +1,20 @@
 package com.roadlink.tripservice.config
 
-import com.roadlink.tripservice.domain.trip.events.CommandBus
-import com.roadlink.tripservice.domain.trip.events.command_responses.CommandResponse
-import com.roadlink.tripservice.domain.trip.events.command_responses.TripCreatedCommandResponse
-import com.roadlink.tripservice.domain.trip.events.commands.Command
-import com.roadlink.tripservice.domain.trip.events.commands.TripCreatedCommand
-import com.roadlink.tripservice.domain.trip.events.handlers.CommandHandler
+import com.roadlink.tripservice.domain.common.events.Command
+import com.roadlink.tripservice.domain.common.events.CommandBus
+import com.roadlink.tripservice.domain.common.events.CommandHandler
+import com.roadlink.tripservice.domain.common.events.CommandResponse
+import com.roadlink.tripservice.domain.trip.events.TripCreatedEvent
+import com.roadlink.tripservice.domain.trip.events.TripCreatedEventResponse
 import kotlin.reflect.KClass
 
-class StubCreateTripHandler : CommandHandler<TripCreatedCommand, TripCreatedCommandResponse> {
-    override fun handle(command: TripCreatedCommand): TripCreatedCommandResponse {
-        return TripCreatedCommandResponse(command.trip)
+class StubCreateTripHandler : CommandHandler<TripCreatedEvent, TripCreatedEventResponse> {
+    override fun handle(command: TripCreatedEvent): TripCreatedEventResponse {
+        return TripCreatedEventResponse(command.trip)
     }
 }
 
+// TODO check if this spy class is necessary
 class SpyCommandBus : CommandBus {
     val handlers = mutableMapOf<Class<out Command>, CommandHandler<Command, CommandResponse>>()
 
@@ -40,6 +41,5 @@ class SpyCommandBus : CommandBus {
             ?: throw IllegalArgumentException("Handler class does not implement CommandHandler")
         handlers[commandClass.java] = handler as CommandHandler<Command, CommandResponse>
     }
-
 
 }

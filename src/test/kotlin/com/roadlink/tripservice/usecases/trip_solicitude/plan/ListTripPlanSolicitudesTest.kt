@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
 
-class ListTripSearchPlanResultSolicitudesTest {
+class ListTripPlanSolicitudesTest {
 
     @MockK
     lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
@@ -24,17 +24,17 @@ class ListTripSearchPlanResultSolicitudesTest {
     }
 
     @Test
-    fun `when list trip plan applications and filter by status and passenger id, then return the expected amount`() {
+    fun `when list trip plan solicitudes and filter by status and passenger id, then return the expected amount`() {
         // GIVEN
         val passengerId: UUID = UUID.randomUUID()
-        val status = "CONFIRMED"
+        val status = "ACCEPTED"
         val input = ListTripPlanSolicitudes.Input(passengerId = passengerId, status = status)
 
         every { tripPlanSolicitudeRepository.find(TripPlanSolicitudeRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED),
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED),
             TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.REJECTED),
             TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL),
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED)
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED)
         )
 
         // WHEN
@@ -44,7 +44,7 @@ class ListTripSearchPlanResultSolicitudesTest {
         Assertions.assertEquals(2, output.tripPlanSolicitudes.size)
         Assertions.assertEquals(
             2,
-            output.tripPlanSolicitudes.filter { it.status() == TripPlanSolicitude.Status.CONFIRMED }.size
+            output.tripPlanSolicitudes.filter { it.status() == TripPlanSolicitude.Status.ACCEPTED }.size
         )
     }
 
@@ -56,7 +56,7 @@ class ListTripSearchPlanResultSolicitudesTest {
         val input = ListTripPlanSolicitudes.Input(passengerId = passengerId, status = status)
 
         every { tripPlanSolicitudeRepository.find(TripPlanSolicitudeRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED),
+            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED),
         )
 
         // WHEN

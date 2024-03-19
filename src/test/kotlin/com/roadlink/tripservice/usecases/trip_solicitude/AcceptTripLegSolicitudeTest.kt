@@ -1,8 +1,14 @@
 package com.roadlink.tripservice.usecases.trip_solicitude
 
+import com.roadlink.tripservice.domain.common.events.SimpleCommandBus
+import com.roadlink.tripservice.domain.trip_plan.TripPlan
+import com.roadlink.tripservice.domain.trip_plan.events.OnTripLegSolicitudeAcceptedEventCreateTripPlan
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.usecases.UseCase
+import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlan
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.mockk.*
+import io.mockk.InternalPlatformDsl.toStr
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.BeforeEach
@@ -14,16 +20,27 @@ class AcceptTripLegSolicitudeTest {
     @MockK
     lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 
+    @MockK
+    lateinit var createTripPlan: UseCase<CreateTripPlan.Input, CreateTripPlan.Output>
+
+    private lateinit var commandBus: SimpleCommandBus
+
     private lateinit var acceptTripLegSolicitude: AcceptTripLegSolicitude
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        acceptTripLegSolicitude = AcceptTripLegSolicitude(tripPlanSolicitudeRepository)
+        commandBus = SimpleCommandBus()
+        commandBus.registerHandler(
+            OnTripLegSolicitudeAcceptedEventCreateTripPlan(
+                createTripPlan
+            )
+        )
+        acceptTripLegSolicitude = AcceptTripLegSolicitude(tripPlanSolicitudeRepository, commandBus)
     }
 
     @Test
-    fun `when try to accept a trip application but the plan does not exit, then an expected error must be retrieved`() {
+    fun `when try to accept a trip leg solicitude, but the plan does not exist, then an expected error must be retrieved`() {
         every { tripPlanSolicitudeRepository.find(any()) } returns emptyList()
 
         // WHEN
@@ -34,7 +51,7 @@ class AcceptTripLegSolicitudeTest {
     }
 
     @Test
-    fun `when try to accept a trip plan but the it has been already rejected, then an error response must be retrieved`() {
+    fun `when try to accept a trip plan solicitude, but it has been already rejected, then an error must be retrieved`() {
         every { tripPlanSolicitudeRepository.find(any()) } returns listOf(TripPlanSolicitudeFactory.withASingleTripApplicationRejected())
 
         // WHEN
@@ -45,19 +62,25 @@ class AcceptTripLegSolicitudeTest {
     }
 
     @Test
-    fun `when accept a trip plan application, then an expected response must be retrieved and it must be saved`() {
+    fun `when accept a trip plan leg solicitude, then an expected response must be retrieved and it must be saved`() {
         // GIVEN
-        val tripApplicationId = UUID.randomUUID()
+        val tripLegSolicitudeId = UUID.randomUUID()
         val callerId = UUID.randomUUID()
+        val passengerId = UUID.randomUUID()
+        val vehicleId = UUID.randomUUID()
         every { tripPlanSolicitudeRepository.update(any()) } just runs
-        every { tripPlanSolicitudeRepository.find(any()) } returns listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplication(
-                tripApplicationId = tripApplicationId
-            )
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
+            tripApplicationId = tripLegSolicitudeId,
+            passengerId = passengerId.toString(),
+            vehicleId = vehicleId.toString()
         )
+        every { tripPlanSolicitudeRepository.find(any()) } returns listOf(
+            tripPlanSolicitude
+        )
+        every { createTripPlan.invoke(any()) } returns CreateTripPlan.Output(TripPlan.from(tripPlanSolicitude))
 
         // WHEN
-        val output = acceptTripLegSolicitude(AcceptTripLegSolicitudeInput(tripApplicationId, callerId))
+        val output = acceptTripLegSolicitude(AcceptTripLegSolicitudeInput(tripLegSolicitudeId, callerId))
 
         // THEN
         assertInstanceOf(AcceptTripLegSolicitudeOutput.TripLegSolicitudeAccepted::class.java, output)

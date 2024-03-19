@@ -10,7 +10,7 @@ import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.CONFIRMED
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
 import com.roadlink.tripservice.domain.user.User
 import com.roadlink.tripservice.domain.user.UserRepository
@@ -115,7 +115,7 @@ class RetrieveDriverTripDetailTest {
         val tripLegSolicitude = TripLegSolicitudeFactory.withSections(
             sections = listOf(section),
             passengerId = passengerId,
-            status = CONFIRMED
+            status = ACCEPTED
         )
 
         givenSectionsAssociatedToATrip(tripId, listOf(section))
@@ -306,7 +306,7 @@ class RetrieveDriverTripDetailTest {
         val georgeTripLegSolicitude = TripLegSolicitudeFactory.withSections(
             sections = listOf(section),
             passengerId = georgeId,
-            status = CONFIRMED
+            status = ACCEPTED
         )
         val martinId = UUID.randomUUID().toString()
         val martinTripLegSolicitude = TripLegSolicitudeFactory.withSections(
@@ -377,7 +377,7 @@ class RetrieveDriverTripDetailTest {
         val georgeTripLegSolicitude = TripLegSolicitudeFactory.withSections(
             sections = listOf(section),
             passengerId = georgeId,
-            status = CONFIRMED
+            status = ACCEPTED
         )
 
         givenSectionsAssociatedToATrip(tripId, listOf(section))
@@ -502,7 +502,7 @@ class RetrieveDriverTripDetailTest {
     ) {
         every {
             tripLegSolicitudeRepository.find(commandQuery = match {
-                it.sectionId == section.id && it.status == CONFIRMED
+                it.sectionId == section.id && it.status == ACCEPTED
             })
         } returns response
     }
