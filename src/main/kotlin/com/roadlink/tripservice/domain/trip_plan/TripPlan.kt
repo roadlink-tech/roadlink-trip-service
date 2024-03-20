@@ -5,7 +5,7 @@ import java.util.*
 
 class TripPlan(
     val id: UUID = UUID.randomUUID(),
-    private val tripLegs: List<TripLeg>,
+    val tripLegs: List<TripLeg>,
     val passengerId: UUID,
 ) {
     enum class Status {

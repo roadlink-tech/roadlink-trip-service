@@ -1,20 +1,19 @@
-package com.roadlink.tripservice.infrastructure.persistence.section
+package com.roadlink.tripservice.infrastructure.persistence.trip_plan
 
-import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.domain.trip_plan.TripLegSection
 import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
-import jakarta.persistence.*
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
-import java.util.*
+import jakarta.persistence.AttributeOverride
+import jakarta.persistence.AttributeOverrides
+import jakarta.persistence.Column
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 
 @Entity
-@Table(name = "section")
-data class SectionJPAEntity(
+@Table(name = "trip_leg_sections")
+data class TripLegSectionJPAEntity(
     @Id val id: String,
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(name = "trip_id", nullable = false, updatable = false, columnDefinition = "VARCHAR(36)")
-    val tripId: UUID,
-
     @Embedded
     @AttributeOverrides(
         AttributeOverride(
@@ -30,7 +29,6 @@ data class SectionJPAEntity(
         AttributeOverride(name = "longitude", column = Column(name = "departure_longitude"))
     )
     val departure: TripPointJPAEntity,
-
     @Embedded
     @AttributeOverrides(
         AttributeOverride(
@@ -48,42 +46,16 @@ data class SectionJPAEntity(
     val arrival: TripPointJPAEntity,
     @Column(name = "distance_in_meters")
     val distanceInMeters: Double,
-    @Column(name = "driver_id")
-    val driverId: String,
-    @Column(name = "vehicle_id")
-    val vehicleId: String,
-    @Column(name = "initial_amount_of_seats")
-    var initialAmountOfSeats: Int,
-    @Column(name = "booked_seats")
-    var bookedSeats: Int
 ) {
+
     companion object {
-        fun from(section: Section): SectionJPAEntity {
-            return SectionJPAEntity(
-                id = section.id,
-                tripId = section.tripId,
-                departure = TripPointJPAEntity.from(section.departure),
-                arrival = TripPointJPAEntity.from(section.arrival),
-                distanceInMeters = section.distanceInMeters,
-                driverId = section.driverId,
-                vehicleId = section.vehicleId,
-                initialAmountOfSeats = section.initialAmountOfSeats,
-                bookedSeats = section.bookedSeats
+        fun from(tripLegSection: TripLegSection): TripLegSectionJPAEntity {
+            return TripLegSectionJPAEntity(
+                id = tripLegSection.id,
+                departure = TripPointJPAEntity.from(tripLegSection.departure),
+                arrival = TripPointJPAEntity.from(tripLegSection.arrival),
+                distanceInMeters = tripLegSection.distanceInMeters
             )
         }
     }
-
-    fun toDomain(): Section =
-        Section(
-            id = id,
-            tripId = tripId,
-            departure = departure.toDomain(),
-            arrival = arrival.toDomain(),
-            distanceInMeters = distanceInMeters,
-            driverId = driverId,
-            vehicleId = vehicleId,
-            initialAmountOfSeats = initialAmountOfSeats,
-            bookedSeats = bookedSeats,
-        )
 }
-
