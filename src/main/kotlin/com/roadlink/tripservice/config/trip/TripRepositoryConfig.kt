@@ -11,7 +11,13 @@ import org.hibernate.Session
 @Factory
 class TripRepositoryConfig {
     @Singleton
-    fun tripRepository(entityManager: EntityManager, transactionManager: TransactionOperations<Session>): TripRepository {
-        return MySQLTripRepository(entityManager = entityManager, transactionManager = transactionManager)
+    fun tripRepository(
+        entityManager: EntityManager,
+        transactionManager: TransactionOperations<Session>
+    ): TripRepository {
+        return MySQLTripRepository(
+            entityManager = entityManager,
+            transactionManager = transactionManager
+        )
     }
 }

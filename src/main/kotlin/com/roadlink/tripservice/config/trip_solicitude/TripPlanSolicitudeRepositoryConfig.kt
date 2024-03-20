@@ -14,12 +14,10 @@ import org.hibernate.Session
 class TripPlanSolicitudeRepositoryConfig {
     @Singleton
     fun tripPlanSolicitudeRepository(
-        entityManager: EntityManager,
-        transactionManager: TransactionOperations<Session>
+        entityManager: EntityManager, transactionManager: TransactionOperations<Session>
     ): TripPlanSolicitudeRepository {
         return MySQLTripPlanSolicitudeRepository(
-            entityManager = entityManager,
-            transactionManager = transactionManager
+            entityManager = entityManager, transactionManager = transactionManager
         )
     }
 

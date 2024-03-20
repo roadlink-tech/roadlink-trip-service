@@ -14,6 +14,7 @@ class MySQLTripLegSolicitudeRepository(
     private val transactionManager: TransactionOperations<Session>,
 ) : TripLegSolicitudeRepository {
     override fun saveAll(tripLegSolicitudes: List<TripPlanSolicitude.TripLegSolicitude>) {
+        // TODO batch write!
         for (tripApplication in tripLegSolicitudes) {
             entityManager.persist(TripLegSolicitudeJPAEntity.from(tripApplication))
         }
