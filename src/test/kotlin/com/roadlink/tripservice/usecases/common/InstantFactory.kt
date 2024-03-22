@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.factory
+package com.roadlink.tripservice.usecases.common
 
 import java.time.Instant
 

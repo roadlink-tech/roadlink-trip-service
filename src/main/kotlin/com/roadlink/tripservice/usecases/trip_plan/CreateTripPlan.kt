@@ -10,7 +10,7 @@ class CreateTripPlan(private var repository: TripPlanRepository) :
     UseCase<CreateTripPlan.Input, CreateTripPlan.Output> {
     override fun invoke(input: Input): Output {
         val tripPlan = TripPlan.from(input.solicitude)
-        repository.insert(tripPlan).also { return Output(tripPlan = it) }
+        repository.insert(tripPlan).also { return Output(tripPlan = tripPlan) }
     }
 
     class Input(

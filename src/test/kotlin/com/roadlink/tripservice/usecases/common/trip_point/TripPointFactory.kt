@@ -2,7 +2,7 @@ package com.roadlink.tripservice.usecases.common.trip_point
 
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.usecases.common.address.AddressFactory
-import com.roadlink.tripservice.usecases.factory.InstantFactory
+import com.roadlink.tripservice.usecases.common.InstantFactory
 import java.time.Instant
 
 object TripPointFactory {

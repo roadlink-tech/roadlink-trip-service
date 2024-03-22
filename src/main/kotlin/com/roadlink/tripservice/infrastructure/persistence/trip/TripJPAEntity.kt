@@ -14,7 +14,10 @@ data class TripJPAEntity(
     val vehicleId: String,
     @Embedded
     @AttributeOverrides(
-        AttributeOverride(name = "estimatedArrivalTime", column = Column(name = "departure_estimated_arrival_time")),
+        AttributeOverride(
+            name = "estimatedArrivalTime",
+            column = Column(name = "departure_estimated_arrival_time")
+        ),
         AttributeOverride(name = "fullAddress", column = Column(name = "departure_full_address")),
         AttributeOverride(name = "street", column = Column(name = "departure_street")),
         AttributeOverride(name = "city", column = Column(name = "departure_city")),
@@ -26,7 +29,10 @@ data class TripJPAEntity(
     val departure: TripPointJPAEntity,
     @Embedded
     @AttributeOverrides(
-        AttributeOverride(name = "estimatedArrivalTime", column = Column(name = "arrival_estimated_arrival_time")),
+        AttributeOverride(
+            name = "estimatedArrivalTime",
+            column = Column(name = "arrival_estimated_arrival_time")
+        ),
         AttributeOverride(name = "fullAddress", column = Column(name = "arrival_full_address")),
         AttributeOverride(name = "street", column = Column(name = "arrival_street")),
         AttributeOverride(name = "city", column = Column(name = "arrival_city")),

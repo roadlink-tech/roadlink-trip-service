@@ -1,9 +1,9 @@
 package com.roadlink.tripservice.usecases.trip_search
 
 import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 
-object TripPlanFactory {
+object TripSearchPlanFactory {
     fun avCabildo() = TripSearchPlanResult(sections = listOf(SectionFactory.avCabildo()))
 
     fun avCabildo4853_virreyDelPino1800_avCabildo20() =

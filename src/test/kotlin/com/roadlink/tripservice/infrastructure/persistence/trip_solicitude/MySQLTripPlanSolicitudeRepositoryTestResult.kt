@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.infrastructure.persistence
+package com.roadlink.tripservice.infrastructure.persistence.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
+class MySQLTripPlanSolicitudeRepositoryTestResult {
 
     @Inject
     private lateinit var sectionRepository: SectionRepository
@@ -21,7 +21,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     lateinit var repository: TripPlanSolicitudeRepository
 
     @Test
-    fun `given a trip plan application stored, when find it by passenger id then it must be retrieved`() {
+    fun `given a trip plan solicitude stored, when find it by passenger id then it must be retrieved`() {
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
         val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
@@ -41,7 +41,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `given a trip plan application stored, when find it by passenger id and trip application status then it must be retrieved`() {
+    fun `given a trip plan solicitude stored, when find it by passenger id and trip application status then it must be retrieved`() {
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
         val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
@@ -62,7 +62,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `when find trip plan application by passenger id, but there no is anything, then an empty list must be retrieved`() {
+    fun `when find trip plan solicitude by passenger id, but there no is anything, then an empty list must be retrieved`() {
         val passengerId = UUID.randomUUID()
 
         assertEquals(
@@ -72,7 +72,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `given no trip plan application when save one then should be able to find it`() {
+    fun `given no trip plan solicitude when save one then should be able to find it`() {
         val tripApplicationId = UUID.randomUUID()
         val tripPlanSolicitude =
             TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationId = tripApplicationId)
@@ -89,7 +89,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `given trip plan application exists and it is modified when update it then should retrieve it`() {
+    fun `given trip plan solicitude exists and it is modified when update it then should retrieve it`() {
         val passengerId = UUID.randomUUID()
         val tripApplicationId = UUID.randomUUID()
         val tripPlanSolicitude = givenExists(
@@ -112,7 +112,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `given no trip plan application exists with the given id when find by trip application id then should return null`() {
+    fun `given no trip plan solicitude exists with the given id when find by trip application id then should return null`() {
         val otherTripApplicationId = UUID.randomUUID()
         givenExists(TripPlanSolicitudeFactory.withASingleTripApplication())
 
@@ -124,7 +124,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
 
 
     @Test
-    fun `given no trip plan application when save one then should be able to find it by id`() {
+    fun `given no trip plan solicitude when save one then should be able to find it by id`() {
         val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication()
         tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
             sectionRepository.save(it)
@@ -139,7 +139,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `given trip plan application exists and it is modified when update it then should retrieve it by id`() {
+    fun `given trip plan solicitude exists and it is modified when update it then should retrieve it by id`() {
         val passengerId = UUID.randomUUID()
         val tripPlanSolicitude = givenExists(
             TripPlanSolicitudeFactory.withASingleTripApplication(
@@ -160,7 +160,7 @@ class MySQLTripSearchPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `given no trip plan application exists with the given id when find by id then should return an empty list`() {
+    fun `given no trip plan solicitude exists with the given id when find by id then should return an empty list`() {
         val otherTripPlanSolicitudeId = UUID.randomUUID()
         givenExists(TripPlanSolicitudeFactory.withASingleTripApplication())
 

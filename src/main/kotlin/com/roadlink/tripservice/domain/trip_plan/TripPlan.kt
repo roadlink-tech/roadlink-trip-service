@@ -4,8 +4,8 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import java.util.*
 
 class TripPlan(
-    val id: UUID = UUID.randomUUID(),
-    private val tripLegs: List<TripLeg>,
+    val id: UUID,
+    val tripLegs: List<TripLeg>,
     val passengerId: UUID,
 ) {
     enum class Status {
@@ -15,7 +15,7 @@ class TripPlan(
     }
 
     class TripLeg(
-        val id: UUID = UUID.randomUUID(),
+        val id: UUID,
         val tripId: UUID,
         val driverId: UUID,
         val vehicleId: UUID,
@@ -31,6 +31,16 @@ class TripPlan(
         }
     }
 
+    fun status(): Status {
+        if (isCancelled()) {
+            return Status.CANCELLED
+        }
+        if (isFinished()) {
+            return Status.FINISHED
+        }
+        return Status.NOT_FINISHED
+    }
+
     fun isCancelled(): Boolean {
         return this.tripLegs.any { it.isCancelled() }
     }
@@ -42,9 +52,11 @@ class TripPlan(
     companion object {
         fun from(solicitude: TripPlanSolicitude): TripPlan {
             return TripPlan(
+                id = solicitude.id,
                 passengerId = solicitude.passengerId(),
                 tripLegs = solicitude.tripLegSolicitudes.map {
                     TripLeg(
+                        id = it.id,
                         tripId = it.tripId(),
                         driverId = it.driverId(),
                         vehicleId = it.vehicleId(),

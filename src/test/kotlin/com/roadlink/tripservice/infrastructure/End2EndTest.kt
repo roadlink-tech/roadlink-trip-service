@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 abstract class End2EndTest {
 
     @Inject
-    private lateinit var entityManager: EntityManager
+    lateinit var entityManager: EntityManager
 
     @BeforeEach
     fun setUp() {

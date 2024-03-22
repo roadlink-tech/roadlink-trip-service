@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.infrastructure.factories
 
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.*
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import java.util.*
 

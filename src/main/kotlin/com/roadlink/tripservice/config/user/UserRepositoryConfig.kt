@@ -3,7 +3,7 @@ package com.roadlink.tripservice.config.user
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Get
 import com.roadlink.tripservice.domain.user.UserRepository
-import com.roadlink.tripservice.infrastructure.remote.HttpUserRepository
+import com.roadlink.tripservice.infrastructure.remote.user.HttpUserRepository
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton

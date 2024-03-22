@@ -4,7 +4,7 @@ import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponseMapper
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SectionResponse
-import com.roadlink.tripservice.infrastructure.rest.trip_search.response.TripPlanResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_search.response.TripSearchPlanResponse
 
 object SectionResponseMapper {
     fun map(section: Section) =
@@ -21,7 +21,7 @@ object SectionResponseMapper {
 
 object TripPlanResponseMapper {
     fun map(tripSearchPlanResult: TripSearchPlanResult) =
-        TripPlanResponse(
+        TripSearchPlanResponse(
             sections = tripSearchPlanResult.sections.map { SectionResponseMapper.map(it) }
         )
 }

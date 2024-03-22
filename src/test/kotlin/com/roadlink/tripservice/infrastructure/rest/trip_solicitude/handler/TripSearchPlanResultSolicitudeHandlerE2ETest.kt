@@ -6,7 +6,7 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.micronaut.http.HttpRequest
@@ -29,9 +29,6 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
 
     @Inject
     private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
-
-    @Inject
-    private lateinit var entityManager: EntityManager
 
     @Inject
     private lateinit var sectionRepository: SectionRepository

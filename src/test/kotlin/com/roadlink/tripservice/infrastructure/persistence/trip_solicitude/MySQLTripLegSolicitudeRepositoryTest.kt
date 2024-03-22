@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.infrastructure.persistence
+package com.roadlink.tripservice.infrastructure.persistence.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
@@ -6,7 +6,7 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.TripLegSolicitudeFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest

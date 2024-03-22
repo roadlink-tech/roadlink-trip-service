@@ -9,10 +9,10 @@ import com.roadlink.tripservice.domain.user.UserTrustScore
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripDetailResponseFactory
-import com.roadlink.tripservice.infrastructure.remote.HttpUserRepository
-import com.roadlink.tripservice.infrastructure.remote.HttpUserTrustScoreRepository
+import com.roadlink.tripservice.infrastructure.remote.user.HttpUserRepository
+import com.roadlink.tripservice.infrastructure.remote.user.HttpUserTrustScoreRepository
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripDetailResponse
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.usecases.user.UserFactory
 import com.roadlink.tripservice.usecases.user.UserTrustScoreFactory
@@ -47,10 +47,6 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
 
     @Inject
     private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
-
-    @Inject
-    private lateinit var entityManager: EntityManager
-
 
     @Inject
     private lateinit var userTrustScoreRepository: UserTrustScoreRepository
