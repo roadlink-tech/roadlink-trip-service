@@ -1,10 +1,10 @@
-package com.roadlink.tripservice.infrastructure.persistence
+package com.roadlink.tripservice.infrastructure.persistence.section
 
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.usecases.common.address.LocationFactory
-import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.common.InstantFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals

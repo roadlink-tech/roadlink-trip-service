@@ -48,6 +48,15 @@ data class TripLegSectionJPAEntity(
     val distanceInMeters: Double,
 ) {
 
+    fun toDomain(): TripLegSection {
+        return TripLegSection(
+            id = id,
+            departure = departure.toDomain(),
+            arrival = departure.toDomain(),
+            distanceInMeters = distanceInMeters
+        )
+    }
+
     companion object {
         fun from(tripLegSection: TripLegSection): TripLegSectionJPAEntity {
             return TripLegSectionJPAEntity(

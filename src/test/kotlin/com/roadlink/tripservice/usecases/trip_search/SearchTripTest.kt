@@ -2,9 +2,9 @@ package com.roadlink.tripservice.usecases.trip_search
 
 import com.roadlink.tripservice.domain.trip_search.BruteForceSearchEngine
 import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
-import com.roadlink.tripservice.usecases.factory.InstantFactory
+import com.roadlink.tripservice.usecases.common.InstantFactory
 import com.roadlink.tripservice.usecases.common.address.LocationFactory
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -51,7 +51,7 @@ internal class SearchTripTest {
             at = InstantFactory.october15_12hs(),
         ))
 
-        assertEquals(listOf(TripPlanFactory.avCabildo()), result)
+        assertEquals(listOf(TripSearchPlanFactory.avCabildo()), result)
     }
 
     @Test
@@ -95,7 +95,7 @@ internal class SearchTripTest {
             at = InstantFactory.october15_12hs(),
         ))
 
-        assertEquals(listOf(TripPlanFactory.avCabildo()), result)
+        assertEquals(listOf(TripSearchPlanFactory.avCabildo()), result)
     }
 
     @Test
@@ -110,7 +110,7 @@ internal class SearchTripTest {
             at = InstantFactory.october15_12hs(),
         ))
 
-        assertEquals(listOf(TripPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20()), result)
+        assertEquals(listOf(TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20()), result)
     }
 
     @Test
@@ -130,8 +130,8 @@ internal class SearchTripTest {
 
         assertEquals(
             listOf(
-                TripPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
-                TripPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
+                TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+                TripSearchPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
             ),
             result
         )
@@ -156,9 +156,9 @@ internal class SearchTripTest {
 
         assertEquals(
             listOf(
-                TripPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
-                TripPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
-                TripPlanFactory.avCabildo4853_virreyDelPino1800_avDelLibertador5000_avCabildo20(),
+                TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+                TripSearchPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
+                TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avDelLibertador5000_avCabildo20(),
             ),
             result
         )

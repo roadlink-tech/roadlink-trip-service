@@ -6,13 +6,13 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.DriverTripApplicationResponseFactory
-import com.roadlink.tripservice.infrastructure.remote.HttpUserRepository
-import com.roadlink.tripservice.infrastructure.remote.HttpUserTrustScoreRepository
+import com.roadlink.tripservice.infrastructure.remote.user.HttpUserRepository
+import com.roadlink.tripservice.infrastructure.remote.user.HttpUserTrustScoreRepository
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripLegSolicitudeResponse
 import com.roadlink.tripservice.usecases.user.UserFactory
 import com.roadlink.tripservice.usecases.user.UserTrustScoreFactory

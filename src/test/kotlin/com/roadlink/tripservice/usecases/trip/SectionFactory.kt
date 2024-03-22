@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.usecases.factory
+package com.roadlink.tripservice.usecases.trip
 
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section

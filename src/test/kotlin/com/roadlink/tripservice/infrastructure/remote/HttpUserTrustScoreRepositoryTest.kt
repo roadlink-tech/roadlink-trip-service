@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Get
 import com.roadlink.tripservice.domain.user.UserTrustScore
+import com.roadlink.tripservice.infrastructure.remote.user.HttpUserTrustScoreRepository
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.AfterEach

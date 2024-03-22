@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManager
 import org.hibernate.Session
 
 @Factory
-class TripPlanRepository {
+class TripPlanRepositoryConfig {
 
     @Singleton
     fun tripPlanRepository(

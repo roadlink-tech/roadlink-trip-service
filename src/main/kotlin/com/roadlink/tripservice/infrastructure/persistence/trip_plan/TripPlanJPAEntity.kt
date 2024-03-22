@@ -32,6 +32,14 @@ data class TripPlanJPAEntity(
     val tripLegs: List<TripLegJPAEntity>,
 ) {
 
+    fun toDomain(): TripPlan {
+        return TripPlan(
+            id = id,
+            passengerId = passengerId,
+            tripLegs = tripLegs.map { it.toDomain() }
+        )
+    }
+
     companion object {
         fun from(tripPlan: TripPlan): TripPlanJPAEntity {
             return TripPlanJPAEntity(

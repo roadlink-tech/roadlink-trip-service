@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.infrastructure.remote
+package com.roadlink.tripservice.infrastructure.remote.user
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper

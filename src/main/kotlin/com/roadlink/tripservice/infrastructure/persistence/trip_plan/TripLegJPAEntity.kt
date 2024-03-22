@@ -20,7 +20,7 @@ data class TripLegJPAEntity(
     @Id
     @JdbcTypeCode(SqlTypes.CHAR)
     val id: UUID,
-    @Column(name = "driver_id")
+    @Column(name = "trip_id")
     @JdbcTypeCode(SqlTypes.CHAR)
     val tripId: UUID,
     @Column(name = "driver_id")
@@ -37,6 +37,18 @@ data class TripLegJPAEntity(
     @Column(name = "status")
     val status: String
 ) {
+
+    fun toDomain(): TripPlan.TripLeg {
+        return TripPlan.TripLeg(
+            id = id,
+            tripId = tripId,
+            driverId = driverId,
+            vehicleId = vehicleId,
+            sections = sections.map { it.toDomain() },
+            status = TripPlan.Status.valueOf(status)
+        )
+    }
+
     companion object {
         fun from(tripLeg: TripPlan.TripLeg): TripLegJPAEntity {
             return TripLegJPAEntity(

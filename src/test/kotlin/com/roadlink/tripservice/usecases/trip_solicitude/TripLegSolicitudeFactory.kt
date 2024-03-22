@@ -1,10 +1,9 @@
 package com.roadlink.tripservice.usecases.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.Section
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import java.util.*
 
 object TripLegSolicitudeFactory {

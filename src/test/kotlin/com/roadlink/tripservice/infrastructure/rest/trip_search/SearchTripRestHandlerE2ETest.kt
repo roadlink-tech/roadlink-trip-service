@@ -7,8 +7,8 @@ import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.SearchTripResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
 import com.roadlink.tripservice.usecases.common.address.LocationFactory
-import com.roadlink.tripservice.usecases.factory.InstantFactory
-import com.roadlink.tripservice.usecases.factory.SectionFactory
+import com.roadlink.tripservice.usecases.common.InstantFactory
+import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
