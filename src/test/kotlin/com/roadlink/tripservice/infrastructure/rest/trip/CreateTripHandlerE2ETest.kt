@@ -50,9 +50,6 @@ class CreateTripHandlerE2ETest : End2EndTest() {
     @Inject
     private lateinit var spyCommandBus: SpyCommandBus
 
-    @Inject
-    private lateinit var entityManager: EntityManager
-
     @BeforeEach
     fun beforeEach() {
         spyCommandBus.clear()

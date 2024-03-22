@@ -31,9 +31,6 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
     private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 
     @Inject
-    private lateinit var entityManager: EntityManager
-
-    @Inject
     private lateinit var sectionRepository: SectionRepository
 
     /**

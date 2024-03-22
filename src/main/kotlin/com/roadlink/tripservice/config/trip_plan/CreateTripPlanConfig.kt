@@ -7,11 +7,10 @@ import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 
 @Factory
-
 class CreateTripPlanConfig {
 
     @Singleton
-    fun createTrip(tripPlanRepository: TripPlanRepository): UseCase<CreateTripPlan.Input, CreateTripPlan.Output> {
+    fun createTripPlan(tripPlanRepository: TripPlanRepository): UseCase<CreateTripPlan.Input, CreateTripPlan.Output> {
         return CreateTripPlan(tripPlanRepository)
     }
 }

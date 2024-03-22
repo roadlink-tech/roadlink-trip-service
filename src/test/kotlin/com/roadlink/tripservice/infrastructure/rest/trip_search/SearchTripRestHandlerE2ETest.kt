@@ -37,8 +37,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     @Inject
     private lateinit var objectMapper: ObjectMapper
 
-    @Inject
-    private lateinit var entityManager: EntityManager
+//    @Inject
+//    private lateinit var entityManager: EntityManager
 
     @Test
     fun `given no section exists then should return ok status code and the trip plan in response body`() {
