@@ -7,14 +7,14 @@ import java.time.Duration
 class Get(
     readTimeout: Duration = Duration.ofSeconds(10),
     connectionTimeout: Duration = Duration.ofSeconds(10),
-) : Component {
+) : Component<ReadRequest> {
     private val okHttpDispatcher = OkHttpDispatcher(
         readTimeout = readTimeout,
         connectionTimeout = connectionTimeout,
         writeTimeout = readTimeout
     )
 
-    override fun dispatch(request: Request): Response {
+    override fun dispatch(request: ReadRequest): Response {
         val req = buildRequest(
             request.scheme,
             request.host,

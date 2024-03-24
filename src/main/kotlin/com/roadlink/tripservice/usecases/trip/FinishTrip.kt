@@ -1,6 +1,7 @@
 package com.roadlink.tripservice.usecases.trip
 
 import com.roadlink.tripservice.domain.trip.feedback_solicitude.FeedbackSolicitude
+import com.roadlink.tripservice.domain.trip.feedback_solicitude.FeedbackSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_plan.TripPlan
 import com.roadlink.tripservice.domain.trip_plan.TripPlanRepository
 import com.roadlink.tripservice.usecases.UseCase
@@ -8,16 +9,20 @@ import java.util.*
 
 class FinishTrip(
     private val tripPlanRepository: TripPlanRepository,
+    private val feedbackSolicitudeRepository: FeedbackSolicitudeRepository
 ) : UseCase<FinishTrip.Input, FinishTrip.Output> {
 
     override fun invoke(input: Input): Output {
         val tripPlans =
             tripPlanRepository.find(commandQuery = TripPlanRepository.CommandQuery(tripId = input.tripId))
-        val feedbackSolicitudes = createFeedbackSolicitude(tripPlans, input.tripId)
         tripPlans.forEach { tripPlan ->
             tripPlan.finishLegByTripId(tripId = input.tripId)
             // TODO it must be an updateAll
             tripPlanRepository.update(tripPlan)
+        }
+        val feedbackSolicitudes = createFeedbackSolicitude(tripPlans, input.tripId)
+        feedbackSolicitudes.forEach {
+            feedbackSolicitudeRepository.insert(it)
         }
         return Output(feedbackSolicitudes)
     }

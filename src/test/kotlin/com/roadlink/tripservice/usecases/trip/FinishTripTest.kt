@@ -1,11 +1,14 @@
 package com.roadlink.tripservice.usecases.trip
 
+import com.roadlink.tripservice.domain.trip.feedback_solicitude.FeedbackSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_plan.TripPlan.Status.FINISHED
 import com.roadlink.tripservice.domain.trip_plan.TripPlanRepository
 import com.roadlink.tripservice.usecases.trip_plan.TripPlanFactory
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -19,12 +22,15 @@ class FinishTripTest {
     @MockK
     private lateinit var tripPlanRepository: TripPlanRepository
 
+    @MockK
+    private lateinit var feedbackSolicitudeRepository: FeedbackSolicitudeRepository
+
     private lateinit var finishTrip: FinishTrip
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        finishTrip = FinishTrip(tripPlanRepository)
+        finishTrip = FinishTrip(tripPlanRepository, feedbackSolicitudeRepository)
     }
 
     /**
@@ -57,6 +63,10 @@ class FinishTripTest {
             })
         } answers { arg(0) }
 
+        every {
+            feedbackSolicitudeRepository.insert(any())
+        } just runs
+
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
 
@@ -65,6 +75,7 @@ class FinishTripTest {
             response.feedbackSolicitudes.map { Pair(it.reviewerId, it.receiverId) }
         assertEquals(12, response.feedbackSolicitudes.size)
         verify(exactly = 3) { tripPlanRepository.update(any()) }
+        verify(exactly = 12) { feedbackSolicitudeRepository.insert(any()) }
 
         assertTrue(feedbackSolicitudesPairs.contains(Pair(georgeId, martinId)))
         assertTrue(feedbackSolicitudesPairs.contains(Pair(georgeId, felixId)))
@@ -107,6 +118,10 @@ class FinishTripTest {
             tripPlanRepository.update(match { tripPlan -> tripPlan.isFinished() })
         } answers { arg(0) }
 
+        every {
+            feedbackSolicitudeRepository.insert(any())
+        } just runs
+
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
 
@@ -115,7 +130,7 @@ class FinishTripTest {
             response.feedbackSolicitudes.map { Pair(it.reviewerId, it.receiverId) }
         assertEquals(2, response.feedbackSolicitudes.size)
         verify(exactly = 1) { tripPlanRepository.update(any()) }
-
+        verify(exactly = 2) { feedbackSolicitudeRepository.insert(any()) }
         assertTrue(feedbackSolicitudesPairs.contains(Pair(georgeId, driverId)))
         assertFalse(feedbackSolicitudesPairs.contains(Pair(georgeId, georgeId)))
 
@@ -169,6 +184,10 @@ class FinishTripTest {
             tripPlanRepository.update(match { tripPlan -> !tripPlan.isFinished() })
         } answers { arg(0) }
 
+        every {
+            feedbackSolicitudeRepository.insert(any())
+        } just runs
+
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
 
@@ -177,6 +196,7 @@ class FinishTripTest {
             response.feedbackSolicitudes.map { Pair(it.reviewerId, it.receiverId) }
         assertEquals(2, response.feedbackSolicitudes.size)
         verify(exactly = 1) { tripPlanRepository.update(any()) }
+        verify(exactly = 2) { feedbackSolicitudeRepository.insert(any()) }
 
         assertTrue(feedbackSolicitudesPairs.contains(Pair(georgeId, driverId)))
         assertFalse(feedbackSolicitudesPairs.contains(Pair(georgeId, georgeId)))

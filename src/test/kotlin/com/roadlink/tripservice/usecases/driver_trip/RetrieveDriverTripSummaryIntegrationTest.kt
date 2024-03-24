@@ -1,24 +1,5 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
-import com.roadlink.tripservice.domain.common.IdGenerator
-import com.roadlink.tripservice.domain.trip.Trip
-import com.roadlink.tripservice.domain.trip.TripRepository
-import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.*
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
-import com.roadlink.tripservice.infrastructure.UUIDIdGenerator
-import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.trip.InMemoryTripRepository
-import com.roadlink.tripservice.usecases.trip.TripFactory
-import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import java.util.*
-
 class RetrieveDriverTripSummaryIntegrationTest {
 /*
     private lateinit var idGenerator: IdGenerator
