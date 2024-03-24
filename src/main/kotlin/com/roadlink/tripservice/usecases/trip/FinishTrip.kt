@@ -13,43 +13,35 @@ class FinishTrip(
     override fun invoke(input: Input): Output {
         val tripPlans =
             tripPlanRepository.find(commandQuery = TripPlanRepository.CommandQuery(tripId = input.tripId))
-        val feedbacksSolicitudes = createFeedbackSolicitude(tripPlans, input.tripId)
+        val feedbackSolicitudes = createFeedbackSolicitude(tripPlans, input.tripId)
         tripPlans.forEach { tripPlan ->
             tripPlan.finishLegByTripId(tripId = input.tripId)
             // TODO it must be an updateAll
             tripPlanRepository.update(tripPlan)
         }
-        return Output(feedbacksSolicitudes)
+        return Output(feedbackSolicitudes)
     }
 
     private fun createFeedbackSolicitude(
         tripPlans: List<TripPlan>,
         tripId: UUID
     ): List<FeedbackSolicitude> {
-        val feedbackSolicitudes = mutableListOf<FeedbackSolicitude>()
-        val passengers: List<UUID> = tripPlans.map { it.passengerId }
-        val driverId = tripPlans.first().tripLegs.first { it.tripId == tripId }.driverId
-        for (i in 0 until passengers.size - 1) {
-            val reviewerId = passengers[i]
-            for (j in i + 1 until passengers.size) {
-                val receiverId = passengers[j]
-                feedbackSolicitudes.add(
-                    FeedbackSolicitude(
-                        reviewerId = reviewerId,
-                        receiverId = receiverId,
-                        tripLegId = tripId
-                    )
+        val driverId = tripPlans.flatMap { it.tripLegs }
+            .firstOrNull { it.tripId == tripId }
+            ?.driverId
+
+        val passengers: List<UUID> = tripPlans.map { it.passengerId }.let { passengerIds ->
+            if (driverId != null) passengerIds + driverId else passengerIds
+        }
+
+        return passengers.flatMapIndexed { index, reviewerId ->
+            passengers.drop(index + 1).flatMap { receiverId ->
+                listOf(
+                    FeedbackSolicitude(reviewerId, receiverId, tripId),
+                    FeedbackSolicitude(receiverId, reviewerId, tripId)
                 )
             }
-            feedbackSolicitudes.add(
-                FeedbackSolicitude(
-                    reviewerId = reviewerId,
-                    receiverId = driverId,
-                    tripLegId = tripId
-                )
-            )
         }
-        return feedbackSolicitudes
     }
 
     class Input(

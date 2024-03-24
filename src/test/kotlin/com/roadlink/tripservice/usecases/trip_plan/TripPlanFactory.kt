@@ -31,4 +31,41 @@ object TripPlanFactory {
             )
         )
     }
+
+    fun withTwoTripLeg(
+        id: UUID = UUID.randomUUID(),
+        passengerId: UUID = UUID.randomUUID(),
+        oneTripLegId: UUID = UUID.randomUUID(),
+        anotherTripLegId: UUID = UUID.randomUUID(),
+        oneTripId: UUID = UUID.randomUUID(),
+        anotherTripId: UUID = UUID.randomUUID(),
+        oneDriverId: UUID = UUID.randomUUID(),
+        anotherDriverId: UUID = UUID.randomUUID(),
+        oneVehicleId: UUID = UUID.randomUUID(),
+        anotherVehicleId: UUID = UUID.randomUUID(),
+        status: Status = Status.NOT_FINISHED
+    ): TripPlan {
+        return TripPlan(
+            id = id,
+            passengerId = passengerId,
+            tripLegs = listOf(
+                TripLeg(
+                    id = oneTripLegId,
+                    tripId = oneTripId,
+                    vehicleId = oneVehicleId,
+                    driverId = oneDriverId,
+                    sections = emptyList(),
+                    status = status
+                ),
+                TripLeg(
+                    id = anotherTripLegId,
+                    tripId = anotherTripId,
+                    vehicleId = anotherVehicleId,
+                    driverId = anotherDriverId,
+                    sections = emptyList(),
+                    status = status
+                ),
+            )
+        )
+    }
 }
