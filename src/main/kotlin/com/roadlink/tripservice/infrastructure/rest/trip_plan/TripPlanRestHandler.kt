@@ -1,8 +1,12 @@
 package com.roadlink.tripservice.infrastructure.rest.trip_plan
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.roadlink.tripservice.domain.common.TripPoint
+import com.roadlink.tripservice.domain.trip_plan.TripLegSection
 import com.roadlink.tripservice.domain.trip_plan.TripPlan
 import com.roadlink.tripservice.infrastructure.rest.ApiResponse
+import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponse
+import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponseMapper
 import com.roadlink.tripservice.usecases.trip_plan.ListTripPlan
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
@@ -47,6 +51,8 @@ data class TripPlanResponse(
         val driverId: UUID,
         @JsonProperty("vehicle_id")
         val vehicleId: UUID,
+        @JsonProperty("sections")
+        val sections: List<TripLegSectionResponse>,
     ) {
 
         companion object {
@@ -56,8 +62,24 @@ data class TripPlanResponse(
                     tripId = tripLeg.tripId,
                     driverId = tripLeg.driverId,
                     vehicleId = tripLeg.vehicleId,
+                    sections = tripLeg.sections.map { TripLegSectionResponse.from(it) }
                 )
             }
+        }
+    }
+
+    data class TripLegSectionResponse(
+        val id: String,
+        val departure: TripPointResponse,
+        val arrival: TripPointResponse,
+    ) {
+        companion object {
+            fun from(tripLegSection: TripLegSection): TripLegSectionResponse =
+                TripLegSectionResponse(
+                    id = tripLegSection.id,
+                    departure = TripPointResponseMapper.map(tripLegSection.departure),
+                    arrival = TripPointResponseMapper.map(tripLegSection.departure),
+                )
         }
     }
 
