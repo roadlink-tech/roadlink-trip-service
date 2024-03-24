@@ -29,6 +29,14 @@ class TripPlan(
         fun isFinished(): Boolean {
             return status == Status.FINISHED
         }
+
+        fun finish() {
+            status = Status.FINISHED
+        }
+    }
+
+    fun finishLegByTripId(tripId: UUID) {
+        this.tripLegs.first { it.tripId == tripId }.finish()
     }
 
     fun status(): Status {

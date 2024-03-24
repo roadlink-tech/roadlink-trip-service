@@ -41,9 +41,11 @@ class Get(
                 .host(host)
                 .port(port)
                 .addPathSegments(endpoint)
-                .apply { queryParameters.forEach {
-                    addQueryParameter(it.name, it.value)
-                } }
+                .apply {
+                    queryParameters.forEach {
+                        addQueryParameter(it.name, it.value)
+                    }
+                }
                 .build())
             .headers(headers.associate {
                 Pair(

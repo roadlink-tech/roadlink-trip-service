@@ -78,7 +78,6 @@ class MySQLTripLegSolicitudeRepository(
                     tripId = domainCommandQuery.tripId,
                     driverId = domainCommandQuery.driverId,
                     status = domainCommandQuery.status
-
                 )
             }
         }

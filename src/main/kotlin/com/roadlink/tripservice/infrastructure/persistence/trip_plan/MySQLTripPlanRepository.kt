@@ -19,6 +19,13 @@ class MySQLTripPlanRepository(
         return tripPlan
     }
 
+    override fun update(tripPlan: TripPlan): TripPlan {
+        transactionManager.executeWrite {
+            entityManager.merge(TripPlanJPAEntity.from(tripPlan))
+        }
+        return tripPlan
+    }
+
     override fun find(commandQuery: TripPlanRepository.CommandQuery): List<TripPlan> {
         val cq = TripPlanCommandQuery.from(commandQuery)
         return transactionManager.executeRead {
