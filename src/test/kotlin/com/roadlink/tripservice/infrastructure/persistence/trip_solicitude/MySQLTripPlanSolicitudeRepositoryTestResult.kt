@@ -41,6 +41,28 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
+    fun `given a trip plan solicitude stored, when find it by trip id then it must be retrieved`() {
+        val tripApplicationId = UUID.randomUUID()
+        val passengerId = UUID.randomUUID()
+        val tripId = UUID.randomUUID()
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
+            tripApplicationId = tripApplicationId,
+            passengerId = passengerId.toString(),
+            tripId = tripId
+        )
+        tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
+            sectionRepository.save(it)
+        }
+
+        repository.insert(tripPlanSolicitude)
+
+        assertEquals(
+            listOf(tripPlanSolicitude),
+            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripId = tripId))
+        )
+    }
+
+    @Test
     fun `given a trip plan solicitude stored, when find it by passenger id and trip application status then it must be retrieved`() {
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
@@ -84,7 +106,8 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
 
         assertEquals(
             tripPlanSolicitude,
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = tripApplicationId)).first()
+            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = tripApplicationId))
+                .first()
         )
     }
 
@@ -107,7 +130,8 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
 
         assertEquals(
             tripPlanSolicitude,
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = tripApplicationId)).first()
+            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = tripApplicationId))
+                .first()
         )
     }
 
@@ -134,7 +158,13 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
 
         assertEquals(
             tripPlanSolicitude,
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(ids = listOf(tripPlanSolicitude.id))).first()
+            repository.find(
+                TripPlanSolicitudeRepository.CommandQuery(
+                    ids = listOf(
+                        tripPlanSolicitude.id
+                    )
+                )
+            ).first()
         )
     }
 
@@ -155,7 +185,13 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
 
         assertEquals(
             tripPlanSolicitude,
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(ids = listOf(tripPlanSolicitude.id))).first()
+            repository.find(
+                TripPlanSolicitudeRepository.CommandQuery(
+                    ids = listOf(
+                        tripPlanSolicitude.id
+                    )
+                )
+            ).first()
         )
     }
 

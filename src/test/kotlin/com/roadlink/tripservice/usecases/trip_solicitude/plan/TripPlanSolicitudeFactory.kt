@@ -4,7 +4,9 @@ import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.REJECTED
 import com.roadlink.tripservice.usecases.trip.SectionFactory
 import java.util.*
 
@@ -69,7 +71,8 @@ object TripPlanSolicitudeFactory {
         driverId: String = johnSmithDriverId.toString(),
         passengerId: String = "passengerId",
         tripApplicationStatus: Status = PENDING_APPROVAL,
-        vehicleId: String = "Ford mustang"
+        vehicleId: String = "Ford mustang",
+        tripId: UUID = UUID.randomUUID()
     ): TripPlanSolicitude {
         return TripPlanSolicitude(
             id = id,
@@ -78,6 +81,7 @@ object TripPlanSolicitudeFactory {
                     id = tripApplicationId,
                     sections = listOf(
                         SectionFactory.avCabildo(
+                            tripId = tripId,
                             initialAmountOfSeats = initialAmountOfSeats,
                             driverId = driverId,
                             vehicleId = vehicleId
@@ -109,7 +113,7 @@ object TripPlanSolicitudeFactory {
         )
     }
 
-    fun withASingleTripApplicationConfirmed(
+    fun withASingleTripApplicationAccepted(
         sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",
     ): TripPlanSolicitude {

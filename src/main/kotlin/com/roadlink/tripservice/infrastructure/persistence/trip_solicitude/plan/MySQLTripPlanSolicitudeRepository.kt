@@ -2,6 +2,7 @@ package com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.plan
 
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.persistence.section.SectionJPAEntity
 import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.TripLegSolicitudeJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
@@ -45,14 +46,28 @@ class MySQLTripPlanSolicitudeRepository(
                 val tripApplicationsJoin =
                     root.join<TripPlanSolicitudeJPAEntity, TripLegSolicitudeJPAEntity>("tripLegSolicitudes")
                 val passengerIdPredicate =
-                    cb.equal(tripApplicationsJoin.get<String>("passengerId"), cq.passengerId.toString())
+                    cb.equal(
+                        tripApplicationsJoin.get<String>("passengerId"),
+                        cq.passengerId.toString()
+                    )
                 predicates.add(passengerIdPredicate)
             }
 
             if (cq.tripLegSolicitudeId != null) {
-                val tripApplicationsJoin = root.join<TripPlanSolicitudeJPAEntity, TripLegSolicitudeJPAEntity>("tripLegSolicitudes")
-                val tripApplicationIdPredicate = cb.equal(tripApplicationsJoin.get<UUID>("id"), cq.tripLegSolicitudeId)
+                val tripApplicationsJoin =
+                    root.join<TripPlanSolicitudeJPAEntity, TripLegSolicitudeJPAEntity>("tripLegSolicitudes")
+                val tripApplicationIdPredicate =
+                    cb.equal(tripApplicationsJoin.get<UUID>("id"), cq.tripLegSolicitudeId)
                 predicates.add(tripApplicationIdPredicate)
+            }
+
+            if (cq.tripId != null) {
+                val tripApplicationsJoin =
+                    root.join<TripPlanSolicitudeJPAEntity, TripLegSolicitudeJPAEntity>("tripLegSolicitudes")
+                val sectionsJoin =
+                    tripApplicationsJoin.join<TripLegSolicitudeJPAEntity, SectionJPAEntity>("sections")
+                val tripIdPredicate = cb.equal(sectionsJoin.get<UUID>("tripId"), cq.tripId)
+                predicates.add(tripIdPredicate)
             }
 
             criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))
@@ -66,9 +81,10 @@ class MySQLTripPlanSolicitudeRepository(
         val ids: List<UUID> = emptyList(),
         val tripLegSolicitudeId: UUID? = null,
         val passengerId: UUID? = null,
+        val tripId: UUID? = null
     ) {
         init {
-            require(ids.isNotEmpty() || tripLegSolicitudeId != null || passengerId != null) {
+            require(ids.isNotEmpty() || tripLegSolicitudeId != null || passengerId != null || tripId != null) {
                 "At least one field must be not null or empty"
             }
         }
@@ -79,7 +95,8 @@ class MySQLTripPlanSolicitudeRepository(
                 return TripPlanSolicitudeCommandQuery(
                     ids = domainCommandQuery.ids,
                     tripLegSolicitudeId = domainCommandQuery.tripLegSolicitudeId,
-                    passengerId = domainCommandQuery.passengerId
+                    passengerId = domainCommandQuery.passengerId,
+                    tripId = domainCommandQuery.tripId
                 )
             }
         }
