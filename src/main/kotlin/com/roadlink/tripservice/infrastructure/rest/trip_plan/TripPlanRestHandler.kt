@@ -8,17 +8,22 @@ import com.roadlink.tripservice.infrastructure.rest.ApiResponse
 import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponse
 import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponseMapper
 import com.roadlink.tripservice.usecases.trip_plan.ListTripPlan
+import com.roadlink.tripservice.usecases.trip_plan.RetrieveTripPlan
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.QueryValue
 import java.util.*
 
-@Controller("/trip-service/users/{userId}")
-class TripPlanRestHandler(private val listTripPlan: ListTripPlan) {
+@Controller("/trip-service")
+class TripPlanRestHandler(
+    private val listTripPlan: ListTripPlan,
+    private val retrieveTripPlan: RetrieveTripPlan,
+) {
 
-    @Get("/trip_plans")
+    @Get("/users/{userId}/trip_plans")
     fun list(
         @PathVariable("userId") passengerId: String,
         @QueryValue("status") status: List<TripPlan.Status> = emptyList(),
@@ -27,8 +32,19 @@ class TripPlanRestHandler(private val listTripPlan: ListTripPlan) {
         return HttpResponse.ok(response.tripPlans.map {
             TripPlanResponse.from(it)
         })
-
     }
+
+    @Get("/trip_plans/{tripPlanId}")
+    fun list(
+        @PathVariable("tripPlanId") tripPlanId: String,
+    ): HttpResponse<*> {
+        val response = retrieveTripPlan(RetrieveTripPlan.Input(tripPlanId = UUID.fromString(tripPlanId)))
+        return when (response) {
+            is RetrieveTripPlan.Output.TripPlanFound -> HttpResponse.ok(TripPlanResponse.from(response.tripPlan))
+            RetrieveTripPlan.Output.TripPlanNotFound -> HttpResponse.notFound<Unit>()
+        }
+    }
+
 }
 
 data class TripPlanResponse(
