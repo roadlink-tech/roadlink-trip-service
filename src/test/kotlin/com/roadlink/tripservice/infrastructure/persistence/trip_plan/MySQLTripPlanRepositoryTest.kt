@@ -1,7 +1,9 @@
 package com.roadlink.tripservice.infrastructure.persistence.trip_plan
 
+import com.roadlink.tripservice.domain.trip_plan.TripLegSection
 import com.roadlink.tripservice.domain.trip_plan.TripPlan
 import com.roadlink.tripservice.domain.trip_plan.TripPlanRepository
+import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import com.roadlink.tripservice.usecases.trip_plan.TripPlanFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -33,7 +35,15 @@ class MySQLTripPlanRepositoryTest {
                 tripLegId = tripLegId,
                 tripId = tripId,
                 vehicleId = vehicleId,
-                status = status
+                status = status,
+                sections = listOf(
+                    TripLegSection(
+                        id = UUID.randomUUID().toString(),
+                        departure = TripPointFactory.avCabildo_20(),
+                        arrival = TripPointFactory.avCabildo_4853(),
+                        distanceInMeters = 0.0,
+                    ),
+                )
             )
         )
 

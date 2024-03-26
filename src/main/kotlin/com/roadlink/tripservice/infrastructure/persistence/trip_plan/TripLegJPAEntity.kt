@@ -30,7 +30,7 @@ data class TripLegJPAEntity(
     @JdbcTypeCode(SqlTypes.CHAR)
     val vehicleId: UUID,
     @ManyToMany(
-        cascade = [CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH],
+        cascade = [CascadeType.ALL],
         fetch = FetchType.EAGER
     )
     val sections: List<TripLegSectionJPAEntity>,
