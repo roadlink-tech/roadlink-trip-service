@@ -113,7 +113,9 @@ class ListDriverTripApplicationsHandlerE2ETest : End2EndTest() {
         assertOkBody(
             listOf(
                 DriverTripApplicationResponseFactory.avCabildoWithASingleTripApplicationPendingApproval(
-                    tripApplicationId = tripPlanSolicitudePendingApproval.tripLegSolicitudes.first().id, userId = userId
+                    tripApplicationId = tripPlanSolicitudePendingApproval.tripLegSolicitudes.first().id,
+                    userId = userId,
+                    profilePhotoUrl = "http//profile.photo.com"
                 )
             ),
             response

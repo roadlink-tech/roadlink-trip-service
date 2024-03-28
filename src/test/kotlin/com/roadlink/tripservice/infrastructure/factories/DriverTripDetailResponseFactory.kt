@@ -8,7 +8,8 @@ import java.util.*
 object DriverTripDetailResponseFactory {
     fun avCabildoWithASingleTripApplicationConfirmed(
         tripId: String = TripFactory.avCabildo_id,
-        userId: UUID
+        userId: UUID,
+        profilePhotoUrl: String = "http://profile.photo"
     ): DriverTripDetailResponse =
         DriverTripDetailResponse(
             tripId = UUID.fromString(tripId),
@@ -28,7 +29,7 @@ object DriverTripDetailResponseFactory {
                             id = userId.toString(),
                             fullName = "Painn Wilson",
                             score = ScoreResultResponse.NotBeenScoredResponse(),
-                            profilePhotoUrl = "http://profile.photo"
+                            profilePhotoUrl = profilePhotoUrl
                         )
                     ),
                 )

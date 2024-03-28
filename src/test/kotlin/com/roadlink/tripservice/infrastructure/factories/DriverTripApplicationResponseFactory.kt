@@ -10,7 +10,8 @@ import java.util.*
 object DriverTripApplicationResponseFactory {
     fun avCabildoWithASingleTripApplicationPendingApproval(
         tripApplicationId: UUID,
-        userId: UUID
+        userId: UUID,
+        profilePhotoUrl: String = "http://photo.url"
     ): DriverTripLegSolicitudeResponse =
         DriverTripLegSolicitudeResponse(
             tripLegSolicitudeId = tripApplicationId.toString(),
@@ -18,7 +19,7 @@ object DriverTripApplicationResponseFactory {
                 id = userId.toString(),
                 fullName = "John Krasinski",
                 score = ScoreResultResponse.ScoreResponse(score = 1.3),
-                profilePhotoUrl = "http://photo.url"
+                profilePhotoUrl = profilePhotoUrl
             ),
             status = PENDING_APPROVAL,
             addressJoinStart = AddressResponseFactory.avCabildo_4853(),
