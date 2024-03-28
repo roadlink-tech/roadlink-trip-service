@@ -28,6 +28,7 @@ object DriverTripDetailResponseFactory {
                             id = userId.toString(),
                             fullName = "Painn Wilson",
                             score = ScoreResultResponse.NotBeenScoredResponse(),
+                            profilePhotoUrl = "http://profile.photo"
                         )
                     ),
                 )

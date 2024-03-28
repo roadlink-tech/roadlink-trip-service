@@ -4,6 +4,7 @@ import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverT
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.PassengerResultResponse
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.ScoreResultResponse
 import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripLegSolicitudeStatusResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripLegSolicitudeStatusResponse.*
 import java.util.*
 
 object DriverTripApplicationResponseFactory {
@@ -17,8 +18,9 @@ object DriverTripApplicationResponseFactory {
                 id = userId.toString(),
                 fullName = "John Krasinski",
                 score = ScoreResultResponse.ScoreResponse(score = 1.3),
+                profilePhotoUrl = "http://photo.url"
             ),
-            status = TripLegSolicitudeStatusResponse.PENDING_APPROVAL,
+            status = PENDING_APPROVAL,
             addressJoinStart = AddressResponseFactory.avCabildo_4853(),
             addressJoinEnd = AddressResponseFactory.avCabildo_20(),
         )

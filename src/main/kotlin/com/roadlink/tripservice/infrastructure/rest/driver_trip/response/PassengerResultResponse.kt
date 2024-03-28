@@ -19,6 +19,7 @@ sealed class PassengerResultResponse(open val type: PassengerResultResponseType)
         val id: String,
         val fullName: String,
         val score: ScoreResultResponse,
+        val profilePhotoUrl: String
     ) : PassengerResultResponse(type)
 }
 

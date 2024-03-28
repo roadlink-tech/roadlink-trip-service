@@ -70,4 +70,3 @@ data class UserCoreResponse(
         )
     }
 }
-
