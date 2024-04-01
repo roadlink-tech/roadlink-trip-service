@@ -4,12 +4,11 @@ import com.roadlink.tripservice.domain.trip_plan.TripLegSection
 import com.roadlink.tripservice.domain.trip_plan.TripPlan
 import com.roadlink.tripservice.domain.trip_plan.TripPlan.Status
 import com.roadlink.tripservice.domain.trip_plan.TripPlan.TripLeg
-import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import java.util.*
 
 object TripPlanFactory {
 
-    fun common(
+    fun withASingleTripLeg(
         id: UUID = UUID.randomUUID(),
         passengerId: UUID = UUID.randomUUID(),
         tripLegId: UUID = UUID.randomUUID(),
@@ -32,6 +31,27 @@ object TripPlanFactory {
                     status = status
                 )
             )
+        )
+    }
+
+    fun common(
+        id: UUID = UUID.randomUUID(),
+        passengerId: UUID = UUID.randomUUID(),
+        tripLegs: List<TripLeg> = listOf(
+            TripLeg(
+                id = UUID.randomUUID(),
+                tripId = UUID.randomUUID(),
+                vehicleId = UUID.randomUUID(),
+                driverId = UUID.randomUUID(),
+                sections = listOf(TripLegSectionFactory.common()),
+                status = Status.NOT_FINISHED
+            )
+        ),
+    ): TripPlan {
+        return TripPlan(
+            id = id,
+            passengerId = passengerId,
+            tripLegs = tripLegs
         )
     }
 

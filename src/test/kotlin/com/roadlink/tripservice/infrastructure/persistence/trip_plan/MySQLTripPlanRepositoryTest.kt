@@ -28,7 +28,7 @@ class MySQLTripPlanRepositoryTest {
         val vehicleId = UUID.randomUUID()
         val status = TripPlan.Status.NOT_FINISHED
         tripPlanRepository.insert(
-            TripPlanFactory.common(
+            TripPlanFactory.withASingleTripLeg(
                 id = tripPlanId,
                 passengerId = passengerId,
                 driverId = driverId,
@@ -75,7 +75,7 @@ class MySQLTripPlanRepositoryTest {
         val vehicleId = UUID.randomUUID()
         val status = TripPlan.Status.NOT_FINISHED
         tripPlanRepository.insert(
-            TripPlanFactory.common(
+            TripPlanFactory.withASingleTripLeg(
                 id = tripPlanId,
                 passengerId = passengerId,
                 driverId = driverId,

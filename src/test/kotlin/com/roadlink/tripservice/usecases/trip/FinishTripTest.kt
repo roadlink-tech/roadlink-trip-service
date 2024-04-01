@@ -50,9 +50,9 @@ class FinishTripTest {
         val driverId = UUID.randomUUID()
 
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
-            TripPlanFactory.common(passengerId = georgeId, tripId = tripId, driverId = driverId),
-            TripPlanFactory.common(passengerId = martinId, tripId = tripId, driverId = driverId),
-            TripPlanFactory.common(passengerId = felixId, tripId = tripId, driverId = driverId),
+            TripPlanFactory.withASingleTripLeg(passengerId = georgeId, tripId = tripId, driverId = driverId),
+            TripPlanFactory.withASingleTripLeg(passengerId = martinId, tripId = tripId, driverId = driverId),
+            TripPlanFactory.withASingleTripLeg(passengerId = felixId, tripId = tripId, driverId = driverId),
         )
 
         every {
@@ -111,7 +111,7 @@ class FinishTripTest {
         val driverId = UUID.randomUUID()
 
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
-            TripPlanFactory.common(passengerId = georgeId, tripId = tripId, driverId = driverId),
+            TripPlanFactory.withASingleTripLeg(passengerId = georgeId, tripId = tripId, driverId = driverId),
         )
 
         every {

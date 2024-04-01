@@ -1,6 +1,5 @@
 package com.roadlink.tripservice.infrastructure.rest.trip.handler
 
-import com.roadlink.tripservice.config.user.UserRepositoryConfig
 import com.roadlink.tripservice.usecases.trip.StartTrip
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller

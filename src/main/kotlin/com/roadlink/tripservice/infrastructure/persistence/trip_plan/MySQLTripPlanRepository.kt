@@ -45,6 +45,12 @@ class MySQLTripPlanRepository(
                 predicates.add(idPredicate)
             }
 
+            if (cq.tripId != null) {
+                val tripLegsJoin = root.join<TripPlanJPAEntity, TripLegJPAEntity>("tripLegs")
+                val tripIdPredicate = cb.equal(tripLegsJoin.get<UUID>("tripId"), cq.tripId)
+                predicates.add(tripIdPredicate)
+            }
+
             criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))
 
             entityManager.createQuery(criteriaQuery).resultList.map { it.toDomain() }
@@ -53,10 +59,11 @@ class MySQLTripPlanRepository(
 
     data class TripPlanCommandQuery(
         val ids: List<UUID?> = emptyList(),
-        val passengerId: List<UUID?> = emptyList()
+        val passengerId: List<UUID?> = emptyList(),
+        val tripId: UUID? = null
     ) {
         init {
-            require(ids.isNotEmpty() || passengerId.isNotEmpty()) {
+            require(ids.isNotEmpty() || passengerId.isNotEmpty() || tripId != null) {
                 "At least one field must be not null or empty"
             }
         }
@@ -66,7 +73,8 @@ class MySQLTripPlanRepository(
             fun from(domainCommandQuery: TripPlanRepository.CommandQuery): TripPlanCommandQuery {
                 return TripPlanCommandQuery(
                     ids = listOfNotNull(domainCommandQuery.id),
-                    passengerId = listOfNotNull(domainCommandQuery.passengerId)
+                    passengerId = listOfNotNull(domainCommandQuery.passengerId),
+                    tripId = domainCommandQuery.tripId
                 )
             }
         }
