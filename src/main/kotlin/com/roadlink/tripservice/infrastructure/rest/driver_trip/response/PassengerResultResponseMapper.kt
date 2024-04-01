@@ -23,6 +23,7 @@ object PassengerResultResponseMapper {
                     } else {
                         NotBeenScoredResponse()
                     },
+                    profilePhotoUrl = passengerResult.profilePhotoUrl
                 )
 
             is PassengerNotExists ->

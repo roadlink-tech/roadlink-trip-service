@@ -9,7 +9,9 @@ data class SectionResponse(
     val tripId: String,
     val departure: TripPointResponse,
     val arrival: TripPointResponse,
+    // TODO es un id!
     val driver: String,
+    // TODO es un id!
     val vehicle: String,
     val availableSeats: Int,
 )

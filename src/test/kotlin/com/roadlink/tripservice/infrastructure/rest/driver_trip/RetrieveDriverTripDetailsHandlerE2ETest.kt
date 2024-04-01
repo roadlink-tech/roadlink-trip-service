@@ -110,7 +110,8 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
         assertOkBody(
             DriverTripDetailResponseFactory.avCabildoWithASingleTripApplicationConfirmed(
                 tripId = section.tripId.toString(),
-                userId = userId
+                userId = userId,
+                profilePhotoUrl = "http//profile.photo.com"
             ),
             response
         )

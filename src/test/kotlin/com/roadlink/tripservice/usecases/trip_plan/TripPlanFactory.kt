@@ -1,8 +1,10 @@
 package com.roadlink.tripservice.usecases.trip_plan
 
+import com.roadlink.tripservice.domain.trip_plan.TripLegSection
 import com.roadlink.tripservice.domain.trip_plan.TripPlan
 import com.roadlink.tripservice.domain.trip_plan.TripPlan.Status
 import com.roadlink.tripservice.domain.trip_plan.TripPlan.TripLeg
+import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import java.util.*
 
 object TripPlanFactory {
@@ -14,7 +16,8 @@ object TripPlanFactory {
         tripId: UUID = UUID.randomUUID(),
         driverId: UUID = UUID.randomUUID(),
         vehicleId: UUID = UUID.randomUUID(),
-        status: Status = Status.NOT_FINISHED
+        status: Status = Status.NOT_FINISHED,
+        sections: List<TripLegSection> = emptyList(),
     ): TripPlan {
         return TripPlan(
             id = id,
@@ -25,7 +28,7 @@ object TripPlanFactory {
                     tripId = tripId,
                     vehicleId = vehicleId,
                     driverId = driverId,
-                    sections = emptyList(),
+                    sections = sections,
                     status = status
                 )
             )
