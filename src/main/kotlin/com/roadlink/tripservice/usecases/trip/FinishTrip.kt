@@ -17,10 +17,9 @@ class FinishTrip(
             tripPlanRepository.find(commandQuery = TripPlanRepository.CommandQuery(tripId = input.tripId))
         val finishedTripLegs = mutableListOf<TripPlan.TripLeg>()
         tripPlans.forEach { tripPlan ->
-            tripPlan.finishLegByTripId(tripId = input.tripId)
-            tripPlan.findLegByTripId(tripId = input.tripId).also { tripLeg ->
-                finishedTripLegs.add(tripLeg)
-            }
+            val tripLeg = tripPlan.findLegByTripId(tripId = input.tripId)
+            tripLeg.finish()
+            finishedTripLegs.add(tripLeg)
             // TODO it must be an updateAll
             tripPlanRepository.update(tripPlan)
         }

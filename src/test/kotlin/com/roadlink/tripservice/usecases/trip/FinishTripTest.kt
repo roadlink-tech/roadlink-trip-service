@@ -50,9 +50,21 @@ class FinishTripTest {
         val driverId = UUID.randomUUID()
 
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
-            TripPlanFactory.withASingleTripLeg(passengerId = georgeId, tripId = tripId, driverId = driverId),
-            TripPlanFactory.withASingleTripLeg(passengerId = martinId, tripId = tripId, driverId = driverId),
-            TripPlanFactory.withASingleTripLeg(passengerId = felixId, tripId = tripId, driverId = driverId),
+            TripPlanFactory.withASingleTripLeg(
+                passengerId = georgeId,
+                tripId = tripId,
+                driverId = driverId
+            ),
+            TripPlanFactory.withASingleTripLeg(
+                passengerId = martinId,
+                tripId = tripId,
+                driverId = driverId
+            ),
+            TripPlanFactory.withASingleTripLeg(
+                passengerId = felixId,
+                tripId = tripId,
+                driverId = driverId
+            ),
         )
 
         every {
@@ -111,7 +123,11 @@ class FinishTripTest {
         val driverId = UUID.randomUUID()
 
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
-            TripPlanFactory.withASingleTripLeg(passengerId = georgeId, tripId = tripId, driverId = driverId),
+            TripPlanFactory.withASingleTripLeg(
+                passengerId = georgeId,
+                tripId = tripId,
+                driverId = driverId
+            ),
         )
 
         every {
@@ -162,7 +178,7 @@ class FinishTripTest {
      * --> (D, G)
      */
     @Test
-    fun `when a trip finish, and the plan just contains more than one trip leg with driver and passenger, then the expected feedbacks solicitudes must be created`() {
+    fun `when a trip finish, and the plan contains more than one trip leg with driver and passenger, then the expected feedbacks solicitudes must be created`() {
         // given
         val tripId = UUID.randomUUID()
         val otherTripId = UUID.randomUUID()
@@ -203,5 +219,55 @@ class FinishTripTest {
 
         assertTrue(feedbackSolicitudesPairs.contains(Pair(driverId, georgeId)))
         assertFalse(feedbackSolicitudesPairs.contains(Pair(driverId, driverId)))
+    }
+
+    /**
+     * Passengers: G
+     * --> (G, D)
+     * --> (D, G)
+     */
+    @Test
+    fun `when a trip finish, and the plan contains just one trip leg with driver and passenger, then the expected feedbacks solicitudes must be created`() {
+        // given
+        val tripId = UUID.randomUUID()
+        val tripLegId = UUID.randomUUID()
+        val georgeId = UUID.randomUUID()
+        val driverId = UUID.randomUUID()
+
+        every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
+            TripPlanFactory.withASingleTripLeg(
+                passengerId = georgeId,
+                tripId = tripId,
+                driverId = driverId,
+                tripLegId = tripLegId
+            ),
+        )
+
+        every {
+            tripPlanRepository.update(match { tripPlan -> tripPlan.isFinished() })
+        } answers { arg(0) }
+
+        every {
+            feedbackSolicitudeRepository.insert(any())
+        } just runs
+
+        // when
+        val response = finishTrip(FinishTrip.Input(tripId))
+
+        // then
+        val feedbackSolicitudesPairs =
+            response.feedbackSolicitudes.map { Pair(it.reviewerId, it.receiverId) }
+        assertEquals(2, response.feedbackSolicitudes.size)
+        verify(exactly = 1) { tripPlanRepository.update(any()) }
+        verify(exactly = 2) { feedbackSolicitudeRepository.insert(any()) }
+
+        assertTrue(feedbackSolicitudesPairs.contains(Pair(georgeId, driverId)))
+        assertFalse(feedbackSolicitudesPairs.contains(Pair(georgeId, georgeId)))
+
+        assertTrue(feedbackSolicitudesPairs.contains(Pair(driverId, georgeId)))
+        assertFalse(feedbackSolicitudesPairs.contains(Pair(driverId, driverId)))
+
+        assertEquals(listOf(tripLegId), response.tripLegsFinished.map { it.id })
+        assertEquals(listOf(FINISHED), response.tripLegsFinished.map { it.status })
     }
 }
