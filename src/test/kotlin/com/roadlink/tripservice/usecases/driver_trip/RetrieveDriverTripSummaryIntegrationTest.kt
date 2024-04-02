@@ -1,5 +1,25 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
+import com.roadlink.tripservice.domain.common.IdGenerator
+import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip.TripRepository
+import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.infrastructure.UUIDGenerator
+import com.roadlink.tripservice.infrastructure.persistence.section.InMemorySectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.trip.InMemoryTripRepository
+import com.roadlink.tripservice.usecases.trip.TripFactory
+import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
+import org.junit.jupiter.api.Assertions.assertInstanceOf
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import java.util.*
+
 class RetrieveDriverTripSummaryIntegrationTest {
 /*
     private lateinit var idGenerator: IdGenerator
@@ -16,20 +36,24 @@ class RetrieveDriverTripSummaryIntegrationTest {
 
     @BeforeEach
     fun setUp() {
-        idGenerator = UUIDIdGenerator()
+        idGenerator = UUIDGenerator()
         tripRepository = InMemoryTripRepository()
         sectionsRepository = InMemorySectionRepository()
         tripLegSolicitudeRepository = InMemoryTripLegSolicitudeRepository()
         tripPlanSolicitudeRepository =
             InMemoryTripPlanSolicitudeRepository(tripLegSolicitudeRepository = tripLegSolicitudeRepository)
         retrieveDriverTripSummary =
-            RetrieveDriverTripSummary(tripRepository, sectionsRepository, tripLegSolicitudeRepository)
+            RetrieveDriverTripSummary(
+                tripRepository,
+                sectionsRepository,
+                tripLegSolicitudeRepository
+            )
     }
 
-    @AfterEach
+    /*@AfterEach
     fun afterEach() {
         tripPlanSolicitudeRepository.deleteAll()
-    }
+    }*/
 
     @Test
     fun `when a trip was saved successfully, then its summary should be retrieved`() {
@@ -93,7 +117,10 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val driverId = UUID.randomUUID()
 
         val trip = givenACreatedTrip(driverId)
-        givenATripPlanSolicitudeFor(trip.id, driverId, CONFIRMED)
+        givenATripPlanSolicitudeFor(
+            trip.id, driverId,
+            ACCEPTED
+        )
 
         // WHEN
         val summary = retrieveDriverTripSummary(driverId.toString())
@@ -126,7 +153,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
     private fun givenATripPlanSolicitudeFor(
         tripId: String,
         driverId: UUID,
-        status: Status = PENDING_APPROVAL
+        status: TripLegSolicitude.Status = PENDING_APPROVAL
     ) {
         val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleBooking(
             tripId = UUID.fromString(tripId),
@@ -141,9 +168,14 @@ class RetrieveDriverTripSummaryIntegrationTest {
         availableSeats: Int = 4
     ): Trip {
         val trip =
-            TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString(), availableSeats = availableSeats)
+            TripFactory.avCabildo4853_to_avCabildo20(
+                driverId = driverId.toString(),
+                availableSeats = availableSeats
+            )
         tripRepository.save(trip)
         sectionsRepository.saveAll(trip.sections(idGenerator))
         return trip
-    }*/
+    }
+    
+ */
 }
