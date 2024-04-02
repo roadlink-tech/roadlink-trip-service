@@ -15,8 +15,12 @@ class FinishTrip(
     override fun invoke(input: Input): Output {
         val tripPlans =
             tripPlanRepository.find(commandQuery = TripPlanRepository.CommandQuery(tripId = input.tripId))
+        val finishedTripLegs = mutableListOf<TripPlan.TripLeg>()
         tripPlans.forEach { tripPlan ->
             tripPlan.finishLegByTripId(tripId = input.tripId)
+            tripPlan.findLegByTripId(tripId = input.tripId).also { tripLeg ->
+                finishedTripLegs.add(tripLeg)
+            }
             // TODO it must be an updateAll
             tripPlanRepository.update(tripPlan)
         }
@@ -24,7 +28,7 @@ class FinishTrip(
         feedbackSolicitudes.forEach {
             feedbackSolicitudeRepository.insert(it)
         }
-        return Output(feedbackSolicitudes)
+        return Output(feedbackSolicitudes, finishedTripLegs)
     }
 
     private fun createFeedbackSolicitude(
@@ -53,5 +57,8 @@ class FinishTrip(
         var tripId: UUID
     )
 
-    class Output(var feedbackSolicitudes: List<FeedbackSolicitude>)
+    class Output(
+        var feedbackSolicitudes: List<FeedbackSolicitude>,
+        var tripLegsFinished: List<TripPlan.TripLeg>
+    )
 }

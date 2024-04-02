@@ -35,8 +35,12 @@ class TripPlan(
         }
     }
 
+    fun findLegByTripId(tripId: UUID): TripLeg {
+        return this.tripLegs.first { it.tripId == tripId }
+    }
+
     fun finishLegByTripId(tripId: UUID) {
-        this.tripLegs.first { it.tripId == tripId }.finish()
+        findLegByTripId(tripId).finish()
     }
 
     fun status(): Status {

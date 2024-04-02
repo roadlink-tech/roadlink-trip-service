@@ -1,7 +1,10 @@
 package com.roadlink.tripservice.infrastructure.rest.trip.handler
 
+import com.roadlink.tripservice.infrastructure.rest.trip.response.TripLegFinishedResponse
+import com.roadlink.tripservice.infrastructure.rest.trip.response.TripResponse
 import com.roadlink.tripservice.usecases.trip.FinishTrip
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus.*
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
@@ -18,9 +21,11 @@ class FinishTripHandler(private val finishTrip: FinishTrip) {
     @Post
     fun finish(
         @PathVariable("tripId") tripId: String,
-    ): HttpResponse<Any> {
+    ): HttpResponse<List<TripLegFinishedResponse>> {
         val response = finishTrip(FinishTrip.Input(tripId = UUID.fromString(tripId)))
         logger.info("The following feedbacks solicitudes were created ${response.feedbackSolicitudes}")
-        return HttpResponse.ok()
+        return HttpResponse
+            .status<TripResponse>(OK)
+            .body(response.tripLegsFinished.map { TripLegFinishedResponse.from(it) })
     }
 }

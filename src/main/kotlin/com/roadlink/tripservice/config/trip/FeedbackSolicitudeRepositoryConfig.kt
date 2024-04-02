@@ -7,9 +7,13 @@ import com.roadlink.tripservice.infrastructure.remote.trip.feedback_solicitude.H
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
+import org.slf4j.LoggerFactory
 
 @Factory
 class FeedbackSolicitudeRepositoryConfig {
+    companion object {
+        private val logger = LoggerFactory.getLogger(FeedbackSolicitudeRepositoryConfig::class.java)
+    }
 
     @Value("\${http-post-feedback-solicitude.scheme}")
     private lateinit var createFeedbackSolicitudeByIdScheme: String
@@ -24,9 +28,8 @@ class FeedbackSolicitudeRepositoryConfig {
     private lateinit var createFeedbackSolicitudeEndpoint: String
 
     @Singleton
-    fun feedbackSolicitudeRepository(
-        post: Post, objectMapper: ObjectMapper
-    ): FeedbackSolicitudeRepository {
+    fun feedbackSolicitudeRepository(post: Post, objectMapper: ObjectMapper): FeedbackSolicitudeRepository {
+        logger.info("The HttpFeedbackSolicitudeRepository will start with the following parameters: {\"host\":\"$createFeedbackSolicitudeHost\", \"port\":\"$createFeedbackSolicitudeIdPort\"}")
         return HttpFeedbackSolicitudeRepository(
             post = post,
             scheme = createFeedbackSolicitudeByIdScheme,
