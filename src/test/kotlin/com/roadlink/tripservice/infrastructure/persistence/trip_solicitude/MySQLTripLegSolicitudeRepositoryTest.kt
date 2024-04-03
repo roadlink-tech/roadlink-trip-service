@@ -31,7 +31,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
     @Test
     fun `given no trip application exists with the given driver id when find all by driver id then should return empty list`() {
         val otherDriverId = UUID.randomUUID()
-        givenASavedTripPlanSolicitudeWithSections(TripLegSolicitudeFactory.any())
+        givenASavedTripPlanSolicitudeWithSections(TripLegSolicitudeFactory.common())
 
         val result =
             tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(driverId = otherDriverId))
@@ -184,7 +184,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
     @Test
     fun `given no existing trip leg solicitude with the given trip id when find by trip id then should return empty list`() {
         val otherTripId = UUID.randomUUID()
-        givenASavedTripPlanSolicitudeWithSections(TripLegSolicitudeFactory.any())
+        givenASavedTripPlanSolicitudeWithSections(TripLegSolicitudeFactory.common())
 
         val result =
             tripLegSolicitudeRepository.find(TripLegSolicitudeRepository.CommandQuery(tripId = otherTripId))
