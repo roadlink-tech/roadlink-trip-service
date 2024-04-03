@@ -10,5 +10,6 @@ interface TripPlanSolicitudeRepository {
         val ids: List<UUID> = emptyList(),
         val tripLegSolicitudeId: UUID? = null,
         val passengerId: UUID? = null,
+        val tripId: UUID? = null
     )
 }

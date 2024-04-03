@@ -7,9 +7,11 @@ import java.util.*
  */
 interface TripPlanRepository {
     fun insert(tripPlan: TripPlan): TripPlan
+    fun update(tripPlan: TripPlan): TripPlan
     fun find(commandQuery: CommandQuery): List<TripPlan>
     data class CommandQuery(
         val id: UUID? = null,
-        val passengerId: UUID? = null
+        val passengerId: UUID? = null,
+        val tripId: UUID? = null
     )
 }

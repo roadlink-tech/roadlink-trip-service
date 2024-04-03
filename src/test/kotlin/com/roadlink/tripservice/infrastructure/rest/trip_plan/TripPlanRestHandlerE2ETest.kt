@@ -73,8 +73,8 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
     fun `list trip plans with more than a single result`() {
         // given
         val userId = UUID.randomUUID()
-        val savedTripPlan = TripPlanFactory.common(passengerId = userId, status = NOT_FINISHED)
-        val otherTripPlan = TripPlanFactory.common(passengerId = userId, status = FINISHED)
+        val savedTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = NOT_FINISHED)
+        val otherTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = FINISHED)
         tripPlanRepository.insert(savedTripPlan)
         tripPlanRepository.insert(otherTripPlan)
         entityManager.transaction.commit()
@@ -125,8 +125,8 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
     fun `list trip plans by passenger id and status`() {
         // given
         val userId = UUID.randomUUID()
-        val savedTripPlan = TripPlanFactory.common(passengerId = userId, status = FINISHED)
-        val otherTripPlan = TripPlanFactory.common(passengerId = userId, status = NOT_FINISHED)
+        val savedTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = FINISHED)
+        val otherTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = NOT_FINISHED)
         tripPlanRepository.insert(savedTripPlan)
         tripPlanRepository.insert(otherTripPlan)
         entityManager.transaction.commit()
@@ -169,8 +169,8 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
     fun `list trip plans by passenger id and status, but without any result`() {
         // given
         val userId = UUID.randomUUID()
-        val savedTripPlan = TripPlanFactory.common(passengerId = userId, status = FINISHED)
-        val otherTripPlan = TripPlanFactory.common(passengerId = userId, status = NOT_FINISHED)
+        val savedTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = FINISHED)
+        val otherTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = NOT_FINISHED)
         tripPlanRepository.insert(savedTripPlan)
         tripPlanRepository.insert(otherTripPlan)
         entityManager.transaction.commit()
@@ -195,8 +195,8 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
     fun `list trip plans with by passenger id and different status`() {
         // given
         val userId = UUID.randomUUID()
-        val savedTripPlan = TripPlanFactory.common(passengerId = userId, status = NOT_FINISHED)
-        val otherTripPlan = TripPlanFactory.common(passengerId = userId, status = FINISHED)
+        val savedTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = NOT_FINISHED)
+        val otherTripPlan = TripPlanFactory.withASingleTripLeg(passengerId = userId, status = FINISHED)
         tripPlanRepository.insert(savedTripPlan)
         tripPlanRepository.insert(otherTripPlan)
         entityManager.transaction.commit()
@@ -312,11 +312,11 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
             )
 
     private fun givenASavedTripPlanWithPassengerId(userId: UUID): TripPlan {
-        tripPlanRepository.insert(TripPlanFactory.common(passengerId = userId)).also { return it }
+        tripPlanRepository.insert(TripPlanFactory.withASingleTripLeg(passengerId = userId)).also { return it }
     }
 
     private fun givenASavedTripPlan(): TripPlan {
-        tripPlanRepository.insert(TripPlanFactory.common()).also { return it }
+        tripPlanRepository.insert(TripPlanFactory.withASingleTripLeg()).also { return it }
     }
 
 }

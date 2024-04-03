@@ -28,7 +28,6 @@ import io.mockk.every
 import io.mockk.mockk
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -84,7 +83,7 @@ class ListDriverTripApplicationsHandlerE2ETest : End2EndTest() {
             sections = listOf(section),
             passengerId = "JENNA",
         )
-        val tripPlanSolicitudeConfirmed = TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
+        val tripPlanSolicitudeConfirmed = TripPlanSolicitudeFactory.withASingleTripApplicationAccepted(
             sections = listOf(section),
             passengerId = "BJNOVAK",
         )

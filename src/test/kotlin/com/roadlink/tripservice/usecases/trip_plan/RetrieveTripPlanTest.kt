@@ -26,7 +26,7 @@ class RetrieveTripPlanTest {
     @Test
     fun `retrieve trip plan by id`() {
         // given
-        val tripPlan = TripPlanFactory.common()
+        val tripPlan = TripPlanFactory.withASingleTripLeg()
         every { tripPlanRepository.find(commandQuery = match { it.id == tripPlan.id }) } returns listOf(
             tripPlan,
         )

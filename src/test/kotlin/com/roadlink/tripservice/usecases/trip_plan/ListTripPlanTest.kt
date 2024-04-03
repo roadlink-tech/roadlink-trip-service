@@ -29,8 +29,8 @@ class ListTripPlanTest {
         // given
         val passengerId = UUID.randomUUID()
         val tripPlanNotFinished =
-            TripPlanFactory.common(passengerId = passengerId, status = NOT_FINISHED)
-        val tripPlanCancelled = TripPlanFactory.common(passengerId = passengerId, status = CANCELLED)
+            TripPlanFactory.withASingleTripLeg(passengerId = passengerId, status = NOT_FINISHED)
+        val tripPlanCancelled = TripPlanFactory.withASingleTripLeg(passengerId = passengerId, status = CANCELLED)
         every { tripPlanRepository.find(commandQuery = match { it.passengerId == passengerId }) } returns listOf(
             tripPlanNotFinished,
             tripPlanCancelled
@@ -50,8 +50,8 @@ class ListTripPlanTest {
         // given
         val passengerId = UUID.randomUUID()
         val tripPlanNotFinished =
-            TripPlanFactory.common(passengerId = passengerId, status = NOT_FINISHED)
-        val tripPlanCancelled = TripPlanFactory.common(passengerId = passengerId, status = CANCELLED)
+            TripPlanFactory.withASingleTripLeg(passengerId = passengerId, status = NOT_FINISHED)
+        val tripPlanCancelled = TripPlanFactory.withASingleTripLeg(passengerId = passengerId, status = CANCELLED)
         every { tripPlanRepository.find(commandQuery = match { it.passengerId == passengerId }) } returns listOf(
             tripPlanNotFinished,
             tripPlanCancelled
@@ -72,8 +72,8 @@ class ListTripPlanTest {
         // given
         val passengerId = UUID.randomUUID()
         val tripPlanNotFinished =
-            TripPlanFactory.common(passengerId = passengerId, status = FINISHED)
-        val tripPlanCancelled = TripPlanFactory.common(passengerId = passengerId, status = CANCELLED)
+            TripPlanFactory.withASingleTripLeg(passengerId = passengerId, status = FINISHED)
+        val tripPlanCancelled = TripPlanFactory.withASingleTripLeg(passengerId = passengerId, status = CANCELLED)
         every { tripPlanRepository.find(commandQuery = match { it.passengerId == passengerId }) } returns listOf(
             tripPlanNotFinished,
             tripPlanCancelled

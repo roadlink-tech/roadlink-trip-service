@@ -27,8 +27,8 @@ object SectionFactory {
         tripId: UUID = UUID.fromString("ad2e7d11-0fbb-4711-8f0c-a0f31529241f"),
         driverId: String = "John Smith",
         vehicleId: String = "Ford mustang"
-    ) =
-        Section(
+    ): Section {
+        return Section(
             id = avCabildo_id,
             departure = departure,
             arrival = arrival,
@@ -39,6 +39,7 @@ object SectionFactory {
             bookedSeats = bookedSeats,
             tripId = tripId
         )
+    }
 
     fun virreyDelPino(tripId: UUID = UUID.fromString("ad2e7d11-0fbb-4711-8f0c-a0f31529241f")) =
         Section(

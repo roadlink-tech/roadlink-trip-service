@@ -1,7 +1,7 @@
 package com.roadlink.tripservice.usecases.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.Section
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL
 import com.roadlink.tripservice.usecases.trip.SectionFactory
 import java.util.*
@@ -40,17 +40,22 @@ object TripLegSolicitudeFactory {
         )
     }
 
-    fun any(): TripLegSolicitude {
+    fun common(
+        id: UUID = UUID.randomUUID(),
+        authorizerId: String = "authorizerId",
+        passengerId: String = "passengerId",
+        status: TripLegSolicitude.Status = PENDING_APPROVAL
+    ): TripLegSolicitude {
         return TripLegSolicitude(
-            id = UUID.randomUUID(),
+            id = id,
             sections = listOf(
                 SectionFactory.withDriver(
                     driverId = UUID.randomUUID(),
                 )
             ),
-            status = PENDING_APPROVAL,
-            passengerId = "passengerId",
-            authorizerId = "authorizerId"
+            status = status,
+            passengerId = passengerId,
+            authorizerId = authorizerId
         )
     }
 

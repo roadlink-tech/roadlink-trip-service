@@ -8,13 +8,17 @@ import org.hibernate.type.SqlTypes
 import java.util.*
 
 @Entity
-@Table(name = "section")
+@Table(
+    name = "section", indexes = [
+        Index(name = "section_trip_id_idx", columnList = "trip_id")
+    ]
+)
 data class SectionJPAEntity(
     @Id val id: String,
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "trip_id", nullable = false, updatable = false, columnDefinition = "VARCHAR(36)")
     val tripId: UUID,
-
+// TODO tiene que haber un indice por tripID
     @Embedded
     @AttributeOverrides(
         AttributeOverride(

@@ -28,7 +28,6 @@ import io.mockk.every
 import io.mockk.mockk
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -79,7 +78,7 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
         sectionRepository.save(section)
 
         listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplicationConfirmed(
+            TripPlanSolicitudeFactory.withASingleTripApplicationAccepted(
                 sections = listOf(SectionFactory.avCabildo()),
                 passengerId = userId.toString(),
             ),
