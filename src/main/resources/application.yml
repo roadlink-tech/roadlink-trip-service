@@ -51,6 +51,11 @@ http-get-user-by-id:
   host: ${CORE_SERVICE_HOST:api.roadlink.com.ar}
   port: ${CORE_SERVICE_PORT:80}
   endpoint: users/{userId}
+http-get-user-trust-score:
+  scheme: http
+  host: ${CORE_SERVICE_HOST:api.roadlink.com.ar}
+  port: ${CORE_SERVICE_PORT:80}
+  endpoint: users/{userId}/user_trust_score
 http-post-feedback-solicitude:
   scheme: http
   host: ${CORE_SERVICE_HOST:api.roadlink.com.ar}

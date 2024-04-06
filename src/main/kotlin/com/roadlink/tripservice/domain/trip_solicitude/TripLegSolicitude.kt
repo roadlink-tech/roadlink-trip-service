@@ -4,12 +4,18 @@ import com.roadlink.tripservice.domain.common.DomainError
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
+import java.time.Instant
 import java.util.*
 
 data class TripPlanSolicitude(
     val id: UUID = UUID.randomUUID(),
     val tripLegSolicitudes: MutableList<TripLegSolicitude> = mutableListOf()
 ) {
+    init {
+        // TODO test me!!!
+        tripLegSolicitudes.sortBy { it.departureTime() }
+    }
+
     // Todo move this to a common class
     enum class Status {
         PENDING_APPROVAL,
@@ -81,12 +87,19 @@ data class TripPlanSolicitude(
      */
     data class TripLegSolicitude(
         val id: UUID = UUID.randomUUID(),
-        val sections: List<Section>,
+        var sections: List<Section>,
         // TODO maybe it must be a trip plan attribute
         val passengerId: String,
         var status: Status = PENDING_APPROVAL,
         val authorizerId: String
     ) {
+        init {
+            sections = sections.sortedBy { it.departure.estimatedArrivalTime }
+        }
+
+        fun departureTime(): Instant {
+            return this.sections.first().departure.estimatedArrivalTime
+        }
 
         // TODO validar que las secciones tengan un unico driverId, tripId y vehicleId
         enum class Status {
