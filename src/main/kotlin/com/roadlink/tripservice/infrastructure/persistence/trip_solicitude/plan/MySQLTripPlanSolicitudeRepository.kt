@@ -8,6 +8,8 @@ import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
+import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import java.util.*
 
 
@@ -16,15 +18,17 @@ class MySQLTripPlanSolicitudeRepository(
     private val transactionManager: TransactionOperations<Session>,
 ) : TripPlanSolicitudeRepository {
 
+    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
+
     override fun insert(tripPlanSolicitude: TripPlanSolicitude) {
         transactionManager.executeWrite {
-            entityManager.persist(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude))
+            entityManager.persist(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude, geometryFactory))
         }
     }
 
     override fun update(tripPlanSolicitude: TripPlanSolicitude) {
         transactionManager.executeWrite {
-            entityManager.merge(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude))
+            entityManager.merge(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude, geometryFactory))
         }
     }
 

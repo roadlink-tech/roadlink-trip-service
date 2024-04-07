@@ -5,12 +5,16 @@ import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEn
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import org.locationtech.jts.geom.Coordinate
+import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.Point
 import java.util.*
 
 @Entity
 @Table(
     name = "section", indexes = [
-        Index(name = "section_trip_id_idx", columnList = "trip_id")
+        Index(name = "section_trip_id_idx", columnList = "trip_id"),
+        Index(name = "section_departure_point_idx", columnList = "departure_point")
     ]
 )
 data class SectionJPAEntity(
@@ -34,6 +38,8 @@ data class SectionJPAEntity(
         AttributeOverride(name = "longitude", column = Column(name = "departure_longitude"))
     )
     val departure: TripPointJPAEntity,
+    @Column(nullable = false, columnDefinition = "GEOMETRY SRID 4326")
+    val departurePoint: Point,
 
     @Embedded
     @AttributeOverrides(
@@ -62,11 +68,17 @@ data class SectionJPAEntity(
     var bookedSeats: Int
 ) {
     companion object {
-        fun from(section: Section): SectionJPAEntity {
+        fun from(section: Section, geometryFactory: GeometryFactory): SectionJPAEntity {
+            val departureCoordinate = Coordinate(
+                section.departure.address.location.latitude,
+                section.departure.address.location.longitude
+            )
+
             return SectionJPAEntity(
                 id = section.id,
                 tripId = section.tripId,
                 departure = TripPointJPAEntity.from(section.departure),
+                departurePoint = geometryFactory.createPoint(departureCoordinate),
                 arrival = TripPointJPAEntity.from(section.arrival),
                 distanceInMeters = section.distanceInMeters,
                 driverId = section.driverId,

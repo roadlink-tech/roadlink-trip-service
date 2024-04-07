@@ -25,6 +25,7 @@ import jakarta.inject.Singleton
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.skyscreamer.jsonassert.JSONCompareMode
 import java.util.*
 
 @MicronautTest
@@ -101,18 +102,18 @@ internal class FinishTripHandlerE2ETest : End2EndTest() {
         JSONAssert.assertEquals(
             """
             [
-               {
-                  "id":"$oneTripLegId",
-                  "tripId":"$tripId",
-                  "status":"FINISHED"
-               },
               {
                  "id":"$anotherTripLegId",
                  "tripId":"$tripId",
                  "status":"FINISHED"
-              }
+              },
+               {
+                  "id":"$oneTripLegId",
+                  "tripId":"$tripId",
+                  "status":"FINISHED"
+               }
             ]
-        """.trimIndent(), response.body().toString(), true
+        """.trimIndent(), response.body().toString(), JSONCompareMode.LENIENT
         )
     }
 

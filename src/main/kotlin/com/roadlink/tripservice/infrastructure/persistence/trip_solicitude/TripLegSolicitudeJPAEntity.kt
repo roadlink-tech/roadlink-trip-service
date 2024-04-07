@@ -6,6 +6,7 @@ import jakarta.persistence.*
 import jakarta.persistence.CascadeType.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import org.locationtech.jts.geom.GeometryFactory
 import java.util.*
 
 @Entity
@@ -26,10 +27,10 @@ data class TripLegSolicitudeJPAEntity(
     val authorizerId: String
 ) {
     companion object {
-        fun from(application: TripPlanSolicitude.TripLegSolicitude): TripLegSolicitudeJPAEntity {
+        fun from(application: TripPlanSolicitude.TripLegSolicitude, geometryFactory: GeometryFactory): TripLegSolicitudeJPAEntity {
             return TripLegSolicitudeJPAEntity(
                 id = application.id,
-                sections = application.sections.map { SectionJPAEntity.from(it) },
+                sections = application.sections.map { SectionJPAEntity.from(it, geometryFactory) },
                 passengerId = application.passengerId,
                 status = application.status.name,
                 authorizerId = application.authorizerId,

@@ -5,6 +5,7 @@ import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.TripL
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import org.locationtech.jts.geom.GeometryFactory
 import java.util.*
 
 @Entity
@@ -18,10 +19,10 @@ data class TripPlanSolicitudeJPAEntity(
     val tripLegSolicitudes: List<TripLegSolicitudeJPAEntity>,
 ) {
     companion object {
-        fun from(application: TripPlanSolicitude): TripPlanSolicitudeJPAEntity {
+        fun from(application: TripPlanSolicitude, geometryFactory: GeometryFactory): TripPlanSolicitudeJPAEntity {
             return TripPlanSolicitudeJPAEntity(
                 id = application.id,
-                tripLegSolicitudes = application.tripLegSolicitudes.map { TripLegSolicitudeJPAEntity.from(it) }
+                tripLegSolicitudes = application.tripLegSolicitudes.map { TripLegSolicitudeJPAEntity.from(it, geometryFactory) }
             )
         }
     }

@@ -7,16 +7,21 @@ import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
+import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import java.util.*
 
 class MySQLTripLegSolicitudeRepository(
     private val entityManager: EntityManager,
     private val transactionManager: TransactionOperations<Session>,
 ) : TripLegSolicitudeRepository {
+
+    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
+
     override fun saveAll(tripLegSolicitudes: List<TripPlanSolicitude.TripLegSolicitude>) {
         // TODO batch write!
         for (tripApplication in tripLegSolicitudes) {
-            entityManager.persist(TripLegSolicitudeJPAEntity.from(tripApplication))
+            entityManager.persist(TripLegSolicitudeJPAEntity.from(tripApplication, geometryFactory))
         }
     }
 

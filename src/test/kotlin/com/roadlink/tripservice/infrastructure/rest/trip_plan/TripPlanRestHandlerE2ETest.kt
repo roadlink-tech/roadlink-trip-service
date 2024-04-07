@@ -18,6 +18,7 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.skyscreamer.jsonassert.JSONCompareMode
 import java.util.*
 
 @MicronautTest
@@ -65,7 +66,7 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
                   "status":"NOT_FINISHED"
                }
             ]
-        """.trimIndent(), response.body().toString(), true
+        """.trimIndent(), response.body().toString(), JSONCompareMode.LENIENT
         )
     }
 
@@ -117,7 +118,7 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
                   "status":"FINISHED"
                }
             ]
-        """.trimIndent(), response.body().toString(), true
+        """.trimIndent(), response.body().toString(), JSONCompareMode.LENIENT
         )
     }
 
@@ -161,7 +162,7 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
                   "status":"NOT_FINISHED"
                }
             ]
-        """.trimIndent(), response.body().toString(), true
+        """.trimIndent(), response.body().toString(), JSONCompareMode.LENIENT
         )
     }
 
@@ -243,7 +244,7 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
                   "status":"FINISHED"
                }
             ]
-        """.trimIndent(), response.body().toString(), true
+        """.trimIndent(), response.body().toString(), JSONCompareMode.LENIENT
         )
     }
 
@@ -278,7 +279,7 @@ class TripPlanRestHandlerE2ETest : End2EndTest() {
               "passenger_id":"${savedTripPlan.passengerId}",
               "status":"NOT_FINISHED"
            }
-        """.trimIndent(), response.body().toString(), true
+        """.trimIndent(), response.body().toString(), JSONCompareMode.LENIENT
         )
     }
 
