@@ -16,6 +16,8 @@ services:
       timeout: 5s
       retries: 5
       interval: 10s
+    volumes:
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   api:
     image: trip-service
