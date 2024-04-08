@@ -150,3 +150,50 @@ create table trip_leg_solicitudes_section
     constraint FK5vysfm96udyifvd3o6ry4bah1
         foreign key (sections_id) references section (id)
 );
+
+
+-- INSERTS
+INSERT INTO tripservice_db.trip (arrival_latitude, arrival_longitude, available_seats, departure_latitude,
+                                 departure_longitude, arrival_estimated_arrival_time, departure_estimated_arrival_time,
+                                 arrival_city, arrival_country, arrival_full_address, arrival_house_number,
+                                 arrival_street, departure_city, departure_country, departure_full_address,
+                                 departure_house_number, departure_street, driver_id, id, status, vehicle_id)
+VALUES (-31.42056375510204, -64.19165538979591, 4, -34.54025770408163, -58.47450726734694,
+        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '00:00:00' HOUR_SECOND,
+        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '17:00:00' HOUR_SECOND, 'Cordoba', 'Argentina',
+        'Montevideo 377, Cordoba', '377', 'Montevideo', 'Buenos Aires', 'Argentina',
+        'Avenida Cabildo 4853, Buenos Aires', '4853', 'Avenida Cabildo', '123e4567-e89b-12d3-a456-426614174004',
+        '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2', 'NOT_STARTED', 'b85df607-16cf-4da2-8f2e-51baa90a1748');
+
+INSERT INTO tripservice_db.trip_jpaentity_meeting_points (latitude, longitude, estimated_arrival_time, city, country,
+                                                          full_address, house_number, street, trip_jpaentity_id)
+VALUES (-34.4569996, -58.9131929, ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '19:00:00' HOUR_SECOND, 'Pilar',
+        'Argentina', 'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave', '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2');
+
+INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_seats, departure_latitude,
+                                    departure_longitude, distance_in_meters, initial_amount_of_seats,
+                                    arrival_estimated_arrival_time, departure_estimated_arrival_time, trip_id,
+                                    arrival_city, arrival_country, arrival_full_address, arrival_house_number,
+                                    arrival_street, departure_city, departure_country, departure_full_address,
+                                    departure_house_number, departure_street, driver_id, id, vehicle_id)
+VALUES (-34.4569996, -58.9131929, 0, -34.54025770408163, -58.47450726734694, 0, 4,
+        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '19:00:00' HOUR_SECOND,
+        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '17:00:00' HOUR_SECOND, '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2',
+        'Pilar', 'Argentina', 'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave', 'Buenos Aires', 'Argentina',
+        'Avenida Cabildo 4853, Buenos Aires', '4853', 'Avenida Cabildo', '123e4567-e89b-12d3-a456-426614174004',
+        '475b78e8-7f52-45cc-bb88-d0d417d04394', 'b85df607-16cf-4da2-8f2e-51baa90a1748');
+
+INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_seats, departure_latitude,
+                                    departure_longitude, distance_in_meters, initial_amount_of_seats,
+                                    arrival_estimated_arrival_time, departure_estimated_arrival_time, trip_id,
+                                    arrival_city, arrival_country, arrival_full_address, arrival_house_number,
+                                    arrival_street, departure_city, departure_country, departure_full_address,
+                                    departure_house_number, departure_street, driver_id, id, vehicle_id)
+VALUES (-31.42056375510204, -64.19165538979591, 0, -34.4569996, -58.9131929, 0, 4,
+        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '00:00:00' HOUR_SECOND,
+        CURDATE() + INTERVAL '19:00:00' HOUR_SECOND,
+        '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2', 'Cordoba', 'Argentina',
+        'Montevideo 377, Cordoba', '377', 'Montevideo', 'Pilar', 'Argentina',
+        'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave',
+        '123e4567-e89b-12d3-a456-426614174004', 'b48fc155-f397-4a3d-b8c3-322392e907e6',
+        'b85df607-16cf-4da2-8f2e-51baa90a1748');
