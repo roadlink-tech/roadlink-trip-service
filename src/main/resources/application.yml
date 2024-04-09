@@ -39,7 +39,7 @@ jpa:
     properties:
       hibernate:
         hbm2ddl:
-          auto: create-drop # Make this configurable depending on the environment
+          auto: update # Make this configurable depending on the environment
 
 flyway:
   datasources:
