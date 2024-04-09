@@ -152,7 +152,7 @@ create table trip_leg_solicitudes_section
 );
 
 
--- INSERTS
+-- Creating Trip: Bs As -> Pilar -> Cordoba
 INSERT INTO tripservice_db.trip (arrival_latitude, arrival_longitude, available_seats, departure_latitude,
                                  departure_longitude, arrival_estimated_arrival_time, departure_estimated_arrival_time,
                                  arrival_city, arrival_country, arrival_full_address, arrival_house_number,
@@ -198,7 +198,7 @@ VALUES (-31.42056375510204, -64.19165538979591, 0, -34.4569996, -58.9131929, 0, 
         '123e4567-e89b-12d3-a456-426614174004', 'b48fc155-f397-4a3d-b8c3-322392e907e6',
         'b85df607-16cf-4da2-8f2e-51baa90a1748');
 
---
+-- Creating Trip: Bs As -> Mar del Plata -> Gral Acha -> Bariloche
 INSERT INTO tripservice_db.trip (arrival_latitude, arrival_longitude, available_seats, departure_latitude,
                                  departure_longitude, arrival_estimated_arrival_time, departure_estimated_arrival_time,
                                  arrival_city, arrival_country, arrival_full_address, arrival_house_number,
@@ -215,11 +215,13 @@ VALUES (-41.1166129, -71.4049374, 4, -34.62819801818182, -58.39189034949495,
 
 INSERT INTO tripservice_db.trip_jpaentity_meeting_points (latitude, longitude, estimated_arrival_time, city, country,
                                                           full_address, house_number, street, trip_jpaentity_id)
-VALUES (-38.04862065306122, -57.56475636734694, DATE_ADD(CURRENT_DATE, INTERVAL 20 DAY) + INTERVAL '21:00' HOUR_MINUTE, 'Mar del Plata', 'Argentina',
+VALUES (-38.04862065306122, -57.56475636734694, DATE_ADD(CURRENT_DATE, INTERVAL 20 DAY) + INTERVAL '21:00' HOUR_MINUTE,
+        'Mar del Plata', 'Argentina',
         'Eduardo Carasa 3998, Mar del Plata', '3998', 'Eduardo Carasa', '705b6389-b1be-4215-b7eb-a3093d96eb3d');
 INSERT INTO tripservice_db.trip_jpaentity_meeting_points (latitude, longitude, estimated_arrival_time, city, country,
                                                           full_address, house_number, street, trip_jpaentity_id)
-VALUES (-37.378776110204086, -64.60683112857143,  DATE_ADD(CURRENT_DATE, INTERVAL 20 DAY) + INTERVAL '04:02' HOUR_MINUTE, 'Municipio de General Acha', 'Argentina',
+VALUES (-37.378776110204086, -64.60683112857143, DATE_ADD(CURRENT_DATE, INTERVAL 20 DAY) + INTERVAL '04:02' HOUR_MINUTE,
+        'Municipio de General Acha', 'Argentina',
         'Padre Buodo 1035, Municipio de General Acha', '1035', 'Padre Buodo', '705b6389-b1be-4215-b7eb-a3093d96eb3d');
 
 INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_seats, departure_latitude,
@@ -236,7 +238,7 @@ VALUES (-38.04862065306122, -57.56475636734694, 0, -34.62819801818182, -58.39189
         'Argentina', 'Combate de los Pozos 1682, Buenos Aires', '1682', 'Combate de los Pozos',
         '123e4567-e89b-12d3-a456-426614174004', '498ea12e-5ad5-4b0c-a587-6acfeb0ddbd3',
         'b85df607-16cf-4da2-8f2e-51baa90a1748');
---         '2024-04-22 21:00:00.000000', '2024-04-22 15:00:00.000000',
+
 INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_seats, departure_latitude,
                                     departure_longitude, distance_in_meters, initial_amount_of_seats,
                                     arrival_estimated_arrival_time, departure_estimated_arrival_time, trip_id,
@@ -251,7 +253,7 @@ VALUES (-37.378776110204086, -64.60683112857143, 0, -38.04862065306122, -57.5647
         'Mar del Plata', 'Argentina', 'Eduardo Carasa 3998, Mar del Plata', '3998', 'Eduardo Carasa',
         '123e4567-e89b-12d3-a456-426614174004', 'b9d9bfa1-929d-4c28-811f-e3aaa0e371a8',
         'b85df607-16cf-4da2-8f2e-51baa90a1748');
---        '2024-04-23 04:02:00.000000','2024-04-22 21:00:00.000000',
+
 INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_seats, departure_latitude,
                                     departure_longitude, distance_in_meters, initial_amount_of_seats,
                                     arrival_estimated_arrival_time, departure_estimated_arrival_time, trip_id,
@@ -266,4 +268,16 @@ VALUES (-41.1166129, -71.4049374, 0, -37.378776110204086, -64.60683112857143, 0,
         'Municipio de General Acha', 'Argentina', 'Padre Buodo 1035, Municipio de General Acha', '1035', 'Padre Buodo',
         '123e4567-e89b-12d3-a456-426614174004', 'ecd15ada-6123-4b0d-bd8e-1ee7523b76c7',
         'b85df607-16cf-4da2-8f2e-51baa90a1748');
---        '2024-04-23 15:00:00.000000', '2024-04-23 04:02:00.000000',
+
+-- CREATING SOLICITUDES
+INSERT INTO tripservice_db.trip_plan_solicitudes (id)
+VALUES ('1e7db8a8-abd7-49d8-82b7-562e9e711f3e');
+
+INSERT INTO tripservice_db.trip_leg_solicitudes (id, trip_plan_solicitudes_jpaentity_id, authorizer_id, passenger_id,
+                                                 status)
+VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e2', '1e7db8a8-abd7-49d8-82b7-562e9e711f3e',
+        '123e4567-e89b-12d3-a456-426614174004', '123e4567-e89b-12d3-a456-426614174001', 'PENDING_APPROVAL');
+
+INSERT INTO tripservice_db.trip_leg_solicitudes_section (trip_leg_solicitude_jpaentity_id, sections_id)
+VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e2', '498ea12e-5ad5-4b0c-a587-6acfeb0ddbd3');
+
