@@ -159,15 +159,16 @@ INSERT INTO tripservice_db.trip (arrival_latitude, arrival_longitude, available_
                                  arrival_street, departure_city, departure_country, departure_full_address,
                                  departure_house_number, departure_street, driver_id, id, status, vehicle_id)
 VALUES (-31.42056375510204, -64.19165538979591, 4, -34.54025770408163, -58.47450726734694,
-        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '00:00:00' HOUR_SECOND,
-        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '17:00:00' HOUR_SECOND, 'Cordoba', 'Argentina',
+        DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) + INTERVAL '22:30' HOUR_MINUTE,
+        DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) + INTERVAL '15:00' HOUR_MINUTE,
+        'Cordoba', 'Argentina',
         'Montevideo 377, Cordoba', '377', 'Montevideo', 'Buenos Aires', 'Argentina',
         'Avenida Cabildo 4853, Buenos Aires', '4853', 'Avenida Cabildo', '123e4567-e89b-12d3-a456-426614174004',
         '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2', 'NOT_STARTED', 'b85df607-16cf-4da2-8f2e-51baa90a1748');
 
 INSERT INTO tripservice_db.trip_jpaentity_meeting_points (latitude, longitude, estimated_arrival_time, city, country,
                                                           full_address, house_number, street, trip_jpaentity_id)
-VALUES (-34.4569996, -58.9131929, ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '19:00:00' HOUR_SECOND, 'Pilar',
+VALUES (-34.4569996, -58.9131929, DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) + INTERVAL '16:30' HOUR_MINUTE, 'Pilar',
         'Argentina', 'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave', '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2');
 
 INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_seats, departure_latitude,
@@ -177,8 +178,9 @@ INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_
                                     arrival_street, departure_city, departure_country, departure_full_address,
                                     departure_house_number, departure_street, driver_id, id, vehicle_id)
 VALUES (-34.4569996, -58.9131929, 0, -34.54025770408163, -58.47450726734694, 0, 4,
-        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '19:00:00' HOUR_SECOND,
-        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '17:00:00' HOUR_SECOND, '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2',
+        DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) + INTERVAL '16:30' HOUR_MINUTE,
+        DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) + INTERVAL '15:00' HOUR_MINUTE,
+        '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2',
         'Pilar', 'Argentina', 'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave', 'Buenos Aires', 'Argentina',
         'Avenida Cabildo 4853, Buenos Aires', '4853', 'Avenida Cabildo', '123e4567-e89b-12d3-a456-426614174004',
         '475b78e8-7f52-45cc-bb88-d0d417d04394', 'b85df607-16cf-4da2-8f2e-51baa90a1748');
@@ -190,8 +192,8 @@ INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_
                                     arrival_street, departure_city, departure_country, departure_full_address,
                                     departure_house_number, departure_street, driver_id, id, vehicle_id)
 VALUES (-31.42056375510204, -64.19165538979591, 0, -34.4569996, -58.9131929, 0, 4,
-        ADDDATE(CURDATE(), INTERVAL 1 DAY) + INTERVAL '00:00:00' HOUR_SECOND,
-        CURDATE() + INTERVAL '19:00:00' HOUR_SECOND,
+        DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) + INTERVAL '22:30' HOUR_MINUTE,
+        DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) + INTERVAL '16:30' HOUR_MINUTE,
         '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b2', 'Cordoba', 'Argentina',
         'Montevideo 377, Cordoba', '377', 'Montevideo', 'Pilar', 'Argentina',
         'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave',
@@ -269,15 +271,65 @@ VALUES (-41.1166129, -71.4049374, 0, -37.378776110204086, -64.60683112857143, 0,
         '123e4567-e89b-12d3-a456-426614174004', 'ecd15ada-6123-4b0d-bd8e-1ee7523b76c7',
         'b85df607-16cf-4da2-8f2e-51baa90a1748');
 
+-- Creating trip: Pilar -> Gral Acha
+INSERT INTO tripservice_db.trip (arrival_latitude, arrival_longitude, available_seats, departure_latitude,
+                                 departure_longitude, arrival_estimated_arrival_time, departure_estimated_arrival_time,
+                                 arrival_city, arrival_country, arrival_full_address, arrival_house_number,
+                                 arrival_street, departure_city, departure_country, departure_full_address,
+                                 departure_house_number, departure_street, driver_id, id, status, vehicle_id)
+VALUES (-37.378776110204086, -64.60683112857143,
+        4, -31.42056375510204, -64.19165538979591,
+        DATE_ADD(CURRENT_DATE, INTERVAL 16 DAY) + INTERVAL '04:00' HOUR_MINUTE,
+        DATE_ADD(CURRENT_DATE, INTERVAL 15 DAY) + INTERVAL '23:00' HOUR_MINUTE,
+        'Municipio de General Acha', 'Argentina',
+        'Padre Buodo 1035, Municipio de General Acha', '1035', 'Padre Buodo', 'Pilar', 'Argentina',
+        'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave', '123e4567-e89b-12d3-a456-426614174004',
+        '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b3', 'NOT_STARTED', 'b85df607-16cf-4da2-8f2e-51baa90a1748');
+
+INSERT INTO tripservice_db.section (arrival_latitude, arrival_longitude, booked_seats, departure_latitude,
+                                    departure_longitude, distance_in_meters, initial_amount_of_seats,
+                                    arrival_estimated_arrival_time, departure_estimated_arrival_time, trip_id,
+                                    arrival_city, arrival_country, arrival_full_address, arrival_house_number,
+                                    arrival_street, departure_city, departure_country, departure_full_address,
+                                    departure_house_number, departure_street, driver_id, id, vehicle_id)
+VALUES (-37.378776110204086, -64.60683112857143, 0, -31.42056375510204, -64.19165538979591, 0, 4,
+        DATE_ADD(CURRENT_DATE, INTERVAL 16 DAY) + INTERVAL '04:00' HOUR_MINUTE,
+        DATE_ADD(CURRENT_DATE, INTERVAL 15 DAY) + INTERVAL '23:00' HOUR_MINUTE,
+        '1a4eee4f-3c6a-478d-b55a-cf4911e5b7b3', 'Municipio de General Acha', 'Argentina',
+        'Padre Buodo 1035, Municipio de General Acha', '1035', 'Padre Buodo',
+        'Pilar', 'Argentina', 'Pedro Lagrave 600, Pilar', '600', 'Pedro Lagrave',
+        '123e4567-e89b-12d3-a456-426614174004', 'ecd15ada-6123-4b0d-bd8e-1ee7523b76c8',
+        'b85df607-16cf-4da2-8f2e-51baa90a1748');
+
 -- CREATING SOLICITUDES
+-- Jorge solicitude
 INSERT INTO tripservice_db.trip_plan_solicitudes (id)
 VALUES ('1e7db8a8-abd7-49d8-82b7-562e9e711f3e');
-
 INSERT INTO tripservice_db.trip_leg_solicitudes (id, trip_plan_solicitudes_jpaentity_id, authorizer_id, passenger_id,
                                                  status)
 VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e2', '1e7db8a8-abd7-49d8-82b7-562e9e711f3e',
         '123e4567-e89b-12d3-a456-426614174004', '123e4567-e89b-12d3-a456-426614174001', 'PENDING_APPROVAL');
-
 INSERT INTO tripservice_db.trip_leg_solicitudes_section (trip_leg_solicitude_jpaentity_id, sections_id)
 VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e2', '498ea12e-5ad5-4b0c-a587-6acfeb0ddbd3');
+-- Martin solicitude
+INSERT INTO tripservice_db.trip_plan_solicitudes (id)
+VALUES ('1e7db8a8-abd7-49d8-82b7-562e9e711f3d');
 
+INSERT INTO tripservice_db.trip_leg_solicitudes (id, trip_plan_solicitudes_jpaentity_id, authorizer_id, passenger_id,
+                                                 status)
+VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e3', '1e7db8a8-abd7-49d8-82b7-562e9e711f3d',
+        '123e4567-e89b-12d3-a456-426614174004', '123e4567-e89b-12d3-a456-426614174002', 'PENDING_APPROVAL');
+
+INSERT INTO tripservice_db.trip_leg_solicitudes_section (trip_leg_solicitude_jpaentity_id, sections_id)
+VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e3', '498ea12e-5ad5-4b0c-a587-6acfeb0ddbd3');
+-- Felix solicitude
+INSERT INTO tripservice_db.trip_plan_solicitudes (id)
+VALUES ('1e7db8a8-abd7-49d8-82b7-562e9e711f3f');
+
+INSERT INTO tripservice_db.trip_leg_solicitudes (id, trip_plan_solicitudes_jpaentity_id, authorizer_id, passenger_id,
+                                                 status)
+VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e4', '1e7db8a8-abd7-49d8-82b7-562e9e711f3f',
+        '123e4567-e89b-12d3-a456-426614174004', '123e4567-e89b-12d3-a456-426614174003', 'PENDING_APPROVAL');
+
+INSERT INTO tripservice_db.trip_leg_solicitudes_section (trip_leg_solicitude_jpaentity_id, sections_id)
+VALUES ('6680dfbb-1e46-49bd-9e93-605cb49171e4', '498ea12e-5ad5-4b0c-a587-6acfeb0ddbd3');
