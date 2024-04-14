@@ -1,10 +1,9 @@
 datasources:
   default:
-    url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE # jdbc:tc:mysql:8.0:///databasename
-    driverClassName: org.h2.Driver # org.testcontainers.jdbc.ContainerDatabaseDriver
-    username: sa # test
-    password: "" # test
-    dialect: H2
+    url: jdbc:tc:mysql:8.0:///devDb
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: test
+    password: test
 
 jpa:
   default:

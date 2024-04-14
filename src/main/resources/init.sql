@@ -154,6 +154,9 @@ create table trip_leg_solicitudes_section
 create index section_trip_id_idx
     on section (trip_id);
 
+create spatial index section_departure_point_idx
+       on section (departure_point);
+
 -- SAVING INITIAL DATA
 -- Creating Trip:
 --      Rosario -> Bs As

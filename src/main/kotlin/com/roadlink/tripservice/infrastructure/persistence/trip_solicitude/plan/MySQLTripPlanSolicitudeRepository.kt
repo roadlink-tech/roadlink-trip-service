@@ -8,6 +8,8 @@ import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
+import org.locationtech.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.PrecisionModel
 import java.util.*
 
 

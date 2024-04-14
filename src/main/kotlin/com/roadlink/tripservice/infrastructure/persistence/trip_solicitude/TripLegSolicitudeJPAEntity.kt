@@ -6,6 +6,7 @@ import jakarta.persistence.*
 import jakarta.persistence.CascadeType.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import org.locationtech.jts.geom.GeometryFactory
 import java.util.*
 
 @Entity

@@ -46,6 +46,7 @@ dependencies {
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     runtimeOnly("mysql:mysql-connector-java")
     runtimeOnly("org.flywaydb:flyway-mysql")
+    implementation("org.hibernate.orm:hibernate-spatial:6.4.4.Final")
 
     // JSON
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")

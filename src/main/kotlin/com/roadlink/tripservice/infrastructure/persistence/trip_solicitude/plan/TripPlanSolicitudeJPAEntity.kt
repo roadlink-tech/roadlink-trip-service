@@ -5,6 +5,7 @@ import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.TripL
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import org.locationtech.jts.geom.GeometryFactory
 import java.util.*
 
 @Entity
