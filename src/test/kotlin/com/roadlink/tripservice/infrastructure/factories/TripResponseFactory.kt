@@ -15,9 +15,9 @@ object TripResponseFactory {
             availableSeats = 4,
         )
 
-    fun avCabildo4853_virreyDelPino1800_avCabildo20() =
+    fun avCabildo4853_virreyDelPino1800_avCabildo20(id: String = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id) =
         TripResponse(
-            id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
+            id = id,
             driver = "John Smith",
             vehicle = "Ford mustang",
             departure = TripPointResponseFactory.avCabildo_4853(),

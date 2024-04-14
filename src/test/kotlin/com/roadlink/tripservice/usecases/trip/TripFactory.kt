@@ -7,6 +7,8 @@ object TripFactory {
 
     const val avCabildo_id = "81dcb088-4b7e-4956-a50a-52eee0dd5a0b"
     const val avCabildo4853_virreyDelPino1800_avCabildo20_id = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20"
+    const val avCabildo4853_virreyDelPino1800_avCabildo20_uuid = "81dcb088-4b7e-4956-a50a-52eee0dd5a0c"
+
 
     fun avCabildo4853_to_avCabildo20(driverId: String = "John Smith", availableSeats: Int = 4) =
         Trip(

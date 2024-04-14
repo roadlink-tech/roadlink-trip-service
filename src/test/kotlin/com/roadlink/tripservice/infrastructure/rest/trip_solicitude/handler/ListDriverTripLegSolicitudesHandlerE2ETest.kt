@@ -75,15 +75,15 @@ class ListDriverTripLegSolicitudesHandlerE2ETest : End2EndTest() {
         val section = SectionFactory.avCabildo(tripId = tripId)
         sectionRepository.save(section)
 
-        val tripPlanSolicitudePendingApproval = TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval(
+        val tripPlanSolicitudePendingApproval = TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval(
             sections = listOf(section),
             passengerId = "JOHN",
         )
-        val tripPlanSolicitudeRejected = TripPlanSolicitudeFactory.withASingleTripApplicationRejected(
+        val tripPlanSolicitudeRejected = TripPlanSolicitudeFactory.withASingleTripLegSolicitudeRejected(
             sections = listOf(section),
             passengerId = "JENNA",
         )
-        val tripPlanSolicitudeConfirmed = TripPlanSolicitudeFactory.withASingleTripApplicationAccepted(
+        val tripPlanSolicitudeConfirmed = TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted(
             sections = listOf(section),
             passengerId = "BJNOVAK",
         )

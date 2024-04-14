@@ -31,11 +31,11 @@ internal class StartTripTest {
         // given
         val tripId = UUID.randomUUID()
         val rejectedTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationRejected()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudeRejected()
         val acceptedTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationAccepted()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted()
         val otherAcceptedTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationAccepted()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted()
 
         every { tripPlanSolicitudeRepository.find(match { it.tripId == tripId }) } returns listOf(
             rejectedTripPlanSolicitude,
@@ -57,11 +57,11 @@ internal class StartTripTest {
         // given
         val tripId = UUID.randomUUID()
         val rejectedTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationRejected()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudeRejected()
         val acceptedTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationAccepted()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted()
         val pendingTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
 
         every { tripPlanSolicitudeRepository.find(match { it.tripId == tripId }) } returns listOf(
             rejectedTripPlanSolicitude,
@@ -88,11 +88,11 @@ internal class StartTripTest {
         // given
         val tripId = UUID.randomUUID()
         val rejectedTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationRejected()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudeRejected()
         val twoPendingTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
         val onePendingTripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplicationPendingApproval()
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
 
         every { tripPlanSolicitudeRepository.find(match { it.tripId == tripId }) } returns listOf(
             rejectedTripPlanSolicitude,

@@ -15,7 +15,6 @@ import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.util.*
@@ -127,11 +126,11 @@ class TripSearchPlanResultSolicitudeHandlerE2ETest : End2EndTest() {
         tripLegSolicitudeStatus: TripLegSolicitude.Status = TripLegSolicitude.Status.PENDING_APPROVAL
     ) {
         tripPlanSolicitudeRepository.insert(
-            TripPlanSolicitudeFactory.withASingleTripApplication(
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
                 id = tripPlanSolicitudeId,
-                tripApplicationId = tripApplicationId,
+                tripLegSolicitudeId = tripApplicationId,
                 passengerId = passengerId.toString(),
-                tripApplicationStatus = tripLegSolicitudeStatus,
+                tripLegSolicitudeStatus = tripLegSolicitudeStatus,
             )
         )
     }

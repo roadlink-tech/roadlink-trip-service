@@ -24,8 +24,8 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     fun `given a trip plan solicitude stored, when find it by passenger id then it must be retrieved`() {
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
-        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
-            tripApplicationId = tripApplicationId,
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
+            tripLegSolicitudeId = tripApplicationId,
             passengerId = passengerId.toString()
         )
         tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
@@ -45,8 +45,8 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
         val tripId = UUID.randomUUID()
-        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
-            tripApplicationId = tripApplicationId,
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
+            tripLegSolicitudeId = tripApplicationId,
             passengerId = passengerId.toString(),
             tripId = tripId
         )
@@ -66,10 +66,10 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     fun `given a trip plan solicitude stored, when find it by passenger id and trip application status then it must be retrieved`() {
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
-        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
-            tripApplicationId = tripApplicationId,
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
+            tripLegSolicitudeId = tripApplicationId,
             passengerId = passengerId.toString(),
-            tripApplicationStatus = REJECTED
+            tripLegSolicitudeStatus = REJECTED
         )
         tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
             sectionRepository.save(it)
@@ -97,7 +97,7 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     fun `given no trip plan solicitude when save one then should be able to find it`() {
         val tripApplicationId = UUID.randomUUID()
         val tripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationId = tripApplicationId)
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeId = tripApplicationId)
         tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
             sectionRepository.save(it)
         }
@@ -116,8 +116,8 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
         val passengerId = UUID.randomUUID()
         val tripApplicationId = UUID.randomUUID()
         val tripPlanSolicitude = givenExists(
-            TripPlanSolicitudeFactory.withASingleTripApplication(
-                tripApplicationId = tripApplicationId,
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
+                tripLegSolicitudeId = tripApplicationId,
                 passengerId = passengerId.toString(),
             )
         )
@@ -138,7 +138,7 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     @Test
     fun `given no trip plan solicitude exists with the given id when find by trip application id then should return null`() {
         val otherTripApplicationId = UUID.randomUUID()
-        givenExists(TripPlanSolicitudeFactory.withASingleTripApplication())
+        givenExists(TripPlanSolicitudeFactory.withASingleTripLegSolicitude())
 
         val result =
             repository.find(TripPlanSolicitudeRepository.CommandQuery(tripLegSolicitudeId = otherTripApplicationId))
@@ -149,7 +149,7 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
 
     @Test
     fun `given no trip plan solicitude when save one then should be able to find it by id`() {
-        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication()
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude()
         tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
             sectionRepository.save(it)
         }
@@ -172,7 +172,7 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     fun `given trip plan solicitude exists and it is modified when update it then should retrieve it by id`() {
         val passengerId = UUID.randomUUID()
         val tripPlanSolicitude = givenExists(
-            TripPlanSolicitudeFactory.withASingleTripApplication(
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
                 passengerId = passengerId.toString(),
             )
         )
@@ -198,7 +198,7 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     @Test
     fun `given no trip plan solicitude exists with the given id when find by id then should return an empty list`() {
         val otherTripPlanSolicitudeId = UUID.randomUUID()
-        givenExists(TripPlanSolicitudeFactory.withASingleTripApplication())
+        givenExists(TripPlanSolicitudeFactory.withASingleTripLegSolicitude())
 
         val result = repository.find(
             TripPlanSolicitudeRepository.CommandQuery(ids = listOf(otherTripPlanSolicitudeId))

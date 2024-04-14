@@ -10,7 +10,8 @@ class CreateTripPlan(private var repository: TripPlanRepository) :
     UseCase<CreateTripPlan.Input, CreateTripPlan.Output> {
     override fun invoke(input: Input): Output {
         val tripPlan = TripPlan.from(input.solicitude)
-        repository.insert(tripPlan).also { return Output(tripPlan = tripPlan) }
+        repository.update(tripPlan)
+            .also { return Output(tripPlan = tripPlan) } // update will change an existing entry when it exists or create a new one if it does not exist
     }
 
     class Input(

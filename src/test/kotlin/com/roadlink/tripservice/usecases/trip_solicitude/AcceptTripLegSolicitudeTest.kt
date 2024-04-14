@@ -8,7 +8,6 @@ import com.roadlink.tripservice.usecases.UseCase
 import com.roadlink.tripservice.usecases.trip_plan.CreateTripPlan
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.mockk.*
-import io.mockk.InternalPlatformDsl.toStr
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.BeforeEach
@@ -52,7 +51,7 @@ class AcceptTripLegSolicitudeTest {
 
     @Test
     fun `when try to accept a trip plan solicitude, but it has been already rejected, then an error must be retrieved`() {
-        every { tripPlanSolicitudeRepository.find(any()) } returns listOf(TripPlanSolicitudeFactory.withASingleTripApplicationRejected())
+        every { tripPlanSolicitudeRepository.find(any()) } returns listOf(TripPlanSolicitudeFactory.withASingleTripLegSolicitudeRejected())
 
         // WHEN
         val output = acceptTripLegSolicitude(AcceptTripLegSolicitudeInput(UUID.randomUUID(), UUID.randomUUID()))
@@ -69,8 +68,8 @@ class AcceptTripLegSolicitudeTest {
         val passengerId = UUID.randomUUID()
         val vehicleId = UUID.randomUUID()
         every { tripPlanSolicitudeRepository.update(any()) } just runs
-        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication(
-            tripApplicationId = tripLegSolicitudeId,
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
+            tripLegSolicitudeId = tripLegSolicitudeId,
             passengerId = passengerId.toString(),
             vehicleId = vehicleId.toString()
         )

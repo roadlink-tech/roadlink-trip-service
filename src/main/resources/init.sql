@@ -1,14 +1,14 @@
 create table section
 (
-    arrival_latitude                 double null,
-    arrival_longitude                double null,
-    booked_seats                     int null,
-    departure_latitude               double null,
-    departure_longitude              double null,
-    distance_in_meters               double null,
-    initial_amount_of_seats          int null,
-    arrival_estimated_arrival_time   datetime(6) null,
-    departure_estimated_arrival_time datetime(6) null,
+    arrival_latitude                 double       null,
+    arrival_longitude                double       null,
+    booked_seats                     int          null,
+    departure_latitude               double       null,
+    departure_longitude              double       null,
+    distance_in_meters               double       null,
+    initial_amount_of_seats          int          null,
+    arrival_estimated_arrival_time   datetime(6)  null,
+    departure_estimated_arrival_time datetime(6)  null,
     trip_id                          varchar(36)  not null,
     arrival_city                     varchar(255) null,
     arrival_country                  varchar(255) null,
@@ -31,13 +31,13 @@ create index section_trip_id_idx
 
 create table trip
 (
-    arrival_latitude                 double null,
-    arrival_longitude                double null,
-    available_seats                  int null,
-    departure_latitude               double null,
-    departure_longitude              double null,
-    arrival_estimated_arrival_time   datetime(6) null,
-    departure_estimated_arrival_time datetime(6) null,
+    arrival_latitude                 double       null,
+    arrival_longitude                double       null,
+    available_seats                  int          null,
+    departure_latitude               double       null,
+    departure_longitude              double       null,
+    arrival_estimated_arrival_time   datetime(6)  null,
+    departure_estimated_arrival_time datetime(6)  null,
     arrival_city                     varchar(255) null,
     arrival_country                  varchar(255) null,
     arrival_full_address             varchar(255) null,
@@ -59,7 +59,7 @@ create table trip_jpaentity_meeting_points
 (
     latitude               double       not null,
     longitude              double       not null,
-    estimated_arrival_time datetime(6) null,
+    estimated_arrival_time datetime(6)  null,
     city                   varchar(255) null,
     country                varchar(255) null,
     full_address           varchar(255) null,
@@ -72,13 +72,13 @@ create table trip_jpaentity_meeting_points
 
 create table trip_leg_sections
 (
-    arrival_latitude                 double null,
-    arrival_longitude                double null,
-    departure_latitude               double null,
-    departure_longitude              double null,
-    distance_in_meters               double null,
-    arrival_estimated_arrival_time   datetime(6) null,
-    departure_estimated_arrival_time datetime(6) null,
+    arrival_latitude                 double       null,
+    arrival_longitude                double       null,
+    departure_latitude               double       null,
+    departure_longitude              double       null,
+    distance_in_meters               double       null,
+    arrival_estimated_arrival_time   datetime(6)  null,
+    departure_estimated_arrival_time datetime(6)  null,
     arrival_city                     varchar(255) null,
     arrival_country                  varchar(255) null,
     arrival_full_address             varchar(255) null,
@@ -102,12 +102,12 @@ create table trip_plan
 
 create table trip_leg
 (
-    driver_id              char(36) null,
-    id                     char(36) not null
+    driver_id              char(36)     null,
+    id                     char(36)     not null
         primary key,
-    trip_id                char(36) null,
-    trip_plan_jpaentity_id char(36) null,
-    vehicle_id             char(36) null,
+    trip_id                char(36)     null,
+    trip_plan_jpaentity_id char(36)     null,
+    vehicle_id             char(36)     null,
     status                 varchar(255) null,
     constraint FKdwev0hn4by96xrxgc48x86s09
         foreign key (trip_plan_jpaentity_id) references trip_plan (id)
@@ -131,9 +131,9 @@ create table trip_plan_solicitudes
 
 create table trip_leg_solicitudes
 (
-    id                                 char(36) not null
+    id                                 char(36)     not null
         primary key,
-    trip_plan_solicitudes_jpaentity_id char(36) null,
+    trip_plan_solicitudes_jpaentity_id char(36)     null,
     authorizer_id                      varchar(255) null,
     passenger_id                       varchar(255) null,
     status                             varchar(255) null,
