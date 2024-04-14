@@ -3,6 +3,7 @@ package com.roadlink.tripservice.infrastructure.persistence.section
 import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.infrastructure.persistence.common.Jts
 import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
@@ -11,6 +12,7 @@ import org.hibernate.Session
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
+import org.locationtech.jts.geom.Polygon
 import org.locationtech.jts.geom.PrecisionModel
 import org.locationtech.jts.util.GeometricShapeFactory
 import java.time.Instant
@@ -22,14 +24,15 @@ class MySQLSectionRepository(
     private val transactionManager: TransactionOperations<Session>,
 ) : SectionRepository {
 
-    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
+    private val geometryFactory = GeometryFactory(PrecisionModel(), Jts.SRID)
     private val geometricShapeFactory = GeometricShapeFactory(geometryFactory)
 
     private val maxNearRadiusInMeters = 1000.0
+    private val nearSearchCircleNumPoints = 32
 
     override fun save(section: Section) {
         transactionManager.executeWrite {
-            entityManager.persist(SectionJPAEntity.from(section, geometryFactory))
+            entityManager.persist(SectionJPAEntity.from(section))
         }
     }
 
@@ -37,7 +40,7 @@ class MySQLSectionRepository(
         // TODO: mejorar esto para que el insert sea en batch
         transactionManager.executeWrite {
             for (section in sections) {
-                entityManager.persist(SectionJPAEntity.from(section, geometryFactory))
+                entityManager.persist(SectionJPAEntity.from(section))
             }
         }
     }
@@ -89,18 +92,13 @@ class MySQLSectionRepository(
         }
 
         if (commandQuery.departureLatitude != null && commandQuery.departureLongitude != null) {
-            val coordinate = Coordinate(commandQuery.departureLongitude, commandQuery.departureLatitude)
-
-            geometricShapeFactory.setCentre(coordinate)
-            geometricShapeFactory.setSize(2 * toDegrees(maxNearRadiusInMeters))
-            geometricShapeFactory.setNumPoints(32)
-            val polygon = geometricShapeFactory.createCircle()
+            val nearSearchCircle = createNearSearchCircle(commandQuery.departureLongitude, commandQuery.departureLatitude)
 
             predicates.add(
                 cb.isTrue(
                     cb.function("ST_Contains",
                         Boolean::class.java,
-                        cb.literal(polygon),
+                        cb.literal(nearSearchCircle),
                         root.get<Point>("departurePoint"),
                     )
                 )
@@ -121,6 +119,15 @@ class MySQLSectionRepository(
             .where(cb.and(*predicates.toTypedArray()))
             .orderBy(cb.desc(root.get<TripPointJPAEntity>("departure").get<Instant>("estimatedArrivalTime")))
         return entityManager.createQuery(criteriaQuery).resultList
+    }
+
+    private fun createNearSearchCircle(longitude: Double, latitude: Double): Polygon {
+        val coordinate = Coordinate(longitude, latitude)
+
+        geometricShapeFactory.setCentre(coordinate)
+        geometricShapeFactory.setSize(2 * toDegrees(maxNearRadiusInMeters))
+        geometricShapeFactory.setNumPoints(nearSearchCircleNumPoints)
+        return geometricShapeFactory.createCircle()
     }
 
     private fun toDegrees(meters: Double): Double =

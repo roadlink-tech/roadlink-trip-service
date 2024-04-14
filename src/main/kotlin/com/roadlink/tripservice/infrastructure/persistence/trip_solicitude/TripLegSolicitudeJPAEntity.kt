@@ -27,10 +27,10 @@ data class TripLegSolicitudeJPAEntity(
     val authorizerId: String
 ) {
     companion object {
-        fun from(application: TripPlanSolicitude.TripLegSolicitude, geometryFactory: GeometryFactory): TripLegSolicitudeJPAEntity {
+        fun from(application: TripPlanSolicitude.TripLegSolicitude): TripLegSolicitudeJPAEntity {
             return TripLegSolicitudeJPAEntity(
                 id = application.id,
-                sections = application.sections.map { SectionJPAEntity.from(it, geometryFactory) },
+                sections = application.sections.map { SectionJPAEntity.from(it) },
                 passengerId = application.passengerId,
                 status = application.status.name,
                 authorizerId = application.authorizerId,

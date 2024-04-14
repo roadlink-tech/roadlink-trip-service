@@ -1,12 +1,12 @@
 package com.roadlink.tripservice.infrastructure.persistence.section
 
 import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.infrastructure.persistence.common.Jts
 import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
 import java.util.*
 
@@ -68,7 +68,7 @@ data class SectionJPAEntity(
     var bookedSeats: Int
 ) {
     companion object {
-        fun from(section: Section, geometryFactory: GeometryFactory): SectionJPAEntity {
+        fun from(section: Section): SectionJPAEntity {
             val departureCoordinate = Coordinate(
                 section.departure.address.location.latitude,
                 section.departure.address.location.longitude
@@ -78,7 +78,7 @@ data class SectionJPAEntity(
                 id = section.id,
                 tripId = section.tripId,
                 departure = TripPointJPAEntity.from(section.departure),
-                departurePoint = geometryFactory.createPoint(departureCoordinate),
+                departurePoint = Jts.geometryFactory.createPoint(departureCoordinate),
                 arrival = TripPointJPAEntity.from(section.arrival),
                 distanceInMeters = section.distanceInMeters,
                 driverId = section.driverId,

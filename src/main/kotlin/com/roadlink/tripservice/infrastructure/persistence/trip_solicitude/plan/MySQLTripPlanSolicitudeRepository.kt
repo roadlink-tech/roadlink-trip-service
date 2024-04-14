@@ -18,17 +18,15 @@ class MySQLTripPlanSolicitudeRepository(
     private val transactionManager: TransactionOperations<Session>,
 ) : TripPlanSolicitudeRepository {
 
-    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
-
     override fun insert(tripPlanSolicitude: TripPlanSolicitude) {
         transactionManager.executeWrite {
-            entityManager.persist(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude, geometryFactory))
+            entityManager.persist(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude))
         }
     }
 
     override fun update(tripPlanSolicitude: TripPlanSolicitude) {
         transactionManager.executeWrite {
-            entityManager.merge(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude, geometryFactory))
+            entityManager.merge(TripPlanSolicitudeJPAEntity.from(tripPlanSolicitude))
         }
     }
 

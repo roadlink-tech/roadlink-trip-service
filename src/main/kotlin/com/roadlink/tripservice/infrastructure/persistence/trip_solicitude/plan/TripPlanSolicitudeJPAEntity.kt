@@ -19,10 +19,10 @@ data class TripPlanSolicitudeJPAEntity(
     val tripLegSolicitudes: List<TripLegSolicitudeJPAEntity>,
 ) {
     companion object {
-        fun from(application: TripPlanSolicitude, geometryFactory: GeometryFactory): TripPlanSolicitudeJPAEntity {
+        fun from(application: TripPlanSolicitude): TripPlanSolicitudeJPAEntity {
             return TripPlanSolicitudeJPAEntity(
                 id = application.id,
-                tripLegSolicitudes = application.tripLegSolicitudes.map { TripLegSolicitudeJPAEntity.from(it, geometryFactory) }
+                tripLegSolicitudes = application.tripLegSolicitudes.map { TripLegSolicitudeJPAEntity.from(it) }
             )
         }
     }

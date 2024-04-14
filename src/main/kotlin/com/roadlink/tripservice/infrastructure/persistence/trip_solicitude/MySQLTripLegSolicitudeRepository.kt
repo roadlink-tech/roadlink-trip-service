@@ -16,12 +16,10 @@ class MySQLTripLegSolicitudeRepository(
     private val transactionManager: TransactionOperations<Session>,
 ) : TripLegSolicitudeRepository {
 
-    private val geometryFactory = GeometryFactory(PrecisionModel(), 4326)
-
     override fun saveAll(tripLegSolicitudes: List<TripPlanSolicitude.TripLegSolicitude>) {
         // TODO batch write!
         for (tripApplication in tripLegSolicitudes) {
-            entityManager.persist(TripLegSolicitudeJPAEntity.from(tripApplication, geometryFactory))
+            entityManager.persist(TripLegSolicitudeJPAEntity.from(tripApplication))
         }
     }
 
