@@ -1,3 +1,5 @@
+-- TABLE CREATION
+
 create table section
 (
     arrival_latitude                 double       null,
@@ -25,9 +27,6 @@ create table section
         primary key,
     vehicle_id                       varchar(255) null
 );
-
-create index section_trip_id_idx
-    on section (trip_id);
 
 create table trip
 (
@@ -151,7 +150,11 @@ create table trip_leg_solicitudes_section
         foreign key (sections_id) references section (id)
 );
 
+-- INDEX CREATION: add here all the table indexes
+create index section_trip_id_idx
+    on section (trip_id);
 
+-- SAVING INITIAL DATA
 -- Creating Trip: Bs As -> Pilar -> Cordoba
 INSERT INTO tripservice_db.trip (arrival_latitude, arrival_longitude, available_seats, departure_latitude,
                                  departure_longitude, arrival_estimated_arrival_time, departure_estimated_arrival_time,
