@@ -31,10 +31,10 @@ class ListTripPlanSolicitudesTest {
         val input = ListTripPlanSolicitudes.Input(passengerId = passengerId, status = status)
 
         every { tripPlanSolicitudeRepository.find(TripPlanSolicitudeRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED),
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.REJECTED),
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL),
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED)
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED),
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeStatus = TripPlanSolicitude.TripLegSolicitude.Status.REJECTED),
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeStatus = TripPlanSolicitude.TripLegSolicitude.Status.PENDING_APPROVAL),
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED)
         )
 
         // WHEN
@@ -56,7 +56,7 @@ class ListTripPlanSolicitudesTest {
         val input = ListTripPlanSolicitudes.Input(passengerId = passengerId, status = status)
 
         every { tripPlanSolicitudeRepository.find(TripPlanSolicitudeRepository.CommandQuery(passengerId = passengerId)) } returns listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED),
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeStatus = TripPlanSolicitude.TripLegSolicitude.Status.ACCEPTED),
         )
 
         // WHEN

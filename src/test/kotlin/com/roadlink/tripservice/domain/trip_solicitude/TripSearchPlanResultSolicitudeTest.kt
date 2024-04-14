@@ -15,7 +15,7 @@ class TripSearchPlanResultSolicitudeTest {
         val id = UUID.randomUUID()
         val callerId = UUID.randomUUID()
         val tripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeId = id, initialAmountOfSeats = 4)
 
         // WHEN
         tripPlanSolicitude.acceptTripLegSolicitude(id, callerId)
@@ -31,8 +31,8 @@ class TripSearchPlanResultSolicitudeTest {
         val id = UUID.randomUUID()
         val driverId = UUID.randomUUID()
         val tripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplication(
-                tripApplicationId = id,
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
+                tripLegSolicitudeId = id,
                 initialAmountOfSeats = 4,
                 driverId = driverId.toString()
             )
@@ -53,7 +53,7 @@ class TripSearchPlanResultSolicitudeTest {
         val id = UUID.randomUUID()
         val callerId = UUID.randomUUID()
         val tripPlanSolicitude =
-            TripPlanSolicitudeFactory.withASingleTripApplication(tripApplicationId = id, initialAmountOfSeats = 4)
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitude(tripLegSolicitudeId = id, initialAmountOfSeats = 4)
 
         // WHEN
         repeat(2) {
@@ -83,7 +83,7 @@ class TripSearchPlanResultSolicitudeTest {
     fun `when try to confirm an application that not exist, then an exception must be retrieved`() {
         // GIVEN
         val id = UUID.randomUUID()
-        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication()
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude()
 
         // WHEN
         assertThrows(TripLegSolicitudeError.NotFound::class.java) {
@@ -94,7 +94,7 @@ class TripSearchPlanResultSolicitudeTest {
     @Test
     fun `when reject an application which does not have any booking, then it must work`() {
         // GIVEN
-        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripApplication()
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude()
 
         // WHEN
         tripPlanSolicitude.reject()

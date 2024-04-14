@@ -44,15 +44,16 @@ object TripLegSolicitudeFactory {
         id: UUID = UUID.randomUUID(),
         authorizerId: String = "authorizerId",
         passengerId: String = "passengerId",
-        status: TripLegSolicitude.Status = PENDING_APPROVAL
+        status: TripLegSolicitude.Status = PENDING_APPROVAL,
+        sections: List<Section> = listOf(
+            SectionFactory.withDriver(
+                driverId = UUID.randomUUID(),
+            )
+        )
     ): TripLegSolicitude {
         return TripLegSolicitude(
             id = id,
-            sections = listOf(
-                SectionFactory.withDriver(
-                    driverId = UUID.randomUUID(),
-                )
-            ),
+            sections = sections,
             status = status,
             passengerId = passengerId,
             authorizerId = authorizerId

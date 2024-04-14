@@ -12,7 +12,17 @@ import java.util.*
 
 object TripPlanSolicitudeFactory {
 
-    val johnSmithDriverId = UUID.fromString("806d4a73-eb1f-466f-a646-b71962df512c")
+    val johnSmithDriverId: UUID = UUID.fromString("806d4a73-eb1f-466f-a646-b71962df512c")
+
+    fun common(
+        id: UUID = UUID.randomUUID(),
+        tripLegSolicitudes: List<TripLegSolicitude>
+    ): TripPlanSolicitude {
+        return TripPlanSolicitude(
+            id = id,
+            tripLegSolicitudes = tripLegSolicitudes.toMutableList()
+        )
+    }
 
     fun completed(
         tripApplicationId: UUID = UUID.randomUUID(),
@@ -36,41 +46,13 @@ object TripPlanSolicitudeFactory {
         )
     }
 
-    fun withASingleBooking(
-        tripApplicationId: UUID = UUID.randomUUID(),
-        initialAmountOfSeats: Int = 4,
-        tripId: UUID = UUID.randomUUID(),
-        status: Status = PENDING_APPROVAL,
-        driverId: String = johnSmithDriverId.toString()
-    ): TripPlanSolicitude {
-        return TripPlanSolicitude(
-            id = UUID.randomUUID(),
-            tripLegSolicitudes = mutableListOf(
-                TripLegSolicitude(
-                    id = tripApplicationId,
-                    sections = listOf(
-                        SectionFactory.avCabildo(
-                            initialAmountOfSeats = initialAmountOfSeats,
-                            bookedSeats = 1,
-                            tripId = tripId,
-                            driverId = driverId
-                        )
-                    ),
-                    status = status,
-                    passengerId = "passengerId",
-                    authorizerId = "authorizerId"
-                ),
-            )
-        )
-    }
-
-    fun withASingleTripApplication(
+    fun withASingleTripLegSolicitude(
         id: UUID = UUID.randomUUID(),
-        tripApplicationId: UUID = UUID.randomUUID(),
+        tripLegSolicitudeId: UUID = UUID.randomUUID(),
         initialAmountOfSeats: Int = 4,
         driverId: String = johnSmithDriverId.toString(),
         passengerId: String = "passengerId",
-        tripApplicationStatus: Status = PENDING_APPROVAL,
+        tripLegSolicitudeStatus: Status = PENDING_APPROVAL,
         vehicleId: String = "Ford mustang",
         tripId: UUID = UUID.randomUUID()
     ): TripPlanSolicitude {
@@ -78,7 +60,7 @@ object TripPlanSolicitudeFactory {
             id = id,
             tripLegSolicitudes = mutableListOf(
                 TripLegSolicitude(
-                    id = tripApplicationId,
+                    id = tripLegSolicitudeId,
                     sections = listOf(
                         SectionFactory.avCabildo(
                             tripId = tripId,
@@ -87,7 +69,7 @@ object TripPlanSolicitudeFactory {
                             vehicleId = vehicleId
                         )
                     ),
-                    status = tripApplicationStatus,
+                    status = tripLegSolicitudeStatus,
                     passengerId = passengerId,
                     authorizerId = "authorizerId"
                 ),
@@ -95,7 +77,7 @@ object TripPlanSolicitudeFactory {
         )
     }
 
-    fun withASingleTripApplicationRejected(
+    fun withASingleTripLegSolicitudeRejected(
         sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",
     ): TripPlanSolicitude {
@@ -113,7 +95,7 @@ object TripPlanSolicitudeFactory {
         )
     }
 
-    fun withASingleTripApplicationAccepted(
+    fun withASingleTripLegSolicitudeAccepted(
         sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",
     ): TripPlanSolicitude {
@@ -146,7 +128,7 @@ object TripPlanSolicitudeFactory {
         )
     }
 
-    fun withASingleTripApplicationPendingApproval(
+    fun withASingleTripLegSolicitudePendingApproval(
         sections: List<Section> = emptyList(),
         passengerId: String = "passengerId",
     ): TripPlanSolicitude {

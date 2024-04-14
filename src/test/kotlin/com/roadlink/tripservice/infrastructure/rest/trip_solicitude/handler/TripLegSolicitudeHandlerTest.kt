@@ -35,10 +35,10 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
     lateinit var client: HttpClient
 
     @Inject
-    lateinit var rejectTripApplication: UseCase<UUID, RejectTripLegSolicitudeOutput>
+    lateinit var rejectTripLegSolicitude: UseCase<UUID, RejectTripLegSolicitudeOutput>
 
     @Inject
-    lateinit var acceptTripApplication: UseCase<UUID, AcceptTripLegSolicitudeOutput>
+    lateinit var acceptTripLegSolicitude: UseCase<UUID, AcceptTripLegSolicitudeOutput>
 
     @Primary
     @Singleton
@@ -56,21 +56,21 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
 
     @BeforeEach
     fun clear() {
-        clearMocks(rejectTripApplication)
-        clearMocks(acceptTripApplication)
+        clearMocks(rejectTripLegSolicitude)
+        clearMocks(acceptTripLegSolicitude)
     }
 
     @Test
-    fun `when try to reject which not exist, then an error must be retrieved`() {
-        every { rejectTripApplication.invoke(any()) } returns RejectTripLegSolicitudeOutput.TripPlanLegSolicitudeNotExists
+    fun `when try to reject a trip leg solicitude which not exist, then an error must be retrieved`() {
+        every { rejectTripLegSolicitude.invoke(any()) } returns RejectTripLegSolicitudeOutput.TripPlanLegSolicitudeNotExists
 
         // GIVEN
         val request =
             HttpRequest.PUT(
                 UriBuilder.of(
-                    "/trip-service/trip_solicitude/${
+                    "/trip-service/trip_leg_solicitudes/${
                         UUID.randomUUID()
-                    }/non-acceptance"
+                    }/reject"
                 ).build(), """"""
             )
 
@@ -85,8 +85,8 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
     }
 
     @Test
-    fun `when an application was rejected successfully then a 200 response must be retrieved`() {
-        every { rejectTripApplication.invoke(any()) } returns RejectTripLegSolicitudeOutput.TripLegSolicitudeRejected
+    fun `when an trip leg solicitude was rejected successfully then a 200 response must be retrieved`() {
+        every { rejectTripLegSolicitude.invoke(any()) } returns RejectTripLegSolicitudeOutput.TripLegSolicitudeRejected
 
         // GIVEN
         val request =
@@ -106,17 +106,17 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
     }
 
     @Test
-    fun `when try to accept an application but it does not exist, then a not found must be retrieved`() {
+    fun `when try to accept a trip leg solicitude but it does not exist, then a not found must be retrieved`() {
         val callerId = UUID.randomUUID()
-        every { acceptTripApplication.invoke(any()) } returns AcceptTripLegSolicitudeOutput.TripPlanSolicitudeNotExists
+        every { acceptTripLegSolicitude.invoke(any()) } returns AcceptTripLegSolicitudeOutput.TripPlanSolicitudeNotExists
 
         // GIVEN
         val request =
             HttpRequest.PUT(
                 UriBuilder.of(
-                    "/trip-service/trip_solicitude/${
+                    "/trip-service/trip_leg_solicitudes/${
                         UUID.randomUUID()
-                    }/acceptance"
+                    }/accept"
                 ).build(), """"""
             ).header("X-Caller-Id", callerId.toString())
 
@@ -135,7 +135,7 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
     // TODO fix me!
     fun `when try to accept an solicitude but the plan has been rejected by someone else, then an error must be retrieved`() {
         val callerId = UUID.randomUUID()
-        every { acceptTripApplication.invoke(any()) } returns AcceptTripLegSolicitudeOutput.TripLegSolicitudePlanHasBeenRejected
+        every { acceptTripLegSolicitude.invoke(any()) } returns AcceptTripLegSolicitudeOutput.TripLegSolicitudePlanHasBeenRejected
 
         // GIVEN
         val request =

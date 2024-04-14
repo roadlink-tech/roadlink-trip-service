@@ -78,7 +78,7 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
         sectionRepository.save(section)
 
         listOf(
-            TripPlanSolicitudeFactory.withASingleTripApplicationAccepted(
+            TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted(
                 sections = listOf(SectionFactory.avCabildo()),
                 passengerId = userId.toString(),
             ),
