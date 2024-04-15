@@ -27,7 +27,7 @@ class MySQLSectionRepository(
     private val geometryFactory = GeometryFactory(PrecisionModel(), Jts.SRID)
     private val geometricShapeFactory = GeometricShapeFactory(geometryFactory)
 
-    private val maxNearRadiusInMeters = 1000.0
+    private val maxNearRadiusInMeters = 10000.0
     private val nearSearchCircleNumPoints = 32
 
     override fun save(section: Section) {
