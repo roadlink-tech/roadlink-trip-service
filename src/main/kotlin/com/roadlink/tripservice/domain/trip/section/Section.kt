@@ -73,6 +73,8 @@ data class Section(
         }
         bookedSeats += 1
     }
+
+    fun estimatedArrivalTimeAtArrival(): Instant = arrival.estimatedArrivalTime
 }
 
 
