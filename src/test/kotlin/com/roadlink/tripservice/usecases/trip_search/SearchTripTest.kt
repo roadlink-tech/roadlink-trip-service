@@ -194,6 +194,27 @@ internal class SearchTripTest {
         )
     }
 
+    @Test
+    fun `given exists a trip plan between the given departure and near arrival then should return it`() {
+        // GIVEN
+        val departure = LocationFactory.avCabildo_4853()
+        val arrival = LocationFactory.avCabildo_50()
+        val at = InstantFactory.october15_12hs()
+        circleSearchAreaRadius = circleSearchAreaRadius(departure, arrival)
+        givenNextSections(from = departure, at = at, nextSections = setOf(SectionFactory.avCabildo()))
+
+        // WHEN
+        val result = searchTrip(
+            SearchTrip.Input(
+                departure = departure,
+                arrival = arrival,
+                at = at,
+            ))
+
+        // THEN
+        assertEquals(listOf(TripSearchPlanFactory.avCabildo()), result)
+    }
+
     private fun circleSearchAreaRadius(departure: Location, arrival: Location): Double =
         distanceOnEarthInMeters(departure, arrival) * 0.01
 

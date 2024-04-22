@@ -7,6 +7,7 @@ object LocationFactory {
     fun avCabildo_4700() = Location(latitude = -34.5416829, longitude = -58.4739184, alias = "AvCabildo 4700")
     fun avCabildo_1621() = Location(latitude = -34.565985, longitude = -58.452394, alias = "AvCabildo 41621")
     fun avCabildo_20() = Location(latitude = -34.574810, longitude = -58.435990, alias = "AvCabildo 20")
+    fun avCabildo_50() = Location(latitude = -34.5746742049925, longitude = -58.43641543068223, alias = "AvCabildo 20")
     fun virreyDelPino_2880() = Location(latitude = -34.568644, longitude = -58.456675, alias = "VirreyDelPino 2880")
     fun virreyDelPino_1800() = Location(latitude = -34.562389, longitude = -58.445302, alias = "VirreyDelPino 1800")
     fun caba() = Location(latitude = -34.60381835849808, longitude = -58.381570402592146, alias = "9 de julio")
