@@ -10,11 +10,18 @@ import org.locationtech.jts.util.GeometricShapeFactory
 
 interface SearchFigure
 
-interface SearchAreaCreator<T: SearchFigure> {
+interface SearchAreaCreator<T : SearchFigure> {
     fun from(location: Location, radiusInMeters: Double): T
 }
 
-class JtsCircle(val value: Polygon) : SearchFigure
+class JtsCircle(val value: Polygon) : SearchFigure {
+
+    private val geometryFactory = GeometryFactory(PrecisionModel(), Jts.SRID)
+    fun contains(location: Location): Boolean {
+        val point = geometryFactory.createPoint(Coordinate(location.longitude, location.latitude))
+        return value.contains(point)
+    }
+}
 
 class JtsSearchCircleCreator : SearchAreaCreator<JtsCircle> {
 

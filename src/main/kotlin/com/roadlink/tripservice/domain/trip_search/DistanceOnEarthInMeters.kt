@@ -3,9 +3,9 @@ package com.roadlink.tripservice.domain.trip_search
 import com.roadlink.tripservice.domain.common.Location
 import kotlin.math.*
 
-class DistanceOnEarthInMeters {
+object DistanceOnEarthInMeters {
 
-    private val radiusOfEarthInMeters = 6371000.0
+    private const val radiusOfEarthInMeters = 6371000.0
 
     operator fun invoke(location1: Location, location2: Location): Double {
         val (latitude1, longitude1) = location1
