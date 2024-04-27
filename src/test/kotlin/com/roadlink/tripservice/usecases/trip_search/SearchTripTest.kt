@@ -22,8 +22,6 @@ internal class SearchTripTest {
 
     private lateinit var sectionRepository: SectionRepository
 
-    //private lateinit var distanceOnEarthInMeters: DistanceOnEarthInMeters
-
     private var circleSearchAreaRadius by Delegates.notNull<Double>()
 
     private lateinit var searchTrip: SearchTrip
