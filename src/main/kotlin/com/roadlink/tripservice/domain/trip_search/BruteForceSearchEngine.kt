@@ -15,8 +15,6 @@ class BruteForceSearchEngine(
     private val circleSearchAreaCreator: SearchAreaCreator<JtsCircle>,
 ) : SearchEngine {
 
-    private val geometryFactory = GeometryFactory(PrecisionModel(), Jts.SRID)
-
     override fun search(
         departure: Location,
         arrival: Location,
@@ -38,8 +36,8 @@ class BruteForceSearchEngine(
             val actualSection = actualTripPlan.last()
 
             val arrivalSearchArea =
-                circleSearchAreaCreator.from(arrival, circleSearchAreaRadius).value
-            if (arrivalSearchArea.contains(toPoint(actualSection.arrival()))) {
+                circleSearchAreaCreator.from(arrival, circleSearchAreaRadius)
+            if (arrivalSearchArea.contains(actualSection.arrival())) {
                 tripSearchPlanResults.add(actualTripPlan)
             } else {
                 val departureSearchArea =
@@ -55,9 +53,5 @@ class BruteForceSearchEngine(
         }
 
         return tripSearchPlanResults.sortedBy { it.distance() }
-    }
-
-    private fun toPoint(location: Location): Point {
-        return geometryFactory.createPoint(Coordinate(location.longitude, location.latitude))
     }
 }
