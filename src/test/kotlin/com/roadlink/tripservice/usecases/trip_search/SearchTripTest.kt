@@ -4,8 +4,8 @@ import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_search.BruteForceSearchEngine
-import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
 import com.roadlink.tripservice.domain.trip_search.JtsSearchCircleCreator
+import com.roadlink.tripservice.domain.trip_search.SearchRadiusGenerator
 import com.roadlink.tripservice.usecases.common.InstantFactory
 import com.roadlink.tripservice.usecases.common.address.LocationFactory
 import com.roadlink.tripservice.usecases.trip.SectionFactory
@@ -22,8 +22,6 @@ internal class SearchTripTest {
 
     private lateinit var sectionRepository: SectionRepository
 
-    private lateinit var distanceOnEarthInMeters: DistanceOnEarthInMeters
-
     private var circleSearchAreaRadius by Delegates.notNull<Double>()
 
     private lateinit var searchTrip: SearchTrip
@@ -31,12 +29,10 @@ internal class SearchTripTest {
     @BeforeEach
     fun setUp() {
         sectionRepository = mockk()
-        distanceOnEarthInMeters = DistanceOnEarthInMeters()
 
         val bruteForceSearchEngine = BruteForceSearchEngine(
             sectionRepository = sectionRepository,
             circleSearchAreaCreator = JtsSearchCircleCreator(),
-            distanceOnEarthInMeters = distanceOnEarthInMeters,
         )
 
         searchTrip = SearchTrip(
@@ -216,7 +212,7 @@ internal class SearchTripTest {
     }
 
     private fun circleSearchAreaRadius(departure: Location, arrival: Location): Double =
-        distanceOnEarthInMeters(departure, arrival) * 0.01
+        SearchRadiusGenerator(departure, arrival)
 
     private fun givenNextSections(from: Location, at: Instant, nextSections: Set<Section>) {
         every {
