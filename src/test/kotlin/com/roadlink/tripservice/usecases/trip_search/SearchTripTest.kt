@@ -212,7 +212,7 @@ internal class SearchTripTest {
     }
 
     private fun circleSearchAreaRadius(departure: Location, arrival: Location): Double =
-        SearchRadiusGenerator(departure, arrival) * 0.01
+        SearchRadiusGenerator(departure, arrival)
 
     private fun givenNextSections(from: Location, at: Instant, nextSections: Set<Section>) {
         every {
