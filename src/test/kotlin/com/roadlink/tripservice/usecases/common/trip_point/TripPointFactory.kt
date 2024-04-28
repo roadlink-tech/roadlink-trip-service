@@ -55,6 +55,12 @@ object TripPointFactory {
             address = AddressFactory.rosario(),
         )
 
+    fun ushuaia(at: Instant = InstantFactory.october15_22hs()) =
+        TripPoint(
+            estimatedArrivalTime = at,
+            address = AddressFactory.ushuaia(),
+        )
+
     fun avCabildo_1621() =
         TripPoint(
             estimatedArrivalTime = InstantFactory.october15_15hs(),
