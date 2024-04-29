@@ -52,10 +52,11 @@ internal class SearchTripTest {
         // WHEN
         val result = searchTrip(
             SearchTrip.Input(
-            departure = departure,
-            arrival = arrival,
-            at = at,
-        ))
+                departure = departure,
+                arrival = arrival,
+                at = at,
+            )
+        )
 
         // THEN
         assertTrue(result.isEmpty())
@@ -68,15 +69,20 @@ internal class SearchTripTest {
         val arrival = LocationFactory.avCabildo_20()
         val at = InstantFactory.october15_12hs()
         circleSearchAreaRadius = circleSearchAreaRadius(departure, arrival)
-        givenNextSections(from = departure, at = at, nextSections = setOf(SectionFactory.avCabildo()))
+        givenNextSections(
+            from = departure,
+            at = at,
+            nextSections = setOf(SectionFactory.avCabildo())
+        )
 
         // WHEN
         val result = searchTrip(
             SearchTrip.Input(
-            departure = departure,
-            arrival = arrival,
-            at = at,
-        ))
+                departure = departure,
+                arrival = arrival,
+                at = at,
+            )
+        )
 
         // THEN
         assertEquals(listOf(TripSearchPlanFactory.avCabildo()), result)
@@ -85,7 +91,8 @@ internal class SearchTripTest {
     @Test
     fun `given exists a trip plan with one meeting point between the given departure and arrival then should return it`() {
         // GIVEN
-        circleSearchAreaRadius = circleSearchAreaRadius(LocationFactory.avCabildo_4853(), LocationFactory.avCabildo_20())
+        circleSearchAreaRadius =
+            circleSearchAreaRadius(LocationFactory.avCabildo_4853(), LocationFactory.avCabildo_20())
         givenNextSections(
             from = LocationFactory.avCabildo_4853(),
             at = InstantFactory.october15_12hs(),
@@ -100,23 +107,31 @@ internal class SearchTripTest {
         // WHEN
         val result = searchTrip(
             SearchTrip.Input(
-            departure = LocationFactory.avCabildo_4853(),
-            arrival = LocationFactory.avCabildo_20(),
-            at = InstantFactory.october15_12hs(),
-        ))
+                departure = LocationFactory.avCabildo_4853(),
+                arrival = LocationFactory.avCabildo_20(),
+                at = InstantFactory.october15_12hs(),
+            )
+        )
 
         // THEN
-        assertEquals(listOf(TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20()), result)
+        assertEquals(
+            listOf(TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20()),
+            result
+        )
     }
 
     @Test
     fun `given exists two trip plans with one meeting point between the given departure and arrival then the shorter must be first`() {
         // GIVEN
-        circleSearchAreaRadius = circleSearchAreaRadius(LocationFactory.avCabildo_4853(), LocationFactory.avCabildo_20())
+        circleSearchAreaRadius =
+            circleSearchAreaRadius(LocationFactory.avCabildo_4853(), LocationFactory.avCabildo_20())
         givenNextSections(
             from = LocationFactory.avCabildo_4853(),
             at = InstantFactory.october15_12hs(),
-            nextSections = setOf(SectionFactory.avCabildo4853_virreyDelPino1800(), SectionFactory.avCabildo4853_virreyDelPino2880())
+            nextSections = setOf(
+                SectionFactory.avCabildo4853_virreyDelPino1800(),
+                SectionFactory.avCabildo4853_virreyDelPino2880()
+            )
         )
         givenNextSections(
             from = LocationFactory.virreyDelPino_1800(),
@@ -132,10 +147,11 @@ internal class SearchTripTest {
         // WHEN
         val result = searchTrip(
             SearchTrip.Input(
-            departure = LocationFactory.avCabildo_4853(),
-            arrival = LocationFactory.avCabildo_20(),
-            at = InstantFactory.october15_12hs(),
-        ))
+                departure = LocationFactory.avCabildo_4853(),
+                arrival = LocationFactory.avCabildo_20(),
+                at = InstantFactory.october15_12hs(),
+            )
+        )
 
         // THEN
         assertEquals(
@@ -150,16 +166,23 @@ internal class SearchTripTest {
     @Test
     fun `given exists two trip plans with the same meeting point between the given departure and arrival then should return `() {
         // GIVEN
-        circleSearchAreaRadius = circleSearchAreaRadius(LocationFactory.avCabildo_4853(), LocationFactory.avCabildo_20())
+        circleSearchAreaRadius =
+            circleSearchAreaRadius(LocationFactory.avCabildo_4853(), LocationFactory.avCabildo_20())
         givenNextSections(
             from = LocationFactory.avCabildo_4853(),
             at = InstantFactory.october15_12hs(),
-            nextSections = setOf(SectionFactory.avCabildo4853_virreyDelPino1800(), SectionFactory.avCabildo4853_virreyDelPino2880())
+            nextSections = setOf(
+                SectionFactory.avCabildo4853_virreyDelPino1800(),
+                SectionFactory.avCabildo4853_virreyDelPino2880()
+            )
         )
         givenNextSections(
             from = LocationFactory.virreyDelPino_1800(),
             at = InstantFactory.october15_17hs(),
-            nextSections = setOf(SectionFactory.virreyDelPino1800_avCabildo20(), SectionFactory.virreyDelPino1800_avDelLibertador5000())
+            nextSections = setOf(
+                SectionFactory.virreyDelPino1800_avCabildo20(),
+                SectionFactory.virreyDelPino1800_avDelLibertador5000()
+            )
         )
         givenNextSections(
             from = LocationFactory.avDelLibertador_5000(),
@@ -173,11 +196,13 @@ internal class SearchTripTest {
         )
 
         // WHEN
-        val result = searchTrip(SearchTrip.Input(
-            departure = LocationFactory.avCabildo_4853(),
-            arrival = LocationFactory.avCabildo_20(),
-            at = InstantFactory.october15_12hs(),
-        ))
+        val result = searchTrip(
+            SearchTrip.Input(
+                departure = LocationFactory.avCabildo_4853(),
+                arrival = LocationFactory.avCabildo_20(),
+                at = InstantFactory.october15_12hs(),
+            )
+        )
 
         // THEN
         assertEquals(
@@ -191,13 +216,17 @@ internal class SearchTripTest {
     }
 
     @Test
-    fun `given exists a trip plan between the given departure and near arrival then should return it`() {
+    fun `given an existing trip plan which match with the given departure and a near arrival location, then should return it`() {
         // GIVEN
         val departure = LocationFactory.avCabildo_4853()
         val arrival = LocationFactory.avCabildo_50()
         val at = InstantFactory.october15_12hs()
         circleSearchAreaRadius = circleSearchAreaRadius(departure, arrival)
-        givenNextSections(from = departure, at = at, nextSections = setOf(SectionFactory.avCabildo()))
+        givenNextSections(
+            from = departure,
+            at = at,
+            nextSections = setOf(SectionFactory.avCabildo())
+        )
 
         // WHEN
         val result = searchTrip(
@@ -205,7 +234,8 @@ internal class SearchTripTest {
                 departure = departure,
                 arrival = arrival,
                 at = at,
-            ))
+            )
+        )
 
         // THEN
         assertEquals(listOf(TripSearchPlanFactory.avCabildo()), result)

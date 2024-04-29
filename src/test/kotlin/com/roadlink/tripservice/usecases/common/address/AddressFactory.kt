@@ -83,6 +83,16 @@ object AddressFactory {
             houseNumber = "1800",
         )
 
+    fun ushuaia() =
+        Address(
+            location = LocationFactory.ushuaia(),
+            fullAddress = "Ushuaia, Tierra del Fuego",
+            street = "calle ficticia",
+            city = "Ushuaia",
+            country = "Argentina",
+            houseNumber = "1800",
+        )
+
     fun avCabildo_1621() =
         Address(
             location = LocationFactory.avCabildo_1621(),
