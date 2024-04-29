@@ -7,6 +7,8 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.SearchTripResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SectionResponse
+import com.roadlink.tripservice.infrastructure.rest.trip_search.response.TripSearchPlanResponse
 import com.roadlink.tripservice.usecases.common.address.LocationFactory
 import com.roadlink.tripservice.usecases.common.InstantFactory
 import com.roadlink.tripservice.usecases.trip.SectionFactory
@@ -21,8 +23,6 @@ import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -40,7 +40,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     private lateinit var objectMapper: ObjectMapper
 
     @Test
-    fun `given no section exists then should return ok status code and the trip plan in response body`() {
+    fun `given no existing sections, then should return ok status code and the trip plan in response body`() {
+        // given
         val request: HttpRequest<Any> = HttpRequest
             .GET(
                 UriBuilder.of("/trip-service/trips")
@@ -52,15 +53,21 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .build()
             )
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
-        assertOkBody(SearchTripResponseFactory.empty(), response)
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
+        )
     }
 
     @Test
-    fun `given exists a trip plan with one meeting point between the given departure and arrival then should return ok status code and the trip plan in response body`() {
+    fun `given an existing trip plan with one meeting point between the given departure and arrival location, then should return ok status code and the trip plan in response body`() {
+        // given
         sectionRepository.save(
             SectionFactory.avCabildo4853_virreyDelPino1800(
                 tripId = UUID.fromString(
@@ -88,8 +95,10 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .build()
             )
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(
@@ -99,7 +108,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     }
 
     @Test
-    fun `given an existing trip plan, when search by a near arrival and departure location place by a radius of 1 percent of the total distance, then a result must be retrieved`() {
+    fun `given an existing trip plan, when search by a near arrival and departure location placed by a radius of 1 percent of the total distance, then a result must be retrieved`() {
         val tripId = UUID.fromString(
             TripFactory.avCabildo_id
         )
@@ -149,7 +158,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     }
 
     @Test
-    fun `given an existing trip plan, when search by an arrival location place by a radius greater than 1 percent of the total distance, then none result must be retrieved`() {
+    fun `given an existing trip plan, when search by an arrival location placed by a radius greater than 1 percent of the total distance, then none result must be retrieved`() {
         val tripId = UUID.fromString(
             TripFactory.avCabildo_id
         )
@@ -200,7 +209,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     }
 
     @Test
-    fun `given an existing trip plan, when search by a departure location place by a radius greater than 1 percent of the total distance, then none result must be retrieved`() {
+    fun `given an existing trip plan, when search by a departure location placed by a radius greater than 1 percent of the total distance, then none result must be retrieved`() {
         val tripId = UUID.fromString(
             TripFactory.avCabildo_id
         )
@@ -251,15 +260,15 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     }
 
     @Test
-    fun `given an existing trip plan, when search by a departure location place by a radius less than 15 km of the total distance, then a result must be retrieved`() {
-        val tripId = UUID.fromString(
-            TripFactory.avCabildo_id
+    fun `given an existing trip plan, when search by a departure location placed by a radius less than 15 km of the total distance, then a result must be retrieved`() {
+        // given
+        val tripId = UUID.randomUUID()
+        val sectionId = UUID.randomUUID()
+        val expectedSection = SectionFactory.caba_ushuaia(
+            tripId = tripId,
+            id = sectionId
         )
-        sectionRepository.save(
-            SectionFactory.caba_ushuaia(
-                tripId = tripId
-            )
-        )
+        sectionRepository.save(expectedSection)
         entityManager.transaction.commit()
 
         val departureLocation =
@@ -267,7 +276,6 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
 
         val arrivalLocation = LocationFactory.ushuaia()
 
-
         val request: HttpRequest<Any> = HttpRequest
             .GET(
                 UriBuilder.of("/trip-service/trips")
@@ -279,24 +287,37 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .build()
             )
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
-        assertFalse(response.body().isEmpty)
-        // TODO check the payload response
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(
+                tripPlans = listOf(
+                    TripSearchPlanResponse(
+                        sections = listOf(
+                            SectionResponse.from(expectedSection)
+                        )
+                    )
+                )
+            )
+        )
     }
 
     @Test
-    fun `given an existing trip plan, when search by a departure and arrival location place by a radius less than 15 km of the total distance, then a result must be retrieved`() {
-        val tripId = UUID.fromString(
-            TripFactory.avCabildo_id
+    fun `given an existing trip plan, when search by a departure and arrival location placed by a radius less than 15 km of the total distance, then a result must be retrieved`() {
+        // given
+        val tripId = UUID.randomUUID()
+        val sectionId = UUID.randomUUID()
+        val expectedSection = SectionFactory.caba_ushuaia(
+            tripId = tripId,
+            id = sectionId
         )
-        sectionRepository.save(
-            SectionFactory.caba_ushuaia(
-                tripId = tripId
-            )
-        )
+
+        sectionRepository.save(expectedSection)
         entityManager.transaction.commit()
 
         val departureLocation =
@@ -319,30 +340,42 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .build()
             )
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
-        assertFalse(response.body().isEmpty)
-        // TODO check the payload response
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(
+                tripPlans = listOf(
+                    TripSearchPlanResponse(
+                        sections = listOf(
+                            SectionResponse.from(expectedSection)
+                        )
+                    )
+                )
+            )
+        )
     }
 
     @Test
     fun `given an existing trip plan, when search by a departure location place by a radius greater than 15 km of the total distance, then none result must be retrieved`() {
-        val tripId = UUID.fromString(
-            TripFactory.avCabildo_id
+        // given
+        val tripId = UUID.randomUUID()
+        val sectionId = UUID.randomUUID()
+        val section = SectionFactory.caba_ushuaia(
+            tripId = tripId,
+            id = sectionId
         )
-        sectionRepository.save(
-            SectionFactory.caba_ushuaia(
-                tripId = tripId
-            )
-        )
+        sectionRepository.save(section)
         entityManager.transaction.commit()
 
         val departureLocation = Location(
             latitude = -34.2536,
             longitude = -58.8647,
-            alias = "Ubicación a 50 km de 9 de Julio"
+            alias = "Location 50 km from CABA"
         )
 
         val arrivalLocation = Location(
@@ -362,13 +395,15 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .build()
             )
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
-        assertOkBody(
-            SearchTripResponseFactory.empty(),
-            response
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
         )
     }
 
@@ -382,5 +417,11 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
         )
     }
 
+    private fun mapToSearchTripResponse(response: HttpResponse<JsonNode>): SearchTripResponse {
+        return objectMapper.readValue(
+            objectMapper.writeValueAsString(response.body()),
+            SearchTripResponse::class.java
+        )
+    }
 }
 
