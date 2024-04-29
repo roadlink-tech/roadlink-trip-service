@@ -5,11 +5,11 @@ import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.usecases.common.address.LocationFactory
 import com.roadlink.tripservice.usecases.common.InstantFactory
 import com.roadlink.tripservice.usecases.trip.SectionFactory
+import com.roadlink.tripservice.usecases.trip_search.JtsCircleMother
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -128,8 +128,8 @@ class MySQLSectionRepositoryTest {
         val section2 = SectionFactory.avCabildo4853_virreyDelPino1800()
         repository.saveAll(setOf(section1, section2))
 
-        val result = repository.findNextSections(
-            from = LocationFactory.avCabildo_4853(),
+        val result = repository.findNextSectionsIn(
+            polygon = JtsCircleMother.common(LocationFactory.avCabildo_4853()),
             at = InstantFactory.october15_12hs(),
         )
 
@@ -138,8 +138,8 @@ class MySQLSectionRepositoryTest {
 
     @Test
     fun `given no sections when find next sections then should return empty result`() {
-        val result = repository.findNextSections(
-            from = LocationFactory.avCabildo_4853(),
+        val result = repository.findNextSectionsIn(
+            polygon = JtsCircleMother.common(LocationFactory.avCabildo_4853()),
             at = InstantFactory.october15_12hs(),
         )
 
@@ -151,8 +151,8 @@ class MySQLSectionRepositoryTest {
         val section = SectionFactory.virreyDelPino1800_avCabildo20()
         repository.saveAll(setOf(section))
 
-        val result = repository.findNextSections(
-            from = LocationFactory.avCabildo_4853(),
+        val result = repository.findNextSectionsIn(
+            polygon = JtsCircleMother.common(LocationFactory.rosario()),
             at = InstantFactory.october15_12hs(),
         )
 
@@ -165,8 +165,8 @@ class MySQLSectionRepositoryTest {
         val section2 = SectionFactory.avCabildo4853_virreyDelPino1800()
         repository.saveAll(setOf(section1, section2))
 
-        val result = repository.findNextSections(
-            from = LocationFactory.avCabildo_4853(),
+        val result = repository.findNextSectionsIn(
+            polygon = JtsCircleMother.common(LocationFactory.avCabildo_4853()),
             at = InstantFactory.october15_22hs(),
         )
 
@@ -180,8 +180,8 @@ class MySQLSectionRepositoryTest {
         val section3 = SectionFactory.virreyDelPino1800_avCabildo20()
         repository.saveAll(setOf(section1, section2, section3))
 
-        val result = repository.findNextSections(
-            from = LocationFactory.avCabildo_4700(),
+        val result = repository.findNextSectionsIn(
+            polygon = JtsCircleMother.common(LocationFactory.avCabildo_4700(), radiusInMeters = 200.0),
             at = InstantFactory.october15_12hs(),
         )
 

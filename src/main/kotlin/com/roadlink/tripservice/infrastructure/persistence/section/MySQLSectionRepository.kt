@@ -1,34 +1,21 @@
 package com.roadlink.tripservice.infrastructure.persistence.section
 
-import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.common.Jts
 import com.roadlink.tripservice.infrastructure.persistence.common.TripPointJPAEntity
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
-import jakarta.persistence.criteria.*
+import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.Polygon
-import org.locationtech.jts.geom.PrecisionModel
-import org.locationtech.jts.util.GeometricShapeFactory
 import java.time.Instant
 import java.util.*
-
 
 class MySQLSectionRepository(
     private val entityManager: EntityManager,
     private val transactionManager: TransactionOperations<Session>,
 ) : SectionRepository {
-
-    private val geometryFactory = GeometryFactory(PrecisionModel(), Jts.SRID)
-    private val geometricShapeFactory = GeometricShapeFactory(geometryFactory)
-
-    private val maxNearRadiusInMeters = 1000.0
-    private val nearSearchCircleNumPoints = 32
 
     override fun save(section: Section) {
         transactionManager.executeWrite {
@@ -45,12 +32,11 @@ class MySQLSectionRepository(
         }
     }
 
-    override fun findNextSections(from: Location, at: Instant): Set<Section> {
+    override fun findNextSectionsIn(polygon: Polygon, at: Instant): Set<Section> {
         return transactionManager.executeRead {
             find(
                 SectionCommandQuery(
-                    departureLatitude = from.latitude,
-                    departureLongitude = from.longitude,
+                    polygonContainsDeparturePoint = polygon,
                     departureAfterInstant = at
                 )
             ).map { it.toDomain() }.toSet()
@@ -91,14 +77,12 @@ class MySQLSectionRepository(
             predicates.add(root.get<String>("id").`in`(commandQuery.sectionsIds))
         }
 
-        if (commandQuery.departureLatitude != null && commandQuery.departureLongitude != null) {
-            val nearSearchCircle = createNearSearchCircle(commandQuery.departureLongitude, commandQuery.departureLatitude)
-
+        if (commandQuery.polygonContainsDeparturePoint != null) {
             predicates.add(
                 cb.isTrue(
                     cb.function("ST_Contains",
                         Boolean::class.java,
-                        cb.literal(nearSearchCircle),
+                        cb.literal(commandQuery.polygonContainsDeparturePoint),
                         root.get<Point>("departurePoint"),
                     )
                 )
@@ -121,24 +105,11 @@ class MySQLSectionRepository(
         return entityManager.createQuery(criteriaQuery).resultList
     }
 
-    private fun createNearSearchCircle(longitude: Double, latitude: Double): Polygon {
-        val coordinate = Coordinate(longitude, latitude)
-
-        geometricShapeFactory.setCentre(coordinate)
-        geometricShapeFactory.setSize(2 * toDegrees(maxNearRadiusInMeters))
-        geometricShapeFactory.setNumPoints(nearSearchCircleNumPoints)
-        return geometricShapeFactory.createCircle()
-    }
-
-    private fun toDegrees(meters: Double): Double =
-        meters / 110000.0
-
 }
 
 data class SectionCommandQuery(
     val tripIds: Collection<UUID> = emptySet(),
     val sectionsIds: Collection<String> = emptySet(),
-    val departureLatitude: Double? = null,
-    val departureLongitude: Double? = null,
-    val departureAfterInstant: Instant? = null
+    val departureAfterInstant: Instant? = null,
+    val polygonContainsDeparturePoint: Polygon? = null
 )

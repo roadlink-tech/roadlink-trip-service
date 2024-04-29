@@ -19,6 +19,20 @@ object SectionFactory {
         "SectionFactory-virreyDelPino1800_avDelLibertador5000"
     const val avDelLibertador5000_avCabildo20_id = "SectionFactory-avDelLibertador5000_avCabildo20"
 
+    fun caba_ushuaia(id: UUID = UUID.randomUUID(), tripId: UUID = UUID.randomUUID()): Section {
+        return Section(
+            id = id.toString(),
+            departure = TripPointFactory.caba(),
+            arrival = TripPointFactory.ushuaia(),
+            distanceInMeters = 3000.0,
+            driverId = "John Smith",
+            vehicleId = "Ford mustang",
+            initialAmountOfSeats = 4,
+            bookedSeats = 0,
+            tripId = tripId
+        )
+    }
+
     fun avCabildo(
         departure: TripPoint = TripPointFactory.avCabildo_4853(),
         arrival: TripPoint = TripPointFactory.avCabildo_20(),
@@ -60,7 +74,6 @@ object SectionFactory {
     ) =
         Section(
             id = avCabildo4853_virreyDelPino1800_id,
-            //tripId = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.virreyDelPino_1800(),
             distanceInMeters = 4000.0,
