@@ -4,6 +4,7 @@ import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.section.Section
+import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
 import java.util.*
 
 data class Trip(
@@ -31,12 +32,17 @@ data class Trip(
             if (isTheEndOfTheWay(allTripPoints, i)) {
                 return sections.toSet()
             }
+            val sectionDeparture = allTripPoints[i]
+            val sectionArrival = allTripPoints[i + 1]
             val section = Section(
                 id = idGenerator.id(),
                 tripId = UUID.fromString(this.id),
-                departure = allTripPoints[i],
-                arrival = allTripPoints[i + 1],
-                distanceInMeters = 0.0,
+                departure = sectionDeparture,
+                arrival = sectionArrival,
+                distanceInMeters = DistanceOnEarthInMeters(
+                    sectionDeparture.location(),
+                    sectionArrival.location()
+                ),
                 driverId = driverId,
                 vehicleId = vehicle,
 
