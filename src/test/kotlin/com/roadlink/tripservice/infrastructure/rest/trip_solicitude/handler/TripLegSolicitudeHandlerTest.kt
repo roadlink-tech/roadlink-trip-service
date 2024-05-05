@@ -3,10 +3,7 @@ package com.roadlink.tripservice.infrastructure.rest.trip_solicitude.handler
 import com.fasterxml.jackson.databind.JsonNode
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.usecases.UseCase
-import com.roadlink.tripservice.usecases.trip_solicitude.AcceptTripLegSolicitude
-import com.roadlink.tripservice.usecases.trip_solicitude.AcceptTripLegSolicitudeOutput
-import com.roadlink.tripservice.usecases.trip_solicitude.RejectTripLegSolicitude
-import com.roadlink.tripservice.usecases.trip_solicitude.RejectTripLegSolicitudeOutput
+import com.roadlink.tripservice.usecases.trip_solicitude.*
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.http.HttpRequest
@@ -38,7 +35,7 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
     lateinit var rejectTripLegSolicitude: UseCase<UUID, RejectTripLegSolicitudeOutput>
 
     @Inject
-    lateinit var acceptTripLegSolicitude: UseCase<UUID, AcceptTripLegSolicitudeOutput>
+    lateinit var acceptTripLegSolicitude: UseCase<AcceptTripLegSolicitudeInput, AcceptTripLegSolicitudeOutput>
 
     @Primary
     @Singleton
@@ -50,7 +47,7 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
     @Primary
     @Singleton
     @Replaces(AcceptTripLegSolicitude::class)
-    fun acceptTripApplication(): UseCase<UUID, AcceptTripLegSolicitudeOutput> {
+    fun acceptTripApplication(): UseCase<AcceptTripLegSolicitudeInput, AcceptTripLegSolicitudeOutput> {
         return mockk(relaxed = true)
     }
 
@@ -130,9 +127,7 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
         assertEquals(HttpStatus.NOT_FOUND.code, response.code())
     }
 
-    @Disabled
     @Test
-    // TODO fix me!
     fun `when try to accept an solicitude but the plan has been rejected by someone else, then an error must be retrieved`() {
         val callerId = UUID.randomUUID()
         every { acceptTripLegSolicitude.invoke(any()) } returns AcceptTripLegSolicitudeOutput.TripLegSolicitudePlanHasBeenRejected
@@ -141,7 +136,7 @@ class TripLegSolicitudeHandlerTest : End2EndTest() {
         val request =
             HttpRequest.PUT(
                 UriBuilder.of(
-                    "/trip-service/trip_solicitude/${
+                    "/trip-service/trip_leg_solicitudes/${
                         UUID.randomUUID()
                     }/accept"
                 ).build(), """"""
