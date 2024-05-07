@@ -3,68 +3,16 @@ package com.roadlink.tripservice.domain.trip
 import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.common.utils.time.TimeRange
+import com.roadlink.tripservice.domain.trip.constraint.Policy
+import com.roadlink.tripservice.domain.trip.constraint.Restriction
+import com.roadlink.tripservice.domain.trip.constraint.Rule
+import com.roadlink.tripservice.domain.trip.constraint.Visibility
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
+import com.roadlink.tripservice.domain.trip_search.Filter
 import com.roadlink.tripservice.domain.user.User
 import java.util.*
 
-enum class Filter {
-    PET_ALLOWED,
-    NO_SMOKING,
-    ONLY_WOMEN,
-    PRIVATE,
-    FRIENDS_OF_FRIENDS
-}
-
-
-interface Restriction {
-    /**
-     * isAllowed returns true if the trip can be selected base on the restriction
-     */
-    fun isAllowed(requester: User, trip: Trip): Boolean
-}
-
-sealed class Visibility : Restriction {
-    object Private : Visibility() {
-        override fun isAllowed(requester: User, trip: Trip): Boolean {
-            return true
-        }
-    }
-
-    object FriendsOfFriends : Visibility() {
-        override fun isAllowed(requester: User, trip: Trip): Boolean {
-            return true
-        }
-    }
-
-    companion object {
-        fun valueOf(filter: Filter): Visibility? {
-            return when (filter) {
-                Filter.PRIVATE -> Private
-                Filter.FRIENDS_OF_FRIENDS -> FriendsOfFriends
-                else -> null
-
-            }
-        }
-    }
-}
-
-sealed class Rule {
-    object PetAllowed : Rule()
-    object NoSmoking : Rule()
-    object OnlyWomen : Rule()
-
-    companion object {
-        fun valueOf(filter: Filter): Rule? {
-            return when (filter) {
-                Filter.PET_ALLOWED -> PetAllowed
-                Filter.NO_SMOKING -> NoSmoking
-                Filter.ONLY_WOMEN -> OnlyWomen
-                else -> null
-            }
-        }
-    }
-}
 
 data class Trip(
     val id: String,
@@ -77,20 +25,25 @@ data class Trip(
     val meetingPoints: List<TripPoint>,
     // TODO rename it by seats to be used. It'll be the vehicle capacity
     val availableSeats: Int,
-    val rules: List<Rule> = emptyList(),
-    val restrictions: List<Restriction> = emptyList()
+    private val policies: List<Policy> = emptyList(),
+    private val restrictions: List<Restriction> = emptyList()
 ) {
 
-    fun satisfy(requesterPassenger: User, filters: List<Filter>): Boolean {
+    fun isCompliant(requesterPassenger: User, filters: List<Filter>): Boolean {
         if (filters.isNotEmpty()) {
-            val rules = filters.mapNotNull { Rule.valueOf(it) }
-            if (rules.isNotEmpty() && !this.rules.containsAll(rules)) {
-                return false
-            }
-            val visibilityRestrictions = filters.mapNotNull { Visibility.valueOf(it) }
-            return visibilityRestrictions.none { !it.isAllowed(requesterPassenger, this) }
+            val anyBrokenRule = filters
+                .mapNotNull { Rule.valueOf(it) }
+                .any { !it.isCompliant(this) }
+            val anyRestriction = filters
+                .mapNotNull { Visibility.valueOf(it) }
+                .any { !it.isAllowed(requesterPassenger, this) }
+            return !anyRestriction && !anyBrokenRule
         }
         return false
+    }
+
+    fun ruleIsCompliant(rule: Rule): Boolean {
+        return this.policies.contains(rule)
     }
 
     // TODO revisar la creacion del trip y como lo itero
