@@ -1,8 +1,9 @@
 package com.roadlink.tripservice.domain.trip.constraint
 
-import com.roadlink.tripservice.domain.trip_search.Filter
 import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip_search.Filter
 import com.roadlink.tripservice.domain.user.User
+import java.util.*
 
 /**
  * Interface defining a restriction applicable to a trip.
@@ -31,13 +32,20 @@ interface Restriction : Constraint {
 sealed class Visibility : Restriction {
     object Private : Visibility() {
         override fun isAllowed(requester: User, trip: Trip): Boolean {
-            return true
+            return requester.isFriendOf(UUID.fromString(trip.driverId))
+        }
+    }
+
+    object OnlyWomen : Visibility() {
+        // TODO trip is not necessary here
+        override fun isAllowed(requester: User, trip: Trip): Boolean {
+            return requester.isAWomen()
         }
     }
 
     object FriendsOfFriends : Visibility() {
         override fun isAllowed(requester: User, trip: Trip): Boolean {
-            return true
+            TODO("it should be implemented later, nowadays the user only contains friends information")
         }
     }
 
@@ -46,6 +54,7 @@ sealed class Visibility : Restriction {
             return when (filter) {
                 Filter.PRIVATE -> Private
                 Filter.FRIENDS_OF_FRIENDS -> FriendsOfFriends
+                Filter.ONLY_WOMEN -> OnlyWomen
                 else -> null
 
             }

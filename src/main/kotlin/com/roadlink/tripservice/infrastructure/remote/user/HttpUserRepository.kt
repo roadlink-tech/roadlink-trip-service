@@ -6,6 +6,7 @@ import com.roadlink.tripservice.dev_tools.infrastructure.network.Get
 import com.roadlink.tripservice.dev_tools.infrastructure.network.ReadRequest
 import com.roadlink.tripservice.domain.user.User
 import com.roadlink.tripservice.domain.user.UserRepository
+import java.util.UUID
 
 class HttpUserRepository(
     private val get: Get,
@@ -58,7 +59,9 @@ data class UserCoreResponse(
     @JsonProperty("profile_photo_url")
     val profilePhotoUrl: String,
     @JsonProperty("gender")
-    val gender: String
+    val gender: String,
+    @JsonProperty("friends")
+    val friends: Set<UUID>
 ) {
 
     fun toDomain(): User {
@@ -66,7 +69,9 @@ data class UserCoreResponse(
             id = id,
             firstName = firstName,
             lastName = lastName,
-            profilePhotoUrl = profilePhotoUrl
+            profilePhotoUrl = profilePhotoUrl,
+            friendsIds = friends,
+            gender = User.Gender.fromString(gender)
         )
     }
 }

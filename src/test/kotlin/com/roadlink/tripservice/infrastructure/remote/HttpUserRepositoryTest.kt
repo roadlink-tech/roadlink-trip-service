@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import com.roadlink.tripservice.dev_tools.infrastructure.network.Get
+import com.roadlink.tripservice.domain.user.User
 import com.roadlink.tripservice.infrastructure.remote.user.HttpUserRepository
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -64,7 +65,8 @@ class HttpUserRepositoryTest {
                                 "email": "johndoe@example.com",
                                 "user_name": "johndoe",
                                 "profile_photo_url": "http://example.com/photo.jpg",
-                                "gender": "male"
+                                "gender": "male",
+                                "friends": ["e0a778c4-ca85-490a-80a0-979244a7995b"]
                             }
                             """.trimIndent()
                         )
@@ -81,6 +83,8 @@ class HttpUserRepositoryTest {
         assertEquals("John", user?.firstName)
         assertEquals("Doe", user?.lastName)
         assertEquals("http://example.com/photo.jpg", user?.profilePhotoUrl)
+        assertEquals(setOf(UUID.fromString("e0a778c4-ca85-490a-80a0-979244a7995b")), user?.friendsIds)
+        assertEquals(User.Gender.None, user?.gender)
     }
 
     @Test

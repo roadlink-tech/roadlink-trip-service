@@ -9,13 +9,17 @@ object UserFactory {
         id: UUID = UUID.randomUUID(),
         firstName: String = "John",
         lastName: String = "Krasinski",
-        profilePhotoUrl: String = "http//profile.photo.com"
+        profilePhotoUrl: String = "http//profile.photo.com",
+        friendsIds: Set<UUID> = setOf(),
+        gender: User.Gender = User.Gender.None
     ): User {
         return User(
             id = id.toString(),
             firstName = firstName,
             lastName = lastName,
-            profilePhotoUrl = profilePhotoUrl
+            profilePhotoUrl = profilePhotoUrl,
+            friendsIds = friendsIds,
+            gender = gender
         )
     }
 }

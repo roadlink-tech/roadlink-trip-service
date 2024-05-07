@@ -3,8 +3,6 @@ package com.roadlink.tripservice.usecases.driver_trip
 import com.roadlink.tripservice.domain.driver_trip.DriverTripLegSolicitude
 import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.*
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
@@ -28,7 +26,7 @@ class ListDriverTripLegSolicitudes(
                 passenger = userRepository.findByUserId(passengerId)
                     ?.let { user ->
                         val userTrustScore = userTrustScoreRepository.findById(passengerId)
-                        user.asPassengerWith(userTrustScore)
+                        user.toPassenger(userTrustScore)
                     } ?: PassengerNotExists(id = passengerId),
                 status = tripLegSolicitude.status,
                 addressJoinStart = tripLegSolicitude.departureTripPoint().address,

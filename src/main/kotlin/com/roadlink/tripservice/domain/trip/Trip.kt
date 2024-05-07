@@ -11,6 +11,7 @@ import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
 import com.roadlink.tripservice.domain.trip_search.Filter
 import com.roadlink.tripservice.domain.user.User
+import okhttp3.internal.userAgent
 import java.util.*
 
 
@@ -25,25 +26,32 @@ data class Trip(
     val meetingPoints: List<TripPoint>,
     // TODO rename it by seats to be used. It'll be the vehicle capacity
     val availableSeats: Int,
-    private val policies: List<Policy> = emptyList(),
-    private val restrictions: List<Restriction> = emptyList()
+    val policies: List<Policy> = emptyList(),
+    val restrictions: List<Restriction> = emptyList()
 ) {
 
+    private fun canAdmitePassenger(requesterPassenger: User): Boolean {
+        return this.restrictions
+            .all { it.isAllowed(requesterPassenger, this) }
+    }
+
     fun isCompliant(requesterPassenger: User, filters: List<Filter>): Boolean {
+        // the restrictions always must be evaluated
+        if (!canAdmitePassenger(requesterPassenger)) {
+            return false
+        }
         if (filters.isNotEmpty()) {
             val anyBrokenRule = filters
                 .mapNotNull { Rule.valueOf(it) }
                 .any { !it.isCompliant(this) }
-            val anyRestriction = filters
-                .mapNotNull { Visibility.valueOf(it) }
-                .any { !it.isAllowed(requesterPassenger, this) }
-            return !anyRestriction && !anyBrokenRule
-        }
-        return false
-    }
 
-    fun ruleIsCompliant(rule: Rule): Boolean {
-        return this.policies.contains(rule)
+            val containsRestriction = filters
+                .mapNotNull { Visibility.valueOf(it) }
+                .all { restriction -> this.restrictions.contains(restriction) }
+
+            return !anyBrokenRule && containsRestriction
+        }
+        return true
     }
 
     // TODO revisar la creacion del trip y como lo itero

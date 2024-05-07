@@ -27,18 +27,18 @@ interface Policy : Constraint {
 }
 
 sealed class Rule : Policy {
-    override fun isCompliant(trip: Trip): Boolean = trip.ruleIsCompliant(this)
+    override fun isCompliant(trip: Trip): Boolean {
+        return trip.policies.contains(this)
+    }
 
     object PetAllowed : Rule()
     object NoSmoking : Rule()
-    object OnlyWomen : Rule()
 
     companion object {
         fun valueOf(filter: Filter): Rule? {
             return when (filter) {
                 Filter.PET_ALLOWED -> PetAllowed
                 Filter.NO_SMOKING -> NoSmoking
-                Filter.ONLY_WOMEN -> OnlyWomen
                 else -> null
             }
         }

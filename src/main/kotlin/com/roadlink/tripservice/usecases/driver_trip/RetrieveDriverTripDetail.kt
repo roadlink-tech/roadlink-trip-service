@@ -46,7 +46,7 @@ class RetrieveDriverTripDetail(
                         ).map { it.passengerId }.map { passengerId ->
                             userRepository.findByUserId(passengerId)?.let {
                                 val userTrustScore = userTrustScoreRepository.findById(passengerId)
-                                it.asPassengerWith(userTrustScore)
+                                it.toPassenger(userTrustScore)
                             } ?: kotlin.run {
                                 PassengerNotExists(passengerId)
                             }
