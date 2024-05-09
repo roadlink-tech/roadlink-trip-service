@@ -1,7 +1,8 @@
 package com.roadlink.tripservice.usecases.trip_search
 
 import com.roadlink.tripservice.domain.common.Location
-import com.roadlink.tripservice.domain.trip_search.SearchEngine
+import com.roadlink.tripservice.domain.trip_search.filter.Filter
+import com.roadlink.tripservice.domain.trip_search.algorithm.SearchEngine
 import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 import java.time.Instant
 
@@ -21,5 +22,6 @@ class SearchTrip(
         val departure: Location,
         val arrival: Location,
         val at: Instant,
+        val filters: Set<Filter> = emptySet()
     )
 }

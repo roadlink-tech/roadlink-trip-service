@@ -9,9 +9,8 @@ import com.roadlink.tripservice.domain.trip.constraint.Rule
 import com.roadlink.tripservice.domain.trip.constraint.Visibility
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
-import com.roadlink.tripservice.domain.trip_search.Filter
+import com.roadlink.tripservice.domain.trip_search.filter.Filter
 import com.roadlink.tripservice.domain.user.User
-import okhttp3.internal.userAgent
 import java.util.*
 
 

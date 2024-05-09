@@ -5,8 +5,8 @@ import com.roadlink.tripservice.domain.trip.constraint.Restriction
 import com.roadlink.tripservice.domain.trip.constraint.Rule.*
 import com.roadlink.tripservice.domain.trip.constraint.Visibility.*
 import com.roadlink.tripservice.domain.trip.section.Section
-import com.roadlink.tripservice.domain.trip_search.Filter
-import com.roadlink.tripservice.domain.trip_search.Filter.*
+import com.roadlink.tripservice.domain.trip_search.filter.Filter
+import com.roadlink.tripservice.domain.trip_search.filter.Filter.*
 import com.roadlink.tripservice.domain.user.User
 import com.roadlink.tripservice.infrastructure.UUIDGenerator
 import com.roadlink.tripservice.usecases.trip.TripFactory
@@ -24,7 +24,7 @@ class TripTest {
     private val idGenerator = UUIDGenerator()
 
     @Test
-    fun `when a trip has a meeting point then 2 sections must be created`() {
+    fun `when a trip has a meeting point then 2 sections must                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               be created`() {
         // given
         val trip = givenATripWithAMeetingPoint()
 
@@ -87,7 +87,7 @@ class TripTest {
         fun tripDataProvider(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 "when a trip does not have rules and restrictions, then the trip is compliant",
-                User.Gender.None,
+                User.Gender.X,
                 false,
                 listOf<Policy>(),
                 listOf<Restriction>(),
@@ -96,7 +96,7 @@ class TripTest {
             ),
             Arguments.of(
                 "when a trip has some rules, and the filter NO_SMOKING is present, then the trip is compliant",
-                User.Gender.None,
+                User.Gender.X,
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(),
@@ -141,7 +141,7 @@ class TripTest {
             ),
             Arguments.of(
                 "given a private trip with some rules, when passenger and driver are friends, then the trip is compliant",
-                User.Gender.None,
+                User.Gender.X,
                 true,
                 listOf(NoSmoking, PetAllowed),
                 listOf(Private),
@@ -169,7 +169,7 @@ class TripTest {
             ),
             Arguments.of(
                 "when a trip has some rules, but the restriction ONLY_WOMEN is not present, then the trip is not compliant",
-                User.Gender.None,
+                User.Gender.X,
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(),
@@ -205,7 +205,7 @@ class TripTest {
             ),
             Arguments.of(
                 "when a trip does not have any rule and the filter ONLY_WOMEN is not present, then the trip is not compliant",
-                User.Gender.None,
+                User.Gender.X,
                 false,
                 listOf<Filter>(),
                 listOf<Restriction>(),
@@ -214,7 +214,7 @@ class TripTest {
             ),
             Arguments.of(
                 "when a trip has just one rule, but the restriction ONLY_WOMEN is not present, then the trip is not compliant",
-                User.Gender.None,
+                User.Gender.X,
                 false,
                 listOf(NoSmoking),
                 listOf<Restriction>(),

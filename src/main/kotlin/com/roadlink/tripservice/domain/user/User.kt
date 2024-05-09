@@ -8,7 +8,7 @@ data class User(
     val firstName: String,
     val lastName: String,
     val profilePhotoUrl: String,
-    val gender: Gender = Gender.None,
+    val gender: Gender = Gender.X,
     internal val friendsIds: Set<UUID> = emptySet()
 ) {
     private fun fullName(): String {
@@ -34,7 +34,7 @@ data class User(
     }
 
     enum class Gender {
-        None,
+        X,
         Male,
         Female;
 
@@ -43,7 +43,7 @@ data class User(
                 return when (value.uppercase(Locale.getDefault())) {
                     "M" -> Male
                     "F" -> Female
-                    else -> None
+                    else -> X
                 }
             }
         }

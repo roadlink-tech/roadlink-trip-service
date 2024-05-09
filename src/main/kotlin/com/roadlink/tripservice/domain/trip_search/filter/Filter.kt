@@ -1,4 +1,4 @@
-package com.roadlink.tripservice.domain.trip_search
+package com.roadlink.tripservice.domain.trip_search.filter
 
 enum class Filter {
     // Rules

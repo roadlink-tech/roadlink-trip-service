@@ -1,6 +1,6 @@
 package com.roadlink.tripservice.domain.trip.constraint
 
-import com.roadlink.tripservice.domain.trip_search.Filter
+import com.roadlink.tripservice.domain.trip_search.filter.Filter
 import com.roadlink.tripservice.domain.trip.Trip
 
 /**

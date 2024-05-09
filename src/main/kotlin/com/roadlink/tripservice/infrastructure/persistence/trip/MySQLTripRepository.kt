@@ -5,6 +5,7 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
+import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
 import java.util.*
 
@@ -53,6 +54,51 @@ class MySQLTripRepository(
                 .setParameter("driverId", driverId.toString())
                 .resultList
                 .map { it.toDomain() }
+        }
+    }
+
+    override fun find(commandQuery: TripRepository.CommandQuery): List<Trip> {
+        val cq = TripCommandQuery.from(commandQuery)
+        return transactionManager.executeRead {
+            val cb = entityManager.criteriaBuilder
+            val criteriaQuery = cb.createQuery(TripJPAEntity::class.java)
+            val root = criteriaQuery.from(TripJPAEntity::class.java)
+
+            val predicates = mutableListOf<Predicate>()
+
+            if (cq.ids.isNotEmpty()) {
+                val idPredicate = root.get<UUID>("id").`in`(cq.ids)
+                predicates.add(idPredicate)
+            }
+
+            if (cq.driverId != null) {
+                val idPredicate = root.get<UUID>("driverId").`in`(cq.driverId)
+                predicates.add(idPredicate)
+            }
+
+            criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))
+            entityManager.createQuery(criteriaQuery).resultList.map { it.toDomain() }
+        }
+    }
+
+    data class TripCommandQuery(
+        val ids: List<UUID?> = emptyList(),
+        val driverId: UUID? = null
+    ) {
+        init {
+            require(ids.isNotEmpty() || driverId != null) {
+                "At least one field must be not null or empty"
+            }
+        }
+
+        companion object {
+
+            fun from(domainCommandQuery: TripRepository.CommandQuery): TripCommandQuery {
+                return TripCommandQuery(
+                    ids = domainCommandQuery.ids,
+                    driverId = domainCommandQuery.driverId
+                )
+            }
         }
     }
 

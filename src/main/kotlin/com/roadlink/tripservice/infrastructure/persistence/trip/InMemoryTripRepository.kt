@@ -21,6 +21,10 @@ class InMemoryTripRepository(
         return trips.filter { it.driverId == driverId.toString() }
     }
 
+    override fun find(commandQuery: TripRepository.CommandQuery): List<Trip> {
+        TODO("Not yet implemented")
+    }
+
     fun findAll(): List<Trip> = trips
 
     fun isEmpty(): Boolean = trips.isEmpty()

@@ -11,7 +11,7 @@ object UserFactory {
         lastName: String = "Krasinski",
         profilePhotoUrl: String = "http//profile.photo.com",
         friendsIds: Set<UUID> = setOf(),
-        gender: User.Gender = User.Gender.None
+        gender: User.Gender = User.Gender.X
     ): User {
         return User(
             id = id.toString(),

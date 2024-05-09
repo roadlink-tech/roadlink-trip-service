@@ -3,7 +3,7 @@ package com.roadlink.tripservice.usecases.trip_search
 import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.domain.trip_search.BruteForceSearchEngine
+import com.roadlink.tripservice.domain.trip_search.algorithm.BruteForceSearchEngine
 import com.roadlink.tripservice.domain.trip_search.JtsSearchCircleCreator
 import com.roadlink.tripservice.domain.trip_search.SearchRadiusGenerator
 import com.roadlink.tripservice.usecases.common.InstantFactory

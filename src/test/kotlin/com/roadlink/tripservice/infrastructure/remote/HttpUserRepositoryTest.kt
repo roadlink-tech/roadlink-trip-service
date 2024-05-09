@@ -84,7 +84,7 @@ class HttpUserRepositoryTest {
         assertEquals("Doe", user?.lastName)
         assertEquals("http://example.com/photo.jpg", user?.profilePhotoUrl)
         assertEquals(setOf(UUID.fromString("e0a778c4-ca85-490a-80a0-979244a7995b")), user?.friendsIds)
-        assertEquals(User.Gender.None, user?.gender)
+        assertEquals(User.Gender.X, user?.gender)
     }
 
     @Test
