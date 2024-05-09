@@ -85,7 +85,7 @@ internal class SearchTripTest {
         )
 
         // THEN
-        assertEquals(listOf(TripSearchPlanFactory.avCabildo()), result)
+        assertEquals(listOf(TripSearchPlanResultFactory.avCabildo()), result)
     }
 
     @Test
@@ -115,7 +115,7 @@ internal class SearchTripTest {
 
         // THEN
         assertEquals(
-            listOf(TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20()),
+            listOf(TripSearchPlanResultFactory.avCabildo4853_virreyDelPino1800_avCabildo20()),
             result
         )
     }
@@ -156,8 +156,8 @@ internal class SearchTripTest {
         // THEN
         assertEquals(
             listOf(
-                TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
-                TripSearchPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
+                TripSearchPlanResultFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+                TripSearchPlanResultFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
             ),
             result
         )
@@ -207,9 +207,9 @@ internal class SearchTripTest {
         // THEN
         assertEquals(
             listOf(
-                TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
-                TripSearchPlanFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
-                TripSearchPlanFactory.avCabildo4853_virreyDelPino1800_avDelLibertador5000_avCabildo20(),
+                TripSearchPlanResultFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+                TripSearchPlanResultFactory.avCabildo4853_virreyDelPino2880_avCabildo20(),
+                TripSearchPlanResultFactory.avCabildo4853_virreyDelPino1800_avDelLibertador5000_avCabildo20(),
             ),
             result
         )
@@ -238,7 +238,7 @@ internal class SearchTripTest {
         )
 
         // THEN
-        assertEquals(listOf(TripSearchPlanFactory.avCabildo()), result)
+        assertEquals(listOf(TripSearchPlanResultFactory.avCabildo()), result)
     }
 
     private fun circleSearchAreaRadius(departure: Location, arrival: Location): Double =

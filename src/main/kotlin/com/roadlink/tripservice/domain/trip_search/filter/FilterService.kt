@@ -34,7 +34,7 @@ class SearchFilterService(val tripRepository: TripRepository) : FilterService {
         filters: List<Filter>
     ): List<TripSearchPlanResult> {
         return tripSearchPlanResult.filter { result ->
-            result.listTrips(tripRepository).any { trip -> !trip.isCompliant(requester, filters) }
+            !result.listTrips(tripRepository).any { trip -> !trip.isCompliant(requester, filters) }
         }
     }
 }
