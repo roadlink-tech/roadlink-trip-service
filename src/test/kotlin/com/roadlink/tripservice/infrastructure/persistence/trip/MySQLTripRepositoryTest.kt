@@ -8,7 +8,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.util.UUID
+import java.util.*
 
 @MicronautTest
 class MySQLTripRepositoryTest {
@@ -18,22 +18,28 @@ class MySQLTripRepositoryTest {
 
     @Test
     fun `can save trip with no meeting points`() {
+        // given
         val driverId = UUID.randomUUID()
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString())
 
+        // when
         repository.save(trip)
 
-        assertEquals(listOf(trip), repository.findAllByDriverId(driverId))
+        // then
+        assertEquals(listOf(trip), repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)))
     }
 
     @Test
     fun `can save trip with one meeting point`() {
+        // given
         val driverId = UUID.randomUUID()
         val trip = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(driverId = driverId.toString())
 
+        // when
         repository.save(trip)
 
-        assertEquals(listOf(trip), repository.findAllByDriverId(driverId))
+        // then
+        assertEquals(listOf(trip), repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)))
     }
 
     @Test
@@ -43,7 +49,7 @@ class MySQLTripRepositoryTest {
 
         repository.save(trip)
 
-        assertEquals(listOf(trip), repository.findAllByDriverId(driverId))
+        assertEquals(listOf(trip), repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)))
     }
 
     @Test
@@ -52,7 +58,7 @@ class MySQLTripRepositoryTest {
         val trip = TripFactory.caba_escobar_pilar_rosario()
         repository.save(trip)
 
-        val result = repository.findAllByDriverId(otherDriverId)
+        val result = repository.find(commandQuery = TripRepository.CommandQuery(driverId = otherDriverId))
 
         assertTrue { result.isEmpty() }
     }
@@ -69,7 +75,7 @@ class MySQLTripRepositoryTest {
         val trip3 = TripFactory.caba_escobar_pilar_rosario(driverId = otherDriverId.toString())
         repository.save(trip3)
 
-        val result = repository.findAllByDriverId(driverId)
+        val result = repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId))
 
         assertEquals(2, result.size)
         assertTrue { result.containsAll(setOf(trip1, trip2)) }

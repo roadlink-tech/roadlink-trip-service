@@ -19,7 +19,7 @@ class MySQLTripRepository(
         }
     }
 
-    override fun existsByDriverAndInTimeRange(driver: String, timeRange: TimeRange): Boolean {
+    override fun existsByDriverAndInTimeRange(driverId: String, timeRange: TimeRange): Boolean {
         return transactionManager.executeRead {
             entityManager.createQuery(
                 """
@@ -32,28 +32,12 @@ class MySQLTripRepository(
             |""".trimMargin(),
                 TripJPAEntity::class.java
             )
-                .setParameter("driverId", driver)
+                .setParameter("driverId", driverId)
                 .setParameter("to", timeRange.to)
                 .setParameter("from", timeRange.from)
                 .resultList
                 .map { it.toDomain() }
                 .isNotEmpty()
-        }
-    }
-
-    override fun findAllByDriverId(driverId: UUID): List<Trip> {
-        return transactionManager.executeRead {
-            entityManager.createQuery(
-                """
-                |SELECT t 
-                |FROM TripJPAEntity t
-                |WHERE t.driverId = :driverId
-                |""".trimMargin(),
-                TripJPAEntity::class.java
-            )
-                .setParameter("driverId", driverId.toString())
-                .resultList
-                .map { it.toDomain() }
         }
     }
 
@@ -72,8 +56,8 @@ class MySQLTripRepository(
             }
 
             if (cq.driverId != null) {
-                val idPredicate = root.get<UUID>("driverId").`in`(cq.driverId)
-                predicates.add(idPredicate)
+                val driverIdPredicate = cb.equal(root.get<UUID>("driverId"), cq.driverId.toString())
+                predicates.add(driverIdPredicate)
             }
 
             criteriaQuery.select(root).where(cb.and(*predicates.toTypedArray()))

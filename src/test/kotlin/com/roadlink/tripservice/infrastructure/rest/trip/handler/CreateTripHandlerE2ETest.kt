@@ -6,7 +6,6 @@ import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
-import com.roadlink.tripservice.config.SpyCommandBus
 import com.roadlink.tripservice.config.StubIdGenerator
 import com.roadlink.tripservice.domain.common.events.CommandBus
 import com.roadlink.tripservice.usecases.trip.TripFactory
@@ -143,7 +142,7 @@ class CreateTripHandlerE2ETest : End2EndTest() {
     private fun thenTripExists(trip: Trip) {
         assertTrue {
             tripRepository.existsByDriverAndInTimeRange(
-                driver = trip.driverId,
+                driverId = trip.driverId,
                 timeRange = TimeRange(trip.departure.estimatedArrivalTime, trip.arrival.estimatedArrivalTime)
             )
         }

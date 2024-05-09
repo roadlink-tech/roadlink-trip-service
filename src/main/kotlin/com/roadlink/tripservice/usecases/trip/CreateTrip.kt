@@ -43,8 +43,9 @@ class CreateTrip(
     private fun validateExistsTripByDriverAndInTimeRange(input: Input) {
         val driver = input.driver
         val timeRange = TimeRange(from = input.departure.estimatedArrivalTime, to = input.arrival.estimatedArrivalTime)
-        if (tripRepository.existsByDriverAndInTimeRange(driver, timeRange))
+        if (tripRepository.existsByDriverAndInTimeRange(driver, timeRange)) {
             throw AlreadyExistsTripByDriverInTimeRange(driver, timeRange)
+        }
     }
 
     private fun Input.toTrip(): Trip =
