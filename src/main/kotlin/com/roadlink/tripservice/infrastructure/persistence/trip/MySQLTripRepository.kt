@@ -51,7 +51,7 @@ class MySQLTripRepository(
             val predicates = mutableListOf<Predicate>()
 
             if (cq.ids.isNotEmpty()) {
-                val idPredicate = root.get<UUID>("id").`in`(cq.ids)
+                val idPredicate = root.get<UUID>("id").`in`(cq.ids.map { it.toString() })
                 predicates.add(idPredicate)
             }
 

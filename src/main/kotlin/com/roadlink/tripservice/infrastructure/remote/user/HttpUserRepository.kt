@@ -17,12 +17,12 @@ class HttpUserRepository(
     private val objectMapper: ObjectMapper,
 ) : UserRepository {
 
-    override fun findByUserId(userId: String): User? {
+    override fun findByUserId(id: String): User? {
         val httpRequest = ReadRequest.Builder()
             .scheme(scheme)
             .host(host)
             .port(port)
-            .endpoint(endpoint.replace("{userId}", userId))
+            .endpoint(endpoint.replace("{userId}", id))
             .build()
 
         val response = get.dispatch(httpRequest)

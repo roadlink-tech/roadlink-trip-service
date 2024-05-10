@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
-import java.util.stream.Stream
+import java.util.stream.*
 
 class TripTest {
 
@@ -55,7 +55,7 @@ class TripTest {
         passengerAndDriverAreFriends: Boolean,
         policies: List<Policy>,
         restrictions: List<Restriction>,
-        filters: List<Filter>,
+        filters: Set<Filter>,
         expectedResult: Boolean
     ) {
         // given
@@ -91,7 +91,7 @@ class TripTest {
                 false,
                 listOf<Policy>(),
                 listOf<Restriction>(),
-                listOf<Filter>(),
+                setOf<Filter>(),
                 true
             ),
             Arguments.of(
@@ -100,7 +100,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(),
-                listOf(NO_SMOKING),
+                setOf(NO_SMOKING),
                 true
             ),
             Arguments.of(
@@ -109,7 +109,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(OnlyWomen),
-                listOf(NO_SMOKING),
+                setOf(NO_SMOKING),
                 false
             ),
             Arguments.of(
@@ -118,7 +118,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(OnlyWomen),
-                listOf(NO_SMOKING),
+                setOf(NO_SMOKING),
                 true
             ),
             Arguments.of(
@@ -127,7 +127,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(OnlyWomen, Private),
-                listOf(NO_SMOKING),
+                setOf(NO_SMOKING),
                 false
             ),
             Arguments.of(
@@ -136,7 +136,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(),
-                listOf(NO_SMOKING, PET_ALLOWED),
+                setOf(NO_SMOKING, PET_ALLOWED),
                 true
             ),
             Arguments.of(
@@ -145,7 +145,7 @@ class TripTest {
                 true,
                 listOf(NoSmoking, PetAllowed),
                 listOf(Private),
-                listOf(PRIVATE),
+                setOf(PRIVATE),
                 true
             ),
 
@@ -155,7 +155,7 @@ class TripTest {
                 true,
                 listOf(NoSmoking, PetAllowed),
                 listOf(Private, OnlyWomen),
-                listOf(PRIVATE, ONLY_WOMEN),
+                setOf(PRIVATE, ONLY_WOMEN),
                 true
             ),
             Arguments.of(
@@ -164,7 +164,7 @@ class TripTest {
                 true,
                 listOf(NoSmoking, PetAllowed),
                 listOf(Private, OnlyWomen),
-                listOf(PRIVATE),
+                setOf(PRIVATE),
                 false
             ),
             Arguments.of(
@@ -173,7 +173,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(),
-                listOf(NO_SMOKING, PET_ALLOWED, ONLY_WOMEN),
+                setOf(NO_SMOKING, PET_ALLOWED, ONLY_WOMEN),
                 false
             ),
             Arguments.of(
@@ -182,7 +182,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(OnlyWomen),
-                listOf(NO_SMOKING, PET_ALLOWED, ONLY_WOMEN),
+                setOf(NO_SMOKING, PET_ALLOWED, ONLY_WOMEN),
                 false
             ),
             Arguments.of(
@@ -191,7 +191,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking, PetAllowed),
                 listOf<Restriction>(OnlyWomen),
-                listOf(NO_SMOKING, ONLY_WOMEN),
+                setOf(NO_SMOKING, ONLY_WOMEN),
                 true
             ),
             Arguments.of(
@@ -200,7 +200,7 @@ class TripTest {
                 false,
                 listOf(PetAllowed),
                 listOf<Restriction>(OnlyWomen),
-                listOf(NO_SMOKING, ONLY_WOMEN),
+                setOf(NO_SMOKING, ONLY_WOMEN),
                 false
             ),
             Arguments.of(
@@ -209,7 +209,7 @@ class TripTest {
                 false,
                 listOf<Filter>(),
                 listOf<Restriction>(),
-                listOf(NO_SMOKING, PET_ALLOWED, ONLY_WOMEN),
+                setOf(NO_SMOKING, PET_ALLOWED, ONLY_WOMEN),
                 false
             ),
             Arguments.of(
@@ -218,7 +218,7 @@ class TripTest {
                 false,
                 listOf(NoSmoking),
                 listOf<Restriction>(),
-                listOf(ONLY_WOMEN),
+                setOf(ONLY_WOMEN),
                 false
             )
         )
@@ -229,7 +229,10 @@ class TripTest {
         return TripFactory.caba_escobar_pilar_rosario(id = "81dcb088-4b7e-4956-a50a-52eee0dd5a0b")
     }
 
-    private fun thenTheExpectedAmountOfSectionsWereCreated(expectedSections: Int, sections: Set<Section>) {
+    private fun thenTheExpectedAmountOfSectionsWereCreated(
+        expectedSections: Int,
+        sections: Set<Section>
+    ) {
         assertEquals(expectedSections, sections.size)
     }
 

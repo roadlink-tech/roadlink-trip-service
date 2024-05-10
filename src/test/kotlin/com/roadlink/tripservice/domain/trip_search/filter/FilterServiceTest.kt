@@ -41,7 +41,7 @@ class FilterServiceTest {
         passengerAndDriverAreFriends: Boolean,
         policies: List<Policy>,
         restrictions: List<Restriction>,
-        filters: List<Filter>,
+        filters: Set<Filter>,
         shouldBeFiltered: Boolean
     ) {
         // given
@@ -75,7 +75,7 @@ class FilterServiceTest {
                 false,
                 listOf<Policy>(),
                 listOf<Restriction>(),
-                listOf<Filter>(),
+                setOf<Filter>(),
                 false
             ),
             Arguments.of(
@@ -84,7 +84,7 @@ class FilterServiceTest {
                 false,
                 listOf<Policy>(),
                 listOf<Restriction>(Visibility.OnlyWomen),
-                listOf<Filter>(),
+                setOf<Filter>(),
                 false
             ),
             Arguments.of(
@@ -93,7 +93,7 @@ class FilterServiceTest {
                 false,
                 listOf<Policy>(),
                 listOf<Restriction>(Visibility.OnlyWomen, Visibility.Private),
-                listOf<Filter>(),
+                setOf<Filter>(),
                 true
             ),
             Arguments.of(
@@ -102,7 +102,7 @@ class FilterServiceTest {
                 true,
                 listOf<Policy>(),
                 listOf<Restriction>(Visibility.OnlyWomen, Visibility.Private),
-                listOf<Filter>(),
+                setOf<Filter>(),
                 false
             ),
             Arguments.of(
@@ -111,7 +111,7 @@ class FilterServiceTest {
                 true,
                 listOf<Policy>(),
                 listOf<Restriction>(Visibility.OnlyWomen, Visibility.Private),
-                listOf<Filter>(),
+                setOf<Filter>(),
                 true
             ),
             Arguments.of(
@@ -120,7 +120,7 @@ class FilterServiceTest {
                 false,
                 listOf<Policy>(Rule.PetAllowed),
                 listOf<Restriction>(),
-                listOf(Filter.PET_ALLOWED),
+                setOf(Filter.PET_ALLOWED),
                 false
             ),
             Arguments.of(
@@ -129,7 +129,7 @@ class FilterServiceTest {
                 false,
                 listOf<Policy>(),
                 listOf<Restriction>(),
-                listOf(Filter.PET_ALLOWED),
+                setOf(Filter.PET_ALLOWED),
                 true
             ),
             Arguments.of(
@@ -138,7 +138,7 @@ class FilterServiceTest {
                 false,
                 listOf<Policy>(Rule.PetAllowed),
                 listOf<Restriction>(Visibility.Private),
-                listOf(Filter.PET_ALLOWED),
+                setOf(Filter.PET_ALLOWED),
                 true
             ),
             Arguments.of(
@@ -147,7 +147,7 @@ class FilterServiceTest {
                 true,
                 listOf<Policy>(Rule.PetAllowed, Rule.NoSmoking),
                 listOf<Restriction>(Visibility.Private),
-                listOf(Filter.PET_ALLOWED),
+                setOf(Filter.PET_ALLOWED),
                 false
             ),
             Arguments.of(
@@ -156,7 +156,7 @@ class FilterServiceTest {
                 true,
                 listOf<Policy>(Rule.PetAllowed, Rule.NoSmoking),
                 listOf<Restriction>(),
-                listOf(Filter.PRIVATE),
+                setOf(Filter.PRIVATE),
                 true
             ),
             Arguments.of(
@@ -165,7 +165,7 @@ class FilterServiceTest {
                 true,
                 listOf<Policy>(Rule.PetAllowed, Rule.NoSmoking),
                 listOf<Restriction>(Visibility.Private, Visibility.OnlyWomen),
-                listOf(Filter.PRIVATE),
+                setOf(Filter.PRIVATE),
                 true
             ),
         )

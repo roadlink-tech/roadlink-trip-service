@@ -4,15 +4,19 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.SearchTripResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SearchTripResponse
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.SectionResponse
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.TripSearchPlanResponse
-import com.roadlink.tripservice.usecases.common.address.LocationFactory
 import com.roadlink.tripservice.usecases.common.InstantFactory
+import com.roadlink.tripservice.usecases.common.address.LocationFactory
 import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
+import com.roadlink.tripservice.usecases.user.UserFactory
+import io.micronaut.context.annotation.Primary
+import io.micronaut.context.annotation.Replaces
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
@@ -21,7 +25,10 @@ import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.uri.UriBuilder
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.mockk.every
+import io.mockk.mockk
 import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -34,6 +41,14 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     lateinit var client: HttpClient
 
     @Inject
+    private lateinit var userRepository: UserRepository
+
+    @Singleton
+    @Primary
+    @Replaces(bean = UserRepository::class)
+    fun userRepository(): UserRepository = mockk(relaxed = true)
+
+    @Inject
     private lateinit var sectionRepository: SectionRepository
 
     @Inject
@@ -42,16 +57,20 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     @Test
     fun `given no existing sections, then should return ok status code and the trip plan in response body`() {
         // given
-        val request: HttpRequest<Any> = HttpRequest
-            .GET(
-                UriBuilder.of("/trip-service/trips")
-                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
-                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
-                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
-                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
-                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
-                    .build()
-            )
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
+        )
+        val request: HttpRequest<JsonNode> = HttpRequest.GET<JsonNode>(
+            UriBuilder.of("/trip-service/trips")
+                .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                .build()
+        ).header("x-caller-id", callerId.toString())
+
 
         // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
@@ -68,6 +87,10 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     @Test
     fun `given an existing trip plan with one meeting point between the given departure and arrival location, then should return ok status code and the trip plan in response body`() {
         // given
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
+        )
         sectionRepository.save(
             SectionFactory.avCabildo4853_virreyDelPino1800(
                 tripId = UUID.fromString(
@@ -84,8 +107,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
         )
         entityManager.transaction.commit()
 
-        val request: HttpRequest<Any> = HttpRequest
-            .GET(
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
                 UriBuilder.of("/trip-service/trips")
                     .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
                     .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
@@ -93,7 +116,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .build()
-            )
+            ).header("x-caller-id", callerId.toString())
+
 
         // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
@@ -109,19 +133,14 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
 
     @Test
     fun `given an existing trip plan, when search by a near arrival and departure location placed by a radius of 1 percent of the total distance, then a result must be retrieved`() {
-        val tripId = UUID.fromString(
-            TripFactory.avCabildo_id
+        // given
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
         )
-        sectionRepository.save(
-            SectionFactory.avCabildo4853_virreyDelPino1800(
-                tripId = tripId
-            )
-        )
-        sectionRepository.save(
-            SectionFactory.virreyDelPino1800_avCabildo20(
-                tripId = tripId
-            )
-        )
+        val tripId = UUID.fromString(TripFactory.avCabildo_id)
+        sectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800(tripId = tripId))
+        sectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20(tripId = tripId))
         entityManager.transaction.commit()
 
         val departureLocation = Location(
@@ -136,8 +155,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             alias = "Location 40 mt to the west of AvCabildo 20"
         )
 
-        val request: HttpRequest<Any> = HttpRequest
-            .GET(
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
                 UriBuilder.of("/trip-service/trips")
                     .queryParam("departureLatitude", departureLocation.latitude)
                     .queryParam("departureLongitude", departureLocation.longitude)
@@ -145,7 +164,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", arrivalLocation.longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .build()
-            )
+            ).header("x-caller-id", callerId.toString())
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
@@ -159,19 +178,14 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
 
     @Test
     fun `given an existing trip plan, when search by an arrival location placed by a radius greater than 1 percent of the total distance, then none result must be retrieved`() {
-        val tripId = UUID.fromString(
-            TripFactory.avCabildo_id
+        // given
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
         )
-        sectionRepository.save(
-            SectionFactory.avCabildo4853_virreyDelPino1800(
-                tripId = tripId
-            )
-        )
-        sectionRepository.save(
-            SectionFactory.virreyDelPino1800_avCabildo20(
-                tripId = tripId
-            )
-        )
+        val tripId = UUID.fromString(TripFactory.avCabildo_id)
+        sectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800(tripId = tripId))
+        sectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20(tripId = tripId))
         entityManager.transaction.commit()
 
         val departureLocation = Location(
@@ -180,15 +194,14 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             alias = "Location 1 km to the south AvCabildo 4853"
         )
 
-
         val arrivalLocation = Location(
             latitude = -34.574810,
             longitude = -58.436030,
             alias = "Location 40 mt to the west of AvCabildo 20"
         )
 
-        val request: HttpRequest<Any> = HttpRequest
-            .GET(
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
                 UriBuilder.of("/trip-service/trips")
                     .queryParam("departureLatitude", departureLocation.latitude)
                     .queryParam("departureLongitude", departureLocation.longitude)
@@ -196,10 +209,12 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", arrivalLocation.longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .build()
-            )
+            ).header("x-caller-id", callerId.toString())
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(
@@ -210,19 +225,14 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
 
     @Test
     fun `given an existing trip plan, when search by a departure location placed by a radius greater than 1 percent of the total distance, then none result must be retrieved`() {
-        val tripId = UUID.fromString(
-            TripFactory.avCabildo_id
+        // given
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
         )
-        sectionRepository.save(
-            SectionFactory.avCabildo4853_virreyDelPino1800(
-                tripId = tripId
-            )
-        )
-        sectionRepository.save(
-            SectionFactory.virreyDelPino1800_avCabildo20(
-                tripId = tripId
-            )
-        )
+        val tripId = UUID.fromString(TripFactory.avCabildo_id)
+        sectionRepository.save(SectionFactory.avCabildo4853_virreyDelPino1800(tripId = tripId))
+        sectionRepository.save(SectionFactory.virreyDelPino1800_avCabildo20(tripId = tripId))
         entityManager.transaction.commit()
 
         val departureLocation = Location(
@@ -237,9 +247,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             alias = "Location 1 km to the south of AvCabildo 20"
         )
 
-
-        val request: HttpRequest<Any> = HttpRequest
-            .GET(
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
                 UriBuilder.of("/trip-service/trips")
                     .queryParam("departureLatitude", departureLocation.latitude)
                     .queryParam("departureLongitude", departureLocation.longitude)
@@ -247,10 +256,12 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", arrivalLocation.longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .build()
-            )
+            ).header("x-caller-id", callerId.toString())
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(HttpStatus.OK, response.status)
         assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(
@@ -262,6 +273,10 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     @Test
     fun `given an existing trip plan, when search by a departure location placed by a radius less than 15 km of the total distance, then a result must be retrieved`() {
         // given
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
+        )
         val tripId = UUID.randomUUID()
         val sectionId = UUID.randomUUID()
         val expectedSection = SectionFactory.caba_ushuaia(
@@ -276,8 +291,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
 
         val arrivalLocation = LocationFactory.ushuaia()
 
-        val request: HttpRequest<Any> = HttpRequest
-            .GET(
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
                 UriBuilder.of("/trip-service/trips")
                     .queryParam("departureLatitude", departureLocation.latitude)
                     .queryParam("departureLongitude", departureLocation.longitude)
@@ -285,7 +300,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", arrivalLocation.longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .build()
-            )
+            ).header("x-caller-id", callerId.toString())
 
         // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
@@ -310,6 +325,10 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     @Test
     fun `given an existing trip plan, when search by a departure and arrival location placed by a radius less than 15 km of the total distance, then a result must be retrieved`() {
         // given
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
+        )
         val tripId = UUID.randomUUID()
         val sectionId = UUID.randomUUID()
         val expectedSection = SectionFactory.caba_ushuaia(
@@ -329,8 +348,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             alias = "Location 10 km from Ushuaia"
         )
 
-        val request: HttpRequest<Any> = HttpRequest
-            .GET(
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
                 UriBuilder.of("/trip-service/trips")
                     .queryParam("departureLatitude", departureLocation.latitude)
                     .queryParam("departureLongitude", departureLocation.longitude)
@@ -338,7 +357,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", arrivalLocation.longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .build()
-            )
+            ).header("x-caller-id", callerId.toString())
 
         // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
@@ -363,6 +382,10 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     @Test
     fun `given an existing trip plan, when search by a departure location place by a radius greater than 15 km of the total distance, then none result must be retrieved`() {
         // given
+        val callerId = UUID.randomUUID()
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
+            id = callerId
+        )
         val tripId = UUID.randomUUID()
         val sectionId = UUID.randomUUID()
         val section = SectionFactory.caba_ushuaia(
@@ -385,7 +408,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
         )
 
         val request: HttpRequest<Any> = HttpRequest
-            .GET(
+            .GET<Any?>(
                 UriBuilder.of("/trip-service/trips")
                     .queryParam("departureLatitude", departureLocation.latitude)
                     .queryParam("departureLongitude", departureLocation.longitude)
@@ -393,7 +416,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", arrivalLocation.longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .build()
-            )
+            ).header("x-caller-id", callerId.toString())
 
         // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)

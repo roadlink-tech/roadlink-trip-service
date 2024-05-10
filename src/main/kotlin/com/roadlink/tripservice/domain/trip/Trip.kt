@@ -2,7 +2,6 @@ package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.common.TripPoint
-import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.constraint.Policy
 import com.roadlink.tripservice.domain.trip.constraint.Restriction
 import com.roadlink.tripservice.domain.trip.constraint.Rule
@@ -29,14 +28,14 @@ data class Trip(
     val restrictions: List<Restriction> = emptyList()
 ) {
 
-    private fun canAdmitePassenger(requesterPassenger: User): Boolean {
+    private fun canAdmitPassenger(requesterPassenger: User): Boolean {
         return this.restrictions
             .all { it.isAllowed(requesterPassenger, this) }
     }
 
-    fun isCompliant(requesterPassenger: User, filters: List<Filter>): Boolean {
+    fun isCompliant(requesterPassenger: User, filters: Set<Filter>): Boolean {
         // the restrictions always must be evaluated
-        if (!canAdmitePassenger(requesterPassenger)) {
+        if (!canAdmitPassenger(requesterPassenger)) {
             return false
         }
         if (filters.isNotEmpty()) {
@@ -91,9 +90,6 @@ data class Trip(
         allTripPoints: List<TripPoint>,
         i: Int
     ) = allTripPoints[i] == arrival
-
-    fun isInTimeRange(timeRange: TimeRange): Boolean =
-        TimeRange(departure.estimatedArrivalTime, arrival.estimatedArrivalTime).intersects(timeRange)
 
     enum class Status {
         NOT_STARTED,

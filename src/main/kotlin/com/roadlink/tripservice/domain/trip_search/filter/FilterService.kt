@@ -23,7 +23,7 @@ interface FilterService {
     fun evaluate(
         requester: User,
         tripSearchPlanResult: List<TripSearchPlanResult>,
-        filters: List<Filter>
+        filters: Set<Filter>
     ): List<TripSearchPlanResult>
 }
 
@@ -31,7 +31,7 @@ class SearchFilterService(val tripRepository: TripRepository) : FilterService {
     override fun evaluate(
         requester: User,
         tripSearchPlanResult: List<TripSearchPlanResult>,
-        filters: List<Filter>
+        filters: Set<Filter>
     ): List<TripSearchPlanResult> {
         return tripSearchPlanResult.filter { result ->
             !result.listTrips(tripRepository).any { trip -> !trip.isCompliant(requester, filters) }
