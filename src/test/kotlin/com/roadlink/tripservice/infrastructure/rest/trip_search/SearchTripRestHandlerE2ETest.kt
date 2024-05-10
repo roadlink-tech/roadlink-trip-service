@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
+import com.roadlink.tripservice.domain.user.User
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
 import com.roadlink.tripservice.infrastructure.factories.SearchTripResponseFactory
@@ -85,7 +86,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     }
 
     @Test
-    fun `given an existing trip plan with one meeting point between the given departure and arrival location, then should return ok status code and the trip plan in response body`() {
+    fun `given an existing trip plan with one meeting point between the given departure and arrival location, then should return ok status code and the trip plan`() {
         // given
         val callerId = UUID.randomUUID()
         every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns UserFactory.common(
@@ -430,7 +431,58 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
         )
     }
 
-    private fun assertOkBody(
+    // Search with filters
+    @Test
+    fun `given an existing trip plan with one meeting point between the given departure and arrival location, and which contains a trip just for womens, then should return the trip plan when the caller is a women`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val requester = UserFactory.common(gender = User.Gender.Female, id = callerId)
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns requester
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(
+                    TripFactory.avCabildo_id
+                )
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(
+                    TripFactory.avCabildo_id
+                )
+            )
+        )
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertOkBody(
+            SearchTripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+            response
+        )
+    }
+
+    @Test
+    fun
+            private
+
+    fun assertOkBody(
         searchTripResponse: SearchTripResponse,
         httpResponse: HttpResponse<JsonNode>
     ) {
