@@ -2,6 +2,7 @@ package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.common.TripPoint
+import com.roadlink.tripservice.domain.trip.constraint.Constraint
 import com.roadlink.tripservice.domain.trip.constraint.Policy
 import com.roadlink.tripservice.domain.trip.constraint.Restriction
 import com.roadlink.tripservice.domain.trip.constraint.Rule

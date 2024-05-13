@@ -89,7 +89,6 @@ object SectionFactory {
     ) =
         Section(
             id = virreyDelPino1800_avCabildo20_id,
-            //tripId = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id,
             departure = TripPointFactory.virreyDelPino_1800(),
             arrival = TripPointFactory.avCabildo_20(),
             distanceInMeters = 3000.0,

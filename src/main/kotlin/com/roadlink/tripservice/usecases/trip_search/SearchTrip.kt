@@ -17,12 +17,13 @@ class SearchTrip(
     private val filterService: FilterService,
 ) : UseCase<SearchTrip.Input, SearchTrip.Output> {
 
-    override operator fun invoke(input: Input): Output =
-        userRepository.findByUserId(input.callerId.toString())?.let { user ->
+    override operator fun invoke(input: Input): Output {
+        return userRepository.findByUserId(input.callerId.toString())?.let { user ->
             searchEngine.search(input.departure, input.arrival, input.at)
                 .let { results -> filterService.evaluate(user, results, input.domainFilters()) }
                 .let { filteredResults -> Output(filteredResults) }
         } ?: throw UserError.NotExists(input.callerId.toString())
+    }
     
     data class Output(val result: List<TripSearchPlanResult>)
     data class Input(

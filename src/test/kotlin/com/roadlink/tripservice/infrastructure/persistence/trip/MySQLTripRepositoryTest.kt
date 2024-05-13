@@ -2,6 +2,8 @@ package com.roadlink.tripservice.infrastructure.persistence.trip
 
 import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.TripRepository
+import com.roadlink.tripservice.domain.trip.constraint.Rule
+import com.roadlink.tripservice.domain.trip.constraint.Visibility
 import com.roadlink.tripservice.usecases.common.InstantFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -20,26 +22,76 @@ class MySQLTripRepositoryTest {
     fun `can save trip with no meeting points`() {
         // given
         val driverId = UUID.randomUUID()
-        val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString())
+        val trip = TripFactory.common(driverId = driverId)
 
         // when
         repository.save(trip)
 
         // then
-        assertEquals(listOf(trip), repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)))
+        assertEquals(
+            listOf(trip),
+            repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId))
+        )
+    }
+
+    @Test
+    fun `when save a trip with policies and restrictions, then it must be retrieved`() {
+        // given
+        val driverId = UUID.randomUUID()
+        val trip = TripFactory.common(
+            driverId = driverId,
+            policies = listOf(Rule.NoSmoking, Rule.PetAllowed),
+            restrictions = listOf(Visibility.Private, Visibility.OnlyWomen)
+        )
+        repository.save(trip)
+
+        // when
+        val result =
+            repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)).first()
+        // then
+        assertEquals(trip, result)
+        assertTrue(
+            result.restrictions.containsAll(
+                listOf(
+                    Visibility.Private,
+                    Visibility.OnlyWomen
+                )
+            )
+        )
+        assertTrue(result.policies.containsAll(listOf(Rule.NoSmoking, Rule.PetAllowed)))
+    }
+
+    @Test
+    fun `when save a trip without any policy and restriction, then it must be retrieved as empty values`() {
+        // given
+        val driverId = UUID.randomUUID()
+        val trip = TripFactory.common(driverId = driverId)
+        repository.save(trip)
+
+        // when
+        val result =
+            repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)).first()
+        // then
+        assertEquals(trip, result)
+        assertTrue(result.restrictions.isEmpty())
+        assertTrue(result.policies.isEmpty())
     }
 
     @Test
     fun `can save trip with one meeting point`() {
         // given
         val driverId = UUID.randomUUID()
-        val trip = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(driverId = driverId.toString())
+        val trip =
+            TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(driverId = driverId.toString())
 
         // when
         repository.save(trip)
 
         // then
-        assertEquals(listOf(trip), repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)))
+        assertEquals(
+            listOf(trip),
+            repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId))
+        )
     }
 
     @Test
@@ -49,7 +101,10 @@ class MySQLTripRepositoryTest {
 
         repository.save(trip)
 
-        assertEquals(listOf(trip), repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)))
+        assertEquals(
+            listOf(trip),
+            repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId))
+        )
     }
 
     @Test
@@ -58,7 +113,8 @@ class MySQLTripRepositoryTest {
         val trip = TripFactory.caba_escobar_pilar_rosario()
         repository.save(trip)
 
-        val result = repository.find(commandQuery = TripRepository.CommandQuery(driverId = otherDriverId))
+        val result =
+            repository.find(commandQuery = TripRepository.CommandQuery(driverId = otherDriverId))
 
         assertTrue { result.isEmpty() }
     }
@@ -67,7 +123,8 @@ class MySQLTripRepositoryTest {
     fun `given trip applications exists with the given driver id when find all by driver id then should return them`() {
         val driverId = UUID.randomUUID()
         val trip1 = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString())
-        val trip2 = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(driverId = driverId.toString())
+        val trip2 =
+            TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(driverId = driverId.toString())
         repository.save(trip1)
         repository.save(trip2)
 
@@ -75,7 +132,8 @@ class MySQLTripRepositoryTest {
         val trip3 = TripFactory.caba_escobar_pilar_rosario(driverId = otherDriverId.toString())
         repository.save(trip3)
 
-        val result = repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId))
+        val result =
+            repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId))
 
         assertEquals(2, result.size)
         assertTrue { result.containsAll(setOf(trip1, trip2)) }

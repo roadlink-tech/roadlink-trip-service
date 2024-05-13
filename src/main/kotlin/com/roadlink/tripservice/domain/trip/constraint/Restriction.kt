@@ -43,17 +43,10 @@ sealed class Visibility : Restriction {
         }
     }
 
-    object FriendsOfFriends : Visibility() {
-        override fun isAllowed(requester: User, trip: Trip): Boolean {
-            TODO("it should be implemented later, nowadays the user only contains friends information")
-        }
-    }
-
     companion object {
         fun valueOf(filter: Filter): Visibility? {
             return when (filter) {
                 Filter.PRIVATE -> Private
-                Filter.FRIENDS_OF_FRIENDS -> FriendsOfFriends
                 Filter.ONLY_WOMEN -> OnlyWomen
                 else -> null
             }

@@ -3,6 +3,9 @@ package com.roadlink.tripservice.infrastructure.rest.trip_search
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roadlink.tripservice.domain.common.Location
+import com.roadlink.tripservice.domain.trip.TripRepository
+import com.roadlink.tripservice.domain.trip.constraint.Rule
+import com.roadlink.tripservice.domain.trip.constraint.Visibility
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.user.User
 import com.roadlink.tripservice.domain.user.UserRepository
@@ -51,6 +54,9 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
 
     @Inject
     private lateinit var sectionRepository: SectionRepository
+
+    @Inject
+    private lateinit var tripRepository: TripRepository
 
     @Inject
     private lateinit var objectMapper: ObjectMapper
@@ -433,25 +439,29 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
 
     // Search with filters
     @Test
-    fun `given an existing trip plan with one meeting point between the given departure and arrival location, and which contains a trip just for womens, then should return the trip plan when the caller is a women`() {
+    fun `given a trip plan which contains a trip with ONLY_WOMEN restriction, when use ONLY_WOMEN filter and the requester is a women, then should return the trip`() {
         // given
         val callerId = UUID.randomUUID()
         val requester = UserFactory.common(gender = User.Gender.Female, id = callerId)
+        val oneTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            restrictions = listOf(Visibility.OnlyWomen)
+        )
+
         every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns requester
+
         sectionRepository.save(
             SectionFactory.avCabildo4853_virreyDelPino1800(
-                tripId = UUID.fromString(
-                    TripFactory.avCabildo_id
-                )
+                tripId = UUID.fromString(oneTrip.id)
             )
         )
         sectionRepository.save(
             SectionFactory.virreyDelPino1800_avCabildo20(
-                tripId = UUID.fromString(
-                    TripFactory.avCabildo_id
-                )
+                tripId = UUID.fromString(oneTrip.id)
             )
         )
+        tripRepository.save(trip = oneTrip)
+
         entityManager.transaction.commit()
 
         val request: HttpRequest<JsonNode> = HttpRequest
@@ -462,6 +472,11 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
                     .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("ONLY_WOMEN").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
                     .build()
             ).header("x-caller-id", callerId.toString())
 
@@ -479,10 +494,514 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     }
 
     @Test
-    fun
-            private
+    fun `given a trip plan which contains a trip with ONLY_WOMEN restriction, when use ONLY_WOMEN filter and the requester is not a women, then should not return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val requester = UserFactory.common(gender = User.Gender.Male, id = callerId)
+        val oneTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            restrictions = listOf(Visibility.OnlyWomen)
+        )
 
-    fun assertOkBody(
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns requester
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(oneTrip.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(oneTrip.id)
+            )
+        )
+        tripRepository.save(trip = oneTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("ONLY_WOMEN").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
+        )
+    }
+
+    @Test
+    fun `given a trip plan which contains a trip with ONLY_WOMEN restriction, when use NO_SMOKING filter, then should not return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val requester = UserFactory.common(gender = User.Gender.Female, id = callerId)
+        val tripWithOnlyWomenRestriction = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            restrictions = listOf(Visibility.OnlyWomen)
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns requester
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(tripWithOnlyWomenRestriction.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(tripWithOnlyWomenRestriction.id)
+            )
+        )
+        tripRepository.save(trip = tripWithOnlyWomenRestriction)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("ONLY_WOMEN", "NO_SMOKING").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
+        )
+    }
+
+    @Test
+    fun `given a trip plan which contains a trip with NO_SMOKING rule and PRIVATE restriction, when use NO_SMOKING, PRIVATE filters and requester and driver are friends, then should return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val driverId = UUID.randomUUID()
+        val caller = UserFactory.common(
+            gender = User.Gender.Female,
+            id = callerId,
+            friendsIds = setOf(driverId)
+        )
+        val privateTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            policies = listOf(Rule.NoSmoking),
+            driverId = driverId,
+            restrictions = listOf(Visibility.Private)
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(privateTrip.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(privateTrip.id)
+            )
+        )
+        tripRepository.save(trip = privateTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("PRIVATE", "NO_SMOKING").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertOkBody(
+            SearchTripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(),
+            response
+        )
+    }
+
+    @Test
+    fun `given a trip plan which contains a trip with NO_SMOKING rule and PRIVATE restriction, when use PET_ALLOWED, PRIVATE filters, then should not return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val driverId = UUID.randomUUID()
+        val caller = UserFactory.common(
+            gender = User.Gender.Female,
+            id = callerId,
+            friendsIds = setOf(driverId)
+        )
+        val privateTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            policies = listOf(Rule.NoSmoking),
+            driverId = driverId,
+            restrictions = listOf(Visibility.Private)
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(privateTrip.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(privateTrip.id)
+            )
+        )
+        tripRepository.save(trip = privateTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("PRIVATE", "PET_ALLOWED").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
+        )
+    }
+
+    @Test
+    fun `given a trip plan which contains two private trips, when use PRIVATE filters and the requester is friend of all the drivers, then should return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val oneDriverId = UUID.randomUUID()
+        val otherDriverId = UUID.randomUUID()
+        val caller = UserFactory.common(
+            gender = User.Gender.Female,
+            id = callerId,
+            friendsIds = setOf(oneDriverId, otherDriverId)
+        )
+        val onePrivateTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            policies = listOf(),
+            driverId = oneDriverId,
+            restrictions = listOf(Visibility.Private)
+        )
+        val otherPrivateTrip = TripFactory.common(
+            id = UUID.randomUUID(),
+            policies = listOf(),
+            driverId = otherDriverId,
+            restrictions = listOf(Visibility.Private)
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(onePrivateTrip.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(otherPrivateTrip.id)
+            )
+        )
+        tripRepository.save(trip = onePrivateTrip)
+        tripRepository.save(trip = otherPrivateTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("PRIVATE").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertOkBody(
+            SearchTripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(
+                avCabildo4853_virreyDelPino1800_tripId = onePrivateTrip.id,
+                virreyDelPino1800_avCabildo20_tripId = otherPrivateTrip.id
+            ),
+            response
+        )
+    }
+
+    @Test
+    fun `given a trip plan which contains two private trips, when use PRIVATE filters and the requester is not a friend of all the drivers, then should not return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val oneDriverId = UUID.randomUUID()
+        val otherDriverId = UUID.randomUUID()
+        val caller = UserFactory.common(
+            gender = User.Gender.Female,
+            id = callerId,
+            friendsIds = setOf(oneDriverId)
+        )
+        val onePrivateTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            policies = listOf(),
+            driverId = oneDriverId,
+            restrictions = listOf(Visibility.Private)
+        )
+        val otherPrivateTrip = TripFactory.common(
+            id = UUID.randomUUID(),
+            policies = listOf(),
+            driverId = otherDriverId,
+            restrictions = listOf(Visibility.Private)
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(onePrivateTrip.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(otherPrivateTrip.id)
+            )
+        )
+        tripRepository.save(trip = onePrivateTrip)
+        tripRepository.save(trip = otherPrivateTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("PRIVATE").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
+        )
+    }
+
+    @Test
+    fun `given a trip plan which contains two trips but just one of those is just for women, when use ONLY_WOMEN filter, then should not return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val oneDriverId = UUID.randomUUID()
+        val otherDriverId = UUID.randomUUID()
+        val caller = UserFactory.common(
+            gender = User.Gender.Female,
+            id = callerId,
+        )
+        val oneTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            policies = listOf(),
+            driverId = oneDriverId,
+            restrictions = listOf(Visibility.OnlyWomen)
+        )
+        val otherTrip = TripFactory.common(
+            id = UUID.randomUUID(),
+            policies = listOf(),
+            driverId = otherDriverId
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(oneTrip.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(otherTrip.id)
+            )
+        )
+        tripRepository.save(trip = oneTrip)
+        tripRepository.save(trip = otherTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("ONLY_WOMEN").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
+        )
+    }
+
+    @Test
+    fun `given a trip plan which contains the same rules, when use those rules as filters, then should return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val oneDriverId = UUID.randomUUID()
+        val otherDriverId = UUID.randomUUID()
+        val caller = UserFactory.common(
+            gender = User.Gender.Female,
+            id = callerId,
+        )
+        val oneTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            driverId = oneDriverId,
+            policies = listOf(Rule.NoSmoking, Rule.PetAllowed),
+            restrictions = listOf()
+        )
+        val otherTrip = TripFactory.common(
+            id = UUID.randomUUID(),
+            policies = listOf(Rule.NoSmoking, Rule.PetAllowed),
+            driverId = otherDriverId
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(oneTrip.id)
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(otherTrip.id)
+            )
+        )
+        tripRepository.save(trip = oneTrip)
+        tripRepository.save(trip = otherTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("NO_SMOKING", "PET_ALLOWED").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertOkBody(
+            SearchTripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(
+                avCabildo4853_virreyDelPino1800_tripId = oneTrip.id,
+                virreyDelPino1800_avCabildo20_tripId = otherTrip.id
+            ),
+            response
+        )
+    }
+
+    private fun assertOkBody(
         searchTripResponse: SearchTripResponse,
         httpResponse: HttpResponse<JsonNode>
     ) {

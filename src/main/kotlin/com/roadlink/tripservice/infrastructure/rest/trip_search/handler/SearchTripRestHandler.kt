@@ -21,7 +21,7 @@ class SearchTripRestHandler(private val searchTrip: UseCase<SearchTrip.Input, Se
         @QueryValue departureLongitude: Double,
         @QueryValue arrivalLatitude: Double,
         @QueryValue arrivalLongitude: Double,
-        @QueryValue filter: List<String> = emptyList(),
+        @QueryValue filters: List<String> = emptyList(),
         @QueryValue at: Long,
         @Header("X-Caller-Id") callerId: String
     ): HttpResponse<SearchTripResponse> {
@@ -36,7 +36,7 @@ class SearchTripRestHandler(private val searchTrip: UseCase<SearchTrip.Input, Se
             ),
             at = Instant.ofEpochMilli(at),
             callerId = UUID.fromString(callerId),
-            filters = filter
+            filters = filters
         )
 
         val tripPlans = searchTrip(input)
