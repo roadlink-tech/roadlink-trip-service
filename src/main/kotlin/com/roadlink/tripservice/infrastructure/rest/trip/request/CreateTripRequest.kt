@@ -3,8 +3,12 @@ package com.roadlink.tripservice.infrastructure.rest.trip.request
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.roadlink.tripservice.domain.common.Location
-import com.roadlink.tripservice.domain.common.address.Address
 import com.roadlink.tripservice.domain.common.TripPoint
+import com.roadlink.tripservice.domain.common.address.Address
+import com.roadlink.tripservice.domain.trip.constraint.Policy
+import com.roadlink.tripservice.domain.trip.constraint.Restriction
+import com.roadlink.tripservice.domain.trip.constraint.Rule
+import com.roadlink.tripservice.domain.trip.constraint.Visibility
 import com.roadlink.tripservice.usecases.trip.CreateTrip
 import java.time.Instant
 
@@ -14,6 +18,8 @@ data class CreateTripRequest(
     @JsonProperty(value = "departure") val departure: TripPointRequest,
     @JsonProperty(value = "arrival") val arrival: TripPointRequest,
     @JsonProperty(value = "meeting_points") @JsonInclude(JsonInclude.Include.ALWAYS) val meetingPoints: List<TripPointRequest>,
+    @JsonProperty(value = "policies") @JsonInclude(JsonInclude.Include.ALWAYS) val policies: List<PolicyTypeRequest> = emptyList(),
+    @JsonProperty(value = "restrictions") @JsonInclude(JsonInclude.Include.ALWAYS) val restrictions: List<RestrictionTypeRequest> = emptyList(),
     @JsonProperty(value = "available_seats") val availableSeats: Int,
 ) {
     fun toDomain(): CreateTrip.Input {
@@ -23,9 +29,42 @@ data class CreateTripRequest(
             departure = this.departure.toModel(),
             arrival = this.arrival.toModel(),
             meetingPoints = meetingPoints.map { it.toModel() },
-            availableSeats = availableSeats
+            availableSeats = availableSeats,
+            policies = policies.map { it.toDomain() },
+            restrictions = restrictions.map { it.toDomain() }
         )
     }
+
+    enum class PolicyTypeRequest {
+        NO_SMOKING {
+            override fun toDomain(): Policy {
+                return Rule.NoSmoking
+            }
+        },
+        PET_ALLOWED {
+            override fun toDomain(): Policy {
+                return Rule.PetAllowed
+            }
+        };
+
+        abstract fun toDomain(): Policy
+    }
+
+    enum class RestrictionTypeRequest {
+        PRIVATE {
+            override fun toDomain(): Restriction {
+                return Visibility.Private
+            }
+        },
+        ONLY_WOMEN {
+            override fun toDomain(): Restriction {
+                return Visibility.OnlyWomen
+            }
+        };
+
+        abstract fun toDomain(): Restriction
+    }
+
 }
 
 data class TripPointRequest(

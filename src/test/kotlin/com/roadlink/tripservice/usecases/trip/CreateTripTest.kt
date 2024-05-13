@@ -15,7 +15,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.runs
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -76,6 +78,8 @@ internal class CreateTripTest {
                     arrival = TripPointFactory.avCabildo_20(),
                     meetingPoints = emptyList(),
                     availableSeats = 4,
+                    policies = emptyList(),
+                    restrictions = emptyList()
                 )
             )
         }
@@ -98,6 +102,8 @@ internal class CreateTripTest {
                     ),
                     meetingPoints = emptyList(),
                     availableSeats = 4,
+                    policies = emptyList(),
+                    restrictions = emptyList()
                 )
             )
         }
@@ -122,6 +128,8 @@ internal class CreateTripTest {
                         )
                     ),
                     availableSeats = 4,
+                    policies = emptyList(),
+                    restrictions = emptyList()
                 )
             )
         }
@@ -146,6 +154,8 @@ internal class CreateTripTest {
                         )
                     ),
                     availableSeats = 4,
+                    policies = emptyList(),
+                    restrictions = emptyList()
                 )
             )
         }
@@ -177,6 +187,8 @@ internal class CreateTripTest {
                 arrival = TripPointFactory.avCabildo_20(),
                 meetingPoints = emptyList(),
                 availableSeats = 4,
+                policies = emptyList(),
+                restrictions = emptyList()
             )
         )
 
@@ -207,6 +219,8 @@ internal class CreateTripTest {
                 arrival = TripPointFactory.avCabildo_20(),
                 meetingPoints = listOf(TripPointFactory.virreyDelPino_1800()),
                 availableSeats = 5,
+                policies = emptyList(),
+                restrictions = emptyList()
             )
         )
 

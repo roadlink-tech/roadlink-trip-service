@@ -9,6 +9,8 @@ import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.common.events.CommandBus
+import com.roadlink.tripservice.domain.trip.constraint.Policy
+import com.roadlink.tripservice.domain.trip.constraint.Restriction
 import com.roadlink.tripservice.domain.trip.events.TripCreatedEventResponse
 import com.roadlink.tripservice.domain.trip.events.TripCreatedEvent
 
@@ -42,7 +44,10 @@ class CreateTrip(
 
     private fun validateExistsTripByDriverAndInTimeRange(input: Input) {
         val driver = input.driver
-        val timeRange = TimeRange(from = input.departure.estimatedArrivalTime, to = input.arrival.estimatedArrivalTime)
+        val timeRange = TimeRange(
+            from = input.departure.estimatedArrivalTime,
+            to = input.arrival.estimatedArrivalTime
+        )
         if (tripRepository.existsByDriverAndInTimeRange(driver, timeRange)) {
             throw AlreadyExistsTripByDriverInTimeRange(driver, timeRange)
         }
@@ -57,6 +62,8 @@ class CreateTrip(
             arrival = arrival,
             meetingPoints = meetingPoints,
             availableSeats = availableSeats,
+            policies = policies,
+            restrictions = restrictions
         )
 
     private fun save(trip: Trip) {
@@ -79,5 +86,7 @@ class CreateTrip(
         val arrival: TripPoint,
         val meetingPoints: List<TripPoint>,
         val availableSeats: Int,
+        val policies: List<Policy>,
+        val restrictions: List<Restriction>
     )
 }

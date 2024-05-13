@@ -4,7 +4,10 @@ import com.roadlink.tripservice.infrastructure.rest.trip.request.CreateTripReque
 import com.roadlink.tripservice.usecases.common.InstantFactory
 
 object CreateTripRequestFactory {
-    fun avCabildo() =
+    fun avCabildo(
+        policies: List<CreateTripRequest.PolicyTypeRequest> = emptyList(),
+        restrictions: List<CreateTripRequest.RestrictionTypeRequest> = emptyList()
+    ) =
         CreateTripRequest(
             driver = "John Smith",
             vehicle = "Ford mustang",
@@ -12,6 +15,8 @@ object CreateTripRequestFactory {
             meetingPoints = emptyList(),
             arrival = TripPointRequestFactory.avCabildo_20(),
             availableSeats = 4,
+            policies = policies,
+            restrictions = restrictions
         )
 
     fun avCabildo_invalidTimeRange() =
