@@ -16,6 +16,7 @@ import com.roadlink.tripservice.infrastructure.rest.trip_search.response.Section
 import com.roadlink.tripservice.infrastructure.rest.trip_search.response.TripSearchPlanResponse
 import com.roadlink.tripservice.usecases.common.InstantFactory
 import com.roadlink.tripservice.usecases.common.address.LocationFactory
+import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.user.UserFactory
@@ -34,7 +35,10 @@ import io.mockk.mockk
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Instant
 import java.util.*
 
 @MicronautTest
@@ -615,7 +619,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             id = UUID.fromString(TripFactory.avCabildo_id),
             policies = listOf(Rule.NoSmoking),
             driverId = driverId,
-            restrictions = listOf(Visibility.Private)
+            restrictions = listOf(Visibility.OnlyFriends)
         )
         every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
 
@@ -642,7 +646,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .also { uriBuilder ->
-                        listOf("PRIVATE", "NO_SMOKING").forEach {
+                        listOf("ONLY_FRIENDS", "NO_SMOKING").forEach {
                             uriBuilder.queryParam("filters", it)
                         }
                     }
@@ -676,7 +680,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             id = UUID.fromString(TripFactory.avCabildo_id),
             policies = listOf(Rule.NoSmoking),
             driverId = driverId,
-            restrictions = listOf(Visibility.Private)
+            restrictions = listOf(Visibility.OnlyFriends)
         )
         every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
 
@@ -703,7 +707,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .also { uriBuilder ->
-                        listOf("PRIVATE", "PET_ALLOWED").forEach {
+                        listOf("ONLY_FRIENDS", "PET_ALLOWED").forEach {
                             uriBuilder.queryParam("filters", it)
                         }
                     }
@@ -738,13 +742,13 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             id = UUID.fromString(TripFactory.avCabildo_id),
             policies = listOf(),
             driverId = oneDriverId,
-            restrictions = listOf(Visibility.Private)
+            restrictions = listOf(Visibility.OnlyFriends)
         )
         val otherPrivateTrip = TripFactory.common(
             id = UUID.randomUUID(),
             policies = listOf(),
             driverId = otherDriverId,
-            restrictions = listOf(Visibility.Private)
+            restrictions = listOf(Visibility.OnlyFriends)
         )
         every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
 
@@ -772,7 +776,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .also { uriBuilder ->
-                        listOf("PRIVATE").forEach {
+                        listOf("ONLY_FRIENDS").forEach {
                             uriBuilder.queryParam("filters", it)
                         }
                     }
@@ -810,13 +814,13 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             id = UUID.fromString(TripFactory.avCabildo_id),
             policies = listOf(),
             driverId = oneDriverId,
-            restrictions = listOf(Visibility.Private)
+            restrictions = listOf(Visibility.OnlyFriends)
         )
         val otherPrivateTrip = TripFactory.common(
             id = UUID.randomUUID(),
             policies = listOf(),
             driverId = otherDriverId,
-            restrictions = listOf(Visibility.Private)
+            restrictions = listOf(Visibility.OnlyFriends)
         )
         every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
 
@@ -844,7 +848,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                     .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
                     .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
                     .also { uriBuilder ->
-                        listOf("PRIVATE").forEach {
+                        listOf("ONLY_FRIENDS").forEach {
                             uriBuilder.queryParam("filters", it)
                         }
                     }
@@ -1000,6 +1004,147 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
             response
         )
     }
+
+    @Test
+    fun `given a trip plan which will start inside the following year, when use upcoming year filter, then should return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val oneDriverId = UUID.randomUUID()
+        val otherDriverId = UUID.randomUUID()
+        val caller = UserFactory.common(id = callerId)
+        val oneTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            driverId = oneDriverId,
+            departure = TripPointFactory.avCabildo_4853(at = Instant.now().plusSeconds(60)),
+        )
+        val otherTrip = TripFactory.common(
+            id = UUID.randomUUID(),
+            driverId = otherDriverId,
+            departure = TripPointFactory.virreyDelPino_1800(at = Instant.now().plusSeconds(3600))
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(oneTrip.id),
+                departure = TripPointFactory.avCabildo_4853(at = Instant.now().plusSeconds(60))
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(otherTrip.id),
+                departure = TripPointFactory.virreyDelPino_1800(
+                    at = Instant.now().plusSeconds(3600)
+                )
+            )
+        )
+        tripRepository.save(trip = oneTrip)
+        tripRepository.save(trip = otherTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", Instant.now().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("UPCOMING_YEAR").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertTrue(mapToSearchTripResponse(response).tripPlans.isNotEmpty())
+        assertTrue(mapToSearchTripResponse(response)
+            .tripPlans
+            .flatMap { tripSearchPlanResponse -> tripSearchPlanResponse.sections.map { it.tripId } }
+            .containsAll(listOf(oneTrip.id, otherTrip.id)))
+    }
+
+    @Test
+    fun `given a trip plan which will start half one year before, when use upcoming year filter, then should not return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val oneDriverId = UUID.randomUUID()
+        val otherDriverId = UUID.randomUUID()
+        val caller = UserFactory.common(id = callerId)
+        val oneTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            driverId = oneDriverId,
+            departure = TripPointFactory.avCabildo_4853(at = Instant.now().plusSeconds(47304000)),
+        )
+        val otherTrip = TripFactory.common(
+            id = UUID.randomUUID(),
+            driverId = otherDriverId,
+            departure = TripPointFactory.virreyDelPino_1800(
+                at = Instant.now().plusSeconds(47304000)
+            )
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(oneTrip.id),
+                departure = TripPointFactory.avCabildo_4853(
+                    at = Instant.now().plusSeconds(47304000)
+                )
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(otherTrip.id),
+                departure = TripPointFactory.virreyDelPino_1800(
+                    at = Instant.now().plusSeconds(3600)
+                )
+            )
+        )
+        tripRepository.save(trip = oneTrip)
+        tripRepository.save(trip = otherTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", Instant.now().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("UPCOMING_YEAR").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertTrue(mapToSearchTripResponse(response).tripPlans.isEmpty())
+        assertFalse(mapToSearchTripResponse(response)
+            .tripPlans
+            .flatMap { tripSearchPlanResponse -> tripSearchPlanResponse.sections.map { it.tripId } }
+            .containsAll(listOf(oneTrip.id, otherTrip.id)))
+    }
+
 
     private fun assertOkBody(
         searchTripResponse: SearchTripResponse,

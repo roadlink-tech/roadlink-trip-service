@@ -41,7 +41,7 @@ class MySQLTripRepositoryTest {
         val trip = TripFactory.common(
             driverId = driverId,
             policies = listOf(Rule.NoSmoking, Rule.PetAllowed),
-            restrictions = listOf(Visibility.Private, Visibility.OnlyWomen)
+            restrictions = listOf(Visibility.OnlyFriends, Visibility.OnlyWomen)
         )
         repository.save(trip)
 
@@ -53,7 +53,7 @@ class MySQLTripRepositoryTest {
         assertTrue(
             result.restrictions.containsAll(
                 listOf(
-                    Visibility.Private,
+                    Visibility.OnlyFriends,
                     Visibility.OnlyWomen
                 )
             )

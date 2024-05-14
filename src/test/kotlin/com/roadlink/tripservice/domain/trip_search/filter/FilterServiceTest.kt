@@ -92,7 +92,7 @@ class FilterServiceTest {
                 User.Gender.Female,
                 false,
                 listOf<Policy>(),
-                listOf<Restriction>(Visibility.OnlyWomen, Visibility.Private),
+                listOf<Restriction>(Visibility.OnlyWomen, Visibility.OnlyFriends),
                 setOf<Filter>(),
                 true
             ),
@@ -101,7 +101,7 @@ class FilterServiceTest {
                 User.Gender.Female,
                 true,
                 listOf<Policy>(),
-                listOf<Restriction>(Visibility.OnlyWomen, Visibility.Private),
+                listOf<Restriction>(Visibility.OnlyWomen, Visibility.OnlyFriends),
                 setOf<Filter>(),
                 false
             ),
@@ -110,7 +110,7 @@ class FilterServiceTest {
                 User.Gender.Male,
                 true,
                 listOf<Policy>(),
-                listOf<Restriction>(Visibility.OnlyWomen, Visibility.Private),
+                listOf<Restriction>(Visibility.OnlyWomen, Visibility.OnlyFriends),
                 setOf<Filter>(),
                 true
             ),
@@ -137,7 +137,7 @@ class FilterServiceTest {
                 User.Gender.Male,
                 false,
                 listOf<Policy>(Rule.PetAllowed),
-                listOf<Restriction>(Visibility.Private),
+                listOf<Restriction>(Visibility.OnlyFriends),
                 setOf(Filter.PET_ALLOWED),
                 true
             ),
@@ -146,7 +146,7 @@ class FilterServiceTest {
                 User.Gender.Male,
                 true,
                 listOf<Policy>(Rule.PetAllowed, Rule.NoSmoking),
-                listOf<Restriction>(Visibility.Private),
+                listOf<Restriction>(Visibility.OnlyFriends),
                 setOf(Filter.PET_ALLOWED),
                 false
             ),
@@ -156,7 +156,7 @@ class FilterServiceTest {
                 true,
                 listOf<Policy>(Rule.PetAllowed, Rule.NoSmoking),
                 listOf<Restriction>(),
-                setOf(Filter.PRIVATE),
+                setOf(Filter.ONLY_FRIENDS),
                 true
             ),
             Arguments.of(
@@ -164,8 +164,8 @@ class FilterServiceTest {
                 User.Gender.Male,
                 true,
                 listOf<Policy>(Rule.PetAllowed, Rule.NoSmoking),
-                listOf<Restriction>(Visibility.Private, Visibility.OnlyWomen),
-                setOf(Filter.PRIVATE),
+                listOf<Restriction>(Visibility.OnlyFriends, Visibility.OnlyWomen),
+                setOf(Filter.ONLY_FRIENDS),
                 true
             ),
         )

@@ -38,7 +38,7 @@ object TripResponseMapper {
         companion object {
             fun map(restriction: Restriction): String {
                 return when (restriction) {
-                    is Visibility.Private -> "PRIVATE"
+                    is Visibility.OnlyFriends -> "ONLY_FRIENDS"
                     is Visibility.OnlyWomen -> "ONLY_WOMEN"
                     else -> throw IllegalArgumentException("Unknown restriction: $restriction")
                 }

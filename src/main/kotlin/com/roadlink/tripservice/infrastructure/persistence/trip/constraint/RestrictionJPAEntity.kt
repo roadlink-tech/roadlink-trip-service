@@ -10,8 +10,8 @@ import jakarta.persistence.Embeddable
 sealed class RestrictionJPAEntity {
     abstract fun toDomain(): Restriction
 
-    object Private : RestrictionJPAEntity() {
-        override fun toDomain() = Visibility.Private
+    object OnlyFriends : RestrictionJPAEntity() {
+        override fun toDomain() = Visibility.OnlyFriends
     }
 
     object OnlyWomen : RestrictionJPAEntity() {
@@ -22,7 +22,7 @@ sealed class RestrictionJPAEntity {
         fun from(constraint: Constraint): RestrictionJPAEntity {
             return when (constraint) {
                 is Visibility.OnlyWomen -> OnlyWomen
-                is Visibility.Private -> Private
+                is Visibility.OnlyFriends -> OnlyFriends
                 else -> throw IllegalArgumentException("Unknown constraint: $constraint")
             }
         }

@@ -70,12 +70,14 @@ object SectionFactory {
 
     fun avCabildo4853_virreyDelPino1800(
         availableSeats: Int = 4,
-        tripId: UUID = UUID.fromString("bd7ee293-f5d3-4832-a74c-17e9a8fa465f")
+        tripId: UUID = UUID.fromString("bd7ee293-f5d3-4832-a74c-17e9a8fa465f"),
+        departure: TripPoint = TripPointFactory.avCabildo_4853(),
+        arrival: TripPoint = TripPointFactory.virreyDelPino_1800(),
     ) =
         Section(
             id = avCabildo4853_virreyDelPino1800_id,
-            departure = TripPointFactory.avCabildo_4853(),
-            arrival = TripPointFactory.virreyDelPino_1800(),
+            departure = departure,
+            arrival = arrival,
             distanceInMeters = 4000.0,
             driverId = "John Smith",
             vehicleId = "Ford mustang",
@@ -85,12 +87,14 @@ object SectionFactory {
         )
 
     fun virreyDelPino1800_avCabildo20(
-        tripId: UUID = UUID.fromString("bd7ee293-f5d3-4832-a74c-17e9a8fa465f")
+        tripId: UUID = UUID.fromString("bd7ee293-f5d3-4832-a74c-17e9a8fa465f"),
+        departure: TripPoint = TripPointFactory.virreyDelPino_1800(),
+        arrival: TripPoint = TripPointFactory.avCabildo_20(),
     ) =
         Section(
             id = virreyDelPino1800_avCabildo20_id,
-            departure = TripPointFactory.virreyDelPino_1800(),
-            arrival = TripPointFactory.avCabildo_20(),
+            departure = departure,
+            arrival = arrival,
             distanceInMeters = 3000.0,
             driverId = "John Smith",
             vehicleId = "Ford mustang",

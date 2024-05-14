@@ -126,7 +126,7 @@ class TripTest {
                 User.Gender.Female,
                 false,
                 listOf(NoSmoking, PetAllowed),
-                listOf<Restriction>(OnlyWomen, Private),
+                listOf<Restriction>(OnlyWomen, OnlyFriends),
                 setOf(NO_SMOKING),
                 false
             ),
@@ -144,8 +144,8 @@ class TripTest {
                 User.Gender.X,
                 true,
                 listOf(NoSmoking, PetAllowed),
-                listOf(Private),
-                setOf(PRIVATE),
+                listOf(OnlyFriends),
+                setOf(ONLY_FRIENDS),
                 true
             ),
 
@@ -154,8 +154,8 @@ class TripTest {
                 User.Gender.Female,
                 true,
                 listOf(NoSmoking, PetAllowed),
-                listOf(Private, OnlyWomen),
-                setOf(PRIVATE, ONLY_WOMEN),
+                listOf(OnlyFriends, OnlyWomen),
+                setOf(ONLY_FRIENDS, ONLY_WOMEN),
                 true
             ),
             Arguments.of(
@@ -163,8 +163,8 @@ class TripTest {
                 User.Gender.Male,
                 true,
                 listOf(NoSmoking, PetAllowed),
-                listOf(Private, OnlyWomen),
-                setOf(PRIVATE),
+                listOf(OnlyFriends, OnlyWomen),
+                setOf(ONLY_FRIENDS),
                 false
             ),
             Arguments.of(

@@ -2,8 +2,8 @@ package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.common.TripPoint
-import com.roadlink.tripservice.domain.trip.constraint.Constraint
 import com.roadlink.tripservice.domain.trip.constraint.Policy
+import com.roadlink.tripservice.domain.trip.constraint.Preferences
 import com.roadlink.tripservice.domain.trip.constraint.Restriction
 import com.roadlink.tripservice.domain.trip.constraint.Rule
 import com.roadlink.tripservice.domain.trip.constraint.Visibility
@@ -11,6 +11,7 @@ import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
 import com.roadlink.tripservice.domain.trip_search.filter.Filter
 import com.roadlink.tripservice.domain.user.User
+import java.time.Instant
 import java.util.*
 
 
@@ -34,6 +35,12 @@ data class Trip(
             .all { it.isAllowed(requesterPassenger, this) }
     }
 
+    fun isDepartureWithin(start: Instant, end: Instant): Boolean {
+        return departure.estimatedArrivalTime.isAfter(start) && departure.estimatedArrivalTime.isBefore(
+            end
+        )
+    }
+
     fun isCompliant(requesterPassenger: User, filters: Set<Filter>): Boolean {
         // the restrictions always must be evaluated
         if (!canAdmitPassenger(requesterPassenger)) {
@@ -42,13 +49,17 @@ data class Trip(
         if (filters.isNotEmpty()) {
             val anyBrokenRule = filters
                 .mapNotNull { Rule.valueOf(it) }
-                .any { !it.isCompliant(this) }
+                .any { rule -> !rule.isCompliant(this) }
 
             val containsRestriction = filters
                 .mapNotNull { Visibility.valueOf(it) }
                 .all { restriction -> this.restrictions.contains(restriction) }
 
-            return !anyBrokenRule && containsRestriction
+            val anyBrokenPreference = filters
+                .mapNotNull { Preferences.valueOf(it) }
+                .any { preference -> preference.isCompliant(this) }
+
+            return !anyBrokenRule && containsRestriction && !anyBrokenPreference
         }
         return true
     }

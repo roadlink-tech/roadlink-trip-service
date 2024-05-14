@@ -1,7 +1,9 @@
 package com.roadlink.tripservice.domain.trip.constraint
 
-import com.roadlink.tripservice.domain.trip_search.filter.Filter
 import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip_search.filter.Filter
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 /**
  * Interface defining a compliance policy for a trip.
@@ -39,6 +41,28 @@ sealed class Rule : Policy {
             return when (filter) {
                 Filter.PET_ALLOWED -> PetAllowed
                 Filter.NO_SMOKING -> NoSmoking
+                else -> null
+            }
+        }
+    }
+}
+
+sealed class Preferences : Policy {
+    object UpcomingYear : Preferences() {
+        override fun isCompliant(trip: Trip): Boolean {
+            val now = LocalDateTime.now()
+            val oneYearLater = now.plusYears(1)
+            return !trip.isDepartureWithin(
+                now.toInstant(ZoneOffset.UTC),
+                oneYearLater.toInstant(ZoneOffset.UTC)
+            )
+        }
+    }
+
+    companion object {
+        fun valueOf(filter: Filter): Preferences? {
+            return when (filter) {
+                Filter.UPCOMING_YEAR -> UpcomingYear
                 else -> null
             }
         }

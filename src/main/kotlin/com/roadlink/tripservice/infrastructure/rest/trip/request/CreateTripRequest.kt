@@ -6,6 +6,7 @@ import com.roadlink.tripservice.domain.common.Location
 import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.common.address.Address
 import com.roadlink.tripservice.domain.trip.constraint.Policy
+import com.roadlink.tripservice.domain.trip.constraint.Preferences
 import com.roadlink.tripservice.domain.trip.constraint.Restriction
 import com.roadlink.tripservice.domain.trip.constraint.Rule
 import com.roadlink.tripservice.domain.trip.constraint.Visibility
@@ -45,15 +46,20 @@ data class CreateTripRequest(
             override fun toDomain(): Policy {
                 return Rule.PetAllowed
             }
+        },
+        UPCOMING_YEAR {
+            override fun toDomain(): Policy {
+                return Preferences.UpcomingYear
+            }
         };
 
         abstract fun toDomain(): Policy
     }
 
     enum class RestrictionTypeRequest {
-        PRIVATE {
+        ONLY_FRIENDS {
             override fun toDomain(): Restriction {
-                return Visibility.Private
+                return Visibility.OnlyFriends
             }
         },
         ONLY_WOMEN {

@@ -3,6 +3,8 @@ package com.roadlink.tripservice.domain.trip.constraint
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip_search.filter.Filter
 import com.roadlink.tripservice.domain.user.User
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 /**
@@ -30,7 +32,7 @@ interface Restriction : Constraint {
 }
 
 sealed class Visibility : Restriction {
-    object Private : Visibility() {
+    object OnlyFriends : Visibility() {
         override fun isAllowed(requester: User, trip: Trip): Boolean {
             return requester.isFriendOf(UUID.fromString(trip.driverId))
         }
@@ -46,7 +48,7 @@ sealed class Visibility : Restriction {
     companion object {
         fun valueOf(filter: Filter): Visibility? {
             return when (filter) {
-                Filter.PRIVATE -> Private
+                Filter.ONLY_FRIENDS -> OnlyFriends
                 Filter.ONLY_WOMEN -> OnlyWomen
                 else -> null
             }
