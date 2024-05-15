@@ -8,7 +8,9 @@ import com.roadlink.tripservice.usecases.trip_solicitude.RejectTripLegSolicitude
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.CreateTripPlanSolicitude
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.RetrieveTripPlanSolicitudeOutput
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus.*
+import io.micronaut.http.HttpStatus.ACCEPTED
+import io.micronaut.http.HttpStatus.NOT_FOUND
+import io.micronaut.http.HttpStatus.PRECONDITION_FAILED
 
 class TripPlanSolicitudeResponseFactory {
 
@@ -26,6 +28,13 @@ class TripPlanSolicitudeResponseFactory {
                 HttpResponse
                     .status<UserIsNotCompliantForJoiningTripResponse>(PRECONDITION_FAILED)
                     .body(UserIsNotCompliantForJoiningTripResponse())
+
+            is CreateTripPlanSolicitude.Output.TripPlanSolicitudeAlreadySent ->
+                HttpResponse
+                    .status<TripPlanSolicitudeAlreadySentResponse>(PRECONDITION_FAILED)
+                    .body(TripPlanSolicitudeAlreadySentResponse())
+
+
         }
 
     fun from(output: RetrieveTripPlanSolicitudeOutput): HttpResponse<ApiResponse> {
@@ -72,3 +81,6 @@ class InsufficientAmountOfSeatsResponse :
 
 class UserIsNotCompliantForJoiningTripResponse :
     ErrorResponse(code = ErrorResponseCode.USER_IS_NOT_COMPLIANT_FOR_JOINING_TRIP)
+
+class TripPlanSolicitudeAlreadySentResponse :
+    ErrorResponse(code = ErrorResponseCode.TRIP_PLAN_SOLICITUDE_ALREADY_SENT)

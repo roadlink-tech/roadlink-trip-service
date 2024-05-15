@@ -37,7 +37,7 @@ internal class StartTripTest {
         val otherAcceptedTripPlanSolicitude =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted()
 
-        every { tripPlanSolicitudeRepository.find(match { it.tripId == tripId }) } returns listOf(
+        every { tripPlanSolicitudeRepository.find(match { it.tripIds.contains(tripId) }) } returns listOf(
             rejectedTripPlanSolicitude,
             acceptedTripPlanSolicitude,
             otherAcceptedTripPlanSolicitude
@@ -63,7 +63,7 @@ internal class StartTripTest {
         val pendingTripPlanSolicitude =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
 
-        every { tripPlanSolicitudeRepository.find(match { it.tripId == tripId }) } returns listOf(
+        every { tripPlanSolicitudeRepository.find(match { it.tripIds.contains(tripId) }) } returns listOf(
             rejectedTripPlanSolicitude,
             acceptedTripPlanSolicitude,
             pendingTripPlanSolicitude
@@ -94,7 +94,7 @@ internal class StartTripTest {
         val onePendingTripPlanSolicitude =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
 
-        every { tripPlanSolicitudeRepository.find(match { it.tripId == tripId }) } returns listOf(
+        every { tripPlanSolicitudeRepository.find(match { it.tripIds.contains(tripId) }) } returns listOf(
             rejectedTripPlanSolicitude,
             onePendingTripPlanSolicitude,
             twoPendingTripPlanSolicitude

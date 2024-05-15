@@ -146,7 +146,7 @@ object SectionFactory {
             tripId = UUID.randomUUID()
         )
 
-    fun avCabildo1621_virreyDelPino1800() =
+    fun avCabildo1621_virreyDelPino1800(tripId: UUID = UUID.randomUUID()) =
         Section(
             id = avCabildo1621_virreyDelPino1800_id,
             departure = TripPointFactory.avCabildo_1621(),
@@ -156,7 +156,7 @@ object SectionFactory {
             vehicleId = "Ford mustang",
             initialAmountOfSeats = 4,
             bookedSeats = 0,
-            tripId = UUID.randomUUID()
+            tripId = tripId
         )
 
     fun avCabildo1621_virreyDelPino1800_completed() =

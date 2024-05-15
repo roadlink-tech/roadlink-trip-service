@@ -57,8 +57,8 @@ data class TripPlanSolicitude(
         return !this.tripLegSolicitudes.any { it.isRejected() } && this.tripLegSolicitudes.any { it.isPendingApproval() }
     }
 
-    fun include(application: TripLegSolicitude) {
-        this.tripLegSolicitudes.add(application)
+    fun include(solicitude: TripLegSolicitude) {
+        this.tripLegSolicitudes.add(solicitude)
     }
 
     fun status(): Status {

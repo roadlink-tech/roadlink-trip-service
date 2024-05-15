@@ -27,6 +27,12 @@ class CreateTripPlanSolicitude(
             )
         }
 
+        if (tripPlanSolicitudeAlreadySent(UUID.fromString(passenger.id), input.tripIds())) {
+            return Output.TripPlanSolicitudeAlreadySent(
+                message = "The user ${passenger.id} has already sent a solicitude."
+            )
+        }
+
         val tripPlanSolicitude = TripPlanSolicitude()
         // TODO cuando creamos el trip plan, las seciiones deberían estar ordenadas por arrival time: primero la más proxima en el tiempo y después las más lejanas en el tiempo
         input.tripSections.forEach { tripSectionsDTO ->
@@ -51,22 +57,30 @@ class CreateTripPlanSolicitude(
         return Output.TripPlanSolicitudeCreated(tripPlanSolicitude.id)
     }
 
+    private fun tripPlanSolicitudeAlreadySent(passengerId: UUID, tripIds: List<UUID>): Boolean {
+        return tripPlanSolicitudeRepository.find(
+            TripPlanSolicitudeRepository.CommandQuery(
+                passengerId = passengerId, tripIds = tripIds
+            )
+        ).any { tripPlanSolicitude ->
+            tripPlanSolicitude.tripLegSolicitudes.map { it.tripId() }.containsAll(tripIds)
+        }
+    }
+
     sealed class Output {
         data class TripPlanSolicitudeCreated(val tripPlanSolicitudeId: UUID) : Output()
         data class OneOfTheSectionCanNotReceivePassenger(val message: String) : Output()
         data class UserIsNotCompliantForJoiningTrip(val message: String) : Output()
+        data class TripPlanSolicitudeAlreadySent(val message: String) : Output()
     }
 
     data class Input(
-        val passengerId: String,
-        val tripSections: List<TripSections>
+        val passengerId: String, val tripSections: List<TripSections>
     ) {
         data class TripSections(
-            val tripId: String,
-            val sectionsIds: Set<String>
+            val tripId: String, val sectionsIds: Set<String>
         )
 
         fun tripIds(): List<UUID> = tripSections.map { UUID.fromString(it.tripId) }
     }
-
 }

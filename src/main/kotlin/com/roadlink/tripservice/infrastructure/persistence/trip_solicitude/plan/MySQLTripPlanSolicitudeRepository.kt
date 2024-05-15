@@ -8,8 +8,6 @@ import io.micronaut.transaction.TransactionOperations
 import jakarta.persistence.EntityManager
 import jakarta.persistence.criteria.Predicate
 import org.hibernate.Session
-import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.PrecisionModel
 import java.util.*
 
 
@@ -63,12 +61,12 @@ class MySQLTripPlanSolicitudeRepository(
                 predicates.add(tripApplicationIdPredicate)
             }
 
-            if (cq.tripId != null) {
+            if (cq.tripIds.isNotEmpty()) {
                 val tripApplicationsJoin =
                     root.join<TripPlanSolicitudeJPAEntity, TripLegSolicitudeJPAEntity>("tripLegSolicitudes")
                 val sectionsJoin =
                     tripApplicationsJoin.join<TripLegSolicitudeJPAEntity, SectionJPAEntity>("sections")
-                val tripIdPredicate = cb.equal(sectionsJoin.get<UUID>("tripId"), cq.tripId)
+                val tripIdPredicate = sectionsJoin.get<UUID>("tripId").`in`(cq.tripIds)
                 predicates.add(tripIdPredicate)
             }
 
@@ -80,13 +78,13 @@ class MySQLTripPlanSolicitudeRepository(
     }
 
     data class TripPlanSolicitudeCommandQuery(
-        val ids: List<UUID> = emptyList(),
+        val ids: Set<UUID> = emptySet(),
         val tripLegSolicitudeId: UUID? = null,
         val passengerId: UUID? = null,
-        val tripId: UUID? = null
+        val tripIds: Set<UUID> = emptySet()
     ) {
         init {
-            require(ids.isNotEmpty() || tripLegSolicitudeId != null || passengerId != null || tripId != null) {
+            require(ids.isNotEmpty() || tripLegSolicitudeId != null || passengerId != null || tripIds.isNotEmpty()) {
                 "At least one field must be not null or empty"
             }
         }
@@ -95,10 +93,10 @@ class MySQLTripPlanSolicitudeRepository(
 
             fun from(domainCommandQuery: TripPlanSolicitudeRepository.CommandQuery): TripPlanSolicitudeCommandQuery {
                 return TripPlanSolicitudeCommandQuery(
-                    ids = domainCommandQuery.ids,
+                    ids = domainCommandQuery.ids.toSet(),
                     tripLegSolicitudeId = domainCommandQuery.tripLegSolicitudeId,
                     passengerId = domainCommandQuery.passengerId,
-                    tripId = domainCommandQuery.tripId
+                    tripIds = domainCommandQuery.tripIds.toSet()
                 )
             }
         }

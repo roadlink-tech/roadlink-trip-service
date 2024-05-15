@@ -192,7 +192,7 @@ class FinishTripTest {
                 oneTripId = tripId,
                 oneDriverId = driverId,
                 anotherTripId = otherTripId,
-                anotherDriverId = otherDriverId
+                otherDriverId = otherDriverId
             ),
         )
 

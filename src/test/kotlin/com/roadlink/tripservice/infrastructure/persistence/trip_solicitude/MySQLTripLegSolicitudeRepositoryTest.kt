@@ -233,7 +233,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
         val avCabildoSection = SectionFactory.avCabildo()
         val tripApplication = TripLegSolicitudeFactory.withSections(listOf(avCabildoSection))
         givenASavedTripPlanSolicitude(
-            TripPlanSolicitudeFactory.withApplications(
+            TripPlanSolicitudeFactory.withTripLegSolicitudes(
                 listOf(
                     tripApplication
                 )
@@ -251,7 +251,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
         val avCabildoSection = SectionFactory.avCabildo()
         val tripApplication = TripLegSolicitudeFactory.withSections(listOf(avCabildoSection))
         givenASavedTripPlanSolicitude(
-            TripPlanSolicitudeFactory.withApplications(
+            TripPlanSolicitudeFactory.withTripLegSolicitudes(
                 listOf(
                     tripApplication
                 )
@@ -271,7 +271,7 @@ class MySQLTripLegSolicitudeRepositoryTest {
             }
         }
         tripPlanSolicitudeRepository.insert(
-            TripPlanSolicitudeFactory.withApplications(listOf(tripLegSolicitude))
+            TripPlanSolicitudeFactory.withTripLegSolicitudes(listOf(tripLegSolicitude))
         )
 
         return tripLegSolicitude

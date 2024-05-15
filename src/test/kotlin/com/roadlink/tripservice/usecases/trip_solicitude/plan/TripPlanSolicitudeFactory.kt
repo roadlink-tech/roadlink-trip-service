@@ -146,7 +146,7 @@ object TripPlanSolicitudeFactory {
         )
     }
 
-    fun withApplications(
+    fun withTripLegSolicitudes(
         tripLegSolicitudes: List<TripLegSolicitude>
     ): TripPlanSolicitude {
         return TripPlanSolicitude(
