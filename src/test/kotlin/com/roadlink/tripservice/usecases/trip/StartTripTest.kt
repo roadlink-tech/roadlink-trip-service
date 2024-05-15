@@ -1,5 +1,7 @@
 package com.roadlink.tripservice.usecases.trip
 
+import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.mockk.MockKAnnotations
@@ -18,12 +20,15 @@ internal class StartTripTest {
     @MockK
     lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 
+    @MockK
+    lateinit var tripRepository: TripRepository
+
     private lateinit var startTrip: StartTrip
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        startTrip = StartTrip(tripPlanSolicitudeRepository)
+        startTrip = StartTrip(tripPlanSolicitudeRepository, tripRepository)
     }
 
     @Test
@@ -36,13 +41,17 @@ internal class StartTripTest {
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted()
         val otherAcceptedTripPlanSolicitude =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted()
+        val trip = TripFactory.common(id = tripId)
 
         every { tripPlanSolicitudeRepository.find(match { it.tripIds.contains(tripId) }) } returns listOf(
             rejectedTripPlanSolicitude,
             acceptedTripPlanSolicitude,
             otherAcceptedTripPlanSolicitude
         )
-
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
         every { tripPlanSolicitudeRepository.update(any()) } just runs
 
         // when
@@ -62,13 +71,17 @@ internal class StartTripTest {
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted()
         val pendingTripPlanSolicitude =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
+        val trip = TripFactory.common(id = tripId)
 
         every { tripPlanSolicitudeRepository.find(match { it.tripIds.contains(tripId) }) } returns listOf(
             rejectedTripPlanSolicitude,
             acceptedTripPlanSolicitude,
             pendingTripPlanSolicitude
         )
-
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
         every { tripPlanSolicitudeRepository.update(any()) } just runs
 
         // when
@@ -93,13 +106,17 @@ internal class StartTripTest {
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
         val onePendingTripPlanSolicitude =
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudePendingApproval()
+        val trip = TripFactory.common(id = tripId)
 
         every { tripPlanSolicitudeRepository.find(match { it.tripIds.contains(tripId) }) } returns listOf(
             rejectedTripPlanSolicitude,
             onePendingTripPlanSolicitude,
             twoPendingTripPlanSolicitude
         )
-
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
         every { tripPlanSolicitudeRepository.update(any()) } just runs
 
         // when

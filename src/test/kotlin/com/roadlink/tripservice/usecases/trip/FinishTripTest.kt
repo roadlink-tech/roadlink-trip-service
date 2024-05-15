@@ -1,5 +1,7 @@
 package com.roadlink.tripservice.usecases.trip
 
+import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.feedback_solicitude.FeedbackSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_plan.TripPlan.Status.FINISHED
 import com.roadlink.tripservice.domain.trip_plan.TripPlanRepository
@@ -23,6 +25,9 @@ class FinishTripTest {
     private lateinit var tripPlanRepository: TripPlanRepository
 
     @MockK
+    private lateinit var tripRepository: TripRepository
+
+    @MockK
     private lateinit var feedbackSolicitudeRepository: FeedbackSolicitudeRepository
 
     private lateinit var finishTrip: FinishTrip
@@ -30,7 +35,7 @@ class FinishTripTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        finishTrip = FinishTrip(tripPlanRepository, feedbackSolicitudeRepository)
+        finishTrip = FinishTrip(tripPlanRepository, tripRepository, feedbackSolicitudeRepository)
     }
 
     /**
@@ -48,6 +53,7 @@ class FinishTripTest {
         val martinId = UUID.randomUUID()
         val felixId = UUID.randomUUID()
         val driverId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId)
 
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
             TripPlanFactory.withASingleTripLeg(
@@ -78,6 +84,11 @@ class FinishTripTest {
         every {
             feedbackSolicitudeRepository.insert(any())
         } just runs
+
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
 
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
@@ -121,6 +132,7 @@ class FinishTripTest {
         val tripId = UUID.randomUUID()
         val georgeId = UUID.randomUUID()
         val driverId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId)
 
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
             TripPlanFactory.withASingleTripLeg(
@@ -137,6 +149,11 @@ class FinishTripTest {
         every {
             feedbackSolicitudeRepository.insert(any())
         } just runs
+
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
 
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
@@ -161,8 +178,13 @@ class FinishTripTest {
     fun `when a trip finish and there isn't any passenger, then none feedbacks solicitudes must be created`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId)
 
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf()
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
 
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
@@ -185,7 +207,13 @@ class FinishTripTest {
         val georgeId = UUID.randomUUID()
         val driverId = UUID.randomUUID()
         val otherDriverId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId)
 
+        every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf()
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
             TripPlanFactory.withTwoTripLeg(
                 passengerId = georgeId,
@@ -195,7 +223,6 @@ class FinishTripTest {
                 otherDriverId = otherDriverId
             ),
         )
-
         every {
             tripPlanRepository.update(match { tripPlan -> !tripPlan.isFinished() })
         } answers { arg(0) }
@@ -233,7 +260,12 @@ class FinishTripTest {
         val tripLegId = UUID.randomUUID()
         val georgeId = UUID.randomUUID()
         val driverId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId)
 
+        every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
+            trip
+        )
+        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
             TripPlanFactory.withASingleTripLeg(
                 passengerId = georgeId,
