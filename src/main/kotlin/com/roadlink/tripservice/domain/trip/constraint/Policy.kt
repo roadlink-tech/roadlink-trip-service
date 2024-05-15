@@ -52,7 +52,7 @@ sealed class Preferences : Policy {
         override fun isCompliant(trip: Trip): Boolean {
             val now = LocalDateTime.now()
             val oneYearLater = now.plusYears(1)
-            return !trip.isDepartureWithin(
+            return trip.isDepartureWithin(
                 now.toInstant(ZoneOffset.UTC),
                 oneYearLater.toInstant(ZoneOffset.UTC)
             )
