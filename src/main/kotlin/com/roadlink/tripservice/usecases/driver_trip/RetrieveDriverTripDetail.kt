@@ -1,6 +1,5 @@
 package com.roadlink.tripservice.usecases.driver_trip
 
-import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
 import com.roadlink.tripservice.domain.driver_trip.DriverTripDetail
 import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
@@ -15,7 +14,6 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLe
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
 import java.util.*
-import kotlin.math.truncate
 
 class RetrieveDriverTripDetail(
     private val sectionRepository: SectionRepository,
@@ -23,11 +21,9 @@ class RetrieveDriverTripDetail(
     private val tripLegSolicitudeRepository: TripLegSolicitudeRepository,
     private val userRepository: UserRepository,
     private val userTrustScoreRepository: UserTrustScoreRepository,
-    private val timeProvider: TimeProvider,
 ) {
     operator fun invoke(input: Input): DriverTripDetail {
         val trip = tripRepository.find(TripRepository.CommandQuery(ids = listOf(input.tripId))).first()
-
         val sections = sectionRepository.findAllByTripIdOrFail(input.tripId)
         // TODO validar con martin por que estamos usando TripSearchPlanResult (anterior TripPlan)
         return TripSearchPlanResult(sections).let { tripPlan ->
@@ -58,13 +54,6 @@ class RetrieveDriverTripDetail(
             )
         }
     }
-
-//    private fun tripStatusOf(tripSearchPlanResult: TripSearchPlanResult): TripStatus = when {
-////        tripSearchPlanResult.departureAt().isAfter(timeProvider.now()) -> NOT_STARTED
-////        tripSearchPlanResult.arriveAt().isBefore(timeProvider.now()) -> FINISHED
-////        else -> IN_PROGRESS
-//
-//    }
 
     private fun seatsAvailabilityStatusOf(tripSearchPlanResult: TripSearchPlanResult): SeatsAvailabilityStatus =
         when {

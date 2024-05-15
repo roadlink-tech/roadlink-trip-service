@@ -27,7 +27,6 @@ class GetDriverTripDetailConfig {
             tripLegSolicitudeRepository = tripLegSolicitudeRepository,
             userRepository = userRepository,
             userTrustScoreRepository = userTrustScoreRepository,
-            timeProvider = timeProvider,
         )
     }
 }

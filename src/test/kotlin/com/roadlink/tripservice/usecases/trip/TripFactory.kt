@@ -4,7 +4,6 @@ import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.constraint.Policy
 import com.roadlink.tripservice.domain.trip.constraint.Restriction
-import com.roadlink.tripservice.domain.trip.constraint.Rule
 import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import java.util.*
 
@@ -23,7 +22,8 @@ object TripFactory {
         meetingPoints: List<TripPoint> = emptyList(),
         availableSeats: Int = 4,
         policies: List<Policy> = emptyList(),
-        restrictions: List<Restriction> = emptyList()
+        restrictions: List<Restriction> = emptyList(),
+        status: Trip.Status = Trip.Status.NOT_STARTED
     ): Trip {
         return Trip(
             id = id.toString(),
@@ -33,6 +33,7 @@ object TripFactory {
             arrival = arrival,
             meetingPoints = meetingPoints,
             availableSeats = availableSeats,
+            status = status,
             policies = policies,
             restrictions = restrictions
         )

@@ -24,6 +24,7 @@ import com.roadlink.tripservice.usecases.common.InstantFactory.october15_18hs
 import com.roadlink.tripservice.usecases.common.InstantFactory.october15_7hs
 import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import com.roadlink.tripservice.usecases.trip.SectionFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip.builder
 import com.roadlink.tripservice.usecases.trip_solicitude.TripLegSolicitudeFactory
 import com.roadlink.tripservice.usecases.user.UserFactory
@@ -67,7 +68,6 @@ class RetrieveDriverTripDetailTest {
             tripLegSolicitudeRepository = tripLegSolicitudeRepository,
             userRepository = userRepository,
             userTrustScoreRepository = userTrustScoreRepository,
-            timeProvider = stubTimeProvider,
         )
     }
 
@@ -75,6 +75,7 @@ class RetrieveDriverTripDetailTest {
     fun `trip not started`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId)
         val passengerId = UUID.randomUUID().toString()
         val section = SectionFactory.avCabildo(
             tripId = tripId,
@@ -95,6 +96,9 @@ class RetrieveDriverTripDetailTest {
                 id = UUID.fromString(passengerId)
             )
         )
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
 
         // then
         val driverTripDetail = retrieveDriverTripDetail(
@@ -111,6 +115,7 @@ class RetrieveDriverTripDetailTest {
     fun `trip finished`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.FINISHED)
         val passengerId = UUID.randomUUID().toString()
         val section = SectionFactory.avCabildo(
             tripId = tripId,
@@ -129,6 +134,9 @@ class RetrieveDriverTripDetailTest {
         givenUserTrustScoreWithIds(listOf(passengerId))
         givenAUserWithId(passengerId, UserFactory.common(id = UUID.fromString(passengerId)))
 
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
         // when
         val driverTripDetail = retrieveDriverTripDetail(
             RetrieveDriverTripDetail.Input(
@@ -144,6 +152,7 @@ class RetrieveDriverTripDetailTest {
     fun `given a section that belongs to a trip, when get the driver trip detail then its status must be the expected`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.IN_PROGRESS)
         val passengerId = UUID.randomUUID().toString()
         val section = SectionFactory.avCabildo(
             tripId = tripId,
@@ -160,7 +169,9 @@ class RetrieveDriverTripDetailTest {
         givenTripLegSolicitudesPending(tripId, listOf(tripLegSolicitude))
         givenUserTrustScoreWithIds(listOf(passengerId))
         givenAUserWithId(passengerId, UserFactory.common(id = UUID.fromString(passengerId)))
-
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
 
         // when
         val driverTripDetail = retrieveDriverTripDetail(
@@ -177,6 +188,7 @@ class RetrieveDriverTripDetailTest {
     fun `no seats available`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.IN_PROGRESS)
         val passengerId = UUID.randomUUID().toString()
         val section = SectionFactory.avCabildo(tripId = tripId).builder()
             .noSeatsAvailable()
@@ -191,6 +203,9 @@ class RetrieveDriverTripDetailTest {
         givenTripLegSolicitudesPending(tripId, listOf(tripLegSolicitude))
         givenUserTrustScoreWithIds(listOf(passengerId))
         givenAUserWithId(passengerId, UserFactory.common(id = UUID.fromString(passengerId)))
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
 
         // when
         val driverTripDetail = retrieveDriverTripDetail(
@@ -207,6 +222,7 @@ class RetrieveDriverTripDetailTest {
     fun `all seats available`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.IN_PROGRESS)
         val passengerId = UUID.randomUUID().toString()
         val section = SectionFactory.avCabildo(tripId = tripId).builder()
             .allSeatsAvailable()
@@ -221,6 +237,9 @@ class RetrieveDriverTripDetailTest {
         givenTripLegSolicitudesPending(tripId, listOf(tripLegSolicitude))
         givenUserTrustScoreWithIds(listOf(passengerId))
         givenAUserWithId(passengerId, UserFactory.common(id = UUID.fromString(passengerId)))
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
 
         // when
         val driverTripDetail = retrieveDriverTripDetail(
@@ -245,19 +264,25 @@ class RetrieveDriverTripDetailTest {
             sections = listOf(section),
             passengerId = passengerId
         )
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.IN_PROGRESS)
 
         givenSectionsAssociatedToATrip(tripId, listOf(section))
         givenTripLegSolicitudeAssociatedToASection(section.id, listOf(tripLegSolicitude))
         givenTripLegSolicitudesPending(tripId, listOf(tripLegSolicitude))
         givenUserTrustScoreWithIds(listOf(passengerId))
         givenAUserWithId(passengerId, UserFactory.common(id = UUID.fromString(passengerId)))
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
 
+        // when
         val driverTripDetail = retrieveDriverTripDetail(
             RetrieveDriverTripDetail.Input(
                 tripId = section.tripId
             )
         )
 
+        // then
         assertEquals(SOME_SEATS_AVAILABLE, driverTripDetail.seatStatus)
     }
 
@@ -265,6 +290,7 @@ class RetrieveDriverTripDetailTest {
     fun `driver section detail no passenger`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.IN_PROGRESS)
         val passengerId = UUID.randomUUID().toString()
         val section = SectionFactory.avCabildo(tripId = tripId)
         val tripLegSolicitude = TripLegSolicitudeFactory.withSections(
@@ -276,6 +302,9 @@ class RetrieveDriverTripDetailTest {
         givenTripLegSolicitudesPending(tripId, listOf(tripLegSolicitude))
         givenUserTrustScoreWithIds(listOf(passengerId))
         givenAUserWithId(passengerId, UserFactory.common(id = UUID.fromString(passengerId)))
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
 
         // when
         val driverTripDetail = retrieveDriverTripDetail(
@@ -304,6 +333,7 @@ class RetrieveDriverTripDetailTest {
     fun `driver section detail only consider passenger who has accepted application`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.IN_PROGRESS)
         val section = SectionFactory.avCabildo(
             tripId = tripId
         )
@@ -319,7 +349,9 @@ class RetrieveDriverTripDetailTest {
             passengerId = martinId,
             status = PENDING_APPROVAL
         )
-
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
         givenSectionsAssociatedToATrip(tripId, listOf(section))
         givenTripLegSolicitudeAssociatedToASection(section.id, listOf(georgeTripLegSolicitude, martinTripLegSolicitude))
         givenTripLegSolicitudesPending(tripId, listOf(martinTripLegSolicitude))
@@ -375,6 +407,7 @@ class RetrieveDriverTripDetailTest {
     fun `driver section detail passenger not exists`() {
         // given
         val tripId = UUID.randomUUID()
+        val trip = TripFactory.common(id = tripId, status = Trip.Status.IN_PROGRESS)
         val section = SectionFactory.avCabildo(
             tripId = tripId
         )
@@ -385,6 +418,9 @@ class RetrieveDriverTripDetailTest {
             status = ACCEPTED
         )
 
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
+            trip
+        )
         givenSectionsAssociatedToATrip(tripId, listOf(section))
         givenTripLegSolicitudeAssociatedToASection(section.id, listOf(georgeTripLegSolicitude))
         givenTripLegSolicitudesPending(tripId)
