@@ -5,7 +5,8 @@ import com.roadlink.tripservice.domain.driver_trip.DriverSectionDetail
 import com.roadlink.tripservice.domain.driver_trip.Passenger
 import com.roadlink.tripservice.domain.driver_trip.PassengerNotExists
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus.*
-import com.roadlink.tripservice.domain.trip.TripStatus.*
+import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
@@ -16,12 +17,12 @@ import com.roadlink.tripservice.domain.user.User
 import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.domain.user.UserTrustScore
 import com.roadlink.tripservice.domain.user.UserTrustScoreRepository
-import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import com.roadlink.tripservice.usecases.common.InstantFactory.october15_12hs
 import com.roadlink.tripservice.usecases.common.InstantFactory.october15_13hs
 import com.roadlink.tripservice.usecases.common.InstantFactory.october15_15hs
 import com.roadlink.tripservice.usecases.common.InstantFactory.october15_18hs
 import com.roadlink.tripservice.usecases.common.InstantFactory.october15_7hs
+import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
 import com.roadlink.tripservice.usecases.trip.SectionFactory
 import com.roadlink.tripservice.usecases.trip.builder
 import com.roadlink.tripservice.usecases.trip_solicitude.TripLegSolicitudeFactory
@@ -49,6 +50,9 @@ class RetrieveDriverTripDetailTest {
     @MockK
     private lateinit var userTrustScoreRepository: UserTrustScoreRepository
 
+    @MockK
+    private lateinit var tripRepository: TripRepository
+
     private lateinit var stubTimeProvider: StubTimeProvider
 
     private lateinit var retrieveDriverTripDetail: RetrieveDriverTripDetail
@@ -59,6 +63,7 @@ class RetrieveDriverTripDetailTest {
         stubTimeProvider = StubTimeProvider(fixedNow = october15_13hs())
         retrieveDriverTripDetail = RetrieveDriverTripDetail(
             sectionRepository = sectionRepository,
+            tripRepository = tripRepository,
             tripLegSolicitudeRepository = tripLegSolicitudeRepository,
             userRepository = userRepository,
             userTrustScoreRepository = userTrustScoreRepository,
@@ -99,7 +104,7 @@ class RetrieveDriverTripDetailTest {
         )
 
         // then
-        assertEquals(NOT_STARTED, driverTripDetail.tripStatus)
+        assertEquals(Trip.Status.NOT_STARTED, driverTripDetail.tripStatus)
     }
 
     @Test
@@ -132,7 +137,7 @@ class RetrieveDriverTripDetailTest {
         )
 
         // then
-        assertEquals(FINISHED, driverTripDetail.tripStatus)
+        assertEquals(Trip.Status.FINISHED, driverTripDetail.tripStatus)
     }
 
     @Test
@@ -165,7 +170,7 @@ class RetrieveDriverTripDetailTest {
         )
 
         // then
-        assertEquals(IN_PROGRESS, driverTripDetail.tripStatus)
+        assertEquals(Trip.Status.IN_PROGRESS, driverTripDetail.tripStatus)
     }
 
     @Test

@@ -3,14 +3,14 @@ package com.roadlink.tripservice.infrastructure.rest.driver_trip.mapper
 import com.roadlink.tripservice.domain.driver_trip.DriverTripDetail
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus
 import com.roadlink.tripservice.domain.trip.TripStatus
-import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.*
 import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponseMapper
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.*
 
 object DriverTripDetailResponseMapper {
     fun map(driverTripDetail: DriverTripDetail): DriverTripDetailResponse =
         DriverTripDetailResponse(
             tripId = driverTripDetail.tripId,
-            tripStatus = tripStatusResponse(driverTripDetail.tripStatus),
+            tripStatus = DriverTripStatusResponse.from(driverTripDetail.tripStatus),
             seatStatus = seatsAvailabilityStatusResponse(driverTripDetail.seatStatus),
             hasPendingApplications = driverTripDetail.hasPendingApplications,
             sectionDetails = driverTripDetail.sectionDetails.map { driverSectionDetail ->
