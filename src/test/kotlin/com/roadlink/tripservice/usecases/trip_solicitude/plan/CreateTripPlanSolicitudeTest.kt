@@ -143,6 +143,69 @@ class CreateTripPlanSolicitudeTest {
     }
 
     @Test
+    fun `when all the requested sections can receive the passenger and the passenger has sent a solicitude but to a different plan, then the plan must be created`() {
+        // GIVEN
+        val tripId = UUID.randomUUID()
+        val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800(tripId = tripId)
+        val otherTripID = UUID.randomUUID()
+        val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800(tripId = otherTripID)
+
+        val passengerId = UUID.randomUUID()
+        val george = UserFactory.common(id = passengerId)
+        val tripPlanSolicitude = CreateTripPlanSolicitude.Input(
+            passengerId = george.id,
+            tripSections = listOf(
+                CreateTripPlanSolicitude.Input.TripSections(
+                    tripId = sectionOne.tripId.toString(),
+                    sectionsIds = setOf(sectionOne.id)
+                ),
+                CreateTripPlanSolicitude.Input.TripSections(
+                    tripId = sectionTwo.tripId.toString(),
+                    sectionsIds = setOf(sectionTwo.id)
+                )
+            )
+        )
+
+        val trip = TripFactory.common()
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
+        every { tripPlanSolicitudeRepository.insert(any()) } just runs
+        every { tripRepository.find(any()) } returns listOf(trip)
+        every { userRepository.findByUserId(id = george.id) } returns george
+        every {
+            tripPlanSolicitudeRepository.find(
+                commandQuery = TripPlanSolicitudeRepository.CommandQuery(
+                    passengerId = UUID.fromString(george.id),
+                    tripIds = listOf(sectionOne.tripId, sectionTwo.tripId)
+                )
+            )
+        } returns listOf(
+            TripPlanSolicitudeFactory.common(
+                tripLegSolicitudes = listOf(
+                    TripLegSolicitudeFactory.common(
+                        sections = listOf(
+                            SectionFactory.withDriver(
+                                driverId = UUID.randomUUID(),
+                                tripId = sectionOne.tripId
+                            ),
+                            SectionFactory.withDriver(
+                                driverId = UUID.randomUUID(),
+                                tripId = sectionTwo.tripId
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        // WHEN
+        val output = createTripPlanSolicitude(tripPlanSolicitude)
+
+        // THEN
+        thenTheTripPlanWasCreated(output)
+        thenTheTripPlanWasSaved()
+    }
+
+    @Test
     fun `when there is a section which can not receive the passenger, then the plan must not be created`() {
         // GIVEN
         val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
