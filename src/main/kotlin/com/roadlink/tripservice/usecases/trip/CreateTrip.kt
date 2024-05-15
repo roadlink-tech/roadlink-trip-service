@@ -1,18 +1,18 @@
 package com.roadlink.tripservice.usecases.trip
 
-import com.roadlink.tripservice.domain.trip.exception.AlreadyExistsTripByDriverInTimeRange
 import com.roadlink.tripservice.domain.common.IdGenerator
+import com.roadlink.tripservice.domain.common.TripPoint
+import com.roadlink.tripservice.domain.common.events.CommandBus
 import com.roadlink.tripservice.domain.common.utils.time.TimeProvider
 import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.common.utils.time.exception.InvalidTripTimeRange
 import com.roadlink.tripservice.domain.trip.Trip
-import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.TripRepository
-import com.roadlink.tripservice.domain.common.events.CommandBus
 import com.roadlink.tripservice.domain.trip.constraint.Policy
 import com.roadlink.tripservice.domain.trip.constraint.Restriction
-import com.roadlink.tripservice.domain.trip.events.TripCreatedEventResponse
 import com.roadlink.tripservice.domain.trip.events.TripCreatedEvent
+import com.roadlink.tripservice.domain.trip.events.TripCreatedEventResponse
+import com.roadlink.tripservice.domain.trip.exception.AlreadyExistsTripByDriverInTimeRange
 
 class CreateTrip(
     private val tripRepository: TripRepository,
@@ -25,7 +25,7 @@ class CreateTrip(
         validateExistsTripByDriverAndInTimeRange(input)
 
         return input.toTrip().also { trip ->
-            trip.save(tripRepository)
+            trip.insert(tripRepository)
             publishTripCreatedEvent(trip)
         }
     }

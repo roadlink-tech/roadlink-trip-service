@@ -13,9 +13,15 @@ class MySQLTripRepository(
     private val entityManager: EntityManager,
     private val transactionManager: TransactionOperations<Session>,
 ) : TripRepository {
-    override fun save(trip: Trip) {
+    override fun insert(trip: Trip) {
         transactionManager.executeWrite {
             entityManager.persist(TripJPAEntity.from(trip))
+        }
+    }
+
+    override fun update(trip: Trip) {
+        transactionManager.executeWrite {
+            entityManager.merge(TripJPAEntity.from(trip))
         }
     }
 

@@ -59,7 +59,7 @@ internal class CreateTripTest {
     @Test
     fun `given already exists trip with same driver in the given time range then should fail`() {
         // given
-        every { tripRepository.save(trip = match { it == TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20() }) } just runs
+        every { tripRepository.insert(trip = match { it == TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20() }) } just runs
 
         every {
             tripRepository.existsByDriverAndInTimeRange(
@@ -176,7 +176,7 @@ internal class CreateTripTest {
             )
         } returns false
 
-        every { tripRepository.save(trip = match { it.id == TripFactory.avCabildo_id }) } just runs
+        every { tripRepository.insert(trip = match { it.id == TripFactory.avCabildo_id }) } just runs
 
         // when
         val result = createTrip(
@@ -208,7 +208,7 @@ internal class CreateTripTest {
             )
         } returns false
 
-        every { tripRepository.save(trip = match { it.id == TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id }) } just runs
+        every { tripRepository.insert(trip = match { it.id == TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_id }) } just runs
 
         // when
         val result = createTrip(

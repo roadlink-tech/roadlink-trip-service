@@ -2,11 +2,7 @@ package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.common.TripPoint
-import com.roadlink.tripservice.domain.trip.constraint.Policy
-import com.roadlink.tripservice.domain.trip.constraint.Preferences
-import com.roadlink.tripservice.domain.trip.constraint.Restriction
-import com.roadlink.tripservice.domain.trip.constraint.Rule
-import com.roadlink.tripservice.domain.trip.constraint.Visibility
+import com.roadlink.tripservice.domain.trip.constraint.*
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
 import com.roadlink.tripservice.domain.trip_search.filter.Filter
@@ -109,8 +105,12 @@ data class Trip(
         return apply { this.status = Status.FINISHED }
     }
 
-    fun save(tripRepository: TripRepository) {
-        tripRepository.save(this)
+    fun insert(tripRepository: TripRepository) {
+        tripRepository.insert(this)
+    }
+
+    fun update(tripRepository: TripRepository) {
+        tripRepository.update(this)
     }
 
     private fun isTheEndOfTheWay(

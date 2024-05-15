@@ -88,7 +88,7 @@ class FinishTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
             trip
         )
-        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.FINISHED }) } just runs
 
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
@@ -153,7 +153,7 @@ class FinishTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
             trip
         )
-        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.FINISHED }) } just runs
 
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
@@ -184,7 +184,7 @@ class FinishTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
             trip
         )
-        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.FINISHED }) } just runs
 
         // when
         val response = finishTrip(FinishTrip.Input(tripId))
@@ -213,7 +213,7 @@ class FinishTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
             trip
         )
-        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.FINISHED }) } just runs
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
             TripPlanFactory.withTwoTripLeg(
                 passengerId = georgeId,
@@ -265,7 +265,7 @@ class FinishTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(tripId))) } returns listOf(
             trip
         )
-        every { tripRepository.save(trip = match { it.status == Trip.Status.FINISHED }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.FINISHED }) } just runs
         every { tripPlanRepository.find(commandQuery = match { it.tripId == tripId }) } returns listOf(
             TripPlanFactory.withASingleTripLeg(
                 passengerId = georgeId,

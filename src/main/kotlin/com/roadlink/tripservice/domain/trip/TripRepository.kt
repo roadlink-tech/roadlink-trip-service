@@ -4,7 +4,8 @@ import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import java.util.*
 
 interface TripRepository {
-    fun save(trip: Trip)
+    fun insert(trip: Trip)
+    fun update(trip: Trip)
     fun existsByDriverAndInTimeRange(driverId: String, timeRange: TimeRange): Boolean
     fun find(commandQuery: CommandQuery): List<Trip>
     data class CommandQuery(

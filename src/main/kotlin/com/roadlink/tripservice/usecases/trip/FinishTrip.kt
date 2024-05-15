@@ -29,7 +29,7 @@ class FinishTrip(
         tripRepository.find(TripRepository.CommandQuery(ids = listOf(input.tripId)))
             .firstOrNull()
             ?.finish()
-            ?.save(tripRepository)
+            ?.update(tripRepository)
 
         val feedbackSolicitudes = createFeedbackSolicitude(tripPlans, input.tripId)
         feedbackSolicitudes.forEach(feedbackSolicitudeRepository::insert)

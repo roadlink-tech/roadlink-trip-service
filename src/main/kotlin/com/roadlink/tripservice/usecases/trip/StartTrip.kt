@@ -5,7 +5,6 @@ import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.Status.PENDING_APPROVAL
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.UseCase
-import java.lang.RuntimeException
 import java.util.*
 
 class StartTrip(
@@ -23,7 +22,7 @@ class StartTrip(
         tripRepository.find(TripRepository.CommandQuery(ids = listOf(input.tripId)))
             .first()
             .start()
-            .save(tripRepository)
+            .update(tripRepository)
 
         tripPlanSolicitudes.forEach { tripPlanSolicitude ->
             tripPlanSolicitude.reject()

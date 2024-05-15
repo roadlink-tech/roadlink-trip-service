@@ -27,7 +27,6 @@ services:
     ports:
       - "8081:8080"
     environment:
-      - FOO=foo
       - DB_JDBC_URL=jdbc:mysql://trip_service_db:3306/tripservice_db
       - DB_USERNAME=test
       - DB_PASSWORD=test
