@@ -2,17 +2,18 @@ package com.roadlink.tripservice.infrastructure.persistence.trip_solicitude
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
-import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.*
+import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude.TripLegSolicitude.Status.REJECTED
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class MySQLTripPlanSolicitudeRepositoryTestResult {
+class MySQLTripPlanSolicitudeRepositoryTest {
 
     @Inject
     private lateinit var sectionRepository: SectionRepository
@@ -22,6 +23,7 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
 
     @Test
     fun `given a trip plan solicitude stored, when find it by passenger id then it must be retrieved`() {
+        // given
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
         val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
@@ -32,8 +34,10 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
             sectionRepository.save(it)
         }
 
+        // when
         repository.insert(tripPlanSolicitude)
 
+        // then
         assertEquals(
             listOf(tripPlanSolicitude),
             repository.find(TripPlanSolicitudeRepository.CommandQuery(passengerId = passengerId))
@@ -41,7 +45,8 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
     }
 
     @Test
-    fun `given a trip plan solicitude stored, when find it by trip id then it must be retrieved`() {
+    fun `given a trip plan solicitude stored, when find it by trip ids then it must be retrieved`() {
+        // given
         val tripApplicationId = UUID.randomUUID()
         val passengerId = UUID.randomUUID()
         val tripId = UUID.randomUUID()
@@ -52,14 +57,52 @@ class MySQLTripPlanSolicitudeRepositoryTestResult {
         )
         tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
             sectionRepository.save(it)
+        }.also {
+            repository.insert(tripPlanSolicitude)
         }
 
-        repository.insert(tripPlanSolicitude)
+        // when
+        val result =
+            repository.find(
+                TripPlanSolicitudeRepository.CommandQuery(
+                    passengerId = passengerId,
+                    tripIds = listOf(tripId)
+                )
+            )
 
-        assertEquals(
-            listOf(tripPlanSolicitude),
-            repository.find(TripPlanSolicitudeRepository.CommandQuery(tripId = tripId))
+        // then
+        assertEquals(listOf(tripPlanSolicitude), result)
+    }
+
+    @Test
+    fun `given a trip plan solicitude stored, when try to find it by trip ids but it does not exist then it must be retrieved`() {
+        // given
+        val tripApplicationId = UUID.randomUUID()
+        val passengerId = UUID.randomUUID()
+        val tripId = UUID.randomUUID()
+        val nonExistingTripId = UUID.randomUUID()
+        val tripPlanSolicitude = TripPlanSolicitudeFactory.withASingleTripLegSolicitude(
+            tripLegSolicitudeId = tripApplicationId,
+            passengerId = passengerId.toString(),
+            tripId = tripId
         )
+        tripPlanSolicitude.tripLegSolicitudes.flatMap { it.sections }.forEach {
+            sectionRepository.save(it)
+        }.also {
+            repository.insert(tripPlanSolicitude)
+        }
+
+        // when
+        val result =
+            repository.find(
+                TripPlanSolicitudeRepository.CommandQuery(
+                    passengerId = passengerId,
+                    tripIds = listOf(tripId, nonExistingTripId)
+                )
+            )
+
+        // then
+        assertEquals(listOf(tripPlanSolicitude), result)
     }
 
     @Test

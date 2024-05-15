@@ -8,8 +8,8 @@ interface TripPlanSolicitudeRepository {
     fun find(commandQuery: CommandQuery): List<TripPlanSolicitude>
     data class CommandQuery(
         val ids: List<UUID> = emptyList(),
+        val tripIds: List<UUID> = emptyList(),
         val tripLegSolicitudeId: UUID? = null,
-        val passengerId: UUID? = null,
-        val tripId: UUID? = null
+        val passengerId: UUID? = null
     )
 }

@@ -36,7 +36,7 @@ data class Trip(
                 passenger,
                 this
             )
-        } && passenger.id != this.driverId
+        }
     }
 
     fun isDepartureWithin(start: Instant, end: Instant): Boolean {

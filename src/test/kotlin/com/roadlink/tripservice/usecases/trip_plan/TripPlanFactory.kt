@@ -63,9 +63,9 @@ object TripPlanFactory {
         oneTripId: UUID = UUID.randomUUID(),
         anotherTripId: UUID = UUID.randomUUID(),
         oneDriverId: UUID = UUID.randomUUID(),
-        anotherDriverId: UUID = UUID.randomUUID(),
+        otherDriverId: UUID = UUID.randomUUID(),
         oneVehicleId: UUID = UUID.randomUUID(),
-        anotherVehicleId: UUID = UUID.randomUUID(),
+        otherVehicleId: UUID = UUID.randomUUID(),
         status: Status = Status.NOT_FINISHED
     ): TripPlan {
         return TripPlan(
@@ -83,8 +83,8 @@ object TripPlanFactory {
                 TripLeg(
                     id = anotherTripLegId,
                     tripId = anotherTripId,
-                    vehicleId = anotherVehicleId,
-                    driverId = anotherDriverId,
+                    vehicleId = otherVehicleId,
+                    driverId = otherDriverId,
                     sections = emptyList(),
                     status = status
                 ),

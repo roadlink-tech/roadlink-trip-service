@@ -13,7 +13,7 @@ class StartTrip(
     override fun invoke(input: Input): Output {
         val tripPlanSolicitudes = tripPlanSolicitudeRepository.find(
             commandQuery = TripPlanSolicitudeRepository.CommandQuery(
-                tripId = input.tripId
+                tripIds = listOf(input.tripId)
             )
         ).filter { it.status() == PENDING_APPROVAL }
 
