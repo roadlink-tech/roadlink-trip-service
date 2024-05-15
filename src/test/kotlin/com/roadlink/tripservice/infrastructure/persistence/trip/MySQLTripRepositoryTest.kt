@@ -25,7 +25,7 @@ class MySQLTripRepositoryTest {
         val trip = TripFactory.common(driverId = driverId)
 
         // when
-        repository.save(trip)
+        repository.insert(trip)
 
         // then
         assertEquals(
@@ -43,7 +43,7 @@ class MySQLTripRepositoryTest {
             policies = listOf(Rule.NoSmoking, Rule.PetAllowed),
             restrictions = listOf(Visibility.OnlyFriends, Visibility.OnlyWomen)
         )
-        repository.save(trip)
+        repository.insert(trip)
 
         // when
         val result =
@@ -66,7 +66,7 @@ class MySQLTripRepositoryTest {
         // given
         val driverId = UUID.randomUUID()
         val trip = TripFactory.common(driverId = driverId)
-        repository.save(trip)
+        repository.insert(trip)
 
         // when
         val result =
@@ -85,7 +85,7 @@ class MySQLTripRepositoryTest {
             TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(driverId = driverId.toString())
 
         // when
-        repository.save(trip)
+        repository.insert(trip)
 
         // then
         assertEquals(
@@ -99,7 +99,7 @@ class MySQLTripRepositoryTest {
         val driverId = UUID.randomUUID()
         val trip = TripFactory.caba_escobar_pilar_rosario(driverId = driverId.toString())
 
-        repository.save(trip)
+        repository.insert(trip)
 
         assertEquals(
             listOf(trip),
@@ -111,7 +111,7 @@ class MySQLTripRepositoryTest {
     fun `given no trip exists with the given driver id when find all by driver id then should return empty list`() {
         val otherDriverId = UUID.randomUUID()
         val trip = TripFactory.caba_escobar_pilar_rosario()
-        repository.save(trip)
+        repository.insert(trip)
 
         val result =
             repository.find(commandQuery = TripRepository.CommandQuery(driverId = otherDriverId))
@@ -125,12 +125,12 @@ class MySQLTripRepositoryTest {
         val trip1 = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString())
         val trip2 =
             TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(driverId = driverId.toString())
-        repository.save(trip1)
-        repository.save(trip2)
+        repository.insert(trip1)
+        repository.insert(trip2)
 
         val otherDriverId = UUID.randomUUID()
         val trip3 = TripFactory.caba_escobar_pilar_rosario(driverId = otherDriverId.toString())
-        repository.save(trip3)
+        repository.insert(trip3)
 
         val result =
             repository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId))
@@ -149,7 +149,7 @@ class MySQLTripRepositoryTest {
 
         val otherDriverId = UUID.randomUUID().toString()
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = otherDriverId)
-        repository.save(trip)
+        repository.insert(trip)
 
         val result = repository.existsByDriverAndInTimeRange(driverId, timeRange)
 
@@ -165,7 +165,7 @@ class MySQLTripRepositoryTest {
         )
 
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId)
-        repository.save(trip)
+        repository.insert(trip)
 
         val result = repository.existsByDriverAndInTimeRange(driverId, timeRange)
 
@@ -181,7 +181,7 @@ class MySQLTripRepositoryTest {
         )
 
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId)
-        repository.save(trip)
+        repository.insert(trip)
 
         val result = repository.existsByDriverAndInTimeRange(driverId, timeRange)
 
@@ -197,7 +197,7 @@ class MySQLTripRepositoryTest {
         )
 
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId)
-        repository.save(trip)
+        repository.insert(trip)
 
         val result = repository.existsByDriverAndInTimeRange(driverId, timeRange)
 
@@ -213,7 +213,7 @@ class MySQLTripRepositoryTest {
         )
 
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId)
-        repository.save(trip)
+        repository.insert(trip)
 
         val result = repository.existsByDriverAndInTimeRange(driverId, timeRange)
 
@@ -229,7 +229,7 @@ class MySQLTripRepositoryTest {
         )
 
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId)
-        repository.save(trip)
+        repository.insert(trip)
 
         val result = repository.existsByDriverAndInTimeRange(driverId, timeRange)
 

@@ -19,10 +19,6 @@
       "cpu": 512,
       "environment": [
         {
-          "name": "FOO",
-          "value": "{{FOO}}"
-        },
-        {
           "name": "DB_JDBC_URL",
           "value": "{{DB_JDBC_URL}}"
         },

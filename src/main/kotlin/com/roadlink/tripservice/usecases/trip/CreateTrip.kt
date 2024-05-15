@@ -25,7 +25,7 @@ class CreateTrip(
         validateExistsTripByDriverAndInTimeRange(input)
 
         return input.toTrip().also { trip ->
-            trip.save(tripRepository)
+            trip.update(tripRepository)
             publishTripCreatedEvent(trip)
         }
     }

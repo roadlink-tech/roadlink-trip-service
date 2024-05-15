@@ -464,7 +464,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(oneTrip.id)
             )
         )
-        tripRepository.save(trip = oneTrip)
+        tripRepository.insert(trip = oneTrip)
 
         entityManager.transaction.commit()
 
@@ -519,7 +519,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(oneTrip.id)
             )
         )
-        tripRepository.save(trip = oneTrip)
+        tripRepository.insert(trip = oneTrip)
 
         entityManager.transaction.commit()
 
@@ -573,7 +573,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(tripWithOnlyWomenRestriction.id)
             )
         )
-        tripRepository.save(trip = tripWithOnlyWomenRestriction)
+        tripRepository.insert(trip = tripWithOnlyWomenRestriction)
 
         entityManager.transaction.commit()
 
@@ -633,7 +633,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(privateTrip.id)
             )
         )
-        tripRepository.save(trip = privateTrip)
+        tripRepository.insert(trip = privateTrip)
 
         entityManager.transaction.commit()
 
@@ -694,7 +694,7 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(privateTrip.id)
             )
         )
-        tripRepository.save(trip = privateTrip)
+        tripRepository.insert(trip = privateTrip)
 
         entityManager.transaction.commit()
 
@@ -762,8 +762,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(otherPrivateTrip.id)
             )
         )
-        tripRepository.save(trip = onePrivateTrip)
-        tripRepository.save(trip = otherPrivateTrip)
+        tripRepository.insert(trip = onePrivateTrip)
+        tripRepository.insert(trip = otherPrivateTrip)
 
         entityManager.transaction.commit()
 
@@ -834,8 +834,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(otherPrivateTrip.id)
             )
         )
-        tripRepository.save(trip = onePrivateTrip)
-        tripRepository.save(trip = otherPrivateTrip)
+        tripRepository.insert(trip = onePrivateTrip)
+        tripRepository.insert(trip = otherPrivateTrip)
 
         entityManager.transaction.commit()
 
@@ -901,8 +901,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(otherTrip.id)
             )
         )
-        tripRepository.save(trip = oneTrip)
-        tripRepository.save(trip = otherTrip)
+        tripRepository.insert(trip = oneTrip)
+        tripRepository.insert(trip = otherTrip)
 
         entityManager.transaction.commit()
 
@@ -968,8 +968,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 tripId = UUID.fromString(otherTrip.id)
             )
         )
-        tripRepository.save(trip = oneTrip)
-        tripRepository.save(trip = otherTrip)
+        tripRepository.insert(trip = oneTrip)
+        tripRepository.insert(trip = otherTrip)
 
         entityManager.transaction.commit()
 
@@ -1038,8 +1038,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 )
             )
         )
-        tripRepository.save(trip = oneTrip)
-        tripRepository.save(trip = otherTrip)
+        tripRepository.insert(trip = oneTrip)
+        tripRepository.insert(trip = otherTrip)
 
         entityManager.transaction.commit()
 
@@ -1110,8 +1110,8 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
                 )
             )
         )
-        tripRepository.save(trip = oneTrip)
-        tripRepository.save(trip = otherTrip)
+        tripRepository.insert(trip = oneTrip)
+        tripRepository.insert(trip = otherTrip)
 
         entityManager.transaction.commit()
 

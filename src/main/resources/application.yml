@@ -7,9 +7,6 @@ netty:
     allocator:
       max-order: 3
 
-foo:
-  foo: ${FOO}
-
 geoapify:
   # This is no secure. This is a secret and must be retrieved from
   # a secret manager or env vars.

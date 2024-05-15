@@ -68,7 +68,7 @@ class TripLegSolicitudesHandlerE2ETest : End2EndTest() {
         val vehicleId = UUID.randomUUID()
 
         val trip = TripFactory.avCabildo4853_to_avCabildo20(driverId = driverId.toString())
-        tripRepository.save(trip)
+        tripRepository.insert(trip)
 
         val section = SectionFactory.avCabildo(
             tripId = UUID.fromString(trip.id),

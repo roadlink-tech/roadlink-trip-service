@@ -124,7 +124,7 @@ class CreateTripHandlerE2ETest : End2EndTest() {
 
     @Test
     fun `given already exists trip with same driver in the given time range then should fail`() {
-        tripRepository.save(TripFactory.avCabildo4853_to_avCabildo20())
+        tripRepository.insert(TripFactory.avCabildo4853_to_avCabildo20())
         entityManager.transaction.commit()
         val request = request(CreateTripRequestFactory.avCabildo())
 
