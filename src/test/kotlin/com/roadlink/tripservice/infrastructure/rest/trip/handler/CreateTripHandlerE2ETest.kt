@@ -2,20 +2,19 @@ package com.roadlink.tripservice.infrastructure.rest.trip.handler
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.roadlink.tripservice.config.StubIdGenerator
+import com.roadlink.tripservice.domain.common.events.CommandBus
 import com.roadlink.tripservice.domain.common.utils.time.TimeRange
 import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.infrastructure.End2EndTest
-import com.roadlink.tripservice.config.SpyCommandBus
-import com.roadlink.tripservice.config.StubIdGenerator
-import com.roadlink.tripservice.domain.common.events.CommandBus
-import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.infrastructure.factories.AlreadyExistsTripByDriverInTimeRangeResponseFactory
 import com.roadlink.tripservice.infrastructure.factories.CreateTripRequestFactory
 import com.roadlink.tripservice.infrastructure.factories.InvalidTripTimeRangeResponseFactory
 import com.roadlink.tripservice.infrastructure.factories.TripResponseFactory
 import com.roadlink.tripservice.infrastructure.rest.trip.request.CreateTripRequest
 import com.roadlink.tripservice.infrastructure.rest.trip.response.TripResponse
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -57,16 +56,48 @@ class CreateTripHandlerE2ETest : End2EndTest() {
 
     @Test
     fun `can create trip with no meeting points`() {
+        // given
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
         stubIdGenerator.nextIdToGenerate(id = UUID.randomUUID().toString())
 
         val request = request(CreateTripRequestFactory.avCabildo())
 
+        // when
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
+        // then
         assertEquals(CREATED, response.status)
         assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
         assertOkBody(TripResponseFactory.avCabildo(), response)
+        thenTripExists(TripFactory.avCabildo4853_to_avCabildo20())
+        theCommandHasBeenPublished()
+    }
+
+    @Test
+    fun `can create trip with policies and restrictions`() {
+        // given
+        stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo_id)
+        stubIdGenerator.nextIdToGenerate(id = UUID.randomUUID().toString())
+
+        val request = request(
+            CreateTripRequestFactory.avCabildo(
+                policies = listOf(CreateTripRequest.PolicyTypeRequest.NO_SMOKING),
+                restrictions = listOf(CreateTripRequest.RestrictionTypeRequest.ONLY_WOMEN)
+            )
+        )
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(CREATED, response.status)
+        assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
+        assertOkBody(
+            TripResponseFactory.avCabildo(
+                policies = listOf("NO_SMOKING"),
+                restrictions = listOf("ONLY_WOMEN")
+            ), response
+        )
         thenTripExists(TripFactory.avCabildo4853_to_avCabildo20())
         theCommandHasBeenPublished()
     }
@@ -76,13 +107,17 @@ class CreateTripHandlerE2ETest : End2EndTest() {
         stubIdGenerator.nextIdToGenerate(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_uuid)
         stubIdGenerator.nextIdToGenerate(id = UUID.randomUUID().toString())
         stubIdGenerator.nextIdToGenerate(id = UUID.randomUUID().toString())
-        val request = request(CreateTripRequestFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
+        val request =
+            request(CreateTripRequestFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
 
         val response = client.toBlocking().exchange(request, JsonNode::class.java)
 
         assertEquals(CREATED, response.status)
         assertEquals(APPLICATION_JSON_TYPE, response.contentType.get())
-        assertOkBody(TripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_uuid), response)
+        assertOkBody(
+            TripResponseFactory.avCabildo4853_virreyDelPino1800_avCabildo20(id = TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20_uuid),
+            response
+        )
         thenTripExists(TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20())
         theCommandHasBeenPublished()
     }
@@ -94,7 +129,11 @@ class CreateTripHandlerE2ETest : End2EndTest() {
         val request = request(CreateTripRequestFactory.avCabildo())
 
         val response = try {
-            client.toBlocking().exchange(request, Argument.of(JsonNode::class.java), Argument.of(JsonNode::class.java))
+            client.toBlocking().exchange(
+                request,
+                Argument.of(JsonNode::class.java),
+                Argument.of(JsonNode::class.java)
+            )
         } catch (e: HttpClientResponseException) {
             e.response
         }
@@ -110,7 +149,11 @@ class CreateTripHandlerE2ETest : End2EndTest() {
         val request = request(CreateTripRequestFactory.avCabildo_invalidTimeRange())
 
         val response = try {
-            client.toBlocking().exchange(request, Argument.of(JsonNode::class.java), Argument.of(JsonNode::class.java))
+            client.toBlocking().exchange(
+                request,
+                Argument.of(JsonNode::class.java),
+                Argument.of(JsonNode::class.java)
+            )
         } catch (e: HttpClientResponseException) {
             e.response
         }
@@ -143,8 +186,11 @@ class CreateTripHandlerE2ETest : End2EndTest() {
     private fun thenTripExists(trip: Trip) {
         assertTrue {
             tripRepository.existsByDriverAndInTimeRange(
-                driver = trip.driverId,
-                timeRange = TimeRange(trip.departure.estimatedArrivalTime, trip.arrival.estimatedArrivalTime)
+                driverId = trip.driverId,
+                timeRange = TimeRange(
+                    trip.departure.estimatedArrivalTime,
+                    trip.arrival.estimatedArrivalTime
+                )
             )
         }
     }

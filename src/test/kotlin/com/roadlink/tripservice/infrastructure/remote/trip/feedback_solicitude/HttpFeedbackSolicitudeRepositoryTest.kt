@@ -45,7 +45,7 @@ class HttpFeedbackSolicitudeRepositoryTest {
     }
 
     @Test
-    fun `should`() {
+    fun `should not fail when create a feedback solicitude`() {
         // given
         val receiverId = UUID.randomUUID()
         val reviewerId = UUID.randomUUID()

@@ -20,6 +20,9 @@ val micronautTestJunit5 = "4.0.0-M3"
 val testContainersVersion = "1.19.1"
 val jakartaPersistenceApiVersion = "2.2.3"
 val okhttpVersion = "4.12.0"
+val junitVersion = "5.9.0"
+val wireMockVersion = "2.31.0"
+val jacksonVersion = "2.13.1"
 
 dependencies {
     // KOTLIN
@@ -33,10 +36,14 @@ dependencies {
     annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("jakarta.annotation:jakarta.annotation-api")
     runtimeOnly("org.yaml:snakeyaml")
+
+    // JACKSON
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
     // MICRONAUT DATA
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
@@ -61,7 +68,10 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.micronaut.test:micronaut-test-junit5:$micronautTestJunit5")
     testImplementation("org.skyscreamer:jsonassert:1.5.0")
-    testImplementation("com.github.tomakehurst:wiremock-jre8:2.31.0")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:$wireMockVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:mysql:$testContainersVersion")

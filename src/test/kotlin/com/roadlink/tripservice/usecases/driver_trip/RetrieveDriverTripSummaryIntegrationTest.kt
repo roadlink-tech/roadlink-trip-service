@@ -14,9 +14,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertInstanceOf
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -59,7 +57,9 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val driverId = UUID.randomUUID()
         val trip = givenACreatedTrip(driverId = driverId)
 
-        every { tripRepository.findAllByDriverId(driverId = driverId) } returns listOf(trip)
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)) } returns listOf(
+            trip
+        )
 
         every { sectionsRepository.findAllByTripIds(setOf(UUID.fromString(trip.id))) } returns trip.sections(
             idGenerator
@@ -80,7 +80,7 @@ class RetrieveDriverTripSummaryIntegrationTest {
     fun `when the driver does not have any trip save, an empty summary must be retrieved`() {
         // GIVEN
         val driverId = UUID.randomUUID()
-        every { tripRepository.findAllByDriverId(driverId = driverId) } returns listOf()
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)) } returns listOf()
 
         // WHEN
         val summary = retrieveDriverTripSummary(driverId.toString())
@@ -95,7 +95,9 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val driverId = UUID.randomUUID()
         val trip = givenACreatedTrip(driverId, availableSeats = 0)
 
-        every { tripRepository.findAllByDriverId(driverId = driverId) } returns listOf(trip)
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)) } returns listOf(
+            trip
+        )
 
         every { sectionsRepository.findAllByTripIds(setOf(UUID.fromString(trip.id))) } returns trip.sections(
             idGenerator
@@ -118,7 +120,9 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val driverId = UUID.randomUUID()
         val trip = givenACreatedTrip(driverId)
 
-        every { tripRepository.findAllByDriverId(driverId = driverId) } returns listOf(trip)
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)) } returns listOf(
+            trip
+        )
 
         every { sectionsRepository.findAllByTripIds(setOf(UUID.fromString(trip.id))) } returns trip.sections(
             idGenerator
@@ -141,7 +145,9 @@ class RetrieveDriverTripSummaryIntegrationTest {
         val driverId = UUID.randomUUID()
         val trip = givenACreatedTrip(driverId)
 
-        every { tripRepository.findAllByDriverId(driverId = driverId) } returns listOf(trip)
+        every { tripRepository.find(commandQuery = TripRepository.CommandQuery(driverId = driverId)) } returns listOf(
+            trip
+        )
 
         every { sectionsRepository.findAllByTripIds(setOf(UUID.fromString(trip.id))) } returns trip.sections(
             idGenerator

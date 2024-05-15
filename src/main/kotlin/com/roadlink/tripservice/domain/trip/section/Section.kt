@@ -22,19 +22,7 @@ data class Section(
 
     fun arrival(): Location = arrival.address.location
 
-    fun arrivesTo(location: Location): Boolean {
-        return arrival.address.location == location
-    }
-
-    fun departuresFrom(location: Location): Boolean {
-        return departure.address.location == location
-    }
-
     fun distance(): Double = distanceInMeters
-
-    fun departuresAfterOrEqual(at: Instant): Boolean {
-        return departure.estimatedArrivalTime.isAfter(at) || departure.estimatedArrivalTime == at
-    }
 
     fun availableSeats(): Int {
         return initialAmountOfSeats - bookedSeats

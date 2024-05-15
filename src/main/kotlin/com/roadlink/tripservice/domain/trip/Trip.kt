@@ -2,10 +2,18 @@ package com.roadlink.tripservice.domain.trip
 
 import com.roadlink.tripservice.domain.common.IdGenerator
 import com.roadlink.tripservice.domain.common.TripPoint
-import com.roadlink.tripservice.domain.common.utils.time.TimeRange
+import com.roadlink.tripservice.domain.trip.constraint.Policy
+import com.roadlink.tripservice.domain.trip.constraint.Preferences
+import com.roadlink.tripservice.domain.trip.constraint.Restriction
+import com.roadlink.tripservice.domain.trip.constraint.Rule
+import com.roadlink.tripservice.domain.trip.constraint.Visibility
 import com.roadlink.tripservice.domain.trip.section.Section
 import com.roadlink.tripservice.domain.trip_search.DistanceOnEarthInMeters
+import com.roadlink.tripservice.domain.trip_search.filter.Filter
+import com.roadlink.tripservice.domain.user.User
+import java.time.Instant
 import java.util.*
+
 
 data class Trip(
     val id: String,
@@ -17,8 +25,48 @@ data class Trip(
     val status: Status = Status.NOT_STARTED,
     val meetingPoints: List<TripPoint>,
     // TODO rename it by seats to be used. It'll be the vehicle capacity
-    val availableSeats: Int
+    val availableSeats: Int,
+    val policies: List<Policy> = emptyList(),
+    val restrictions: List<Restriction> = emptyList()
 ) {
+
+    fun canAdmitPassenger(passenger: User): Boolean {
+        return this.restrictions.all {
+            it.isAllowed(
+                passenger,
+                this
+            )
+        } && passenger.id != this.driverId
+    }
+
+    fun isDepartureWithin(start: Instant, end: Instant): Boolean {
+        return departure.estimatedArrivalTime.isAfter(start) && departure.estimatedArrivalTime.isBefore(
+            end
+        )
+    }
+
+    fun isCompliant(requesterPassenger: User, filters: Set<Filter>): Boolean {
+        // the restrictions always must be evaluated
+        if (!canAdmitPassenger(requesterPassenger)) {
+            return false
+        }
+        if (filters.isNotEmpty()) {
+            val anyBrokenRule = filters
+                .mapNotNull { Rule.valueOf(it) }
+                .any { rule -> !rule.isCompliant(this) }
+
+            val containsRestriction = filters
+                .mapNotNull { Visibility.valueOf(it) }
+                .all { restriction -> this.restrictions.contains(restriction) }
+
+            val anyBrokenPreference = filters
+                .mapNotNull { Preferences.valueOf(it) }
+                .any { preference -> !preference.isCompliant(this) }
+
+            return !anyBrokenRule && containsRestriction && !anyBrokenPreference
+        }
+        return true
+    }
 
     // TODO revisar la creacion del trip y como lo itero
     fun sections(idGenerator: IdGenerator): Set<Section> {
@@ -58,9 +106,6 @@ data class Trip(
         allTripPoints: List<TripPoint>,
         i: Int
     ) = allTripPoints[i] == arrival
-
-    fun isInTimeRange(timeRange: TimeRange): Boolean =
-        TimeRange(departure.estimatedArrivalTime, arrival.estimatedArrivalTime).intersects(timeRange)
 
     enum class Status {
         NOT_STARTED,

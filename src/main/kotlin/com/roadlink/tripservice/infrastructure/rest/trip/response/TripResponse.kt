@@ -12,4 +12,8 @@ data class TripResponse(
     val meetingPoints: List<TripPointResponse>,
     val arrival: TripPointResponse,
     val availableSeats: Int,
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    val policies: List<String>,
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    val restrictions: List<String>
 )

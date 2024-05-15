@@ -5,6 +5,10 @@ import java.util.*
 
 interface TripRepository {
     fun save(trip: Trip)
-    fun existsByDriverAndInTimeRange(driver: String, timeRange: TimeRange): Boolean
-    fun findAllByDriverId(driverId: UUID): List<Trip>
+    fun existsByDriverAndInTimeRange(driverId: String, timeRange: TimeRange): Boolean
+    fun find(commandQuery: CommandQuery): List<Trip>
+    data class CommandQuery(
+        val ids: List<UUID> = emptyList(),
+        val driverId: UUID? = null,
+    )
 }

@@ -1,6 +1,7 @@
-package com.roadlink.tripservice.domain.trip_search
+package com.roadlink.tripservice.domain.trip_search.algorithm
 
 import com.roadlink.tripservice.domain.common.Location
+import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 
 import java.time.Instant
 

@@ -1,7 +1,12 @@
 package com.roadlink.tripservice.usecases.trip
 
+import com.roadlink.tripservice.domain.common.TripPoint
 import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip.constraint.Policy
+import com.roadlink.tripservice.domain.trip.constraint.Restriction
+import com.roadlink.tripservice.domain.trip.constraint.Rule
 import com.roadlink.tripservice.usecases.common.trip_point.TripPointFactory
+import java.util.*
 
 object TripFactory {
 
@@ -9,6 +14,29 @@ object TripFactory {
     const val avCabildo4853_virreyDelPino1800_avCabildo20_id = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20"
     const val avCabildo4853_virreyDelPino1800_avCabildo20_uuid = "81dcb088-4b7e-4956-a50a-52eee0dd5a0c"
 
+    fun common(
+        id: UUID = UUID.fromString(avCabildo_id),
+        driverId: UUID = UUID.randomUUID(),
+        vehicleId: UUID = UUID.randomUUID(),
+        departure: TripPoint = TripPointFactory.avCabildo_4853(),
+        arrival: TripPoint = TripPointFactory.avCabildo_20(),
+        meetingPoints: List<TripPoint> = emptyList(),
+        availableSeats: Int = 4,
+        policies: List<Policy> = emptyList(),
+        restrictions: List<Restriction> = emptyList()
+    ): Trip {
+        return Trip(
+            id = id.toString(),
+            driverId = driverId.toString(),
+            vehicle = vehicleId.toString(),
+            departure = departure,
+            arrival = arrival,
+            meetingPoints = meetingPoints,
+            availableSeats = availableSeats,
+            policies = policies,
+            restrictions = restrictions
+        )
+    }
 
     fun avCabildo4853_to_avCabildo20(driverId: String = "John Smith", availableSeats: Int = 4) =
         Trip(

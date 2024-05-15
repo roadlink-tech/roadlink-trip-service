@@ -2,6 +2,7 @@ package com.roadlink.tripservice.config.trip_search
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_search.*
+import com.roadlink.tripservice.domain.trip_search.algorithm.BruteForceSearchEngine
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 

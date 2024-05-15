@@ -1,13 +1,12 @@
-package com.roadlink.tripservice.domain.trip_search
+package com.roadlink.tripservice.domain.trip_search.algorithm
 
 import com.roadlink.tripservice.domain.common.Location
 
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
-import com.roadlink.tripservice.infrastructure.persistence.common.Jts
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.Point
-import org.locationtech.jts.geom.PrecisionModel
+import com.roadlink.tripservice.domain.trip_search.JtsCircle
+import com.roadlink.tripservice.domain.trip_search.SearchAreaCreator
+import com.roadlink.tripservice.domain.trip_search.SearchRadiusGenerator
+import com.roadlink.tripservice.domain.trip_search.TripSearchPlanResult
 import java.time.Instant
 
 class BruteForceSearchEngine(
