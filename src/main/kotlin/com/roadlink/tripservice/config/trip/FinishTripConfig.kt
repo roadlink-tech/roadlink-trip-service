@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.config.trip
 
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.feedback_solicitude.FeedbackSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_plan.TripPlanRepository
 import com.roadlink.tripservice.usecases.trip.FinishTrip
@@ -11,8 +12,9 @@ class FinishTripConfig {
     @Singleton
     fun finishTrip(
         tripPlanRepository: TripPlanRepository,
+        tripRepository: TripRepository,
         feedbackSolicitudeRepository: FeedbackSolicitudeRepository
     ): FinishTrip {
-        return FinishTrip(tripPlanRepository, feedbackSolicitudeRepository)
+        return FinishTrip(tripPlanRepository, tripRepository, feedbackSolicitudeRepository)
     }
 }

@@ -39,10 +39,6 @@ class TripPlan(
         return this.tripLegs.first { it.tripId == tripId }
     }
 
-    fun finishLegByTripId(tripId: UUID) {
-        findLegByTripId(tripId).finish()
-    }
-
     fun status(): Status {
         if (isCancelled()) {
             return Status.CANCELLED

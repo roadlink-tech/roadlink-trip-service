@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.usecases.trip
 
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.feedback_solicitude.FeedbackSolicitude
 import com.roadlink.tripservice.domain.trip.feedback_solicitude.FeedbackSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_plan.TripPlan
@@ -9,24 +10,30 @@ import java.util.*
 
 class FinishTrip(
     private val tripPlanRepository: TripPlanRepository,
+    private val tripRepository: TripRepository,
     private val feedbackSolicitudeRepository: FeedbackSolicitudeRepository
 ) : UseCase<FinishTrip.Input, FinishTrip.Output> {
 
     override fun invoke(input: Input): Output {
-        val tripPlans =
-            tripPlanRepository.find(commandQuery = TripPlanRepository.CommandQuery(tripId = input.tripId))
-        val finishedTripLegs = mutableListOf<TripPlan.TripLeg>()
-        tripPlans.forEach { tripPlan ->
-            val tripLeg = tripPlan.findLegByTripId(tripId = input.tripId)
-            tripLeg.finish()
-            finishedTripLegs.add(tripLeg)
-            // TODO it must be an updateAll
-            tripPlanRepository.update(tripPlan)
+        val tripPlans = tripPlanRepository.find(
+            commandQuery = TripPlanRepository.CommandQuery(tripId = input.tripId)
+        )
+
+        val finishedTripLegs = tripPlans.map { tripPlan ->
+            tripPlan.findLegByTripId(tripId = input.tripId).apply {
+                finish()
+                tripPlanRepository.update(tripPlan)
+            }
         }
+
+        tripRepository.find(TripRepository.CommandQuery(ids = listOf(input.tripId)))
+            .firstOrNull()
+            ?.finish()
+            ?.save(tripRepository)
+
         val feedbackSolicitudes = createFeedbackSolicitude(tripPlans, input.tripId)
-        feedbackSolicitudes.forEach {
-            feedbackSolicitudeRepository.insert(it)
-        }
+        feedbackSolicitudes.forEach(feedbackSolicitudeRepository::insert)
+
         return Output(feedbackSolicitudes, finishedTripLegs)
     }
 

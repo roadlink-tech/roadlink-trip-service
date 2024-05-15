@@ -24,10 +24,9 @@ class CreateTrip(
         validateTripTimeRange(input)
         validateExistsTripByDriverAndInTimeRange(input)
 
-        val trip = input.toTrip()
-        return trip.also {
-            save(it)
-            publishTripCreatedEvent(it)
+        return input.toTrip().also { trip ->
+            trip.save(tripRepository)
+            publishTripCreatedEvent(trip)
         }
     }
 
@@ -65,10 +64,6 @@ class CreateTrip(
             policies = policies,
             restrictions = restrictions
         )
-
-    private fun save(trip: Trip) {
-        tripRepository.save(trip)
-    }
 
     private fun publishTripCreatedEvent(trip: Trip) {
         commandBus.publish<TripCreatedEvent, TripCreatedEventResponse>(
