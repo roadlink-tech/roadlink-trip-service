@@ -61,7 +61,7 @@ data class Trip(
 
             val anyBrokenPreference = filters
                 .mapNotNull { Preferences.valueOf(it) }
-                .any { preference -> preference.isCompliant(this) }
+                .any { preference -> !preference.isCompliant(this) }
 
             return !anyBrokenRule && containsRestriction && !anyBrokenPreference
         }

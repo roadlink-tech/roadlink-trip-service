@@ -24,7 +24,7 @@ class TripTest {
     private val idGenerator = UUIDGenerator()
 
     @Test
-    fun `when a trip has a meeting point then 2 sections must                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               be created`() {
+    fun `when a trip has a meeting point then 2 sections must be created`() {
         // given
         val trip = givenATripWithAMeetingPoint()
 
