@@ -105,6 +105,10 @@ data class Trip(
         return apply { this.status = Status.FINISHED }
     }
 
+    fun insert(tripRepository: TripRepository) {
+        tripRepository.insert(this)
+    }
+
     fun update(tripRepository: TripRepository) {
         tripRepository.update(this)
     }

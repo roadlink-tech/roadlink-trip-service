@@ -51,7 +51,7 @@ internal class StartTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
             trip
         )
-        every { tripRepository.insert(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
         every { tripPlanSolicitudeRepository.update(any()) } just runs
 
         // when
@@ -81,7 +81,7 @@ internal class StartTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
             trip
         )
-        every { tripRepository.insert(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
         every { tripPlanSolicitudeRepository.update(any()) } just runs
 
         // when
@@ -116,7 +116,7 @@ internal class StartTripTest {
         every { tripRepository.find(TripRepository.CommandQuery(ids = listOf(UUID.fromString(trip.id)))) } returns listOf(
             trip
         )
-        every { tripRepository.insert(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
+        every { tripRepository.update(trip = match { it.status == Trip.Status.IN_PROGRESS }) } just runs
         every { tripPlanSolicitudeRepository.update(any()) } just runs
 
         // when
