@@ -21,6 +21,11 @@ class TripPlanSolicitudeResponseFactory {
                 HttpResponse
                     .status<InsufficientAmountOfSeatsResponse>(PRECONDITION_FAILED)
                     .body(InsufficientAmountOfSeatsResponse())
+
+            is CreateTripPlanSolicitude.Output.UserIsNotCompliantForJoiningTrip ->
+                HttpResponse
+                    .status<UserIsNotCompliantForJoiningTripResponse>(PRECONDITION_FAILED)
+                    .body(UserIsNotCompliantForJoiningTripResponse())
         }
 
     fun from(output: RetrieveTripPlanSolicitudeOutput): HttpResponse<ApiResponse> {
@@ -62,6 +67,8 @@ class TripPlanSolicitudeResponseFactory {
 class TripPlanSolicitudeHasBeenRejectedResponse :
     ErrorResponse(code = ErrorResponseCode.TRIP_PLAN_SOLICITUDE_HAS_BEEN_REJECTED)
 
-
 class InsufficientAmountOfSeatsResponse :
     ErrorResponse(code = ErrorResponseCode.INSUFFICIENT_AMOUNT_OF_SEATS)
+
+class UserIsNotCompliantForJoiningTripResponse :
+    ErrorResponse(code = ErrorResponseCode.USER_IS_NOT_COMPLIANT_FOR_JOINING_TRIP)

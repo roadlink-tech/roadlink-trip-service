@@ -25,7 +25,7 @@ data class CreateTripPlanSolicitudeRequest(
     fun toInput(): CreateTripPlanSolicitude.Input {
         return CreateTripPlanSolicitude.Input(
             passengerId = this.passengerId,
-            trips = this.trips.map { it.toInput() }
+            tripSections = this.trips.map { it.toInput() }
         )
     }
 }

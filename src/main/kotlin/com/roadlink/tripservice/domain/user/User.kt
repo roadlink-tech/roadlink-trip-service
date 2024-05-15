@@ -40,9 +40,9 @@ data class User(
 
         companion object {
             fun fromString(value: String): Gender {
-                return when (value.uppercase(Locale.getDefault())) {
-                    "M" -> Male
-                    "F" -> Female
+                return when (value) {
+                    "Male" -> Male
+                    "Female" -> Female
                     else -> X
                 }
             }

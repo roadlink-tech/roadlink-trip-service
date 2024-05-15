@@ -25,7 +25,7 @@ create table trip
     status                           varchar(255) null,
     vehicle_id                       varchar(255) null,
     policies                         varchar(255) null,
-    restrictions                     varchar(255) null,
+    restrictions                     varchar(255) null
 );
 
 create table section

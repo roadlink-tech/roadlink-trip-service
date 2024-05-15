@@ -1,9 +1,11 @@
 package com.roadlink.tripservice.config.trip_solicitude
 
 import com.roadlink.tripservice.domain.common.events.CommandBus
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripLegSolicitudeRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.infrastructure.persistence.trip_solicitude.MySQLTripLegSolicitudeRepository
 import com.roadlink.tripservice.infrastructure.rest.trip_solicitude.response.TripPlanSolicitudeResponseFactory
 import com.roadlink.tripservice.usecases.UseCase
@@ -48,9 +50,16 @@ class TripDriverLegSolicitudeConfig {
     @Singleton
     fun createTripPlanSolicitude(
         sectionRepository: SectionRepository,
+        userRepository: UserRepository,
+        tripRepository: TripRepository,
         tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
     ): UseCase<CreateTripPlanSolicitude.Input, CreateTripPlanSolicitude.Output> {
-        return CreateTripPlanSolicitude(sectionRepository, tripPlanSolicitudeRepository)
+        return CreateTripPlanSolicitude(
+            sectionRepository,
+            tripRepository,
+            userRepository,
+            tripPlanSolicitudeRepository
+        )
     }
 
     @Singleton

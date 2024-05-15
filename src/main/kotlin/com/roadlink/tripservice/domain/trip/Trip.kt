@@ -30,9 +30,13 @@ data class Trip(
     val restrictions: List<Restriction> = emptyList()
 ) {
 
-    private fun canAdmitPassenger(requesterPassenger: User): Boolean {
-        return this.restrictions
-            .all { it.isAllowed(requesterPassenger, this) }
+    fun canAdmitPassenger(passenger: User): Boolean {
+        return this.restrictions.all {
+            it.isAllowed(
+                passenger,
+                this
+            )
+        } && passenger.id != this.driverId
     }
 
     fun isDepartureWithin(start: Instant, end: Instant): Boolean {

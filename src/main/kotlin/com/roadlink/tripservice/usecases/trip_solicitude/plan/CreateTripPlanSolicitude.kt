@@ -1,20 +1,35 @@
 package com.roadlink.tripservice.usecases.trip_solicitude.plan
 
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitude
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.domain.user.UserError
+import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.usecases.UseCase
 import java.util.*
 
 class CreateTripPlanSolicitude(
     private val sectionRepository: SectionRepository,
+    private val tripRepository: TripRepository,
+    private val userRepository: UserRepository,
     private val tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 ) : UseCase<CreateTripPlanSolicitude.Input, CreateTripPlanSolicitude.Output> {
 
     override operator fun invoke(input: Input): Output {
+        val passenger = userRepository.findByUserId(id = input.passengerId)
+            ?: throw UserError.NotExists(input.passengerId)
+        val trips = tripRepository.find(TripRepository.CommandQuery(ids = input.tripIds()))
+
+        if (trips.any { !it.canAdmitPassenger(passenger) }) {
+            return Output.UserIsNotCompliantForJoiningTrip(
+                message = "The user ${passenger.id} is not compliant for joining any trip."
+            )
+        }
+
         val tripPlanSolicitude = TripPlanSolicitude()
         // TODO cuando creamos el trip plan, las seciiones deberían estar ordenadas por arrival time: primero la más proxima en el tiempo y después las más lejanas en el tiempo
-        input.trips.forEach { tripSectionsDTO ->
+        input.tripSections.forEach { tripSectionsDTO ->
             val sections = sectionRepository.findAllById(tripSectionsDTO.sectionsIds)
             sections.forEach { section ->
                 if (!section.canReceiveAnyPassenger()) {
@@ -39,16 +54,19 @@ class CreateTripPlanSolicitude(
     sealed class Output {
         data class TripPlanSolicitudeCreated(val tripPlanSolicitudeId: UUID) : Output()
         data class OneOfTheSectionCanNotReceivePassenger(val message: String) : Output()
+        data class UserIsNotCompliantForJoiningTrip(val message: String) : Output()
     }
 
     data class Input(
         val passengerId: String,
-        val trips: List<TripSections>
+        val tripSections: List<TripSections>
     ) {
         data class TripSections(
             val tripId: String,
             val sectionsIds: Set<String>
         )
+
+        fun tripIds(): List<UUID> = tripSections.map { UUID.fromString(it.tripId) }
     }
 
 }

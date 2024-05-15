@@ -1,13 +1,24 @@
 package com.roadlink.tripservice.usecases.trip_solicitude.plan
 
+import com.roadlink.tripservice.domain.trip.TripRepository
+import com.roadlink.tripservice.domain.trip.constraint.Visibility
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
+import com.roadlink.tripservice.domain.user.User
+import com.roadlink.tripservice.domain.user.UserRepository
 import com.roadlink.tripservice.usecases.trip.SectionFactory
-import io.mockk.*
+import com.roadlink.tripservice.usecases.trip.TripFactory
+import com.roadlink.tripservice.usecases.user.UserFactory
+import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import org.junit.jupiter.api.Assertions.*
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.*
 
 class CreateTripPlanSolicitudeTest {
 
@@ -17,12 +28,24 @@ class CreateTripPlanSolicitudeTest {
     @MockK
     lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
 
+    @MockK
+    lateinit var userRepository: UserRepository
+
+    @MockK
+    lateinit var tripRepository: TripRepository
+
     private lateinit var createTripPlanSolicitude: CreateTripPlanSolicitude
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        createTripPlanSolicitude = CreateTripPlanSolicitude(sectionRepository, tripPlanSolicitudeRepository)
+        createTripPlanSolicitude =
+            CreateTripPlanSolicitude(
+                sectionRepository,
+                tripRepository,
+                userRepository,
+                tripPlanSolicitudeRepository
+            )
     }
 
     @Test
@@ -30,32 +53,35 @@ class CreateTripPlanSolicitudeTest {
         // GIVEN
         val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800()
-        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
-        every { tripPlanSolicitudeRepository.insert(any()) } just runs
-        val application = CreateTripPlanSolicitude.Input(
-            passengerId = "chorch",
-            trips = listOf(
+        val passengerId = UUID.randomUUID()
+        val george = UserFactory.common(id = passengerId)
+        val oneTripId = UUID.randomUUID()
+        val tripPlanSolicitude = CreateTripPlanSolicitude.Input(
+            passengerId = george.id,
+            tripSections = listOf(
                 CreateTripPlanSolicitude.Input.TripSections(
-                    tripId = "1",
+                    tripId = oneTripId.toString(),
                     sectionsIds = setOf(sectionOne.id)
                 ),
                 CreateTripPlanSolicitude.Input.TripSections(
-                    tripId = "2",
+                    tripId = oneTripId.toString(),
                     sectionsIds = setOf(sectionTwo.id)
                 )
             )
         )
 
+        val trip = TripFactory.common()
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
+        every { tripPlanSolicitudeRepository.insert(any()) } just runs
+        every { tripRepository.find(any()) } returns listOf(trip)
+        every { userRepository.findByUserId(id = george.id) } returns george
+
         // WHEN
-        val output = createTripPlanSolicitude(application)
+        val output = createTripPlanSolicitude(tripPlanSolicitude)
 
         // THEN
         thenTheTripPlanWasCreated(output)
         thenTheTripPlanWasSaved()
-    }
-
-    private fun thenTheTripPlanWasSaved() {
-        verify { tripPlanSolicitudeRepository.insert(any()) }
     }
 
     @Test
@@ -63,17 +89,23 @@ class CreateTripPlanSolicitudeTest {
         // GIVEN
         val sectionOne = SectionFactory.avCabildo4853_virreyDelPino1800()
         val sectionTwo = SectionFactory.avCabildo1621_virreyDelPino1800_completed()
+        val passengerId = UUID.randomUUID()
+        val george = UserFactory.common(id = passengerId)
+        val trip = TripFactory.common()
+
+        every { tripRepository.find(any()) } returns listOf(trip)
+        every { userRepository.findByUserId(id = george.id) } returns george
         every { sectionRepository.findAllById(any()) } returns listOf(sectionOne, sectionTwo)
         every { tripPlanSolicitudeRepository.insert(any()) } just runs
         val application = CreateTripPlanSolicitude.Input(
-            passengerId = "chorch",
-            trips = listOf(
+            passengerId = george.id,
+            tripSections = listOf(
                 CreateTripPlanSolicitude.Input.TripSections(
-                    tripId = "1",
+                    tripId = trip.id,
                     sectionsIds = setOf(sectionOne.id)
                 ),
                 CreateTripPlanSolicitude.Input.TripSections(
-                    tripId = "2",
+                    tripId = trip.id,
                     sectionsIds = setOf(sectionTwo.id)
                 )
             )
@@ -85,6 +117,188 @@ class CreateTripPlanSolicitudeTest {
         // THEN
         thenTheTripPlanCouldNotBeCreated(output)
         thenTheTripPlanWasNotSaved()
+    }
+
+    @Test
+    fun `when the trip only admits friends but driver and passenger are not friends, then an error must be retrieved`() {
+        // GIVEN
+        val trip = TripFactory.common(restrictions = listOf(Visibility.OnlyFriends))
+        val sectionOne =
+            SectionFactory.avCabildo4853_virreyDelPino1800(tripId = UUID.fromString(trip.id))
+        val passengerId = UUID.randomUUID()
+        val george = UserFactory.common(id = passengerId)
+
+        every {
+            tripRepository.find(
+                TripRepository.CommandQuery(
+                    ids = listOf(
+                        sectionOne.tripId
+                    )
+                )
+            )
+        } returns listOf(trip)
+
+        every { userRepository.findByUserId(id = george.id) } returns george
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne)
+        every { tripPlanSolicitudeRepository.insert(any()) } just runs
+
+        val solicitude = CreateTripPlanSolicitude.Input(
+            passengerId = george.id,
+            tripSections = listOf(
+                CreateTripPlanSolicitude.Input.TripSections(
+                    tripId = trip.id,
+                    sectionsIds = setOf(sectionOne.id)
+                )
+            )
+        )
+
+        // WHEN
+        val output = createTripPlanSolicitude(solicitude)
+
+        // THEN
+        assertInstanceOf(
+            CreateTripPlanSolicitude.Output.UserIsNotCompliantForJoiningTrip::class.java,
+            output
+        )
+        thenTheTripPlanWasNotSaved()
+    }
+
+    @Test
+    fun `when the trip only admits women but driver is not a women, then an error must be retrieved`() {
+        // GIVEN
+        val trip = TripFactory.common(restrictions = listOf(Visibility.OnlyWomen))
+        val sectionOne =
+            SectionFactory.avCabildo4853_virreyDelPino1800(tripId = UUID.fromString(trip.id))
+        val passengerId = UUID.randomUUID()
+        val george = UserFactory.common(id = passengerId, gender = User.Gender.X)
+
+        every {
+            tripRepository.find(
+                TripRepository.CommandQuery(
+                    ids = listOf(
+                        sectionOne.tripId
+                    )
+                )
+            )
+        } returns listOf(trip)
+
+        every { userRepository.findByUserId(id = george.id) } returns george
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne)
+        every { tripPlanSolicitudeRepository.insert(any()) } just runs
+
+        val solicitude = CreateTripPlanSolicitude.Input(
+            passengerId = george.id,
+            tripSections = listOf(
+                CreateTripPlanSolicitude.Input.TripSections(
+                    tripId = trip.id,
+                    sectionsIds = setOf(sectionOne.id)
+                )
+            )
+        )
+
+        // WHEN
+        val output = createTripPlanSolicitude(solicitude)
+
+        // THEN
+        assertInstanceOf(
+            CreateTripPlanSolicitude.Output.UserIsNotCompliantForJoiningTrip::class.java,
+            output
+        )
+        thenTheTripPlanWasNotSaved()
+    }
+
+    @Test
+    fun `when the trip only admits friends women but driver is not a driver friend, then an error must be retrieved`() {
+        // GIVEN
+        val trip =
+            TripFactory.common(restrictions = listOf(Visibility.OnlyWomen, Visibility.OnlyFriends))
+        val sectionOne =
+            SectionFactory.avCabildo4853_virreyDelPino1800(tripId = UUID.fromString(trip.id))
+        val passengerId = UUID.randomUUID()
+        val george = UserFactory.common(id = passengerId, gender = User.Gender.Female)
+
+        every {
+            tripRepository.find(
+                TripRepository.CommandQuery(
+                    ids = listOf(
+                        sectionOne.tripId
+                    )
+                )
+            )
+        } returns listOf(trip)
+
+        every { userRepository.findByUserId(id = george.id) } returns george
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne)
+        every { tripPlanSolicitudeRepository.insert(any()) } just runs
+
+        val solicitude = CreateTripPlanSolicitude.Input(
+            passengerId = george.id,
+            tripSections = listOf(
+                CreateTripPlanSolicitude.Input.TripSections(
+                    tripId = trip.id,
+                    sectionsIds = setOf(sectionOne.id)
+                )
+            )
+        )
+
+        // WHEN
+        val output = createTripPlanSolicitude(solicitude)
+
+        // THEN
+        assertInstanceOf(
+            CreateTripPlanSolicitude.Output.UserIsNotCompliantForJoiningTrip::class.java,
+            output
+        )
+        thenTheTripPlanWasNotSaved()
+    }
+
+    @Test
+    fun `when the trip only admits friends women and driver and passenger are friends, then the plan must be created`() {
+        // GIVEN
+        val trip =
+            TripFactory.common(restrictions = listOf(Visibility.OnlyWomen, Visibility.OnlyFriends))
+        val sectionOne =
+            SectionFactory.avCabildo4853_virreyDelPino1800(tripId = UUID.fromString(trip.id))
+        val passengerId = UUID.randomUUID()
+        val george = UserFactory.common(
+            id = passengerId,
+            gender = User.Gender.Female,
+            friendsIds = setOf(UUID.fromString(trip.driverId))
+        )
+
+        every {
+            tripRepository.find(
+                TripRepository.CommandQuery(
+                    ids = listOf(
+                        sectionOne.tripId
+                    )
+                )
+            )
+        } returns listOf(trip)
+        every { userRepository.findByUserId(id = george.id) } returns george
+        every { sectionRepository.findAllById(any()) } returns listOf(sectionOne)
+        every { tripPlanSolicitudeRepository.insert(any()) } just runs
+
+        val solicitude = CreateTripPlanSolicitude.Input(
+            passengerId = george.id,
+            tripSections = listOf(
+                CreateTripPlanSolicitude.Input.TripSections(
+                    tripId = trip.id,
+                    sectionsIds = setOf(sectionOne.id)
+                )
+            )
+        )
+
+        // WHEN
+        val output = createTripPlanSolicitude(solicitude)
+
+        // THEN
+        thenTheTripPlanWasCreated(output)
+        thenTheTripPlanWasSaved()
+    }
+
+    private fun thenTheTripPlanWasSaved() {
+        verify { tripPlanSolicitudeRepository.insert(any()) }
     }
 
     private fun thenTheTripPlanWasNotSaved() {
@@ -103,6 +317,9 @@ class CreateTripPlanSolicitudeTest {
     }
 
     private fun extracted(output: CreateTripPlanSolicitude.Output) {
-        assertInstanceOf(CreateTripPlanSolicitude.Output.TripPlanSolicitudeCreated::class.java, output)
+        assertInstanceOf(
+            CreateTripPlanSolicitude.Output.TripPlanSolicitudeCreated::class.java,
+            output
+        )
     }
 }
