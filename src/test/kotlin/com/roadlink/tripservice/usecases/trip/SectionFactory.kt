@@ -73,13 +73,14 @@ object SectionFactory {
         tripId: UUID = UUID.fromString("bd7ee293-f5d3-4832-a74c-17e9a8fa465f"),
         departure: TripPoint = TripPointFactory.avCabildo_4853(),
         arrival: TripPoint = TripPointFactory.virreyDelPino_1800(),
+        driverId: String = "John Smith"
     ) =
         Section(
             id = avCabildo4853_virreyDelPino1800_id,
             departure = departure,
             arrival = arrival,
             distanceInMeters = 4000.0,
-            driverId = "John Smith",
+            driverId = driverId,
             vehicleId = "Ford mustang",
             initialAmountOfSeats = availableSeats,
             bookedSeats = 0,
@@ -90,13 +91,14 @@ object SectionFactory {
         tripId: UUID = UUID.fromString("bd7ee293-f5d3-4832-a74c-17e9a8fa465f"),
         departure: TripPoint = TripPointFactory.virreyDelPino_1800(),
         arrival: TripPoint = TripPointFactory.avCabildo_20(),
+        driverId: String = "John Smith",
     ) =
         Section(
             id = virreyDelPino1800_avCabildo20_id,
             departure = departure,
             arrival = arrival,
             distanceInMeters = 3000.0,
-            driverId = "John Smith",
+            driverId = driverId,
             vehicleId = "Ford mustang",
             initialAmountOfSeats = 4,
             bookedSeats = 0,

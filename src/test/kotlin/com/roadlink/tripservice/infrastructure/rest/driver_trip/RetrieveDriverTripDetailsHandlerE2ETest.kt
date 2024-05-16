@@ -2,6 +2,8 @@ package com.roadlink.tripservice.infrastructure.rest.driver_trip
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.roadlink.tripservice.domain.trip.Trip
+import com.roadlink.tripservice.domain.trip.TripRepository
 import com.roadlink.tripservice.domain.trip.section.SectionRepository
 import com.roadlink.tripservice.domain.trip_solicitude.TripPlanSolicitudeRepository
 import com.roadlink.tripservice.domain.user.UserRepository
@@ -13,6 +15,7 @@ import com.roadlink.tripservice.infrastructure.remote.user.HttpUserRepository
 import com.roadlink.tripservice.infrastructure.remote.user.HttpUserTrustScoreRepository
 import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.DriverTripDetailResponse
 import com.roadlink.tripservice.usecases.trip.SectionFactory
+import com.roadlink.tripservice.usecases.trip.TripFactory
 import com.roadlink.tripservice.usecases.trip_solicitude.plan.TripPlanSolicitudeFactory
 import com.roadlink.tripservice.usecases.user.UserFactory
 import com.roadlink.tripservice.usecases.user.UserTrustScoreFactory
@@ -43,6 +46,9 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
 
     @Inject
     private lateinit var sectionRepository: SectionRepository
+
+    @Inject
+    private lateinit var tripRepository: TripRepository
 
     @Inject
     private lateinit var tripPlanSolicitudeRepository: TripPlanSolicitudeRepository
@@ -76,6 +82,11 @@ class RetrieveDriverTripDetailsHandlerE2ETest : End2EndTest() {
         )
         val userId = UUID.randomUUID()
         sectionRepository.save(section)
+
+        TripFactory.avCabildo4853_virreyDelPino1800_avCabildo20(
+            id = section.tripId.toString(),
+            status = Trip.Status.FINISHED
+        ).also { tripRepository.insert(it) }
 
         listOf(
             TripPlanSolicitudeFactory.withASingleTripLegSolicitudeAccepted(

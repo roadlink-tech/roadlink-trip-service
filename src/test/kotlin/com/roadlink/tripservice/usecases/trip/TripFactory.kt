@@ -53,11 +53,13 @@ object TripFactory {
     fun avCabildo4853_virreyDelPino1800_avCabildo20(
         id: String = "TripFactory_avCabildo4853_virreyDelPino1800_avCabildo20",
         driverId: String = "John Smith",
+        status: Trip.Status = Trip.Status.NOT_STARTED
     ) =
         Trip(
             id = id,
             driverId = driverId,
             vehicle = "Ford mustang",
+            status = status,
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
             meetingPoints = listOf(TripPointFactory.virreyDelPino_1800()),
