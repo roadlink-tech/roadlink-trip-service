@@ -1,5 +1,6 @@
 package com.roadlink.tripservice.infrastructure.rest.driver_trip.response
 
+import com.roadlink.tripservice.domain.trip.Trip
 import java.util.*
 
 data class DriverTripDetailResponse(
@@ -10,4 +11,17 @@ data class DriverTripDetailResponse(
     val sectionDetails: List<DriverSectionDetailResponse>
 )
 
-enum class DriverTripStatusResponse { NOT_STARTED, IN_PROGRESS, FINISHED }
+enum class DriverTripStatusResponse {
+    NOT_STARTED, IN_PROGRESS, FINISHED;
+
+    companion object {
+
+        fun from(status: Trip.Status): DriverTripStatusResponse {
+            return when (status) {
+                Trip.Status.NOT_STARTED -> NOT_STARTED
+                Trip.Status.IN_PROGRESS -> IN_PROGRESS
+                Trip.Status.FINISHED -> FINISHED
+            }
+        }
+    }
+}

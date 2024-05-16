@@ -728,6 +728,70 @@ internal class SearchTripRestHandlerE2ETest : End2EndTest() {
     }
 
     @Test
+    fun `given a trip plan which, when passenger and driver are the same, then should not return the trip`() {
+        // given
+        val callerId = UUID.randomUUID()
+        val driverId = callerId
+        val caller = UserFactory.common(
+            gender = User.Gender.Female,
+            id = callerId,
+            friendsIds = setOf(driverId)
+        )
+        val privateTrip = TripFactory.common(
+            id = UUID.fromString(TripFactory.avCabildo_id),
+            policies = listOf(Rule.NoSmoking),
+            driverId = driverId,
+            restrictions = listOf(Visibility.OnlyFriends),
+        )
+        every { userRepository.findByUserId(id = match { it == callerId.toString() }) } returns caller
+
+        sectionRepository.save(
+            SectionFactory.avCabildo4853_virreyDelPino1800(
+                tripId = UUID.fromString(privateTrip.id),
+                driverId = driverId.toString()
+            )
+        )
+        sectionRepository.save(
+            SectionFactory.virreyDelPino1800_avCabildo20(
+                tripId = UUID.fromString(privateTrip.id),
+                driverId = driverId.toString()
+            )
+        )
+        tripRepository.insert(trip = privateTrip)
+
+        entityManager.transaction.commit()
+
+        val request: HttpRequest<JsonNode> = HttpRequest
+            .GET<JsonNode>(
+                UriBuilder.of("/trip-service/trips")
+                    .queryParam("departureLatitude", LocationFactory.avCabildo_4853().latitude)
+                    .queryParam("departureLongitude", LocationFactory.avCabildo_4853().longitude)
+                    .queryParam("arrivalLatitude", LocationFactory.avCabildo_20().latitude)
+                    .queryParam("arrivalLongitude", LocationFactory.avCabildo_20().longitude)
+                    .queryParam("at", InstantFactory.october15_12hs().toEpochMilli())
+                    .also { uriBuilder ->
+                        listOf("ONLY_FRIENDS", "PET_ALLOWED").forEach {
+                            uriBuilder.queryParam("filters", it)
+                        }
+                    }
+                    .build()
+            ).header("x-caller-id", callerId.toString())
+
+
+        // when
+        val response = client.toBlocking().exchange(request, JsonNode::class.java)
+
+        // then
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals(MediaType.APPLICATION_JSON_TYPE, response.contentType.get())
+        assertEquals(
+            mapToSearchTripResponse(response),
+            SearchTripResponse(tripPlans = listOf())
+        )
+    }
+
+
+    @Test
     fun `given a trip plan which contains two private trips, when use PRIVATE filters and the requester is friend of all the drivers, then should return the trip`() {
         // given
         val callerId = UUID.randomUUID()

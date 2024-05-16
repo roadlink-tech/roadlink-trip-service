@@ -26,6 +26,9 @@ data class Trip(
 ) {
 
     fun canAdmitPassenger(passenger: User): Boolean {
+        val passengerIsTheDriver = passenger.id == this.driverId
+        if (passengerIsTheDriver) return false
+
         return this.restrictions.all {
             it.isAllowed(
                 passenger,

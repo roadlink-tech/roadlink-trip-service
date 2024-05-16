@@ -2,15 +2,15 @@ package com.roadlink.tripservice.infrastructure.rest.driver_trip.mapper
 
 import com.roadlink.tripservice.domain.driver_trip.DriverTripDetail
 import com.roadlink.tripservice.domain.driver_trip.SeatsAvailabilityStatus
-import com.roadlink.tripservice.domain.trip.TripStatus
-import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.*
+import com.roadlink.tripservice.domain.trip.Trip
 import com.roadlink.tripservice.infrastructure.rest.common.trip_point.TripPointResponseMapper
+import com.roadlink.tripservice.infrastructure.rest.driver_trip.response.*
 
 object DriverTripDetailResponseMapper {
     fun map(driverTripDetail: DriverTripDetail): DriverTripDetailResponse =
         DriverTripDetailResponse(
             tripId = driverTripDetail.tripId,
-            tripStatus = tripStatusResponse(driverTripDetail.tripStatus),
+            tripStatus = DriverTripStatusResponse.from(driverTripDetail.tripStatus),
             seatStatus = seatsAvailabilityStatusResponse(driverTripDetail.seatStatus),
             hasPendingApplications = driverTripDetail.hasPendingApplications,
             sectionDetails = driverTripDetail.sectionDetails.map { driverSectionDetail ->
@@ -27,11 +27,11 @@ object DriverTripDetailResponseMapper {
             }
         )
 
-    private fun tripStatusResponse(tripStatus: TripStatus): DriverTripStatusResponse =
+    private fun tripStatusResponse(tripStatus: Trip.Status): DriverTripStatusResponse =
         when (tripStatus) {
-            TripStatus.NOT_STARTED -> DriverTripStatusResponse.NOT_STARTED
-            TripStatus.IN_PROGRESS -> DriverTripStatusResponse.IN_PROGRESS
-            TripStatus.FINISHED -> DriverTripStatusResponse.FINISHED
+            Trip.Status.NOT_STARTED -> DriverTripStatusResponse.NOT_STARTED
+            Trip.Status.IN_PROGRESS -> DriverTripStatusResponse.IN_PROGRESS
+            Trip.Status.FINISHED -> DriverTripStatusResponse.FINISHED
         }
 
     private fun seatsAvailabilityStatusResponse(seatsAvailabilityStatus: SeatsAvailabilityStatus): SeatsAvailabilityStatusResponse =
