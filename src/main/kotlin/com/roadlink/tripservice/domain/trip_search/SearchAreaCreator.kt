@@ -27,6 +27,9 @@ class JtsSearchCircleCreator : SearchAreaCreator<JtsCircle> {
 
     private val geometryFactory = GeometryFactory(PrecisionModel(), Jts.SRID)
     private val geometricShapeFactory = GeometricShapeFactory(geometryFactory)
+    /**
+     * Specifies the number of points used to approximate a circular shape
+     */
     private val nearSearchCircleNumPoints = 32
 
     override fun from(location: Location, radiusInMeters: Double): JtsCircle {
