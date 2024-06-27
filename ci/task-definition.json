@@ -59,7 +59,7 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "trip-service"
+      "name": "roadlink-trip-service"
     }
   ],
   "placementConstraints": [],
