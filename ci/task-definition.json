@@ -1,6 +1,6 @@
 {
   "ipcMode": null,
-  "executionRoleArn": "arn:aws:iam::315238282715:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::730335224124:role/roadlink-trip-service-task-role",
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
@@ -42,7 +42,7 @@
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "315238282715.dkr.ecr.us-east-1.amazonaws.com/trip-service",
+      "image": "730335224124.dkr.ecr.us-east-1.amazonaws.com/trip-service",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -69,8 +69,8 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:315238282715:task-definition/trip-service:9",
-  "family": "trip-service",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:730335224124:task-definition/roadlink-trip-service:9",
+  "family": "roadlink-trip-service",
   "requiresAttributes": [
     {
       "targetId": null,
