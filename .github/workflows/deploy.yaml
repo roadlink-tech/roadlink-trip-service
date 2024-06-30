@@ -1,10 +1,10 @@
-name: Deploy to Amazon ECS
+name: Deploy to Prod
 
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Enter the tag to deploy (e.g., v1.2.3)'
+        description: 'Enter the tag to deploy'
         required: true
         type: string
 
