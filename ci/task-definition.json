@@ -29,6 +29,10 @@
         {
           "name": "DB_PASSWORD",
           "value": "{{DB_PASSWORD}}"
+        },
+        {
+          "name": "CORE_SERVICE_HOST",
+          "value": "{{CORE_SERVICE_HOST}}"
         }
       ],
       "resourceRequirements": null,
