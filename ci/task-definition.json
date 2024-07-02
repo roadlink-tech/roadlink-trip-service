@@ -68,7 +68,7 @@
   ],
   "placementConstraints": [],
   "memory": "1024",
-  "taskRoleArn": null,
+  "taskRoleArn": "arn:aws:iam::730335224124:role/roadlink-trip-service-task-role",
   "compatibilities": [
     "EC2",
     "FARGATE"
