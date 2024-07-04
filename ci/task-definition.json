@@ -16,7 +16,7 @@
       ],
       "command": null,
       "linuxParameters": null,
-      "cpu": 512,
+      "cpu": 256,
       "environment": [
         {
           "name": "DB_JDBC_URL",
@@ -42,7 +42,7 @@
       "workingDirectory": null,
       "secrets": null,
       "dockerSecurityOptions": null,
-      "memory": 1024,
+      "memory": 512,
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
@@ -67,7 +67,7 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "1024",
+  "memory": "512",
   "taskRoleArn": "arn:aws:iam::730335224124:role/roadlink-trip-service-task-role",
   "compatibilities": [
     "EC2",
@@ -107,7 +107,7 @@
   ],
   "networkMode": "awsvpc",
   "runtimePlatform": null,
-  "cpu": "512",
+  "cpu": "256",
   "revision": 9,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
