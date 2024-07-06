@@ -70,7 +70,6 @@
   "memory": "512",
   "taskRoleArn": "arn:aws:iam::730335224124:role/roadlink-trip-service-task-role",
   "compatibilities": [
-    "EC2",
     "FARGATE"
   ],
   "taskDefinitionArn": "arn:aws:ecs:us-east-1:730335224124:task-definition/roadlink-trip-service:9",
