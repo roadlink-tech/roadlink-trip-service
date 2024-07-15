@@ -13,7 +13,7 @@ object TripResponseMapper {
         TripResponse(
             id = trip.id,
             driver = trip.driverId,
-            vehicle = trip.vehicle,
+            vehicle = trip.vehicleId,
             departure = TripPointResponseMapper.map(trip.departure),
             meetingPoints = trip.meetingPoints.map { TripPointResponseMapper.map(it) },
             arrival = TripPointResponseMapper.map(trip.arrival),

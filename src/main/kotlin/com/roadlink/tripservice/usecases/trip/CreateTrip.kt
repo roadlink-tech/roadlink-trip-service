@@ -56,7 +56,7 @@ class CreateTrip(
         Trip(
             id = idGenerator.id(),
             driverId = driver,
-            vehicle = vehicle,
+            vehicleId = vehicle,
             departure = departure,
             arrival = arrival,
             meetingPoints = meetingPoints,
