@@ -1,1 +1,1 @@
-rootProject.name = "trip-service"
+rootProject.name = "roadlink-trip-service"

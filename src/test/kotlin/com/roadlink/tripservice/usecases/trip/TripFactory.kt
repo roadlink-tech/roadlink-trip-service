@@ -28,7 +28,7 @@ object TripFactory {
         return Trip(
             id = id.toString(),
             driverId = driverId.toString(),
-            vehicle = vehicleId.toString(),
+            vehicleId = vehicleId.toString(),
             departure = departure,
             arrival = arrival,
             meetingPoints = meetingPoints,
@@ -43,7 +43,7 @@ object TripFactory {
         Trip(
             id = avCabildo_id,
             driverId = driverId,
-            vehicle = "Ford mustang",
+            vehicleId = "Ford mustang",
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
             meetingPoints = emptyList(),
@@ -58,7 +58,7 @@ object TripFactory {
         Trip(
             id = id,
             driverId = driverId,
-            vehicle = "Ford mustang",
+            vehicleId = "Ford mustang",
             status = status,
             departure = TripPointFactory.avCabildo_4853(),
             arrival = TripPointFactory.avCabildo_20(),
@@ -73,7 +73,7 @@ object TripFactory {
         Trip(
             id = id,
             driverId = driverId,
-            vehicle = "Ford mustang",
+            vehicleId = "Ford mustang",
             departure = TripPointFactory.caba(),
             arrival = TripPointFactory.rosario(),
             meetingPoints = listOf(

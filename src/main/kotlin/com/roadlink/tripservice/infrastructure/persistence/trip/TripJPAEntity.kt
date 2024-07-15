@@ -71,7 +71,7 @@ data class TripJPAEntity(
             return TripJPAEntity(
                 id = trip.id,
                 driverId = trip.driverId,
-                vehicleId = trip.vehicle,
+                vehicleId = trip.vehicleId,
                 departure = TripPointJPAEntity.from(trip.departure),
                 arrival = TripPointJPAEntity.from(trip.arrival),
                 meetingPoints = trip.meetingPoints.map { TripPointJPAEntity.from(it) },
@@ -87,7 +87,7 @@ data class TripJPAEntity(
         return Trip(
             id = id,
             driverId = driverId,
-            vehicle = vehicleId,
+            vehicleId = vehicleId,
             departure = departure.toDomain(),
             arrival = arrival.toDomain(),
             meetingPoints = meetingPoints.map { it.toDomain() },

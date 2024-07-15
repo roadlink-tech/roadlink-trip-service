@@ -12,9 +12,10 @@ import java.util.*
 
 data class Trip(
     val id: String,
-    // TODO Is it the driver id? if it's then why not use a UUID instead of string
+    // TODO UUID instead of string
     val driverId: String,
-    val vehicle: String,
+    // TODO UUID instead of string
+    val vehicleId: String,
     val departure: TripPoint,
     val arrival: TripPoint,
     var status: Status = Status.NOT_STARTED,
@@ -90,7 +91,7 @@ data class Trip(
                     sectionArrival.location()
                 ),
                 driverId = driverId,
-                vehicleId = vehicle,
+                vehicleId = vehicleId,
 
                 initialAmountOfSeats = availableSeats,
                 bookedSeats = 0
